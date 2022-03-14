@@ -1,6 +1,7 @@
 WDL/
 reaper-plugins/
 sdk/
+cmake-build-debug/
 .idea/
 
 *.so

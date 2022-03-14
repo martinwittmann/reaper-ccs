@@ -1,3 +1,6 @@
+#define LOCALIZE_IMPORT_PREFIX "csurf_"
+#include "localize-import.h"
+
 #include "csurf.h"
 #include <iostream>
 
@@ -9,7 +12,7 @@ class CSurf_NovationSlMk3 : public IReaperControlSurface
 
     int m_vol_lastpos;
     int m_flipmode;
-    int m_faderport_lasthw,m_faderport_buttonstates;
+    int m_faderport_buttonstates;
 
     char m_fader_touchstate;
     int m_bank_offset;
@@ -33,11 +36,11 @@ public:
     CSurf_NovationSlMk3(int indev, int outdev, int *errStats) {
       m_midi_in_dev = indev;
       m_midi_out_dev = outdev;
+      std::cout << "Csurf initalized.";
 
-      m_faderport_lasthw = 0;
-      //create midi hardware access
-      m_midiin = m_midi_in_dev >= 0 ? CreateMIDIInput(m_midi_in_dev) : NULL;
-      m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
+      // Create midi hardware access.
+      //m_midiin = m_midi_in_dev >= 0 ? CreateMIDIInput(m_midi_in_dev) : NULL;
+      //m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
 
       if (errStats) {
         if (m_midi_in_dev >=0  && !m_midiin) *errStats|=1;
@@ -54,8 +57,8 @@ public:
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) { }
-      DELETE_ASYNC(m_midiout);
-      DELETE_ASYNC(m_midiin);
+      //DELETE_ASYNC(m_midiout);
+      //DELETE_ASYNC(m_midiin);
     }
 
     const char *GetTypeString() { return "Novation SL MK III"; }
@@ -138,6 +141,10 @@ static IReaperControlSurface *createFunc(const char *type_string, const char *co
   return new CSurf_NovationSlMk3(parms[2],parms[3],errStats);
 }
 
+static WDL_DLGRET dlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+  return 0;
+}
+
 static HWND configFunc(const char *type_string, HWND parent, const char *initConfigString) {
   return CreateDialogParam(
     g_hInst,
@@ -149,7 +156,7 @@ static HWND configFunc(const char *type_string, HWND parent, const char *initCon
 }
 
 
-reaper_csurf_reg_t csurf_faderport_reg = {
+reaper_csurf_reg_t csurf_novation_slmk3_reg = {
   "Wittis Control Surface",
   // !WANT_LOCALIZE_STRINGS_BEGIN:csurf_type
   "Wiuiui noch ein Text",
