@@ -1,0 +1,6 @@
+WDL/
+reaper-plugins/
+sdk/
+.idea/
+
+*.so
