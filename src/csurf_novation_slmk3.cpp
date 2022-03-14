@@ -32,7 +32,7 @@ public:
 
       // Create midi hardware access.
       m_midiin = m_midi_in_dev >= 0 ? CreateMIDIInput(m_midi_in_dev) : NULL;
-      m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
+      //m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
 
       if (errStats) {
         if (m_midi_in_dev >=0  && !m_midiin) *errStats|=1;
@@ -43,14 +43,14 @@ public:
         m_midiin->start();
       }
 
-      if (m_midiout) {
-      }
-
     }
     ~CSurf_NovationSlMk3() {
-      if (m_midiout) { }
-      DELETE_ASYNC(m_midiout);
-      DELETE_ASYNC(m_midiin);
+      if (m_midiout) {
+        DELETE_ASYNC(m_midiout);
+      }
+      if (m_midiin) {
+        DELETE_ASYNC(m_midiin);
+      }
     }
 
     const char *GetTypeString() { return "Novation SL MK III"; }
@@ -70,7 +70,9 @@ public:
     }
 
     void CloseNoReset() {
-      DELETE_ASYNC(m_midiout);
+      if (m_midiout) {
+        DELETE_ASYNC(m_midiout);
+      }
       DELETE_ASYNC(m_midiin);
       m_midiout=0;
       m_midiin=0;
@@ -156,3 +158,7 @@ reaper_csurf_reg_t csurf_novation_slmk3_reg = {
   createFunc,
   configFunc,
 };
+
+
+
+
