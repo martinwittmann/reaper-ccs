@@ -2,7 +2,13 @@
 #include <iostream>
 #include <string>
 #include "sdk/reaper_plugin.h"
+
+#define LOCALIZE_IMPORT_PREFIX "csurf_"
+#include "localize-import.h"
 #include "csurf.h"
+
+//#include "WDL/localize/localize-import.h"
+//#include "WDL/localize/localize.h"
 
 HWND g_hwnd;
 

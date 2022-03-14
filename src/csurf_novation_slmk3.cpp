@@ -1,34 +1,26 @@
-#define LOCALIZE_IMPORT_PREFIX "csurf_"
-#include "localize-import.h"
+
+//#include "WDL/mutex.h"
+//#include "WDL/swell/swell-types.h"
+//#include "WDL/swell/swell-functions.h"
+//#include "WDL/swell/swell-internal.h"
+//#include "WDL/swell/swell-dlggen.h"
+//#include "WDL/swell/swell-gdi-internalpool.h"
+//#include "WDL/swell/swell-menugen.h"
+
 
 #include "csurf.h"
 #include <iostream>
 
-class CSurf_NovationSlMk3 : public IReaperControlSurface
-{
+class CSurf_NovationSlMk3 : public IReaperControlSurface {
     int m_midi_in_dev,m_midi_out_dev;
     midi_Output *m_midiout;
     midi_Input *m_midiin;
 
-    int m_vol_lastpos;
-    int m_flipmode;
-    int m_faderport_buttonstates;
-
-    char m_fader_touchstate;
-    int m_bank_offset;
-
-    DWORD m_frameupd_lastrun;
-    int m_button_states;
-    DWORD m_buttonstate_lastrun;
-    DWORD m_pan_lasttouch;
-
     WDL_String descspace;
     char configtmp[1024];
 
-    void OnMIDIEvent(MIDI_event_t *evt)
-    {
+    void OnMIDIEvent(MIDI_event_t *evt) {
       std::cout << "Midi Event received.";
-
     }
 
 
@@ -39,8 +31,8 @@ public:
       std::cout << "Csurf initalized.";
 
       // Create midi hardware access.
-      //m_midiin = m_midi_in_dev >= 0 ? CreateMIDIInput(m_midi_in_dev) : NULL;
-      //m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
+      m_midiin = m_midi_in_dev >= 0 ? CreateMIDIInput(m_midi_in_dev) : NULL;
+      m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
 
       if (errStats) {
         if (m_midi_in_dev >=0  && !m_midiin) *errStats|=1;
@@ -57,15 +49,15 @@ public:
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) { }
-      //DELETE_ASYNC(m_midiout);
-      //DELETE_ASYNC(m_midiin);
+      DELETE_ASYNC(m_midiout);
+      DELETE_ASYNC(m_midiin);
     }
 
     const char *GetTypeString() { return "Novation SL MK III"; }
     const char *GetDescString() {
       descspace.SetFormatted(
         512,
-        __LOCALIZE_VERFMT("Novation SL MK III (Device %d,%d)", "csurf"),
+        "Novation SL MK III (Device %d,%d)",
         m_midi_in_dev,
         m_midi_out_dev
       );

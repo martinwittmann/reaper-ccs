@@ -3,17 +3,24 @@ project(reaper_slmk3)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+add_definitions(-DSWELL_PROVIDED_BY_APP -DNOMINMAX)
 
 # Add main.cpp file of project root directory as source file
 set(SOURCE_FILES
   src/reaper_slmk3.cpp
   src/csurf_novation_slmk3.cpp
-  WDL/swell/swell-functions.h
-  WDL/swell/swell-internal.h
-  WDL/swell/swell-dlggen.h
-  WDL/swell/swell-gdi-internalpool.h
-  WDL/swell/swell-menugen.h
-  WDL/swell/swell-types.h
+  WDL/swell/swell-modstub-generic.cpp
+  #WDL/swell/swell-misc-generic.cpp
+  #WDL/swell/swell-dlg-generic.cpp
+
+  #src/sdk/reaper_plugin.h
+  #WDL/mutex.h
+  #WDL/swell/swell-functions.h
+  #WDL/swell/swell-internal.h
+  #WDL/swell/swell-dlggen.h
+  #WDL/swell/swell-gdi-internalpool.h
+  #WDL/swell/swell-menugen.h
+  #WDL/swell/swell-types.h
 )
 
 #set(HEADER_FILES
@@ -27,18 +34,18 @@ set(SOURCE_FILES
 
 
 
-add_definitions(-DSWELL_PROVIDED_BY_APP -DNOMINMAX)
-add_definitions(
-  -include ../WDL/swell/swell-types.h
-  -include ../WDL/swell/swell-functions.h
-  -include ../WDL/swell/swell-internal.h
-  -include ../WDL/swell/swell-dlggen.h
-  -include ../WDL/swell/swell-gdi-internalpool.h
-  -include ../WDL/swell/swell-menugen.h
-  -include ../WDL/swell/swell-types.h
-)
+#add_definitions(
+  #-include ../sdk/reaper_plugin.h
+  #-include ../WDL/mutex.h
+  #-include ../WDL/swell/swell-types.h
+  #-include ../WDL/swell/swell-functions.h
+  #-include ../WDL/swell/swell-internal.h
+  #-include ../WDL/swell/swell-dlggen.h
+  #-include ../WDL/swell/swell-gdi-internalpool.h
+  #-include ../WDL/swell/swell-menugen.h
+#)
 
-add_library(reaper_slmk3 ${SOURCE_FILES})
+add_library(reaper_slmk3 SHARED ${SOURCE_FILES})
 target_include_directories(reaper_slmk3 PRIVATE WDL/swell)
 
-set_target_properties(reaper_slmk3 PROPERTIES OUTPUT_NAME "reaper_slmk3.so")
+set_target_properties(reaper_slmk3 PROPERTIES OUTPUT_NAME "reaper_slmk3")
