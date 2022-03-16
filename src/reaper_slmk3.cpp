@@ -6,6 +6,7 @@
 #define LOCALIZE_IMPORT_PREFIX "csurf_"
 #include "localize-import.h"
 #include "csurf.h"
+#include "WDL/setthreadname.h"
 
 HWND g_hwnd;
 
@@ -285,7 +286,7 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hI
     int errcnt = 0;
     #define IMPAPI(x) if (!((*((void **)&(x)) = (void *)rec->GetFunc(#x)))) errcnt++;
 
-    debug(GetAppVersion());
+    debug("Plugin entrypoint executed.");
 
     IMPAPI(update_disk_counters)
     IMPAPI(DB2SLIDER)
@@ -293,7 +294,7 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hI
     IMPAPI(GetNumMIDIInputs)
     IMPAPI(GetNumMIDIOutputs)
     IMPAPI(CreateMIDIInput)
-    //IMPAPI(CreateMIDIOutput)
+    IMPAPI(CreateMIDIOutput)
     IMPAPI(GetMIDIOutputName)
     IMPAPI(GetMIDIInputName)
     IMPAPI(CSurf_TrackToID)
@@ -485,22 +486,29 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hI
     IMPAPI(SetExtState)
     IMPAPI(GetSet_LoopTimeRange2)
 
-    rec->Register("csurf",&csurf_novation_slmk3_reg);
+    rec->Register("csurf", &csurf_novation_slmk3_reg);
 
     debug("Returned 1.");
     return 1;
   }
 }
-/*
+
+#ifndef _WIN32 // MAC resources
+#include "WDL/swell/swell-dlggen.h"
+#include "res.rc_mac_dlg"
+#undef BEGIN
+#undef END
+#include "WDL/swell/swell-menugen.h"
+#include "res.rc_mac_menu"
+#endif
 
 #include "WDL/mutex.h"
 #include "WDL/ptrlist.h"
-#include "WDL/setthreadname.h"
 
 class threadedMIDIOutput : public midi_Output {
 public:
     threadedMIDIOutput(midi_Output *out) {
-      /*
+      std::cout << "\n4\n";
       m_output = out;
       m_quit = 0;
       unsigned id;
@@ -512,6 +520,7 @@ public:
         0,
         &id
       );
+      std::cout << "\n5\n";
     }
 
     virtual ~threadedMIDIOutput() {
@@ -635,10 +644,11 @@ public:
 };
 
 midi_Output *CreateThreadedMIDIOutput(midi_Output *output) {
+  std::cout << "\n1\n";
   if (!output) {
+    std::cout << "\n2\n";
     return output;
   }
+  std::cout << "\n3\n";
   return new threadedMIDIOutput(output);
 }
-
-*/

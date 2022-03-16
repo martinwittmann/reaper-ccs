@@ -1,1 +1,0 @@
-g++ -fPIC -shared -I"./WDL/swell" src/reaper_slmk3.cpp src/csurf_novation_slmk3.cpp ./WDL/swell/swell-modstub-generic.cpp -std=c++11 -o reaper_slmk3.so -DSWELL_PROVIDED_BY_APP -DNOMINMAX

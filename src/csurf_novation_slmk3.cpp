@@ -1,13 +1,3 @@
-
-//#include "WDL/mutex.h"
-//#include "WDL/swell/swell-types.h"
-//#include "WDL/swell/swell-functions.h"
-//#include "WDL/swell/swell-internal.h"
-//#include "WDL/swell/swell-dlggen.h"
-//#include "WDL/swell/swell-gdi-internalpool.h"
-//#include "WDL/swell/swell-menugen.h"
-
-
 #include "csurf.h"
 #include <iostream>
 
@@ -20,19 +10,32 @@ class CSurf_NovationSlMk3 : public IReaperControlSurface {
     char configtmp[1024];
 
     void OnMIDIEvent(MIDI_event_t *evt) {
-      std::cout << "Midi Event received.";
+      std::cout << "\nMidi Event received.\n";
     }
-
 
 public:
     CSurf_NovationSlMk3(int indev, int outdev, int *errStats) {
       m_midi_in_dev = indev;
       m_midi_out_dev = outdev;
-      std::cout << "Csurf initalized.";
 
       // Create midi hardware access.
-      m_midiin = m_midi_in_dev >= 0 ? CreateMIDIInput(m_midi_in_dev) : NULL;
-      //m_midiout = m_midi_out_dev >= 0 ? CreateThreadedMIDIOutput(CreateMIDIOutput(m_midi_out_dev, false, NULL)) : NULL;
+      if (m_midi_in_dev >= 0) {
+        m_midiin = CreateMIDIInput(m_midi_in_dev);
+      }
+      else {
+        m_midiin = NULL;
+      }
+
+      if (m_midi_out_dev >= 0) {
+        m_midiout = CreateThreadedMIDIOutput(CreateMIDIOutput(
+          m_midi_out_dev,
+          false,
+          NULL
+        ));
+      }
+      else {
+        m_midiout = NULL;
+      }
 
       if (errStats) {
         if (m_midi_in_dev >=0  && !m_midiin) *errStats|=1;
@@ -57,7 +60,7 @@ public:
     const char *GetDescString() {
       descspace.SetFormatted(
         512,
-        "Novation SL MK III (Device %d,%d)",
+        __LOCALIZE_VERFMT("Novation SL MK III (Device %d,%d)", "csurf"),
         m_midi_in_dev,
         m_midi_out_dev
       );
@@ -65,17 +68,19 @@ public:
     }
     const char *GetConfigString() {
     // string of configuration data
-      sprintf(configtmp,"0 0 %d %d",m_midi_in_dev,m_midi_out_dev);
+      sprintf(configtmp, "0 0 %d %d", m_midi_in_dev, m_midi_out_dev);
       return configtmp;
     }
 
     void CloseNoReset() {
       if (m_midiout) {
         DELETE_ASYNC(m_midiout);
+        m_midiout = 0;
       }
-      DELETE_ASYNC(m_midiin);
-      m_midiout=0;
-      m_midiin=0;
+      if (m_midiin) {
+        DELETE_ASYNC(m_midiin);
+        m_midiin = 0;
+      }
     }
 
     void Run() {
@@ -132,17 +137,95 @@ static void parseParms(const char *str, int parms[4]) {
 static IReaperControlSurface *createFunc(const char *type_string, const char *configString, int *errStats) {
   int parms[4];
   parseParms(configString,parms);
-  return new CSurf_NovationSlMk3(parms[2],parms[3],errStats);
+  //std::cout << "\n" << parms[2] << " - " << parms[3] << "\n";
+
+  return new CSurf_NovationSlMk3(3,3, errStats);
 }
 
 static WDL_DLGRET dlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+  switch (uMsg) {
+    case WM_INITDIALOG: {
+      int parms[4];
+      parseParms((const char *)lParam, parms);
+
+      ShowWindow(GetDlgItem(hwndDlg, IDC_EDIT1), SW_HIDE);
+      ShowWindow(GetDlgItem(hwndDlg, IDC_EDIT1_LBL), SW_HIDE);
+      ShowWindow(GetDlgItem(hwndDlg, IDC_EDIT2), SW_HIDE);
+      ShowWindow(GetDlgItem(hwndDlg, IDC_EDIT2_LBL), SW_HIDE);
+      ShowWindow(GetDlgItem(hwndDlg, IDC_EDIT2_LBL2), SW_HIDE);
+
+      WDL_UTF8_HookComboBox(GetDlgItem(hwndDlg, IDC_COMBO2));
+      WDL_UTF8_HookComboBox(GetDlgItem(hwndDlg, IDC_COMBO3));
+
+      int n = GetNumMIDIInputs();
+      int x = SendDlgItemMessage(
+        hwndDlg,
+        IDC_COMBO2,
+        CB_ADDSTRING,
+        0,
+        (LPARAM)__LOCALIZE("None", "csurf")
+      );
+      SendDlgItemMessage(hwndDlg, IDC_COMBO2, CB_SETITEMDATA, x, -1);
+      x = SendDlgItemMessage(
+        hwndDlg,
+        IDC_COMBO3,
+        CB_ADDSTRING,
+        0,
+        (LPARAM)__LOCALIZE("None", "csurf")
+      );
+      SendDlgItemMessage(hwndDlg, IDC_COMBO3, CB_SETITEMDATA, x, -1);
+      for (x = 0; x < n; x ++) {
+        char buf[512];
+        if (GetMIDIInputName(x, buf, sizeof(buf))) {
+          int a = SendDlgItemMessage(hwndDlg, IDC_COMBO2, CB_ADDSTRING, 0, (LPARAM)buf);
+          SendDlgItemMessage(hwndDlg, IDC_COMBO2, CB_SETITEMDATA, a, x);
+          if (x == parms[2]) {
+            SendDlgItemMessage(hwndDlg, IDC_COMBO2, CB_SETCURSEL, a, 0);
+          }
+        }
+      }
+      n = GetNumMIDIOutputs();
+      for (x = 0; x < n; x ++) {
+        char buf[512];
+        if (GetMIDIOutputName(x, buf, sizeof(buf))) {
+          int a = SendDlgItemMessage(hwndDlg, IDC_COMBO3, CB_ADDSTRING, 0, (LPARAM)buf);
+          SendDlgItemMessage(hwndDlg, IDC_COMBO3, CB_SETITEMDATA, a, x);
+          if (x == parms[3]) {
+            SendDlgItemMessage(hwndDlg, IDC_COMBO3, CB_SETCURSEL, a, 0);
+          }
+        }
+      }
+    }
+    break;
+
+    case WM_USER + 1024:
+      if (wParam > 1 && lParam) {
+        char tmp[512];
+
+        int indev = -1, outdev = -1;
+        int r = SendDlgItemMessage(hwndDlg, IDC_COMBO2, CB_GETCURSEL, 0, 0);
+        if (r != CB_ERR) {
+          indev = SendDlgItemMessage(hwndDlg, IDC_COMBO2, CB_GETITEMDATA, r, 0);
+        }
+        r = SendDlgItemMessage(hwndDlg, IDC_COMBO3, CB_GETCURSEL, 0, 0);
+        if (r != CB_ERR) {
+          outdev = SendDlgItemMessage(hwndDlg, IDC_COMBO3, CB_GETITEMDATA, r, 0);
+        }
+
+        sprintf(tmp,"0 0 %d %d", indev, outdev);
+        lstrcpyn((char *)lParam, tmp, wParam);
+      }
+    break;
+  }
   return 0;
 }
 
 static HWND configFunc(const char *type_string, HWND parent, const char *initConfigString) {
+  std::cout << "\nconfigFunc: " << initConfigString << "\n";
+
   return CreateDialogParam(
     g_hInst,
-    MAKEINTRESOURCE(IDD_SURFACEEDIT_MCU),
+    MAKEINTRESOURCE(IDD_SURFACEEDIT_SLMK3),
     parent,
     dlgProc,
     (LPARAM)initConfigString
@@ -151,9 +234,9 @@ static HWND configFunc(const char *type_string, HWND parent, const char *initCon
 
 
 reaper_csurf_reg_t csurf_novation_slmk3_reg = {
-  "Wittis Control Surface",
+  "NOVATIONSLMK",
   // !WANT_LOCALIZE_STRINGS_BEGIN:csurf_type
-  "Wiuiui noch ein Text",
+  __LOCALIZE_VERFMT("Novation SL MK III", "csurf"),
   // !WANT_LOCALIZE_STRINGS_END
   createFunc,
   configFunc,

@@ -10,40 +10,7 @@ set(SOURCE_FILES
   src/reaper_slmk3.cpp
   src/csurf_novation_slmk3.cpp
   WDL/swell/swell-modstub-generic.cpp
-  #WDL/swell/swell-misc-generic.cpp
-  #WDL/swell/swell-dlg-generic.cpp
-
-  #src/sdk/reaper_plugin.h
-  #WDL/mutex.h
-  #WDL/swell/swell-functions.h
-  #WDL/swell/swell-internal.h
-  #WDL/swell/swell-dlggen.h
-  #WDL/swell/swell-gdi-internalpool.h
-  #WDL/swell/swell-menugen.h
-  #WDL/swell/swell-types.h
 )
-
-#set(HEADER_FILES
-  #swell-functions.h
-  #swell-internal.h
-  #swell-dlggen.h
-  #swell-gdi-internalpool.h
-  #swell-menugen.h
-  #swell-types.h
-#)
-
-
-
-#add_definitions(
-  #-include ../sdk/reaper_plugin.h
-  #-include ../WDL/mutex.h
-  #-include ../WDL/swell/swell-types.h
-  #-include ../WDL/swell/swell-functions.h
-  #-include ../WDL/swell/swell-internal.h
-  #-include ../WDL/swell/swell-dlggen.h
-  #-include ../WDL/swell/swell-gdi-internalpool.h
-  #-include ../WDL/swell/swell-menugen.h
-#)
 
 add_library(reaper_slmk3 SHARED ${SOURCE_FILES})
 target_include_directories(reaper_slmk3 PRIVATE WDL/swell)

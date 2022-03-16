@@ -8,6 +8,7 @@
 #define IDD_SURFACEEDIT_OSC             266
 #define IDD_SURFACEEDIT_HUI             267
 #define IDD_SURFACEEDIT_WWW             268
+#define IDD_SURFACEEDIT_SLMK3           269
 #define IDC_CHECK1                      1000
 #define IDC_COMBO2                      1001
 #define IDC_COMBO3                      1002
