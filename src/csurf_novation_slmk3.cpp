@@ -1,10 +1,13 @@
 #include "csurf.h"
 #include <iostream>
+#include "CcsConfig.cpp"
 
 class CSurf_NovationSlMk3 : public IReaperControlSurface {
     int m_midi_in_dev,m_midi_out_dev;
     midi_Output *m_midiout;
     midi_Input *m_midiin;
+
+    CcsConfig *config;
 
     WDL_String descspace;
     char configtmp[1024];
@@ -46,6 +49,7 @@ public:
         m_midiin->start();
       }
 
+      config = new CcsConfig("/home/martin/.config/REAPER/ccs/");
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) {
@@ -67,7 +71,7 @@ public:
       return descspace.Get();
     }
     const char *GetConfigString() {
-    // string of configuration data
+      // String of configuration data. We just store the midi device ids as integers.
       sprintf(configtmp, "0 0 %d %d", m_midi_in_dev, m_midi_out_dev);
       return configtmp;
     }
@@ -137,8 +141,8 @@ static void parseParms(const char *str, int parms[4]) {
 static IReaperControlSurface *createFunc(const char *type_string, const char *configString, int *errStats) {
   int parms[4];
   parseParms(configString,parms);
-  //std::cout << "\n" << parms[2] << " - " << parms[3] << "\n";
-
+  // Since I was not yet able to actually store a control surface, let's always use the
+  // correct id so we don't need to manually select them everytime when testing.
   return new CSurf_NovationSlMk3(3,3, errStats);
 }
 

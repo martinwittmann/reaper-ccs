@@ -508,7 +508,6 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hI
 class threadedMIDIOutput : public midi_Output {
 public:
     threadedMIDIOutput(midi_Output *out) {
-      std::cout << "\n4\n";
       m_output = out;
       m_quit = 0;
       unsigned id;
@@ -520,7 +519,6 @@ public:
         0,
         &id
       );
-      std::cout << "\n5\n";
     }
 
     virtual ~threadedMIDIOutput() {
@@ -644,11 +642,8 @@ public:
 };
 
 midi_Output *CreateThreadedMIDIOutput(midi_Output *output) {
-  std::cout << "\n1\n";
   if (!output) {
-    std::cout << "\n2\n";
     return output;
   }
-  std::cout << "\n3\n";
   return new threadedMIDIOutput(output);
 }

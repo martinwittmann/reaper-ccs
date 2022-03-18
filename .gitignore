@@ -3,5 +3,6 @@ reaper-plugins/
 sdk/
 build/
 .idea/
+CMakeFiles/
 
 *.so
