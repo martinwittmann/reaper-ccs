@@ -1,6 +1,7 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include<experimental/filesystem>
+#include "CcsSession.cpp"
 
 namespace fse = std::experimental::filesystem;
 namespace fs = std::filesystem;
@@ -16,6 +17,8 @@ private:
     string lastSession;
     std::vector<string> sessions;
 
+    CcsSession* currentSession;
+
     YAML::Node config;
 
 public:
@@ -26,12 +29,13 @@ public:
       pluginsDir = baseDir + fse::path::preferred_separator + "plugins";
       config = loadYamlFile(baseDir + "config.yml");
 
-      lastSession = config["last_session"].as<std::string>();
-
-      std::cout << "\n" << ;
-      YAML::Node yaml = YAML::LoadFile(baseDir + "config.yml");
-      std::cout << "\n---\n" << yaml["last_session"] << "\n";
       sessions = getSessions();
+      lastSession = config["last_session"].as<std::string>();
+      currentSession = loadSession(lastSession);
+    }
+
+    ~CcsConfig() {
+      delete currentSession;
     }
 
     YAML::Node loadYamlFile(string filename) {
@@ -57,5 +61,9 @@ public:
       }
       string session_filename = path.string() + fse::path::preferred_separator + "session.yml";
       return fse::exists(fse::path(session_filename));
+    }
+
+    CcsSession* loadSession(string sessionId) {
+      return new CcsSession(sessionsDir + fse::path::preferred_separator + sessionId);
     }
 };
