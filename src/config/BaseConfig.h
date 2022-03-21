@@ -13,7 +13,7 @@ namespace CCS {
     YAML::Node yaml;
     bool allowExtendConfig;
     std::string extendKeyName;
-    const char keySeparator = '/';
+    const char keySeparator = '.';
 
   public:
     BaseConfig(std::string filename, bool allowExtendConfig, std::string extendKeyName = "extends");

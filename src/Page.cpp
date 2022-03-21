@@ -12,9 +12,6 @@ namespace CCS {
 
   Page::Page(string pagePath) {
     config = new PageConfig(pagePath);
-    //string hui = config->getValue("mappings/controls/slmk3.encoder2/label");
-    string hui = config->getValue("on_activate/1");
-    int dd = 1;
   }
 
   Page::~Page() {
