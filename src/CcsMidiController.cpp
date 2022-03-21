@@ -2,7 +2,7 @@
 #include "csurf.h"
 #include "CcsMidiControlElement.cpp"
 #include "yaml-cpp/yaml.h"
-#include "CcsUtil.cpp"
+#include "CcsUtil.h"
 
 using namespace std;
 using std::string;
@@ -24,12 +24,12 @@ public:
       string id,
       string name,
       int deviceId,
-      midi_Output *output,
+      //midi_Output *output,
       YAML::Node config
     ) {
       this->id = id;
       this->name = name;
-      this->midiOutput = output;
+      //this->midiOutput = output;
       this->config = config;
       this->defaultStatusByte = CcsUtil::hexToInt(config["default_status"].as<string>());
       initializeControls();

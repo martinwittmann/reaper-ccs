@@ -49,12 +49,10 @@ public:
       if (filename.starts_with(".") || filename.starts_with("_") || !filename.ends_with(".yml")) {
         return false;
       }
-      string session_filename = path.string() + fse::path::preferred_separator + "session.yml";
-      return fse::exists(fse::path(session_filename));
+      return is_regular_file(path);
     }
 
     void addSessionPages() {
-      sessionConfig = YAML::LoadFile(pagesDir);
       std::vector<string> pageNames = getPageNames();
       for (std::vector<string>::iterator it = pageNames.begin(); it != pageNames.end(); ++it) {
         string pagePath = pagesDir + fse::path::preferred_separator + *it;
