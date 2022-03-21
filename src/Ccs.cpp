@@ -1,6 +1,6 @@
 #include <string>
 #include "Session.cpp"
-#include "config/GlobalConfig.cpp"
+#include "config/GlobalConfig.h"
 #include "globals.cpp"
 
 namespace CCS {

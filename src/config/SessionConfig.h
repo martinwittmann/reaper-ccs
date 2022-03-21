@@ -5,7 +5,6 @@ namespace CCS {
 
   class SessionConfig : public BaseConfig {
   public:
-    SessionConfig(std::string baseDir) : BaseConfig(baseDir, false) {
-    }
+    SessionConfig(std::string baseDir);
   };
 }

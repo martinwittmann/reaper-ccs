@@ -1,5 +1,5 @@
-#ifndef CCS_CONFIG_H_
-#define CCS_CONFIG_H_
+#ifndef CCS_CONFIG_H
+#define CCS_CONFIG_H
 
 #include <string>
 #include <map>
@@ -9,8 +9,6 @@
 namespace CCS {
 
   class BaseConfig {
-
-  private:
     std::string filename;
     YAML::Node yaml;
     bool allowExtendConfig;
@@ -18,7 +16,7 @@ namespace CCS {
     const char keySeparator = '/';
 
   public:
-    BaseConfig(std::string filename, bool allowExtendConfig, std::string extendKeyName = "extend");
+    BaseConfig(std::string filename, bool allowExtendConfig, std::string extendKeyName = "extends");
 
     YAML::Node loadConfig(std::string filename);
 

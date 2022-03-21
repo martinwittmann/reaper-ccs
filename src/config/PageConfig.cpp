@@ -2,14 +2,13 @@
 #include "BaseConfig.h"
 
 namespace CCS {
-  using std::string;
 
   class PageConfig : public BaseConfig {
   public:
-    PageConfig(string baseDir) : BaseConfig(
+    PageConfig(std::string baseDir) : BaseConfig(
       baseDir,
       true,
-      "extends"
+      std::string("extends")
     ) {
       replaceVariables();
     }

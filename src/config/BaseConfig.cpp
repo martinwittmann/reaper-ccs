@@ -13,10 +13,11 @@ namespace CCS {
   using std::string;
   using std::vector;
 
-  BaseConfig::BaseConfig(string filename, bool allowExtendConfig, string extendKeyName) {
-    this->filename = filename;
-    this->allowExtendConfig = allowExtendConfig;
-    this->extendKeyName = extendKeyName;
+  BaseConfig::BaseConfig(string filename, bool allowExtendConfig, string extendKeyName) :
+    filename(filename),
+    allowExtendConfig(allowExtendConfig),
+    extendKeyName(extendKeyName)
+  {
     yaml = loadConfig(filename);
   }
 

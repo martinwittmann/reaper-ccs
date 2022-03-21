@@ -5,7 +5,7 @@
 #include "yaml-cpp/yaml.h"
 #include "Util.h"
 #include "MidiEventType.cpp"
-#include "config/MidiControllerConfig.cpp"
+#include "config/MidiControllerConfig.h"
 
 namespace CCS {
 

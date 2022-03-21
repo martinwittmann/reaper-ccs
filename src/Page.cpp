@@ -2,7 +2,7 @@
 #include<experimental/filesystem>
 #include "yaml-cpp/yaml.h"
 #include "Util.h"
-#include "config/PageConfig.cpp"
+#include "config/PageConfig.h"
 
 namespace CCS {
 

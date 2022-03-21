@@ -15,7 +15,7 @@ set(
   SOURCE_FILES
   src/Util.cpp
   src/reaper_slmk3.cpp
-  src/csurf_novation_slmk3.cpp
+  ignrc/csurf_novation_slmk3.cpp
   WDL/swell/swell-modstub-generic.cpp
 )
 
