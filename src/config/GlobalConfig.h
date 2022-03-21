@@ -9,7 +9,7 @@ namespace CCS {
 
   class GlobalConfig : public BaseConfig {
   public:
-    GlobalConfig(std::string baseDir);
+    explicit GlobalConfig(std::string baseDir);
     std::string getLastSessionId();
     std::vector<std::string> getSessionMidiControllers();
   };

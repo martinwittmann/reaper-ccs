@@ -1,11 +1,7 @@
 #include <string>
-#include "BaseConfig.h"
+#include "SessionConfig.h"
 
 namespace CCS {
 
-  class SessionConfig : public BaseConfig {
-  public:
-    SessionConfig(std::string baseDir) : BaseConfig(baseDir, false) {
-    }
-  };
+  SessionConfig::SessionConfig(std::string baseDir) : BaseConfig(baseDir, false) { }
 }

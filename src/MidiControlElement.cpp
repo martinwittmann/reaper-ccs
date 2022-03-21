@@ -1,5 +1,6 @@
 #include <string>
 #include "MidiEventType.cpp"
+#include "MidiControlElement.h"
 
 namespace CCS {
   using std::string;
@@ -9,43 +10,21 @@ namespace CCS {
    * like a knob, a button, a fader,...
    * Note that we do not use leds and other feedback elements here.
    */
-  class MidiControlElement {
-    int type;
-    // The status byte of the midi message received for this control element.
-    // We assume that the status stays the same, no matter which action this
-    // element triggers.
-    // For example when pushing and releasing a button we expect the same status
-    // and data1 bytes assuming a midi cc status and the corresponding cc number
-    // as data1.
-    // For relative encoders we also expect status and data1 to stay the same
-    // the the received data2 byte to contain the direction and speed information.
-    unsigned int statusByte;
-    unsigned int data1Byte;
+  MidiControlElement::MidiControlElement(string typeName, unsigned int status, unsigned int data1) {
+    type = MidiControlElement::getType(typeName);
+    statusByte = status;
+    data1Byte = data1;
+  }
 
+  int MidiControlElement::getType(string type) {
+    if (type == "button") return BUTTON;
+    if (type == "fader") return FADER;
+    if (type == "encoder_absolute") return ENCODER_ABSOLUTE;
+    if (type == "encoder_relative") return ENCODER_RELATIVE;
+    return UNKNOWN_CONTROL_TYPE;
+  }
 
-  public:
-    const static int UNKNOWN_CONTROL_TYPE = -1;
-    const static int BUTTON = 0;
-    const static int ENCODER_ABSOLUTE = 1;
-    const static int ENCODER_RELATIVE = 2;
-    const static int FADER = 3;
-
-    MidiControlElement(string typeName, unsigned int status, unsigned int data1) {
-      type = MidiControlElement::getType(typeName);
-      statusByte = status;
-      data1Byte = data1;
-    }
-
-    static int getType(string type) {
-      if (type == "button") return BUTTON;
-      if (type == "fader") return FADER;
-      if (type == "encoder_absolute") return ENCODER_ABSOLUTE;
-      if (type == "encoder_relative") return ENCODER_RELATIVE;
-      return UNKNOWN_CONTROL_TYPE;
-    }
-
-    MidiEventType getEventType() {
-      return MidiEventType{statusByte, data1Byte};
-    }
-  };
+  MidiEventType MidiControlElement::getEventType() {
+    return MidiEventType{statusByte, data1Byte};
+  }
 }

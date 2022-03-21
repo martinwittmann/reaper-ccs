@@ -8,7 +8,7 @@ namespace CCS {
 
   class PageConfig : public BaseConfig {
   public:
-    PageConfig(std::string baseDir);
+    explicit PageConfig(std::string baseDir);
   };
 }
 #endif
