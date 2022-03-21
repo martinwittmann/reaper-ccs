@@ -5,8 +5,8 @@
 #include "config/SessionConfig.h"
 #include "Session.h"
 
-#include "Page.cpp"
-#include "MidiController.cpp"
+#include "Page.h"
+#include "MidiController.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

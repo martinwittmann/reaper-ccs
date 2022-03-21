@@ -10,7 +10,11 @@ namespace CCS {
    * like a knob, a button, a fader,...
    * Note that we do not use leds and other feedback elements here.
    */
-  MidiControlElement::MidiControlElement(string typeName, unsigned int status, unsigned int data1) {
+  MidiControlElement::MidiControlElement(
+    string typeName,
+    unsigned int status,
+    unsigned int data1
+  ) {
     type = MidiControlElement::getType(typeName);
     statusByte = status;
     data1Byte = data1;

@@ -7,6 +7,7 @@
 #include "MidiEventType.cpp"
 #include "config/MidiControllerConfig.h"
 #include "MidiController.h"
+#include "globals.cpp"
 
 namespace CCS {
 

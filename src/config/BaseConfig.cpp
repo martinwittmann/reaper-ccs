@@ -12,6 +12,7 @@ namespace CCS {
 
   using std::string;
   using std::vector;
+  using std::map;
 
   BaseConfig::BaseConfig(string filename, bool allowExtendConfig, string extendKeyName) :
     filename(filename),

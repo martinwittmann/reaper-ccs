@@ -2,6 +2,7 @@
 #include<experimental/filesystem>
 #include "config/PageConfig.h"
 #include "Page.h"
+#include "globals.cpp"
 
 namespace CCS {
 

@@ -6,7 +6,7 @@ namespace CCS {
 
   GlobalConfig::GlobalConfig(std::string baseDir) : BaseConfig(baseDir, false) {}
 
-  std::string getLastSessionId() {
+  std::string GlobalConfig::getLastSessionId() {
     return getValue("last_session");
   }
 

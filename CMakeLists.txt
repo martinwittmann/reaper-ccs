@@ -10,7 +10,6 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 add_definitions(-DSWELL_PROVIDED_BY_APP -DNOMINMAX)
 
-# Add main.cpp file of project root directory as source file
 set(
   SOURCE_FILES
   src/config/BaseConfig.cpp
@@ -22,12 +21,19 @@ set(
   src/csurf_novation_slmk3.cpp
 
   src/Ccs.cpp
+  src/MidiController.cpp
   src/MidiControlElement.cpp
   src/MidiEventType.cpp
   src/Page.cpp
   src/Session.cpp
   src/Util.cpp
 
+  WDL/swell/swell-modstub-generic.cpp
+)
+
+set(
+  REAPER_SOURCE_FILES
+  src/csurf_novation_slmk3.cpp
   WDL/swell/swell-modstub-generic.cpp
 )
 
@@ -49,7 +55,7 @@ message("boost inc:${Boost_INCLUDE_DIRS}")
 
 #set_target_properties(ccs PROPERTIES OUTPUT_NAME "ccs")
 
-add_executable(ccs_exec src/main.cpp src/Util.cpp)
+add_executable(ccs_exec src/main.cpp ${SOURCE_FILES})
 target_link_libraries(ccs_exec ${YAML_CPP} stdc++fs)
 #target_include_directories(ccs_exec PRIVATE WDL/swell)
 

@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include "csurf.h"
-#include "MidiControlElement.cpp"
+#include "MidiControlElement.h"
 #include "yaml-cpp/yaml.h"
 #include "Util.h"
 #include "MidiEventType.cpp"
