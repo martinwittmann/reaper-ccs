@@ -1,4 +1,5 @@
 #include <string>
+#include "CcsMidiEventType.cpp"
 
 using std::string;
 
@@ -28,8 +29,8 @@ public:
     const static int ENCODER_RELATIVE = 2;
     const static int FADER = 3;
 
-    CcsMidiControlElement(int elementType, unsigned int status, unsigned int data1) {
-      type = elementType;
+    CcsMidiControlElement(string typeName, unsigned int status, unsigned int data1) {
+      type = CcsMidiControlElement::getType(typeName);
       statusByte = status;
       data1Byte = data1;
     }
@@ -40,5 +41,9 @@ public:
       if (type == "encoder_absolute") return ENCODER_ABSOLUTE;
       if (type == "encoder_relative") return ENCODER_RELATIVE;
       return UNKNOWN_CONTROL_TYPE;
+    }
+
+    CcsMidiEventType getEventType() {
+      return CcsMidiEventType { statusByte, data1Byte };
     }
 };

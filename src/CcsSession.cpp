@@ -1,6 +1,8 @@
 #include <string>
 #include<experimental/filesystem>
 #include "yaml-cpp/yaml.h"
+#include "globals.cpp"
+
 #include "CcsPage.cpp"
 #include "CcsMidiController.cpp"
 
@@ -11,16 +13,20 @@ using std::string;
 class CcsSession {
     string path;
     string pagesDir;
+    string midiControllersDir;
     string name;
     YAML::Node sessionConfig;
     std::vector<CcsPage*> pages;
+    std::vector<CcsMidiController*> midiControllers;
 
 public:
     CcsSession(string sessionPath) {
       path = sessionPath;
-      pagesDir = path + fse::path::preferred_separator + "pages";
-      sessionConfig = YAML::LoadFile(path + fse::path::preferred_separator + "session.yml");
-      addSessionPages();
+      pagesDir = path + SEP + "pages";
+      midiControllersDir = path + SEP + "controllers";
+      sessionConfig = YAML::LoadFile(path + SEP + "session" + YAML_EXT);
+      loadSessionPages();
+      loadMidiControllers();
     }
 
     ~CcsSession() {
@@ -29,11 +35,11 @@ public:
       }
     }
 
-    std::vector<string> getPageNames() {
+    static std::vector<string> getSessions(string sessionsDir) {
       std::vector<string> result;
-      for (const auto & entry: fse::directory_iterator(pagesDir)) {
+      for (const auto & entry: fse::directory_iterator(sessionsDir)) {
         fse::path entry_path = fse::path(entry.path());
-        if (is_directory(entry_path) || !isPageFile(entry_path.string())) {
+        if (!is_directory(entry_path) || !CcsSession::isSessionFile(entry_path.string())) {
           continue;
         }
         result.push_back(entry_path.filename());
@@ -41,21 +47,54 @@ public:
       return result;
     }
 
-    bool isPageFile(fse::path path) {
+    static bool isSessionFile(fse::path path) {
       string filename = path.filename();
-      filename.length();
-      // Note that we ignore files starting with _ here. This allows us to use
-      // those as templates to inherit from, like _default.yml.
-      if (filename.starts_with(".") || filename.starts_with("_") || !filename.ends_with(".yml")) {
+      if (filename.starts_with('.')) {
         return false;
       }
-      return is_regular_file(path);
+      string session_filename = path.string() + SEP + "session" + YAML_EXT;
+      return fse::exists(fse::path(session_filename));
     }
 
-    void addSessionPages() {
+    std::vector<string> getPageNames() {
+      std::vector<string> result;
+      for (const auto & entry: fse::directory_iterator(pagesDir)) {
+        fse::path entry_path = fse::path(entry.path());
+        if (is_directory(entry_path) || !CcsPage::isPageFile(entry_path.string())) {
+          continue;
+        }
+        result.push_back(entry_path.filename());
+      }
+      return result;
+    }
+
+    std::vector<string> getMidiControllerNames() {
+      std::vector<string> result;
+      for (const auto & entry: fse::directory_iterator(midiControllersDir)) {
+        fse::path entry_path = fse::path(entry.path());
+        if (
+          is_directory(entry_path) ||
+          !CcsMidiController::isMidiControllerConfigFile(entry_path.string())
+        ) {
+          continue;
+        }
+        result.push_back(entry_path.string());
+      }
+      return result;
+    }
+
+    void loadSessionPages() {
       std::vector<string> pageNames = getPageNames();
-      for (std::vector<string>::iterator it = pageNames.begin(); it != pageNames.end(); ++it) {
-        string pagePath = pagesDir + fse::path::preferred_separator + *it;
+      for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
+        string pagePath = pagesDir + SEP + *it;
+        pages.push_back(new CcsPage(pagePath));
+      }
+    }
+
+    void loadMidiControllers() {
+      std::vector<string> controllerNames = getMidiControllerNames();
+      for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
+        string pagePath = pagesDir + SEP + *it;
         pages.push_back(new CcsPage(pagePath));
       }
     }

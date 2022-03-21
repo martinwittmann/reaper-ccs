@@ -1,7 +1,3 @@
-//
-// Created by martin on 21.03.22.
-//
-
 #ifndef PROJECTNAME_CCSUTIL_H
 #define PROJECTNAME_CCSUTIL_H
 

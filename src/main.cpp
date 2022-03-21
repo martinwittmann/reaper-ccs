@@ -12,8 +12,8 @@ int main() {
   string pageFile = baseDir + "sessions/pcc/pages/page1.yml";
   string sessionPath = baseDir + "sessions/pcc";
   //auto session = new CcsSession(sessionPath);
-  auto page = new CcsPage(pageFile);
+  //auto page = new CcsPage(pageFile);
   int aa = 1;
-  delete page;
+  //delete session;
   return 0;
 }

@@ -1,9 +1,10 @@
 #include <string>
 #include "CcsSession.cpp"
-#include "CcsConfig.cpp"
+#include "config/GlobalConfig.cpp"
+#include "globals.cpp"
 
 namespace fse = std::experimental::filesystem;
-const std::string sep = to_string(fse::path::preferred_separator);
+using std::string;
 
 class Ccs {
 
@@ -15,17 +16,17 @@ class Ccs {
 
     CcsSession* currentSession;
 
-    CcsConfig config;
+    GlobalConfig* config;
 
 public:
     Ccs(string baseDir) {
-      sessionsDir = baseDir + sep + "sessions";
-      controllersDir = baseDir + sep + "controllers";
-      pluginsDir = baseDir + sep + "plugins";
-      config = loadYamlFile(baseDir + "config.yml");
+      sessionsDir = baseDir + SEP + "sessions";
+      controllersDir = baseDir + SEP + "controllers";
+      pluginsDir = baseDir + SEP + "plugins";
+      config = new GlobalConfig(baseDir + "config" + YAML_EXT);
 
-      sessions = getSessions();
-      lastSession = config["last_session"].as<std::string>();
+      sessions = CcsSession::getSessions(sessionsDir);
+      lastSession = config->getLastSession();
       currentSession = loadSession(lastSession);
     }
 
@@ -33,28 +34,8 @@ public:
       delete currentSession;
     }
 
-    std::vector<string> getSessions() {
-      std::vector<string> result;
-      for (const auto & entry: fse::directory_iterator(sessionsDir)) {
-        fse::path entry_path = fse::path(entry.path());
-        if (!is_directory(entry_path) || !isSessionDir(entry_path.string())) {
-          continue;
-        }
-        result.push_back(entry_path.filename());
-      }
-      return result;
-    }
-
-    bool isSessionDir(fse::path path) {
-      string filename = path.filename();
-      if (filename.starts_with('.')) {
-        return false;
-      }
-      string session_filename = path.string() + fse::path::preferred_separator + "session.yml";
-      return fse::exists(fse::path(session_filename));
-    }
 
     CcsSession* loadSession(string sessionId) {
-      return new CcsSession(sessionsDir + fse::path::preferred_separator + sessionId);
+      return new CcsSession(sessionsDir + SEP + sessionId);
     }
 };

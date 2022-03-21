@@ -1,5 +1,5 @@
 #include <string>
-#include "CcsConfig.cpp"
+#include "CcsConfig.h"
 
 using std::string;
 
