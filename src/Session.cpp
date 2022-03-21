@@ -16,7 +16,11 @@ namespace CCS {
   Session::Session(string sessionPath) {
     path = sessionPath;
     pagesDir = path + SEP + "pages";
-    midiControllersDir = path + SEP + "controllers";
+    midiControllersDir = fse::path(path)
+      .parent_path()
+      .parent_path()
+      .append("controllers")
+      .string();
     sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
     loadSessionPages();
     loadMidiControllers();
@@ -86,10 +90,12 @@ namespace CCS {
   }
 
   void Session::loadMidiControllers() {
+    // Hardcoded for testing.
+    const int deviceId = 0;
     std::vector<string> controllerNames = getMidiControllerNames();
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
-      string pagePath = pagesDir + SEP + *it;
-      pages.push_back(new Page(pagePath));
+      string controllerConfigFile = *it;
+      midiControllers.push_back(new MidiController(controllerConfigFile, deviceId));
     }
   }
 }

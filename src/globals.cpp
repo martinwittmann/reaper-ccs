@@ -4,7 +4,7 @@
 #include<experimental/filesystem>
 namespace fse = std::experimental::filesystem;
 namespace fs = std::filesystem;
-const std::string SEP = std::to_string(fse::path::preferred_separator);
+const std::string SEP = std::string(1, fse::path::preferred_separator);
 #endif
 
 #ifndef YAML_EXT_

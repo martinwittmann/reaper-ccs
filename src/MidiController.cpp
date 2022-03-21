@@ -48,7 +48,7 @@ namespace CCS {
       auto controlElement = new MidiControlElement(
         config->getValue("type", &controlNode),
         status,
-        Util::hexToInt(config->getValue("data1", &controlNode))
+        Util::hexToInt(config->getValue("message/data1", &controlNode))
       );
       controls.push_back(controlElement);
     }

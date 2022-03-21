@@ -109,15 +109,17 @@ namespace CCS {
   }
 
   string BaseConfig::getValue(string key) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
-    YAML::Node actualNode = _getValue(keyParts, yaml);
-    return actualNode[keyParts.back()].as<string>();
+    return getValue(key, &yaml);
   }
 
   string BaseConfig::getValue(string key, YAML::Node *rootNode) {
     vector<string> keyParts = Util::splitString(key, &keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
-    return actualNode[keyParts.back()].as<string>();
+    YAML::Node resultNode = actualNode[keyParts.back()];
+    if (resultNode) {
+      return resultNode.as<string>();
+    }
+    throw "Did not find values for key: '" + key + "'";
   }
 
   vector<string> BaseConfig::getListValues(string key) {

@@ -9,10 +9,11 @@ namespace CCS {
   using std::string;
 
   Ccs::Ccs(string baseDir) {
-    sessionsDir = baseDir + SEP + "sessions";
-    controllersDir = baseDir + SEP + "controllers";
-    pluginsDir = baseDir + SEP + "plugins";
+    sessionsDir = baseDir + "sessions";
+    controllersDir = baseDir + "controllers";
+    pluginsDir = baseDir + "plugins";
     config = new GlobalConfig(baseDir + "config" + YAML_EXT);
+
     sessions = Session::getSessions(sessionsDir);
     lastSession = config->getLastSessionId();
     currentSession = loadSession(lastSession);
