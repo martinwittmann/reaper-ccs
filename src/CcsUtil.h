@@ -18,13 +18,10 @@ class CcsUtil {
     YAML::Node config;
 public:
     static unsigned int hexToInt(string hex);
-    static map<string,string> getVariables(YAML::Node &variablesNode);
     static bool _compareVariableLength(string var1, string var2);
     static string processString(string raw, map<string,string> variables);
-    static void mergeYaml(YAML::Node target, YAML::Node const& source);
-    static void _mergeYamlNode(YAML::Node target, YAML::Node const& source);
-    static void _mergeYamlMap(YAML::Node target, YAML::Node const& source);
-    static void _mergeYamlSequences(YAML::Node target, YAML::Node const& source);
+    static void logError(string message);
+    static std::vector<string> splitString(string &input, const char* delimiter);
 };
 
 #endif //PROJECTNAME_CCSUTIL_H

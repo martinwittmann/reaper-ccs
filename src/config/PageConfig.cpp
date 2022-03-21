@@ -1,0 +1,11 @@
+#include <string>
+#include "CcsConfig.cpp"
+
+using std::string;
+
+class PageConfig : public CcsConfig {
+public:
+    PageConfig(string baseDir) : CcsConfig(baseDir, true, "extends") {
+
+    }
+};

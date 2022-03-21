@@ -4,6 +4,8 @@
 #include "yaml-cpp/yaml.h"
 #include "boost/algorithm/string.hpp"
 #include "CcsUtil.h"
+#include <iostream>
+#include <vector>
 
 using std::string;
 using std::map;
@@ -12,15 +14,7 @@ unsigned int CcsUtil::hexToInt(string hex) {
   return std::stoul(hex, nullptr, 16);
 }
 
-map<string,string> CcsUtil::getVariables(YAML::Node &variablesNode) {
-  map<string,string> result;
-  for (const auto& item : variablesNode) {
-    auto key = item.first.as<string>();
-    auto value = item.second.as<string>();
-    result.insert(std::pair(key, value));
-  }
-  return result;
-}
+
 
 bool CcsUtil::_compareVariableLength(string var1, string var2) {
   return var1.length() > var2.length();
@@ -62,38 +56,17 @@ string CcsUtil::processString(string raw, map<string,string> variables) {
   return result;
 }
 
-// Copied from https://github.com/coryan/jaybeams/blob/master/jb/merge_yaml.cpp
-void CcsUtil::mergeYaml(YAML::Node target, YAML::Node const& source) {
-  switch (source.Type()) {
-    case YAML::NodeType::Scalar:
-      target = source.Scalar();
-      break;
-    case YAML::NodeType::Map:
-      CcsUtil::_mergeYamlMap(target, source);
-      break;
-    case YAML::NodeType::Sequence:
-      CcsUtil::_mergeYamlSequences(target, source);
-      break;
-  }
+void CcsUtil::logError(string message) {
+  std::cout << "[ERROR] " << message << "\n";
 }
 
-void CcsUtil::_mergeYamlNode(YAML::Node target, YAML::Node const& source) {
-  CcsUtil::mergeYaml(target, source);
-}
-
-void CcsUtil::_mergeYamlMap(YAML::Node target, YAML::Node const& source) {
-  for (auto const& j : source) {
-    CcsUtil::_mergeYamlNode(target[j.first.Scalar()], j.second);
+std::vector<string> CcsUtil::splitString(string &input, const char* delimiter) {
+  std::vector<string> result;
+  char *token = strtok(const_cast<char*>(input.c_str()), delimiter);
+  while (token != nullptr) {
+    string part = std::string(token);
+    result.push_back(part);
+    token = strtok(nullptr, delimiter);
   }
-}
-
-void CcsUtil::_mergeYamlSequences(YAML::Node target, YAML::Node const& source) {
-  for (std::size_t i = 0; i != source.size(); ++i) {
-    if (i < target.size()) {
-      CcsUtil::_mergeYamlNode(target[i], source[i]);
-    }
-    else {
-      target.push_back(YAML::Clone(source[i]));
-    }
-  }
+  return result;
 }
