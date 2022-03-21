@@ -14,7 +14,7 @@ class CcsConfig {
 
 private:
     string filename;
-    YAML::Node config;
+    YAML::Node yaml;
     bool allowExtendConfig;
     string extendKeyName;
 
@@ -27,7 +27,7 @@ public:
       this->filename = filename;
       this->allowExtendConfig = allowExtendConfig;
       this->extendKeyName = extendKeyName;
-      config = loadConfig(filename);
+      yaml = loadConfig(filename);
     }
 
     YAML::Node loadConfig(string filename) {
@@ -56,22 +56,34 @@ public:
       return result;
     }
 
-    void replaceVariables(YAML::Node &config, map<string,string> variables) {
-      switch (config.Type()) {
+    void replaceVariables() {
+      YAML::Node variablesNode = yaml["variables"];
+      auto variables = getVariables(variablesNode);
+      replaceVariables(yaml, variables);
+    }
+
+    void replaceVariables(YAML::Node &yaml, map<string,string> variables) {
+      switch (yaml.Type()) {
         case YAML::NodeType::Scalar:
           // Actually replace variables.
-          config = CcsUtil::processString(config.as<string>(), variables);
+          yaml = CcsUtil::processString(yaml.as<string>(), variables);
           break;
         case YAML::NodeType::Map:
           // For maps we simply recurse.
-          for (const auto& item : config) {
+          for (const auto& item : yaml) {
             auto node = item.second;
+            string dd = item.first.as<string>();
             replaceVariables(node, variables);
           }
           break;
         case YAML::NodeType::Sequence:
-          for (const auto& item : config) {
-            auto node = item.second;
+          /*
+          for (YAML::iterator it = yaml.begin(); it != yaml.end(); ++it) {
+            const YAML::Node &item = *it;
+          }
+          */
+          for (const auto& item : yaml) {
+            auto node = item;
             replaceVariables(node, variables);
           }
           break;
@@ -99,24 +111,26 @@ public:
 
     string getValue(string key, const char separator = '/') {
       vector<string> keyParts = CcsUtil::splitString(key, &separator);
-      YAML::Node* actualNode = _getValue(keyParts, &config);
-      return "sdf";
-      //return actualNode->as<string>();
+      YAML::Node actualNode = _getValue(keyParts, yaml);
+      //vector<string> ff = debugNode(actualNode);
+      return actualNode[keyParts.back()].as<string>();
     }
 
-    YAML::Node* _getValue(vector<string> keyParts, YAML::Node *node) {
-      return node;
-      /*
+    YAML::Node _getValue(vector<string> keyParts, YAML::Node node) {
       if (keyParts.size() == 1) {
         return node;
       }
       string firstKey = keyParts.at(0);
       keyParts.erase(keyParts.begin());
-      // TODO Find a cleaner way of doing this.
-      YAML::Node hui = *node;
-      auto newNode = hui[firstKey];
-      return _getValue(keyParts, &newNode);
-      */
+      return _getValue(keyParts, node[firstKey]);
+    }
+
+    vector<string> debugNode(YAML::Node node) {
+      vector<string> result;
+      for (const auto& item : node) {
+        result.push_back(item.first.as<string>());
+      }
+      return result;
     }
 
     void mergeYamlNode(YAML::Node target, YAML::Node const& source) {

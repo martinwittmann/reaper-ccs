@@ -1,5 +1,6 @@
 //#include "CcsConfig.cpp"
-#include "CcsPage.cpp"
+//#include "CcsPage.cpp"
+#include "CcsSession.cpp"
 #include <fstream>
 
 namespace fse = std::experimental::filesystem;
@@ -9,7 +10,9 @@ using std::ofstream;
 int main() {
   string baseDir = "/home/martin/.config/REAPER/ccs/";
   string pageFile = baseDir + "sessions/pcc/pages/page1.yml";
-  CcsPage* page = new CcsPage(pageFile);
+  string sessionPath = baseDir + "sessions/pcc";
+  //auto session = new CcsSession(sessionPath);
+  auto page = new CcsPage(pageFile);
   int aa = 1;
   delete page;
   return 0;

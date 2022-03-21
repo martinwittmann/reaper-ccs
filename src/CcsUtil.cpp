@@ -50,8 +50,12 @@ string CcsUtil::processString(string raw, map<string,string> variables) {
   for (auto it = used_variables.begin(); it != used_variables.end(); ++it) {
     string variable = *it;
     // We need to remove the $ when looking up the value.
-    string value1 = variables.at(variable.substr(1));
-    boost::replace_all(result, variable, value1);
+    string variableName = variable.substr(1);
+    map<string,string>::iterator variableIt = variables.find(variableName);
+    if (variableIt != variables.end()) {
+      string value = variables.at(variableName);
+      boost::replace_all(result, variable, value);
+    }
   }
   return result;
 }
