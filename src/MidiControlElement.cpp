@@ -1,14 +1,15 @@
 #include <string>
-#include "CcsMidiEventType.cpp"
+#include "MidiEventType.cpp"
 
-using std::string;
+namespace CCS {
+  using std::string;
 
-/**
- * This represents a single control/ui element on a midi controller
- * like a knob, a button, a fader,...
- * Note that we do not use leds and other feedback elements here.
- */
-class CcsMidiControlElement {
+  /**
+   * This represents a single control/ui element on a midi controller
+   * like a knob, a button, a fader,...
+   * Note that we do not use leds and other feedback elements here.
+   */
+  class MidiControlElement {
     int type;
     // The status byte of the midi message received for this control element.
     // We assume that the status stays the same, no matter which action this
@@ -22,15 +23,15 @@ class CcsMidiControlElement {
     unsigned int data1Byte;
 
 
-public:
+  public:
     const static int UNKNOWN_CONTROL_TYPE = -1;
     const static int BUTTON = 0;
     const static int ENCODER_ABSOLUTE = 1;
     const static int ENCODER_RELATIVE = 2;
     const static int FADER = 3;
 
-    CcsMidiControlElement(string typeName, unsigned int status, unsigned int data1) {
-      type = CcsMidiControlElement::getType(typeName);
+    MidiControlElement(string typeName, unsigned int status, unsigned int data1) {
+      type = MidiControlElement::getType(typeName);
       statusByte = status;
       data1Byte = data1;
     }
@@ -43,7 +44,8 @@ public:
       return UNKNOWN_CONTROL_TYPE;
     }
 
-    CcsMidiEventType getEventType() {
-      return CcsMidiEventType { statusByte, data1Byte };
+    MidiEventType getEventType() {
+      return MidiEventType{statusByte, data1Byte};
     }
-};
+  };
+}

@@ -3,23 +3,24 @@
 #include "yaml-cpp/yaml.h"
 #include "globals.cpp"
 
-#include "CcsPage.cpp"
-#include "CcsMidiController.cpp"
+#include "Page.cpp"
+#include "MidiController.cpp"
 
-namespace fse = std::experimental::filesystem;
-namespace fs = std::filesystem;
-using std::string;
+namespace CCS {
+  namespace fse = std::experimental::filesystem;
+  namespace fs = std::filesystem;
+  using std::string;
 
-class CcsSession {
+  class CcsSession {
     string path;
     string pagesDir;
     string midiControllersDir;
     string name;
     YAML::Node sessionConfig;
-    std::vector<CcsPage*> pages;
-    std::vector<CcsMidiController*> midiControllers;
+    std::vector<Page *> pages;
+    std::vector<MidiController *> midiControllers;
 
-public:
+  public:
     CcsSession(string sessionPath) {
       path = sessionPath;
       pagesDir = path + SEP + "pages";
@@ -37,7 +38,7 @@ public:
 
     static std::vector<string> getSessions(string sessionsDir) {
       std::vector<string> result;
-      for (const auto & entry: fse::directory_iterator(sessionsDir)) {
+      for (const auto &entry: fse::directory_iterator(sessionsDir)) {
         fse::path entry_path = fse::path(entry.path());
         if (!is_directory(entry_path) || !CcsSession::isSessionFile(entry_path.string())) {
           continue;
@@ -58,9 +59,9 @@ public:
 
     std::vector<string> getPageNames() {
       std::vector<string> result;
-      for (const auto & entry: fse::directory_iterator(pagesDir)) {
+      for (const auto &entry: fse::directory_iterator(pagesDir)) {
         fse::path entry_path = fse::path(entry.path());
-        if (is_directory(entry_path) || !CcsPage::isPageFile(entry_path.string())) {
+        if (is_directory(entry_path) || !Page::isPageConfigFile(entry_path.string())) {
           continue;
         }
         result.push_back(entry_path.filename());
@@ -70,12 +71,12 @@ public:
 
     std::vector<string> getMidiControllerNames() {
       std::vector<string> result;
-      for (const auto & entry: fse::directory_iterator(midiControllersDir)) {
+      for (const auto &entry: fse::directory_iterator(midiControllersDir)) {
         fse::path entry_path = fse::path(entry.path());
         if (
           is_directory(entry_path) ||
-          !CcsMidiController::isMidiControllerConfigFile(entry_path.string())
-        ) {
+          !MidiController::isMidiControllerConfigFile(entry_path.string())
+          ) {
           continue;
         }
         result.push_back(entry_path.string());
@@ -87,7 +88,7 @@ public:
       std::vector<string> pageNames = getPageNames();
       for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
         string pagePath = pagesDir + SEP + *it;
-        pages.push_back(new CcsPage(pagePath));
+        pages.push_back(new Page(pagePath));
       }
     }
 
@@ -95,7 +96,8 @@ public:
       std::vector<string> controllerNames = getMidiControllerNames();
       for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
         string pagePath = pagesDir + SEP + *it;
-        pages.push_back(new CcsPage(pagePath));
+        pages.push_back(new Page(pagePath));
       }
     }
-};
+  };
+}

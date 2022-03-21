@@ -1,25 +1,27 @@
 #include <string>
 #include<experimental/filesystem>
 #include "yaml-cpp/yaml.h"
-#include "CcsUtil.h"
+#include "Util.h"
 #include "config/PageConfig.cpp"
 
-namespace fse = std::experimental::filesystem;
-namespace fs = std::filesystem;
-using std::string;
+namespace CCS {
 
-class CcsPage {
-    PageConfig* config;
+  namespace fse = std::experimental::filesystem;
+  namespace fs = std::filesystem;
+  using std::string;
 
-public:
-    CcsPage(string pagePath) {
+  class Page {
+    PageConfig *config;
+
+  public:
+    Page(string pagePath) {
       config = new PageConfig(pagePath);
       //string hui = config->getValue("mappings/controls/slmk3.encoder2/label");
       string hui = config->getValue("on_activate/1");
       int dd = 1;
     }
 
-    ~CcsPage() {
+    ~Page() {
       delete config;
     }
 
@@ -33,4 +35,5 @@ public:
       }
       return is_regular_file(path);
     }
-};
+  };
+}

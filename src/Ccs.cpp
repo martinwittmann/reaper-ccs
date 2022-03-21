@@ -1,32 +1,29 @@
 #include <string>
-#include "CcsSession.cpp"
+#include "Session.cpp"
 #include "config/GlobalConfig.cpp"
 #include "globals.cpp"
 
-namespace fse = std::experimental::filesystem;
-using std::string;
+namespace CCS {
+  namespace fse = std::experimental::filesystem;
+  using std::string;
 
-class Ccs {
-
+  class Ccs {
     string sessionsDir;
     string controllersDir;
     string pluginsDir;
     string lastSession;
     std::vector<string> sessions;
+    CcsSession *currentSession;
+    GlobalConfig *config;
 
-    CcsSession* currentSession;
-
-    GlobalConfig* config;
-
-public:
+  public:
     Ccs(string baseDir) {
       sessionsDir = baseDir + SEP + "sessions";
       controllersDir = baseDir + SEP + "controllers";
       pluginsDir = baseDir + SEP + "plugins";
       config = new GlobalConfig(baseDir + "config" + YAML_EXT);
-
       sessions = CcsSession::getSessions(sessionsDir);
-      lastSession = config->getLastSession();
+      lastSession = config->getLastSessionId();
       currentSession = loadSession(lastSession);
     }
 
@@ -35,7 +32,8 @@ public:
     }
 
 
-    CcsSession* loadSession(string sessionId) {
+    CcsSession *loadSession(string sessionId) {
       return new CcsSession(sessionsDir + SEP + sessionId);
     }
-};
+  };
+}

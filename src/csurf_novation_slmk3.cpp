@@ -1,13 +1,13 @@
 #include "csurf.h"
 #include <iostream>
-#include "CcsConfig.cpp"
+#include "BaseConfig.cpp"
 
 class CSurf_NovationSlMk3 : public IReaperControlSurface {
     int m_midi_in_dev,m_midi_out_dev;
     midi_Output *m_midiout;
     midi_Input *m_midiin;
 
-    CcsConfig *config;
+    BaseConfig *config;
 
     WDL_String descspace;
     char configtmp[1024];
@@ -49,7 +49,7 @@ public:
         m_midiin->start();
       }
 
-      config = new CcsConfig("/home/martin/.config/REAPER/ccs/");
+      config = new BaseConfig("/home/martin/.config/REAPER/ccs/");
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) {

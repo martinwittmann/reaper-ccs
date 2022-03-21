@@ -1,12 +1,15 @@
 #include <string>
 
-class CcsAction {
-public:
-    CcsAction() {
+namespace CCS {
+
+  class Action {
+  public:
+    Action() {
       std::string actionTypes[] = {
         "send_midi_message",
         "ccs",
         "reaper"
       };
     }
-};
+  };
+}

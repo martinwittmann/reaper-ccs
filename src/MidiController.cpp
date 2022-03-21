@@ -1,30 +1,31 @@
 #include <string>
 #include <vector>
 #include "csurf.h"
-#include "CcsMidiControlElement.cpp"
+#include "MidiControlElement.cpp"
 #include "yaml-cpp/yaml.h"
-#include "CcsUtil.h"
-#include "CcsMidiEventType.cpp"
+#include "Util.h"
+#include "MidiEventType.cpp"
 #include "config/MidiControllerConfig.cpp"
 
-using namespace std;
-using std::string;
-using std::vector;
+namespace CCS {
 
-/**
- * This represents a midi controller
- */
-class CcsMidiController {
+  using std::string;
+  using std::vector;
+
+  /**
+   * This represents a midi controller
+   */
+  class MidiController {
     string id;
     string name;
     int midiDeviceId;
     midi_Output *midiOutput;
-    vector<CcsMidiControlElement*> controls;
-    MidiControllerConfig* config;
+    vector<MidiControlElement *> controls;
+    MidiControllerConfig *config;
     unsigned int defaultStatusByte;
 
-public:
-    CcsMidiController(
+  public:
+    MidiController(
       string configFilename,
       int deviceId
       //midi_Output *output
@@ -33,11 +34,11 @@ public:
       id = config->getValue("id");
       name = config->getValue("name");
       //this->midiOutput = output;
-      this->defaultStatusByte = CcsUtil::hexToInt(config->getValue("default_status"));
+      this->defaultStatusByte = Util::hexToInt(config->getValue("default_status"));
       initializeControls();
     }
 
-    ~CcsMidiController() {
+    ~MidiController() {
       for (auto it = controls.begin(); it != controls.end(); ++it) {
         delete *it;
       }
@@ -46,20 +47,20 @@ public:
     void initializeControls() {
       YAML::Node controlConfigs = config->getMapValue("controls");
 
-      for (const auto& item : controlConfigs) {
+      for (const auto &item: controlConfigs) {
         auto id = item.first.as<string>();
         YAML::Node controlNode = item.second;
         unsigned int status = defaultStatusByte;
         if (config->keyExists("status", &controlNode)) {
-          status = CcsUtil::hexToInt(config->getValue("status", &controlNode));
+          status = Util::hexToInt(config->getValue("status", &controlNode));
         }
 
-        auto ccsControl = new CcsMidiControlElement(
+        auto controlElement = new MidiControlElement(
           config->getValue("type", &controlNode),
           status,
-          CcsUtil::hexToInt(config->getValue("data1", &controlNode))
+          Util::hexToInt(config->getValue("data1", &controlNode))
         );
-        controls.push_back(ccsControl);
+        controls.push_back(controlElement);
       }
     }
 
@@ -74,13 +75,14 @@ public:
       return is_regular_file(path);
     }
 
-    vector<CcsMidiEventType> getMidiEventTypes() {
-      vector<CcsMidiEventType> result;
+    vector<MidiEventType> getMidiEventTypes() {
+      vector<MidiEventType> result;
       for (auto it = controls.begin(); it != controls.end(); ++it) {
-        CcsMidiControlElement* element = *it;
-        CcsMidiEventType event = element->getEventType();
+        MidiControlElement *element = *it;
+        MidiEventType event = element->getEventType();
         result.push_back(event);
       }
       return result;
     }
-};
+  };
+}

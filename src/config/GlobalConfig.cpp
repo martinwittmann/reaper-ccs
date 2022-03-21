@@ -1,14 +1,15 @@
 #include <string>
 #include <vector>
-#include "CcsConfig.h"
+#include "BaseConfig.h"
 
-using std::string;
-using std::vector;
+namespace CCS {
 
-class GlobalConfig : public CcsConfig {
-public:
-    GlobalConfig(string baseDir) : CcsConfig(baseDir, false) {
-    }
+  using std::string;
+  using std::vector;
+
+  class GlobalConfig : public BaseConfig {
+  public:
+    GlobalConfig(string baseDir) : BaseConfig(baseDir, false) {}
 
     string getLastSessionId() {
       return getValue("last_session");
@@ -17,4 +18,5 @@ public:
     vector<string> getSessionMidiControllers() {
       return getListValues("required_midi_controllers");
     }
-};
+  };
+}

@@ -1,15 +1,17 @@
 #include <string>
-#include "CcsConfig.h"
+#include "BaseConfig.h"
 
-using std::string;
+namespace CCS {
+  using std::string;
 
-class PageConfig : public CcsConfig {
-public:
-    PageConfig(string baseDir) : CcsConfig(
+  class PageConfig : public BaseConfig {
+  public:
+    PageConfig(string baseDir) : BaseConfig(
       baseDir,
       true,
       "extends"
     ) {
       replaceVariables();
     }
-};
+  };
+}

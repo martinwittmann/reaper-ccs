@@ -13,7 +13,7 @@ add_definitions(-DSWELL_PROVIDED_BY_APP -DNOMINMAX)
 # Add main.cpp file of project root directory as source file
 set(
   SOURCE_FILES
-  src/CcsUtil.cpp
+  src/Util.cpp
   src/reaper_slmk3.cpp
   src/csurf_novation_slmk3.cpp
   WDL/swell/swell-modstub-generic.cpp
@@ -37,7 +37,7 @@ message("boost inc:${Boost_INCLUDE_DIRS}")
 
 #set_target_properties(ccs PROPERTIES OUTPUT_NAME "ccs")
 
-add_executable(ccs_exec src/main.cpp src/CcsUtil.cpp)
+add_executable(ccs_exec src/main.cpp src/Util.cpp)
 target_link_libraries(ccs_exec ${YAML_CPP} stdc++fs)
 #target_include_directories(ccs_exec PRIVATE WDL/swell)
 
