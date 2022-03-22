@@ -18,20 +18,22 @@ namespace CCS {
     providers.push_back(provider);
   }
 
-  void Actions::invokeAction(Action action) {
-    action.invoke();
+  void Actions::invokeAction(Action action, vector<string> arguments) {
+    action.invoke(arguments);
   }
 
+  // Note that we do not accept arguments here, because they are encoded in the
+  // rawAction string and are unpacket in ActionInvokation.
   void Actions::invokeAction(std::string rawAction) {
     auto invokation = new ActionInvokation(rawAction);
     Action action = getAction(invokation->providerId, invokation->actionId);
-    invokeAction(action);
+    invokeAction(action, invokation->arguments);
   }
 
   Action Actions::getAction(std::string providerId, std::string actionId) {
     for (auto it = actions.begin(); it != actions.end(); ++it) {
       Action action = *it;
-      if (action.providerId == providerId && action.id == actionId) {
+      if (action.getProviderId() == providerId && action.getId() == actionId) {
         return action;
       }
     }
@@ -39,7 +41,7 @@ namespace CCS {
   }
 
   ActionProvider* Actions::getProvider(Action action) {
-    return getProvider(action.providerId);
+    return getProvider(action.getProviderId());
   }
 
   ActionProvider* Actions::getProvider(std::string providerId) {

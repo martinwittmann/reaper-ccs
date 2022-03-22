@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
-#include "Action.h"
 #include "ActionProvider.h"
+#include "Action.h"
 
 namespace CCS {
 
@@ -19,7 +19,7 @@ namespace CCS {
     void registerAction(Action action);
     void registerProvider(ActionProvider* provider);
 
-    void invokeAction(Action action);
+    void invokeAction(Action action, std::vector<std::string> arguments);
     void invokeAction(std::string rawAction);
     Action getAction(std::string providerId, std::string actionId);
     ActionProvider* getProvider(Action action);

@@ -153,7 +153,7 @@ namespace CCS {
           // Since the current action is not a midi action, but the last one(s)
           // were, we need to add the accumulated send midi actions before adding
           // the current macro action.
-          string rawMessage = Util::joinStrVector(midiMessages);
+          string rawMessage = Util::joinStrVector(midiMessages, ' ');
           string midiMessage = "[" + controllerId + ".send_midi_message:" + rawMessage + "]";
           midiMessages.clear();
           result.push_back(midiMessage);

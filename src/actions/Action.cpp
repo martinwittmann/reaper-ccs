@@ -12,14 +12,14 @@ namespace CCS {
   // simply invokes all sub actions when executed.
   Action::Action(
     string providerId,
-    string id,
+    string actionId,
     vector<string> argumentNames,
     vector<string> subActions,
     Actions* actionsManager
   ) {
     this->type = Action::COMPOSITE;
     this->providerId = providerId;
-    this->id = id;
+    this->actionId = actionId;
     this->argumentNames = argumentNames;
     this->subActions = subActions;
     this->actionsManager = actionsManager;
@@ -27,15 +27,23 @@ namespace CCS {
 
   Action::Action(
     string providerId,
-    string id,
+    string actionId,
     void (ActionProvider::*callback)(vector<string>),
     ActionProvider* actionProvider
   ) {
     this->type = Action::CALLBACK;
     this->providerId = providerId;
-    this->id = id;
+    this->actionId = actionId;
     this->callback = callback;
     this->actionProvider = actionProvider;
+  }
+
+  string Action::getId() {
+    return actionId;
+  }
+
+  string Action::getProviderId() {
+    return providerId;
   }
 
   void Action::invoke(vector<string> arguments) {
@@ -48,11 +56,16 @@ namespace CCS {
         break;
 
       case Action::COMPOSITE:
-        // TODO Implement substitution of arguments before invoking the subactions.
-        std::map<string,string> variables = Variables::getVariables(
-          argumentNames,
-          arguments
-        );
+        // We map the given arguments in the same order as the vector of
+        // argument names we got in the constructor.
+        std::map<string,string> variables;
+        for (auto i = 0; i < arguments.size(); i++) {
+          string argumentValue = arguments.at(i);
+          string argumentName = "_ARGS." + argumentNames.at(i);
+          variables.insert(std::pair(argumentName, argumentValue));
+        }
+
+        // Apply the arguments to every sub action.
         for (auto it = subActions.begin(); it != subActions.end(); ++it) {
           string rawAction = *it;
           rawAction = Variables::replaceVariables(rawAction, variables);

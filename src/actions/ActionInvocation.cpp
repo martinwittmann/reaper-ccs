@@ -14,7 +14,8 @@ namespace CCS {
     string actionId = parts.at(0);
 
     if (providerId.length() < 1) {
-      vector<string> actionParts = Util::splitString(parts.at(0), &separator);
+      const char actionSeparator = '.';
+      vector<string> actionParts = Util::splitString(parts.at(0), &actionSeparator);
       providerId = actionParts.at(0);
       actionId = actionParts.at(1);
     }

@@ -33,6 +33,7 @@ set(
   src/Page.cpp
   src/Session.cpp
   src/Util.cpp
+  src/Variables.cpp
 
   WDL/swell/swell-modstub-generic.cpp
 )

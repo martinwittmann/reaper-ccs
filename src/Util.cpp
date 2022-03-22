@@ -83,9 +83,12 @@ namespace CCS {
     return std::regex_replace(input, regexExpression, replacement);
   }
 
-  string Util::joinStrVector(vector<string> input) {
+  string Util::joinStrVector(vector<string> input, char separator) {
     string result;
     for (auto it = input.begin(); it != input.end(); ++it) {
+      if (it != input.begin()) {
+        result += std::string(separator);
+      }
       result += *it;
     }
     return result;

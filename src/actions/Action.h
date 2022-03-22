@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Actions.h"
+#include "ActionProvider.h"
 
 namespace CCS {
 
@@ -12,7 +13,7 @@ namespace CCS {
 
   class Action {
     // A string identifier unique within the scope of the given provider id.
-    string id;
+    string actionId;
 
     // This can be the id of a midi controller, "reaper" for reaper actions
     // (see ActionProviderReaper class) or "ccs" for actions ccs itself provides.
@@ -40,7 +41,7 @@ namespace CCS {
     // This creates an action of type COMPOSITE.
     Action(
       string providerId,
-      string id,
+      string actionId,
       vector<string> argumentNames,
       vector<string> subActions,
       Actions* actionsManager
@@ -49,12 +50,15 @@ namespace CCS {
     // This creates an action of type CALLBACK.
     Action(
       string providerId,
-      string id,
+      string actionId,
       void (ActionProvider::*callback)(vector<string>),
       ActionProvider* actionProvider
     );
 
     void invoke(vector<string> arguments);
+
+    string getId();
+    string getProviderId();
   };
 }
 
