@@ -1,0 +1,104 @@
+name: TAL U-No-LX-V2
+id: juno
+parameters:
+
+  modulation:
+    id: 1
+    # Parameters default to type float in reaper.
+    #type: float
+    
+  dco_lfo_value:
+    id: 2
+
+  dco_pwm_value:
+    id: 3
+
+  dco_pwm_mode:
+    id: 4
+    type: enum
+    values:
+      - ENV
+      - MAN
+      - LFO
+
+  dco_saw_enabled:
+    id: 5
+    type: bool
+
+  dco_sub_osc_enabled:
+    id: 6
+    type: bool
+
+  dco_sub_osc_volume:
+    id: 7
+
+  dco_noise_volume:
+    id: 8
+
+  dco_hp_filter:
+    id: 9
+
+  filter_cutoff:
+    id: 10
+
+  filter_responance:
+    id: 11
+
+  filter_env_mode:
+    id: 12
+    type: enum
+    values:
+      - NEG
+      - POS
+
+  filter_env:
+    id: 13
+
+  filter_modulation:
+    id: 14
+
+  filter_keyboard:
+    id: 15
+
+  master_volume:
+    id: 16
+
+  master_fine_tune:
+    id: 17
+
+  master_octave_transpose:
+    id: 18
+    type: int
+    min: -1
+    max: 1
+
+  vca_mode:
+    id: 19
+    type: enum
+    values:
+      - GATE
+      - ENV
+
+  attack:
+    id: 20
+
+  decay:
+    id: 21
+
+  sustain:
+    id: 22
+
+  release:
+    id: 23
+
+  lfo_rate:
+    id: 24
+    type: bool
+
+  lfo_trigger_mode:
+    id: 25
+    type: enum
+    values:
+      - SYNC
+      - FREE
+      - NOTE TRIG

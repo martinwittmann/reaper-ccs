@@ -1,0 +1,205 @@
+name: Novation SL MKIII
+id: slmk3
+default_status: B0
+controls:
+  encoder1:
+    type: encoder_relative
+    message:
+      data1: 15
+
+  encoder2:
+    type: encoder_relative
+    message:
+      data1: 16
+
+  encoder3:
+    type: encoder_relative
+    message:
+      data1: 17
+
+  encoder4:
+    type: encoder_relative
+    message:
+      data1: 18
+
+  encoder5:
+    type: encoder_relative
+    message:
+      data1: 19
+
+  encoder6:
+    type: encoder_relative
+    message:
+      data1: 1A
+
+  encoder7:
+    type: encoder_relative
+    message:
+      data1: 1B
+
+  encoder8:
+    type: encoder_relative
+    message:
+      data1: 1C
+
+  button1:
+    type: button
+    message:
+      data1: 33
+
+  button2:
+    type: button
+    message:
+      data1: 34
+
+  button3:
+    type: button
+    message:
+      data1: 35
+
+  button4:
+    type: button
+    message:
+      data1: 36
+
+  button5:
+    type: button
+    message:
+      data1: 37
+
+  button6:
+    type: button
+    message:
+      data1: 38
+
+  button7:
+    type: button
+    message:
+      data1: 39
+
+  button8:
+    type: button
+    message:
+      data1: 3A
+
+variables:
+  SYSEX_HEADER: F0 00 20 29 02 0A 01
+  SYSEX_END: F7
+
+  SCREEN1: 00
+  SCREEN2: 01
+  SCREEN3: 02
+  SCREEN4: 03
+  SCREEN5: 04
+
+  SET_SCREEN_LAYOUT: 01
+  SET_SCREEN_PROPERTY: 02
+
+  PROPERTY_TYPE_TEXT: 01
+  PROPERTY_TYPE_COLOR: 02
+  PROPERTY_TYPE_VALUE: 03
+  PROPERTY_TYPE_RGB: 04
+
+  LAYOUT_EMPTY: 00
+  L_EMPTY: 00
+  # To make things less verbose, let's use l_ instead of layout_
+
+  # Documentation says there are not properties that can be set, but when
+  # testing things it seemed like we can set text for 1 lines.
+  # What else could be possible?
+
+  LAYOUT_KNOB: 01
+  L_KNOB: 01
+  L_KNOB_TOP_BAR_COLOR: 00
+  L_KNOB_KNOB_COLOR: 01
+  L_KNOB_BOTTOM_BAR_COLOR: 02
+  L_KNOB_TEXT1: 00
+  L_KNOB_TEXT2: 01
+  L_KNOB_TEXT3: 02
+  L_KNOB_TEXT4: 03
+
+  L_KNOB_VALUE: 00
+
+  # If set to 1 the bottom bar color is used as text background color.
+  L_KNOB_LOWER_TEXT_SELECTED: 01
+
+  LAYOUT_BOX: 02
+  L_BOX: 02
+  L_KNOB_TOP_BOX_COLOR: 00
+  L_KNOB_CENTER_BOX_COLOR: 01
+  L_KNOB_BOTTOM_BAR_COLOR: 02
+
+  L_KNOB_TOP_BOX_SELECTED: 0
+  L_KNOB_CENTER_BOX_SELECTED: 1
+  L_KNOB_BOTTOM_BOX_SELECTED: 1
+
+  L_KNOB_TEXT1: 00
+  L_KNOB_TEXT2: 01
+  L_KNOB_TEXT3: 02
+  L_KNOB_TEXT4: 03
+  L_KNOB_TEXT5: 04
+  L_KNOB_TEXT6: 05
+
+  CENTER_L_LEFT_BAR_COLOR: 0
+  CENTER_L_TOP_RIGHT_BAR_COLOR: 1
+  CENTER_L_BOTTOM_RIGHT_BAR_COLOR: 1
+
+  CENTER_L_LEFT_TOP_TEXT: 0
+  CENTER_L_LEFT_BOTTOM_TEXT: 1
+  CENTER_L_RIGHT_TOP_TEXT: 2
+  CENTER_L_RIGHT_BOTTOM_TEXT: 3
+
+actions:
+  set_screen_layout:
+    arguments:
+      - LAYOUT
+      - SCREEN_ID
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_LAYOUT
+      - $_LAYOUT
+      - $_SCREEN_ID
+      - $SYSEX_END
+
+  set_main_screens_to_knob_layout:
+    message:
+      - "[set_screen_layout:$SCREEN1:$LAYOUT_KNOB]"
+      - "[set_screen_layout:$SCREEN2:$LAYOUT_KNOB]"
+      - "[set_screen_layout:$SCREEN3:$LAYOUT_KNOB]"
+      - "[set_screen_layout:$SCREEN4:$LAYOUT_KNOB]"
+
+  set_knob_value:
+    arguments:
+      - SCREEN_COLUMN
+      - VALUE
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_VALUE
+      - $L_KNOB_VALUE
+      - $_ARGS.VALUE
+      - $SYSEX_END
+
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT2
+      - $_ARGS.VALUE
+      - $SYSEX_END
+
+  set_knob_label:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT1
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+

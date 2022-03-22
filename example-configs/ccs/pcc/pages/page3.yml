@@ -1,0 +1,44 @@
+extends: _default
+name: Vital
+on_activate:
+  # Messages that will initialize this page.
+  - "[slmk3.set_main_screens_to_knob_layout]"
+  - "[slmk3.set_knob_label:1:$ENCODER1_LABEL]"
+  - "[slmk3.set_knob_label:2:$ENCODER2_LABEL]"
+  - "[slmk3.set_knob_label:3:$ENCODER3_LABEL]"
+  - "[slmk3.set_knob_label:4:$ENCODER4_LABEL]"
+  - "[slmk3.set_knob_label:5:$ENCODER5_LABEL]"
+  - "[slmk3.set_knob_label:6:$ENCODER6_LABEL]"
+  - "[slmk3.set_knob_label:7:$ENCODER7_LABEL]"
+  - "[slmk3.set_knob_label:8:$ENCODER8_LABEL]"
+
+variables:
+  ENCODER1_LABEL: Vital 1
+  ENCODER2_LABEL: Vital 2
+  ENCODER3_LABEL: Vital 3
+  ENCODER4_LABEL: Vital 4
+  ENCODER5_LABEL: Vital 5
+  ENCODER6_LABEL: Vital 6
+  ENCODER7_LABEL: Vital 7
+  ENCODER8_LABEL: Vital 8
+mappings:
+  controls:
+
+    slmk3.encoder1:
+      label: $ENCODER1_LABEL
+      mapping: reaper.track1.fx1.dco_lfo_value
+      on_action:
+        # Value normalizing depending on the current parameter should be possible.
+        # The parameter defines a type, and the type defines how values are supposed
+        # to be normalized.
+        - "[slmk3.set_knob_value:1:$VALUE_NORMALIZED]"
+
+    slmk3.encoder2:
+      label: $ENCODER2_LABEL
+      mapping: reaper.track1.fx1.dco_pwm_value
+      on_action: "[slmk3.set_knob_value:2:$VALUE_NORMALIZED]"
+
+    slmk3.encoder3:
+      label: $ENCODER3_LABEL
+      mapping: reaper.track1.fx1.lfo_rate
+      on_action: "[slmk3.set_knob_value:3:$VALUE_NORMALIZED]"
