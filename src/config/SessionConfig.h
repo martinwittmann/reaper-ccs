@@ -1,5 +1,5 @@
-#ifndef SESSION_CONFIG_H
-#define SESSION_CONFIG_H
+#ifndef CCS_SESSION_CONFIG_H
+#define CCS_SESSION_CONFIG_H
 
 #include <string>
 #include "BaseConfig.h"

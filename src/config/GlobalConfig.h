@@ -1,5 +1,5 @@
-#ifndef GLOBAL_CONFIG_H
-#define GLOBAL_CONFIG_H
+#ifndef CCS_GLOBAL_CONFIG_H
+#define CCS_GLOBAL_CONFIG_H
 
 #include <string>
 #include <vector>

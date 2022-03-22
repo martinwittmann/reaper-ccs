@@ -1,3 +1,6 @@
+#ifndef CCS_MIDI_CONTROLLER_H
+#define CCS_MIDI_CONTROLLER_H
+
 #include <string>
 #include <vector>
 #include "csurf.h"
@@ -7,9 +10,9 @@
 #include "MidiEventType.cpp"
 #include "config/MidiControllerConfig.h"
 #include<experimental/filesystem>
-
-#ifndef MIDI_CONTROLLER_H
-#define MIDI_CONTROLLER_H
+#include "actions/Action.h"
+#include "actions/Actions.h"
+#include "actions/ActionProvider.h"
 
 namespace CCS {
 
@@ -28,11 +31,13 @@ namespace CCS {
     vector<MidiControlElement *> controls;
     MidiControllerConfig *config;
     unsigned int defaultStatusByte;
+    ActionProvider* actionProvider;
 
   public:
     MidiController(
       string configFilename,
-      int deviceId
+      int deviceId,
+      Actions* actionManager
       //midi_Output *output
     );
 
@@ -42,6 +47,8 @@ namespace CCS {
 
     static bool isMidiControllerConfigFile(fse::path path);
     vector<MidiEventType> getMidiEventTypes();
+
+    vector<Action> getActions();
   };
 }
 

@@ -1,5 +1,5 @@
-#ifndef PAGE_CONFIG_H
-#define PAGE_CONFIG_H
+#ifndef CCS_PAGE_CONFIG_H
+#define CCS_PAGE_CONFIG_H
 
 #include <string>
 #include "BaseConfig.h"

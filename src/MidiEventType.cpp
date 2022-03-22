@@ -1,5 +1,5 @@
-#ifndef CCS_MIDI_EVENT_TYPE_H_
-#define CCS_MIDI_EVENT_TYPE_H_
+#ifndef CCS_MIDI_EVENT_TYPE_H
+#define CCS_MIDI_EVENT_TYPE_H
 namespace CCS {
   struct MidiEventType {
     unsigned int status;

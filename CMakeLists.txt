@@ -12,13 +12,19 @@ add_definitions(-DSWELL_PROVIDED_BY_APP -DNOMINMAX)
 
 set(
   SOURCE_FILES
+  src/reaper_slmk3.cpp
+  src/csurf_novation_slmk3.cpp
+
   src/config/BaseConfig.cpp
   src/config/PageConfig.cpp
   src/config/SessionConfig.cpp
   src/config/MidiControllerConfig.cpp
   src/config/GlobalConfig.cpp
-  src/reaper_slmk3.cpp
-  src/csurf_novation_slmk3.cpp
+
+  src/actions/Action.cpp
+  src/actions/Actions.cpp
+  src/actions/ActionProvider.cpp
+  src/actions/ActionInvocation.cpp
 
   src/Ccs.cpp
   src/MidiController.cpp

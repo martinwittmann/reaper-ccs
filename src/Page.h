@@ -1,5 +1,5 @@
-#ifndef PAGE_H
-#define PAGE_H
+#ifndef CCS_PAGE_H
+#define CCS_PAGE_H
 
 #include <string>
 #include<experimental/filesystem>

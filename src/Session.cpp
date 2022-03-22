@@ -1,19 +1,20 @@
 #include <string>
 #include<experimental/filesystem>
 #include "yaml-cpp/yaml.h"
+
 #include "globals.cpp"
 #include "config/SessionConfig.h"
 #include "Session.h"
-
 #include "Page.h"
 #include "MidiController.h"
+#include "actions/Actions.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
   namespace fs = std::filesystem;
   using std::string;
 
-  Session::Session(string sessionPath) {
+  Session::Session(string sessionPath, Actions* actions) {
     path = sessionPath;
     pagesDir = path + SEP + "pages";
     midiControllersDir = fse::path(path)
@@ -21,6 +22,7 @@ namespace CCS {
       .parent_path()
       .append("controllers")
       .string();
+    this->actions = actions;
     sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
     loadSessionPages();
     loadMidiControllers();
@@ -31,6 +33,16 @@ namespace CCS {
     for (auto it = pages.begin(); it != pages.end(); ++it) {
       delete *it;
     }
+  }
+
+  void Session::start() {
+    setActivePage(0);
+  }
+
+  void Session::setActivePage(int pageId) {
+    activePage = pageId;
+    Page* page = pages.at(pageId);
+    // TODO
   }
 
   std::vector<string> Session::getSessions(string sessionsDir) {
@@ -95,7 +107,9 @@ namespace CCS {
     std::vector<string> controllerNames = getMidiControllerNames();
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
       string controllerConfigFile = *it;
-      midiControllers.push_back(new MidiController(controllerConfigFile, deviceId));
+      midiControllers.push_back(
+        new MidiController(controllerConfigFile, deviceId, actions)
+      );
     }
   }
 }

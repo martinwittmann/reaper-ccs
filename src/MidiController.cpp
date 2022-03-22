@@ -8,6 +8,8 @@
 #include "config/MidiControllerConfig.h"
 #include "MidiController.h"
 #include "globals.cpp"
+#include "actions/ActionProvider.h"
+#include "actions/Actions.h"
 
 namespace CCS {
 
@@ -16,12 +18,15 @@ namespace CCS {
 
   MidiController::MidiController(
     string configFilename,
-    int deviceId
+    int deviceId,
+    Actions* actionsManager
     //midi_Output *output
   ) {
     config = new MidiControllerConfig(configFilename);
     id = config->getValue("id");
     name = config->getValue("name");
+    actionProvider = new ActionProvider(id, actionsManager);
+
     //this->midiOutput = output;
     this->defaultStatusByte = Util::hexToInt(config->getValue("default_status"));
     initializeControls();
@@ -48,7 +53,7 @@ namespace CCS {
       auto controlElement = new MidiControlElement(
         config->getValue("type", &controlNode),
         status,
-        Util::hexToInt(config->getValue("message/data1", &controlNode))
+        Util::hexToInt(config->getValue("message.data1", &controlNode))
       );
       controls.push_back(controlElement);
     }
@@ -73,5 +78,9 @@ namespace CCS {
       result.push_back(event);
     }
     return result;
+  }
+
+  vector<Action> getActions() {
+
   }
 }

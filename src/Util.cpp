@@ -3,6 +3,7 @@
 #include <regex>
 #include "yaml-cpp/yaml.h"
 #include "boost/algorithm/string.hpp"
+#include <regex>
 #include "Util.h"
 #include <iostream>
 #include <vector>
@@ -73,5 +74,10 @@ namespace CCS {
       token = strtok(nullptr, delimiter);
     }
     return result;
+  }
+
+  string Util::regexReplace(string input, string pattern, string replacement) {
+    std::regex regexExpression = std::regex(pattern);
+    return std::regex_replace(input, regexExpression, replacement);
   }
 }

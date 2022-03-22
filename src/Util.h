@@ -1,5 +1,5 @@
-#ifndef PROJECTNAME_CCSUTIL_H
-#define PROJECTNAME_CCSUTIL_H
+#ifndef CCS_UTIL_H
+#define CCS_UTIL_H
 
 #include <string>
 #include <map>
@@ -20,7 +20,9 @@ namespace CCS {
     static void logError(std::string message);
 
     static std::vector<std::string> splitString(std::string &input, const char *delimiter);
+
+    static std::string regexReplace(std::string input, std::string pattern, std::string replacement);
   };
 }
 
-#endif //PROJECTNAME_CCSUTIL_H
+#endif

@@ -1,5 +1,5 @@
-#ifndef CCS_CONFIG_H
-#define CCS_CONFIG_H
+#ifndef CCS_BASE_CONFIG_H
+#define CCS_BASE_CONFIG_H
 
 #include <string>
 #include <map>

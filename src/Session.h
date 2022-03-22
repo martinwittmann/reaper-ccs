@@ -1,5 +1,5 @@
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef CCS_SESSION_H
+#define CCS_SESSION_H
 
 #include <string>
 #include<experimental/filesystem>
@@ -9,6 +9,7 @@
 
 #include "Page.h"
 #include "MidiController.h"
+#include "actions/Actions.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -23,9 +24,11 @@ namespace CCS {
     SessionConfig* sessionConfig;
     std::vector<Page *> pages;
     std::vector<MidiController *> midiControllers;
+    int activePage = 0;
+    Actions* actions;
 
   public:
-    Session(string sessionPath);
+    Session(string sessionPath, Actions* actions);
 
     ~Session();
 
@@ -40,6 +43,10 @@ namespace CCS {
     void loadSessionPages();
 
     void loadMidiControllers();
+
+    void start();
+
+    void setActivePage(int pageId);
   };
 }
 

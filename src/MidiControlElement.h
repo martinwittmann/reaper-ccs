@@ -1,5 +1,5 @@
-#ifndef MIDI_CONTROL_ELEMENT_H
-#define MIDI_CONTROL_ELEMENT_H
+#ifndef CCS_MIDI_CONTROL_ELEMENT_H
+#define CCS_MIDI_CONTROL_ELEMENT_H
 
 #include <string>
 #include "MidiEventType.cpp"
