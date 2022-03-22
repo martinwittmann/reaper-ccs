@@ -4,6 +4,7 @@
 #include "../globals.cpp"
 #include "../Util.h"
 #include "BaseConfig.h"
+#include "../Variables.h"
 
 namespace CCS {
 
@@ -38,45 +39,10 @@ namespace CCS {
     return result;
   }
 
-  map <string, string> BaseConfig::getVariables(YAML::Node &variablesNode) {
-    map <string, string> result;
-    for (const auto &item: variablesNode) {
-      auto key = item.first.as<string>();
-      auto value = item.second.as<string>();
-      result.insert(std::pair(key, value));
-    }
-    return result;
-  }
-
   void BaseConfig::replaceVariables() {
     YAML::Node variablesNode = yaml["variables"];
-    auto variables = getVariables(variablesNode);
-    replaceVariables(yaml, variables);
-  }
-
-  void BaseConfig::replaceVariables(YAML::Node &yaml, map <string, string> variables) {
-    switch (yaml.Type()) {
-      case YAML::NodeType::Scalar:
-        // Actually replace variables.
-        yaml = Util::processString(yaml.as<string>(), variables);
-        break;
-      case YAML::NodeType::Map:
-        // For maps we simply recurse.
-        for (const auto &item: yaml) {
-          auto node = item.second;
-          string dd = item.first.as<string>();
-          replaceVariables(node, variables);
-        }
-        break;
-      case YAML::NodeType::Sequence:
-        for (const auto &item: yaml) {
-          auto node = item;
-          replaceVariables(node, variables);
-        }
-        break;
-      default:
-        Util::logError("BaseConfig::mergeYaml: Unknown source node type");
-    }
+    auto variables = Variables::getVariables(variablesNode);
+    Variables::replaceVariables(yaml, variables);
   }
 
   // Copied from https://github.com/coryan/jaybeams/blob/master/jb/merge_yaml.cpp

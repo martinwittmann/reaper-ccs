@@ -11,10 +11,12 @@
 namespace CCS {
 
   using std::string;
+  using std::vector;
   using std::map;
+  using std::stoul;
 
   unsigned int Util::hexToInt(string hex) {
-    return std::stoul(hex, nullptr, 16);
+    return stoul(hex, nullptr, 16);
   }
 
   bool Util::_compareVariableLength(string var1, string var2) {
@@ -29,7 +31,7 @@ namespace CCS {
       raw.end(),
       variables_regex
     );
-    std::vector<string> used_variables;
+    vector<string> used_variables;
     for (std::sregex_iterator it = matches; it != std::sregex_iterator(); ++it) {
       std::smatch match = *it;
       used_variables.push_back(it->str());
@@ -65,11 +67,11 @@ namespace CCS {
     std::cout << "[ERROR] " << message << "\n";
   }
 
-  std::vector<string> Util::splitString(string &input, const char *delimiter) {
-    std::vector<string> result;
+  vector<string> Util::splitString(string &input, const char *delimiter) {
+    vector<string> result;
     char *token = strtok(const_cast<char *>(input.c_str()), delimiter);
     while (token != nullptr) {
-      string part = std::string(token);
+      string part = string(token);
       result.push_back(part);
       token = strtok(nullptr, delimiter);
     }
@@ -79,5 +81,13 @@ namespace CCS {
   string Util::regexReplace(string input, string pattern, string replacement) {
     std::regex regexExpression = std::regex(pattern);
     return std::regex_replace(input, regexExpression, replacement);
+  }
+
+  string Util::joinStrVector(vector<string> input) {
+    string result;
+    for (auto it = input.begin(); it != input.end(); ++it) {
+      result += *it;
+    }
+    return result;
   }
 }

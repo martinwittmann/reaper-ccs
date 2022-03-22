@@ -13,10 +13,10 @@ namespace CCS {
     std::string id;
     Actions* manager;
 
-    void registerAtManager();
   public:
-    ActionProvider(std::string providerId, Actions* actionsManager);
+    explicit ActionProvider(Actions* actionsManager);
     std::string getId();
+    void registerActionProvider(std::string providerId);
   };
 }
 

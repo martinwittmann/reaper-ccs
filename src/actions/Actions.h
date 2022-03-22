@@ -19,8 +19,8 @@ namespace CCS {
     void registerAction(Action action);
     void registerProvider(ActionProvider* provider);
 
-    void executeAction(Action action);
-    void executeAction(std::string rawAction);
+    void invokeAction(Action action);
+    void invokeAction(std::string rawAction);
     Action getAction(std::string providerId, std::string actionId);
     ActionProvider* getProvider(Action action);
     ActionProvider* getProvider(std::string providerId);

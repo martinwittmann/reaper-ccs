@@ -18,14 +18,14 @@ namespace CCS {
     providers.push_back(provider);
   }
 
-  void Actions::executeAction(Action action) {
-
+  void Actions::invokeAction(Action action) {
+    action.invoke();
   }
 
-  void Actions::executeAction(std::string rawAction) {
+  void Actions::invokeAction(std::string rawAction) {
     auto invokation = new ActionInvokation(rawAction);
     Action action = getAction(invokation->providerId, invokation->actionId);
-    executeAction(action);
+    invokeAction(action);
   }
 
   Action Actions::getAction(std::string providerId, std::string actionId) {

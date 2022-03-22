@@ -20,11 +20,7 @@ namespace CCS {
 
     YAML::Node loadConfig(std::string filename);
 
-    std::map<std::string, std::string> getVariables(YAML::Node &variablesNode);
-
     void replaceVariables();
-
-    void replaceVariables(YAML::Node &yaml, std::map<std::string, std::string> variables);
 
     void mergeYaml(YAML::Node target, YAML::Node const &source);
 

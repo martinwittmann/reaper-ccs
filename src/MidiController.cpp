@@ -10,6 +10,7 @@
 #include "globals.cpp"
 #include "actions/ActionProvider.h"
 #include "actions/Actions.h"
+#include "Variables.h"
 
 namespace CCS {
 
@@ -21,11 +22,11 @@ namespace CCS {
     int deviceId,
     Actions* actionsManager
     //midi_Output *output
-  ) {
+  ) : ActionProvider(actionsManager) {
     config = new MidiControllerConfig(configFilename);
-    id = config->getValue("id");
+    controllerId = config->getValue("id");
     name = config->getValue("name");
-    actionProvider = new ActionProvider(id, actionsManager);
+    registerActionProvider(controllerId);
 
     //this->midiOutput = output;
     this->defaultStatusByte = Util::hexToInt(config->getValue("default_status"));
@@ -35,6 +36,9 @@ namespace CCS {
   MidiController::~MidiController() {
     delete config;
     for (auto it = controls.begin(); it != controls.end(); ++it) {
+      delete *it;
+    }
+    for (auto it = actions.begin(); it != actions.end(); ++it) {
       delete *it;
     }
   }
@@ -80,7 +84,101 @@ namespace CCS {
     return result;
   }
 
-  vector<Action> getActions() {
+  void MidiController::createActions() {
+    // Each midi controller needs to provide at least 1 action for sending
+    // midi messages;
 
+    actions.push_back(new Action(
+      controllerId,
+      "send_midi_message",
+      new vector("MESSAGE"),
+      &MidiController::sendMidiMessageToController,
+      this)
+    ));
+
+
+    // Get Actions from config.
+    YAML::Node actionsNode = config->getMapValue("actions");
+    YAML::Node variablesNode = config->getMapValue("variables");
+    std::map<string,string> variables = Variables::getVariables(variablesNode);
+    for (const auto &item: actionsNode) {
+      auto actionId = item.first.as<string>();
+      Action* action = createMidiControllerAction(
+        actionId,
+        item.second,
+        variables,
+      );
+      actions.push_back(action);
+    }
+  }
+
+  Action* MidiController::createMidiControllerAction(
+    string actionId,
+    YAML::Node node,
+    std::map<string,string> variables
+  ) {
+    vector<string> rawSubActions = config->getListValues("message", &node);
+    vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
+    vector<string> argumentNames = config->getListValues("arguments", &node);
+
+    return new Action(
+      actionId,
+      controllerId,
+      argumentNames,
+      processedSubActions,
+      actions
+    );
+  }
+
+  vector<string> MidiController::getProcessedSubActions(vector<string> rawSubActions) {
+    vector<string> result;
+
+    vector<string>midiMessages;
+    for (auto it = rawSubActions.begin(); it != rawSubActions.end(); ++it) {
+      string subAction = *it;
+      // Actions for midi controllers are always composite actions.
+      // To make writing actions less verbose we allow users to skip defining
+      // the action type and simply default to send midi message.
+      // This means that we need to preprocess each message item here and add
+      // the appropriate action.
+
+
+      // For each message item, check if it is an action/macro (contains []).
+      // If not add the [controllerId.sendMidiMessage:messageString] action.
+      // Also try to merge multiple subsequent send midi messages into a single
+      // send midi message to not add performance bottlenecks by sending lots
+      // of small messages after each other.
+      if (isMacroAction(subAction)) {
+        if (!midiMessages.empty()) {
+          // Since the current action is not a midi action, but the last one(s)
+          // were, we need to add the accumulated send midi actions before adding
+          // the current macro action.
+          string rawMessage = Util::joinStrVector(midiMessages);
+          string midiMessage = "[" + controllerId + ".send_midi_message:" + rawMessage + "]";
+          midiMessages.clear();
+          result.push_back(midiMessage);
+        }
+
+        // Now add the current macro action.
+        result.push_back(subAction);
+      }
+      else {
+        // Here subAction is simply a string of midi messages, possibly containing
+        // variables.
+        midiMessages.push_back(subAction);
+      }
+    }
+    return result;
+  }
+
+  bool MidiController::isMacroAction(string rawAction) {
+    // If the string contains brackets we think it's a macro action because we
+    // define that macros/subactions are being called by using
+    // [action_provider.action_id:argument1:argument2:...]
+    return rawAction.find("[") == -1;
+  }
+
+  void MidiController::sendMidiMessageToController(vector<string> arguments) {
+    // TODO Use the provided midi output to actually send the message.
   }
 }

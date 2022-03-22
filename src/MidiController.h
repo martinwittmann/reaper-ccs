@@ -23,8 +23,8 @@ namespace CCS {
   /**
    * This represents a midi controller
    */
-  class MidiController {
-    string id;
+  class MidiController : ActionProvider {
+    string controllerId;
     string name;
     int midiDeviceId;
     midi_Output *midiOutput;
@@ -32,6 +32,7 @@ namespace CCS {
     MidiControllerConfig *config;
     unsigned int defaultStatusByte;
     ActionProvider* actionProvider;
+    vector<Action*> actions;
 
   public:
     MidiController(
@@ -48,7 +49,19 @@ namespace CCS {
     static bool isMidiControllerConfigFile(fse::path path);
     vector<MidiEventType> getMidiEventTypes();
 
-    vector<Action> getActions();
+    void createActions();
+
+    void sendMidiMessageToController(vector<string> arguments);
+
+    Action* createMidiControllerAction(
+      string actionId,
+      YAML::Node node,
+      std::map<string,string> variables
+    );
+
+    bool isMacroAction(string rawAction);
+
+    vector<string> getProcessedSubActions(vector<string> rawSubActions);
   };
 }
 

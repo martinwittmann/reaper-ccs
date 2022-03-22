@@ -22,6 +22,8 @@ namespace CCS {
     static std::vector<std::string> splitString(std::string &input, const char *delimiter);
 
     static std::string regexReplace(std::string input, std::string pattern, std::string replacement);
+
+    static std::string joinStrVector(std::vector<std::string> input);
   };
 }
 
