@@ -18,7 +18,7 @@ namespace CCS {
     static std::string processString(
       std::string raw,
       std::map<std::string,std::string> variables,
-      std::string pattern = "\\$(_ARGS\\.)?[A-Z0-9_]+"
+      std::string pattern = "\\$(_ARGS\\.)?[A-Z0-9_]+!?"
     );
 
     static void logError(std::string message);
@@ -34,6 +34,8 @@ namespace CCS {
     static void debug(std::string message);
 
     static std::vector<unsigned char> splitToBytes(std::string &input);
+
+    static std::string strToHexBytes(std::string input);
   };
 }
 

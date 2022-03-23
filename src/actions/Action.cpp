@@ -16,6 +16,7 @@ namespace CCS {
     string providerId,
     string actionId,
     vector<string> argumentNames,
+    vector<string> argumentTypes,
     vector<string> subActions,
     Actions* actionsManager
   ) {
@@ -23,6 +24,7 @@ namespace CCS {
     this->providerId = providerId;
     this->actionId = actionId;
     this->argumentNames = argumentNames;
+    this->argumentTypes = argumentTypes;
     this->subActions = subActions;
     this->actionsManager = actionsManager;
   }
@@ -54,6 +56,11 @@ namespace CCS {
     if (!argumentNames.empty()) {
       for (auto i = 0; i < arguments.size(); i++) {
         string argumentValue = arguments.at(i);
+        string argumentType = argumentTypes.at(i);
+        if (argumentType == "string") {
+          argumentValue = Util::strToHexBytes(argumentValue);
+          int a = 1;
+        }
         string argumentName = "_ARGS." + argumentNames.at(i);
         argumentVariables.insert(std::pair(argumentName, argumentValue));
       }

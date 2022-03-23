@@ -115,12 +115,15 @@ namespace CCS {
         event.message.midi_message[i] = bytes.at(i);
       }
 
+      #ifndef MOCK_MIDI
       if (midiOutput) {
         midiOutput->SendMsg(&event.message, -1);
       }
       else {
         Util::debug("Midi output not available");
       }
+      #endif
+
     }
   }
 
@@ -161,11 +164,23 @@ namespace CCS {
     vector<string> rawSubActions = config->getListValues("message", &node);
     vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
     vector<string> argumentNames = config->getListValues("arguments", &node);
+    vector<string> argumentTypes;
+
+    for (auto &argument : argumentNames) {
+      if (argument.substr(argument.length() - 1) == "!") {
+        argument = argument.substr(0, argument.length() - 1);
+        argumentTypes.push_back("string");
+      }
+      else {
+        argumentTypes.push_back("byte");
+      }
+    }
 
     return new Action(
       controllerId,
       actionId,
       argumentNames,
+      argumentTypes,
       processedSubActions,
       actionsManager
     );

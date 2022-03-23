@@ -7,6 +7,8 @@
 #include "Util.h"
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include "boost/format.hpp"
 
 namespace CCS {
 
@@ -127,6 +129,22 @@ namespace CCS {
         string byte = input.substr(i - 1, 2);
         result.push_back(std::stoi(byte, 0, 16));
       }
+    }
+    return result;
+  }
+
+  string Util::strToHexBytes(std::string input) {
+    string result;
+    std::stringstream stream;
+    for (int i = 0; i < input.length(); ++i) {
+      if (i != 0) {
+        result += " ";
+      }
+      stream << boost::format("%x") % int(input[i]);
+      result += stream.str();
+      // stream.clear() does not what I expected. See:
+      // https://stackoverflow.com/questions/20731/how-do-you-clear-a-stringstream-variable
+      stream.str(std::string());
     }
     return result;
   }

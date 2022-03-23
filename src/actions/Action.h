@@ -25,6 +25,7 @@ namespace CCS {
 
     void (ActionProvider::*callback)(vector<string>) = NULL;
     vector<string> argumentNames;
+    vector<string> argumentTypes;
 
     Actions* actionsManager;
 
@@ -37,6 +38,7 @@ namespace CCS {
       string providerId,
       string actionId,
       vector<string> argumentNames,
+      vector<string> argumentTypes,
       vector<string> subActions,
       Actions* actionsManager
     );
