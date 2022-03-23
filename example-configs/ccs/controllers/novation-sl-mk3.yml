@@ -110,6 +110,7 @@ variables:
 
   LAYOUT_KNOB: 01
   L_KNOB: 01
+
   L_KNOB_TOP_BAR_COLOR: 00
   L_KNOB_KNOB_COLOR: 01
   L_KNOB_BOTTOM_BAR_COLOR: 02
@@ -149,24 +150,49 @@ variables:
   CENTER_L_RIGHT_TOP_TEXT: 2
   CENTER_L_RIGHT_BOTTOM_TEXT: 3
 
+  COLOR_WHITE: 03
+  COLOR_RED: 05
+  COLOR_YELLOW: 0D
+  COLOR_GREEN: 15
+  COLOR_LIGHT_BLUE: 25
+  COLOR_DARK_BLUE: 27
+  COLOR_VIOLET: 2D
+  COLOR_ORANGE: 3C
+
 actions:
+  # Combining multiple messages within 1 header and end does not
+  # work. At least not the way it's implemented currently.
+
   set_screen_layout:
     arguments:
       - LAYOUT
-      - SCREEN_ID
     message:
       - $SYSEX_HEADER
       - $SET_SCREEN_LAYOUT
-      - $_LAYOUT
-      - $_SCREEN_ID
+      - $_ARGS.LAYOUT
       - $SYSEX_END
 
-  set_main_screens_to_knob_layout:
+  set_knob_layout:
     message:
-      - "[set_screen_layout:$SCREEN1:$LAYOUT_KNOB]"
-      - "[set_screen_layout:$SCREEN2:$LAYOUT_KNOB]"
-      - "[set_screen_layout:$SCREEN3:$LAYOUT_KNOB]"
-      - "[set_screen_layout:$SCREEN4:$LAYOUT_KNOB]"
+      - $SYSEX_HEADER
+      - $SET_SCREEN_LAYOUT
+      - $LAYOUT_KNOB
+      - $SYSEX_END
+
+  # Yes, setting a value of 01 disables them, and 00 enables them.
+  disable_keyboard_leds:
+    message:
+      - $SYSEX_HEADER
+      - 05
+      - 01
+      - $SYSEX_END
+
+  enable_keyboard_leds:
+    message:
+      - $SYSEX_HEADER
+      - 05
+      - 00
+      - $SYSEX_END
 
   set_knob_value:
     arguments:
@@ -181,18 +207,25 @@ actions:
       - $_ARGS.VALUE
       - $SYSEX_END
 
+  set_knob_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
       - $SYSEX_HEADER
       - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
-      - $PROPERTY_TYPE_TEXT
-      - $L_KNOB_TEXT2
-      - $_ARGS.VALUE
+      - $PROPERTY_TYPE_COLOR
+      - $L_KNOB_KNOB_COLOR
+      - $_ARGS.COLOR
       - $SYSEX_END
 
   set_knob_label:
     arguments:
       - SCREEN_COLUMN
-      - TEXT
+      # '!' marks this argument as a text argument so that it's
+      # translated into midi compatible bytes.
+      - TEXT!
     message:
       - $SYSEX_HEADER
       - $SET_SCREEN_PROPERTY
@@ -202,4 +235,82 @@ actions:
       - $_ARGS.TEXT
       - $SYSEX_END
 
+  set_knob_label2:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT2
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_knob_label3:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT3
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_knob_label4:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT4
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_knob_lower_text_selected:
+    arguments:
+      - SCREEN_COLUMN
+      - SELECTED
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_VALUE
+      - $L_KNOB_LOWER_TEXT_SELECTED
+      - $_ARGS.SELECTED
+      - $SYSEX_END
+
+  set_knob_top_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_KNOB_TOP_BAR_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+
+  set_knob_bottom_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_KNOB_BOTTOM_BAR_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
 

@@ -1,0 +1,45 @@
+# To save lots of repetition, allow settings defaults that can be overriden
+# on each page.
+# This is useful if variables and mappings should stay the same on all pages.
+variables:
+  COLOR_LIGHT_BLUE: 25
+  COLOR_RED: 05
+  COLOR_YELLOW: 0D
+  COLOR_VIOLET: 36
+  COLOR_ORANGE: 54
+  COLOR_WHITE: 03
+  COLOR_GREEN: 15
+  COLOR_DARK_BLUE: 28
+
+  PART1_LABEL: Juno 1
+  PART2_LABEL: Juno 2
+  PART3_LABEL: Juno 3
+  PART4_LABEL: Vital
+  PART5_LABEL: 
+  PART5_LABEL: 
+  PART6_LABEL: 
+  PART7_LABEL: 
+  PART8_LABEL: Mixer
+
+  PART1_COLOR: 25
+  PART2_COLOR: 05
+  PART3_COLOR: 0D
+  PART4_COLOR: 36
+  PART5_COLOR: 54
+  PART6_COLOR: 03
+  PART7_COLOR: 15
+  PART8_COLOR: 28
+
+mappings:
+  controls:
+    button1:
+      label: $_PAGES.page1.name
+      action: set_active_page:page1
+
+    button2:
+      label: $_PAGES.page2.name
+      action: set_active_page:page2
+
+    button3:
+      label: $_PAGES.page3.name
+      action: set_active_page:page3

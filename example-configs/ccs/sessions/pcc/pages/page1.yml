@@ -1,0 +1,72 @@
+extends: _default
+name: $PART1_LABEL
+on_activate:
+  # Messages that will initialize this page.
+  - "[slmk3.set_knob_label:00:$ENCODER1_LABEL]"
+  - "[slmk3.set_knob_label:01:$ENCODER2_LABEL]"
+  - "[slmk3.set_knob_label:02:$ENCODER3_LABEL]"
+  - "[slmk3.set_knob_label:03:$ENCODER4_LABEL]"
+  - "[slmk3.set_knob_label:04:$ENCODER5_LABEL]"
+  - "[slmk3.set_knob_label:05:$ENCODER6_LABEL]"
+  - "[slmk3.set_knob_label:06:$ENCODER7_LABEL]"
+  - "[slmk3.set_knob_label:07:$ENCODER8_LABEL]"
+
+  - "[slmk3.set_knob_label4:00:$PART1_LABEL]"
+  - "[slmk3.set_knob_label4:01:$PART2_LABEL]"
+  - "[slmk3.set_knob_label4:02:$PART3_LABEL]"
+  - "[slmk3.set_knob_label4:03:$PART4_LABEL]"
+  - "[slmk3.set_knob_label4:04:$PART5_LABEL]"
+  - "[slmk3.set_knob_label4:05:$PART6_LABEL]"
+  - "[slmk3.set_knob_label4:06:$PART7_LABEL]"
+  - "[slmk3.set_knob_label4:07:$PART8_LABEL]"
+
+  - "[slmk3.set_knob_bottom_color:00:$PART1_COLOR]"
+  - "[slmk3.set_knob_bottom_color:01:$PART2_COLOR]"
+  - "[slmk3.set_knob_bottom_color:02:$PART3_COLOR]"
+  - "[slmk3.set_knob_bottom_color:03:$PART4_COLOR]"
+  - "[slmk3.set_knob_bottom_color:04:$PART5_COLOR]"
+  - "[slmk3.set_knob_bottom_color:05:$PART6_COLOR]"
+  - "[slmk3.set_knob_bottom_color:06:$PART7_COLOR]"
+  - "[slmk3.set_knob_bottom_color:07:$PART8_COLOR]"
+
+disabled:
+  - "[slmk3.set_knob_layout]"
+  - "[slmk3.set_knob_value:00:7F]"
+  - "[slmk3.set_knob_color:00:03]"
+  - "[slmk3.set_knob_label3:00:Line 3]"
+  - "[slmk3.set_knob_label4:00:Line 4]"
+  - "[slmk3.set_knob_top_color:00:15]"
+  - "[slmk3.set_knob_bottom_color:01:0D]"
+  - "[slmk3.set_knob_lower_text_selected:00:00]"
+
+variables:
+  ENCODER1_LABEL: LFO Amt
+  ENCODER2_LABEL: PW
+  ENCODER3_LABEL: LFO Rate
+  ENCODER4_LABEL: Test 1
+  ENCODER5_LABEL: Test 2
+  ENCODER6_LABEL: Test 3
+  ENCODER7_LABEL: Test 4
+  ENCODER8_LABEL: Test 5
+
+mappings:
+  controls:
+
+    slmk3.encoder1:
+      label: $ENCODER1_LABEL
+      mapping: reaper.track1.fx1.dco_lfo_value
+      on_action:
+        # Value normalizing depending on the current parameter should be possible.
+        # The parameter defines a type, and the type defines how values are supposed
+        # to be normalized.
+        - "[slmk3.set_knob_value:1:$VALUE_NORMALIZED]"
+
+    slmk3.encoder2:
+      label: $ENCODER2_LABEL
+      mapping: reaper.track1.fx1.dco_pwm_value
+      on_action: "[slmk3.set_knob_value:2:$VALUE_NORMALIZED]"
+
+    slmk3.encoder3:
+      label: $ENCODER3_LABEL
+      mapping: reaper.track1.fx1.lfo_rate
+      on_action: "[slmk3.set_knob_value:3:$VALUE_NORMALIZED]"

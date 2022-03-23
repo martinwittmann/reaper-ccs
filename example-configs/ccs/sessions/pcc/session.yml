@@ -1,7 +1,7 @@
 name: PCC - Live
 
 on_activate:
-  "[ccs.set_active_page:page1]"
+  - "[slmk3.set_knob_layout]"
 
 required_midi_controllers:
   - slmk3
