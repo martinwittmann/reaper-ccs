@@ -2,7 +2,7 @@
 #define CCS_SESSION_H
 
 #include <string>
-#include<experimental/filesystem>
+#include <experimental/filesystem>
 #include "yaml-cpp/yaml.h"
 #include "globals.cpp"
 #include "config/SessionConfig.h"
@@ -44,8 +44,6 @@ namespace CCS {
     void loadSessionPages();
 
     void loadMidiControllers();
-
-    void start();
 
     void setActivePage(int pageId);
   };

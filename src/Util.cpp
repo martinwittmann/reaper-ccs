@@ -120,6 +120,10 @@ namespace CCS {
     std::cout << "[DEBUG] " + message + "\n";
   }
 
+  void Util::error(std::string message) {
+    std::cout << "[ERROR] " + message + "\n";
+  }
+
   vector<unsigned char> Util::splitToBytes(string &input) {
     input = Util::regexReplace(input, "\\s+", "");
     vector<unsigned char> result;

@@ -1,5 +1,6 @@
 #include <string>
-#include<experimental/filesystem>
+#include <set>
+#include <experimental/filesystem>
 #include "yaml-cpp/yaml.h"
 
 #include "globals.cpp"
@@ -27,11 +28,14 @@ namespace CCS {
     this->output = output;
     loadSessionPages();
     loadMidiControllers();
+
     // Invoke the actions defined in "on_activate";
     vector<string> initActionItems = sessionConfig->getListValues("on_activate");
     for (auto it : initActionItems) {
       actions->invokeAction(it);
     }
+
+    setActivePage(0);
   }
 
   Session::~Session() {
@@ -41,24 +45,26 @@ namespace CCS {
     }
   }
 
-  void Session::start() {
-    setActivePage(0);
-  }
-
   void Session::setActivePage(int pageId) {
     activePage = pageId;
     Page* page = pages.at(pageId);
     // TODO implement changing page.
+    page->setActive();
   }
 
   std::vector<string> Session::getSessions(string sessionsDir) {
     std::vector<string> result;
+    std::set<string> sortedSessions;
     for (const auto &entry: fse::directory_iterator(sessionsDir)) {
       fse::path entry_path = fse::path(entry.path());
       if (!is_directory(entry_path) || !Session::isSessionFile(entry_path.string())) {
         continue;
       }
-      result.push_back(entry_path.filename());
+      sortedSessions.insert(entry_path.filename());
+    }
+
+    for (auto sessionName : sortedSessions) {
+      result.push_back(sessionName);
     }
     return result;
   }
@@ -74,12 +80,17 @@ namespace CCS {
 
   std::vector<string> Session::getPageNames() {
     std::vector<string> result;
+    std::set<string> sortedPages;
     for (const auto &entry: fse::directory_iterator(pagesDir)) {
       fse::path entry_path = fse::path(entry.path());
       if (is_directory(entry_path) || !Page::isPageConfigFile(entry_path.string())) {
         continue;
       }
-      result.push_back(entry_path.filename());
+      sortedPages.insert(entry_path.filename());
+    }
+
+    for (auto pageName : sortedPages) {
+      result.push_back(pageName);
     }
     return result;
   }
@@ -103,7 +114,7 @@ namespace CCS {
     std::vector<string> pageNames = getPageNames();
     for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
       string pagePath = pagesDir + SEP + *it;
-      pages.push_back(new Page(pagePath));
+      pages.push_back(new Page(pagePath, actions));
     }
   }
 

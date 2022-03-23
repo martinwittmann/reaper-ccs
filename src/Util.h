@@ -32,6 +32,7 @@ namespace CCS {
     static std::string removePrefixSuffix(std::string input);
 
     static void debug(std::string message);
+    static void error(std::string message);
 
     static std::vector<unsigned char> splitToBytes(std::string &input);
 

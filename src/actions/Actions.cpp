@@ -1,6 +1,7 @@
 #include "Actions.h"
 #include "ActionInvocation.h"
 #include "Action.h"
+#include "../Util.h"
 
 namespace CCS {
 
@@ -26,8 +27,13 @@ namespace CCS {
   // rawAction string and are unpacket in ActionInvokation.
   void Actions::invokeAction(std::string rawAction) {
     auto invokation = new ActionInvokation(rawAction);
-    Action action = getAction(invokation->providerId, invokation->actionId);
-    action.invoke(invokation->arguments);
+    try {
+      Action action = getAction(invokation->providerId, invokation->actionId);
+      action.invoke(invokation->arguments);
+    }
+    catch (...) {
+      Util::error("Trying to invoke action that does not exist: " + rawAction);
+    }
   }
 
   Action Actions::getAction(std::string providerId, std::string actionId) {

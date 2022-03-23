@@ -1,8 +1,11 @@
 #include <string>
-#include<experimental/filesystem>
+#include <map>
+#include <experimental/filesystem>
 #include "config/PageConfig.h"
 #include "Page.h"
 #include "globals.cpp"
+#include "actions/Actions.h"
+#include "Variables.h"
 
 namespace CCS {
 
@@ -10,8 +13,9 @@ namespace CCS {
   namespace fs = std::filesystem;
   using std::string;
 
-  Page::Page(string pagePath) {
+  Page::Page(string pagePath, Actions* actionManager) {
     config = new PageConfig(pagePath);
+    this->actionManager = actionManager;
   }
 
   Page::~Page() {
@@ -27,5 +31,13 @@ namespace CCS {
       return false;
     }
     return is_regular_file(path);
+  }
+
+  void Page::setActive() {
+    // Invoke the actions defined in "on_activate";
+    vector<string> initActionItems = config->getListValues("on_activate");
+    for (auto it : initActionItems) {
+      actionManager->invokeAction(it);
+    }
   }
 }

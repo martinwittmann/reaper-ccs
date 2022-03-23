@@ -15,7 +15,11 @@ namespace CCS {
   using std::vector;
   using std::map;
 
-  BaseConfig::BaseConfig(string filename, bool allowExtendConfig, string extendKeyName) :
+  BaseConfig::BaseConfig(
+    string filename,
+    bool allowExtendConfig,
+    string extendKeyName
+  ) :
     filename(filename),
     allowExtendConfig(allowExtendConfig),
     extendKeyName(extendKeyName)
@@ -91,20 +95,17 @@ namespace CCS {
   vector<string> BaseConfig::getListValues(string key) {
     vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, yaml);
-    try {
+    if (actualNode[keyParts.back()] && actualNode[keyParts.back()].Type() != YAML::NodeType::Null) {
       return actualNode[keyParts.back()].as<vector<string>>();
     }
-    catch (YAML::BadConversion &e) {
-      string message = "getListValues: " + key;
-      Util::debug(message);
-      throw message;
-    }
+    vector<string> result;
+    return result;
   }
 
   vector<string> BaseConfig::getListValues(string key, YAML::Node *rootNode) {
     vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
-    if (actualNode[keyParts.back()]) {
+    if (actualNode[keyParts.back()] && actualNode[keyParts.back()].Type() != YAML::NodeType::Null) {
       return actualNode[keyParts.back()].as<vector<string>>();
     }
 

@@ -2,10 +2,11 @@
 #define CCS_PAGE_H
 
 #include <string>
-#include<experimental/filesystem>
+#include <experimental/filesystem>
 #include "yaml-cpp/yaml.h"
 #include "Util.h"
 #include "config/PageConfig.h"
+#include "actions/Actions.h"
 
 namespace CCS {
 
@@ -15,13 +16,16 @@ namespace CCS {
 
   class Page {
     PageConfig *config;
+    Actions *actionManager;
 
   public:
-    Page(string pagePath);
+    Page(string pagePath, Actions* actionManager);
 
     ~Page();
 
     static bool isPageConfigFile(fse::path path);
+
+    void setActive();
   };
 }
 
