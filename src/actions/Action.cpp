@@ -1,7 +1,9 @@
 #include <string>
 #include <vector>
+#include <functional>
 #include "Action.h"
 #include "../Variables.h"
+#include "../MidiController.h"
 
 namespace CCS {
 
@@ -17,7 +19,7 @@ namespace CCS {
     vector<string> subActions,
     Actions* actionsManager
   ) {
-    this->type = Action::COMPOSITE;
+    this->type = "composite";
     this->providerId = providerId;
     this->actionId = actionId;
     this->argumentNames = argumentNames;
@@ -28,10 +30,9 @@ namespace CCS {
   Action::Action(
     string providerId,
     string actionId,
-    void (ActionProvider::*callback)(vector<string>),
     ActionProvider* actionProvider
   ) {
-    this->type = Action::CALLBACK;
+    this->type = "callback";
     this->providerId = providerId;
     this->actionId = actionId;
     this->callback = callback;
@@ -48,30 +49,25 @@ namespace CCS {
 
   void Action::invoke(vector<string> arguments) {
 
-    switch (type) {
-      case Action::CALLBACK:
-        // See https://opensource.com/article/21/2/ccc-method-pointers for some
-        // help with pointers to a method.
-        (actionProvider->*callback)(arguments);
-        break;
+    if (type == "callback") {
+      actionProvider->actionCallback(actionId, arguments);
+    }
+    else if (type == "composite") {
+      // We map the given arguments in the same order as the vector of
+      // argument names we got in the constructor.
+      std::map<string, string> variables;
+      for (auto i = 0; i < arguments.size(); i++) {
+        string argumentValue = arguments.at(i);
+        string argumentName = "_ARGS." + argumentNames.at(i);
+        variables.insert(std::pair(argumentName, argumentValue));
+      }
 
-      case Action::COMPOSITE:
-        // We map the given arguments in the same order as the vector of
-        // argument names we got in the constructor.
-        std::map<string,string> variables;
-        for (auto i = 0; i < arguments.size(); i++) {
-          string argumentValue = arguments.at(i);
-          string argumentName = "_ARGS." + argumentNames.at(i);
-          variables.insert(std::pair(argumentName, argumentValue));
-        }
-
-        // Apply the arguments to every sub action.
-        for (auto it = subActions.begin(); it != subActions.end(); ++it) {
-          string rawAction = *it;
-          rawAction = Variables::replaceVariables(rawAction, variables);
-          actionsManager->invokeAction(rawAction);
-        }
-        break;
+      // Apply the arguments to every sub action.
+      for (auto it = subActions.begin(); it != subActions.end(); ++it) {
+        string rawAction = *it;
+        rawAction = Variables::replaceVariables(rawAction, variables);
+        actionsManager->invokeAction(rawAction);
+      }
     }
   }
 }

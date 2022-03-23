@@ -14,6 +14,8 @@
 
 namespace CCS {
 
+  typedef void (ActionProvider::*pActionCallback)(vector<string>);
+
   using std::string;
   using std::vector;
 
@@ -38,7 +40,7 @@ namespace CCS {
     for (auto it = controls.begin(); it != controls.end(); ++it) {
       delete *it;
     }
-    for (auto it = actions.begin(); it != actions.end(); ++it) {
+    for (auto it = providedActions.begin(); it != providedActions.end(); ++it) {
       delete *it;
     }
   }
@@ -84,16 +86,19 @@ namespace CCS {
     return result;
   }
 
+  void MidiController::actionCallback(std::string actionName, std::vector<std::string> arguments) {
+
+  }
+
   void MidiController::createActions() {
     // Each midi controller needs to provide at least 1 action for sending
     // midi messages;
 
-    actions.push_back(new Action(
+    auto provider = dynamic_cast<ActionProvider*>(this);
+    providedActions.push_back(new Action(
       controllerId,
       "send_midi_message",
-      new vector("MESSAGE"),
-      &MidiController::sendMidiMessageToController,
-      this)
+      provider
     ));
 
 
@@ -106,9 +111,9 @@ namespace CCS {
       Action* action = createMidiControllerAction(
         actionId,
         item.second,
-        variables,
+        variables
       );
-      actions.push_back(action);
+      providedActions.push_back(action);
     }
   }
 
@@ -122,11 +127,11 @@ namespace CCS {
     vector<string> argumentNames = config->getListValues("arguments", &node);
 
     return new Action(
-      actionId,
       controllerId,
+      actionId,
       argumentNames,
       processedSubActions,
-      actions
+      actionsManager
     );
   }
 

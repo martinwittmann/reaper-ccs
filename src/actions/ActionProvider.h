@@ -2,6 +2,7 @@
 #define CCS_ACTION_PROVIDER_H
 
 #include <string>
+#include <vector>
 
 namespace CCS {
 
@@ -10,12 +11,15 @@ namespace CCS {
 
   class ActionProvider {
     std::string id;
-    Actions* manager;
+
+  protected:
+    Actions* actionsManager;
 
   public:
     explicit ActionProvider(Actions* actionsManager);
     std::string getId();
     void registerActionProvider(std::string providerId);
+    virtual void actionCallback(std::string actionName, std::vector<std::string> arguments);
   };
 }
 

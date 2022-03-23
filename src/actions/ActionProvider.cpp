@@ -15,15 +15,18 @@ namespace CCS {
   // I know, this is a side-effect situation, but until I find a cleaner way
   // we're sticking with this.
   ActionProvider::ActionProvider(Actions* actionsManager) {
-    this->manager = actionsManager;
+    this->actionsManager = actionsManager;
   }
 
   void ActionProvider::registerActionProvider(std::string providerId) {
     id = providerId;
-    manager->registerProvider(this);
+    actionsManager->registerProvider(this);
   }
 
   std::string ActionProvider::getId() {
     return id;
+  }
+
+  void ActionProvider::actionCallback(std::string actionName, std::vector<std::string> arguments) {
   }
 }

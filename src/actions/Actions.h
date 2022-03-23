@@ -8,6 +8,8 @@
 
 namespace CCS {
 
+  class Action;
+
   class Actions {
     std::vector<Action> actions;
     std::vector<ActionProvider*> providers;

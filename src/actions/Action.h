@@ -19,7 +19,7 @@ namespace CCS {
     // (see ActionProviderReaper class) or "ccs" for actions ccs itself provides.
     string providerId;
 
-    int type;
+    string type;
 
     vector<string> subActions;
 
@@ -31,12 +31,6 @@ namespace CCS {
     ActionProvider* actionProvider;
 
   public:
-    // Available action types:
-    // Actions that get a callback function.
-    const static int CALLBACK = 0;
-    // Actions can invoke other actions. This way users can combine multiple
-    // actions into easy to use composite actions.
-    const static int COMPOSITE = 1;
 
     // This creates an action of type COMPOSITE.
     Action(
@@ -51,7 +45,6 @@ namespace CCS {
     Action(
       string providerId,
       string actionId,
-      void (ActionProvider::*callback)(vector<string>),
       ActionProvider* actionProvider
     );
 

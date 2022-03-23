@@ -87,7 +87,7 @@ namespace CCS {
     string result;
     for (auto it = input.begin(); it != input.end(); ++it) {
       if (it != input.begin()) {
-        result += std::string(separator);
+        result += std::string(1, separator);
       }
       result += *it;
     }

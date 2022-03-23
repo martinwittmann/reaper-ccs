@@ -23,7 +23,7 @@ namespace CCS {
   /**
    * This represents a midi controller
    */
-  class MidiController : ActionProvider {
+  class MidiController : public ActionProvider {
     string controllerId;
     string name;
     int midiDeviceId;
@@ -32,7 +32,7 @@ namespace CCS {
     MidiControllerConfig *config;
     unsigned int defaultStatusByte;
     ActionProvider* actionProvider;
-    vector<Action*> actions;
+    vector<Action*> providedActions;
 
   public:
     MidiController(
@@ -62,6 +62,8 @@ namespace CCS {
     bool isMacroAction(string rawAction);
 
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
+
+    void actionCallback(string actionId, vector<string> arguments) override;
   };
 }
 
