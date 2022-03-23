@@ -26,9 +26,10 @@ namespace CCS {
     std::vector<MidiController *> midiControllers;
     int activePage = 0;
     Actions* actions;
+    midi_Output* output;
 
   public:
-    Session(string sessionPath, Actions* actions);
+    Session(string sessionPath, Actions* actions, midi_Output* output);
 
     ~Session();
 

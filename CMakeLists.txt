@@ -55,14 +55,12 @@ message("boost lib: ${Boost_LIBRARIES}")
 message("boost inc:${Boost_INCLUDE_DIRS}")
 
 
-#add_library(ccs SHARED ${SOURCE_FILES})
+add_library(ccs SHARED ${SOURCE_FILES})
+target_include_directories(ccs PRIVATE WDL/swell)
+set_target_properties(ccs PROPERTIES OUTPUT_NAME "ccs")
+target_link_libraries(ccs ${YAML_CPP} stdc++fs)
 
-#target_include_directories(ccs PRIVATE WDL/swell)
-#target_link_libraries(${PROJECT_NAME} ${YAML_CPP} stdc++fs)
-
-#set_target_properties(ccs PROPERTIES OUTPUT_NAME "ccs")
-
-add_executable(ccs_exec src/main.cpp ${SOURCE_FILES})
-target_link_libraries(ccs_exec ${YAML_CPP} stdc++fs)
-target_include_directories(ccs_exec PRIVATE WDL/swell)
-set_target_properties(ccs_exec PROPERTIES OUTPUT_NAME "ccs")
+#add_executable(ccs_exec src/main.cpp ${SOURCE_FILES})
+#target_link_libraries(ccs_exec ${YAML_CPP} stdc++fs)
+#target_include_directories(ccs_exec PRIVATE WDL/swell)
+#set_target_properties(ccs_exec PROPERTIES OUTPUT_NAME "ccs")

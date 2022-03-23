@@ -14,7 +14,7 @@ namespace CCS {
   namespace fs = std::filesystem;
   using std::string;
 
-  Session::Session(string sessionPath, Actions* actions) {
+  Session::Session(string sessionPath, Actions* actions, midi_Output* output) {
     path = sessionPath;
     pagesDir = path + SEP + "pages";
     midiControllersDir = fse::path(path)
@@ -24,8 +24,14 @@ namespace CCS {
       .string();
     this->actions = actions;
     sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
+    this->output = output;
     loadSessionPages();
     loadMidiControllers();
+    // Invoke the actions defined in "on_activate";
+    vector<string> initActionItems = sessionConfig->getListValues("on_activate");
+    for (auto it : initActionItems) {
+      actions->invokeAction(it);
+    }
   }
 
   Session::~Session() {
@@ -108,7 +114,7 @@ namespace CCS {
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
       string controllerConfigFile = *it;
       midiControllers.push_back(
-        new MidiController(controllerConfigFile, deviceId, actions)
+        new MidiController(controllerConfigFile, deviceId, output, actions)
       );
     }
   }

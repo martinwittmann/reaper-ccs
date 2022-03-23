@@ -112,4 +112,22 @@ namespace CCS {
     result = Util::regexReplace(result, "[\"\\]]+$", "");
     return result;
   }
+
+
+  void Util::debug(std::string message) {
+    std::cout << "[DEBUG] " + message + "\n";
+  }
+
+  vector<unsigned char> Util::splitToBytes(string &input) {
+    input = Util::regexReplace(input, "\\s+", "");
+    vector<unsigned char> result;
+    string tmp = "";
+    for (int i = 0; i < input.length(); ++i) {
+      if (i % 2 == 1) {
+        string byte = input.substr(i - 1, 2);
+        result.push_back(std::stoi(byte, 0, 16));
+      }
+    }
+    return result;
+  }
 }

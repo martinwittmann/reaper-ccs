@@ -39,7 +39,7 @@ namespace CCS {
     MidiController(
       string configFilename,
       int deviceId,
-      //midi_Output *output,
+      midi_Output *output,
       Actions* actionManager
     );
 

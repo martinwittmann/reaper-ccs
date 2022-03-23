@@ -30,6 +30,10 @@ namespace CCS {
     static std::string joinStrVector(std::vector<std::string> input, char separator);
 
     static std::string removePrefixSuffix(std::string input);
+
+    static void debug(std::string message);
+
+    static std::vector<unsigned char> splitToBytes(std::string &input);
   };
 }
 

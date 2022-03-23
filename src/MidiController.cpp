@@ -24,14 +24,14 @@ namespace CCS {
   MidiController::MidiController(
     string configFilename,
     int deviceId,
-    //midi_Output *output,
+    midi_Output *output,
     Actions* actionsManager
   ) : ActionProvider(actionsManager) {
     config = new MidiControllerConfig(configFilename);
     controllerId = config->getValue("id");
     name = config->getValue("name");
     registerActionProvider(controllerId);
-    //midiOutput = output;
+    midiOutput = output;
 
     this->defaultStatusByte = Util::hexToInt(config->getValue("default_status"));
 
@@ -92,23 +92,35 @@ namespace CCS {
 
   void MidiController::actionCallback(std::string actionName, std::vector<std::string> arguments) {
     if (actionName == "send_midi_message") {
-      /*
-      struct MIDI_event_t {
-        int frame_offset;
-        int size; // bytes used by midi_message, can be >3, but should never be <3, even if a short 1 or 2 byte msg
-        unsigned char midi_message[4]; // size is number of bytes valid -- can be more than 4!
+      Util::debug(controllerId + ": Send midi message: " + arguments.at(0));
+      vector<unsigned char> bytes = Util::splitToBytes(arguments.at(0));
+
+      // I think this is a dirty hack, but I copied it from the examples and
+      // the CSI source code.
+      // I believe that we define a custom struct and additionally to the midi
+      // event reserve enough memory to hold our additional bytes.
+      // Additional because for some reason MIDI_event_t hard-codes messages to
+      // be 4 bytes long. This seems to work though.
+      // Additionally, I think we need to reseve more memory than actually
+      // because I could not find a way of creating a struct and define the
+      // size of data depending on the number of bytes our message will have.
+      struct {
+        MIDI_event_t message;
+        char data[1024];
+      } event;
+
+      event.message.frame_offset = 0;
+      event.message.size = bytes.size();
+      for (int i = 0; i < bytes.size(); ++i) {
+        event.message.midi_message[i] = bytes.at(i);
       }
-      */
-      /*
-      MIDI_event_t message = {
-        .frame_offset = 0,
 
-      };
-
-
-      midiOutput->SendMsg(&message, 0);
-      // frame_offset can be <0 for "instant" if supported
-      */
+      if (midiOutput) {
+        midiOutput->SendMsg(&event.message, -1);
+      }
+      else {
+        Util::debug("Midi output not available");
+      }
     }
   }
 

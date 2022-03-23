@@ -7,8 +7,6 @@ class CSurf_NovationSlMk3 : public IReaperControlSurface {
     midi_Output *m_midiout;
     midi_Input *m_midiin;
 
-    //BaseConfig *config;
-
     WDL_String descspace;
     char configtmp[1024];
 
@@ -51,7 +49,7 @@ public:
       }
 
       // TODO How to get the reaper resource dir via the api?
-      auto ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/");
+      auto ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/", m_midiout);
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) {
@@ -145,7 +143,7 @@ static IReaperControlSurface *createFunc(const char *type_string, const char *co
   parseParms(configString,parms);
   // Since I was not yet able to actually store a control surface, let's always use the
   // correct id so we don't need to manually select them everytime when testing.
-  return new CSurf_NovationSlMk3(3,3, errStats);
+  return new CSurf_NovationSlMk3(3, 3, errStats);
 }
 
 static WDL_DLGRET dlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {

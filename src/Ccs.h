@@ -6,6 +6,7 @@
 #include "config/GlobalConfig.h"
 #include "globals.cpp"
 #include "actions/Actions.h"
+#include "sdk/reaper_plugin.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -20,9 +21,10 @@ namespace CCS {
     Session *currentSession;
     GlobalConfig *config;
     Actions* actions;
+    midi_Output* output;
 
   public:
-    Ccs(string baseDir);
+    Ccs(string baseDir, midi_Output* output);
 
     ~Ccs();
 
