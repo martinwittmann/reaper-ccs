@@ -13,6 +13,7 @@
 #include "actions/Action.h"
 #include "actions/Actions.h"
 #include "actions/ActionProvider.h"
+#include "sdk/reaper_plugin.h"
 
 namespace CCS {
 
@@ -38,8 +39,8 @@ namespace CCS {
     MidiController(
       string configFilename,
       int deviceId,
+      //midi_Output *output,
       Actions* actionManager
-      //midi_Output *output
     );
 
     ~MidiController();

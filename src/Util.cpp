@@ -23,8 +23,8 @@ namespace CCS {
     return var1.length() > var2.length();
   }
 
-  string Util::processString(string raw, map<string, string> variables) {
-    std::regex variables_regex = std::regex("\\$[A-Z0-9_]+");
+  string Util::processString(string raw, map<string, string> variables, string pattern) {
+    std::regex variables_regex = std::regex(pattern);
     // Find all variables used in this string.
     auto matches = std::sregex_iterator(
       raw.begin(),
@@ -43,7 +43,7 @@ namespace CCS {
     }
 
     // We need replace longer variables first because there could be
-    // variables starting the the name of other variables.
+    // variables starting with the name of other variables.
     // Example: $LABEL = "123", $LABEL_BUTTON = "Click";
     // If we would handle $LABEL before $LABEL_BUTTON we would do something
     // the user does not expect and mess up the string.
@@ -67,15 +67,28 @@ namespace CCS {
     std::cout << "[ERROR] " << message << "\n";
   }
 
-  vector<string> Util::splitString(string &input, const char *delimiter) {
+  vector<string> Util::splitString(string &input, char delimiter) {
     vector<string> result;
-    char *token = strtok(const_cast<char *>(input.c_str()), delimiter);
-    while (token != nullptr) {
-      string part = string(token);
-      result.push_back(part);
-      token = strtok(nullptr, delimiter);
+    string tmp = "";
+    for (char const &current: input) {
+      if (current == delimiter) {
+        result.push_back(tmp);
+        tmp = "";
+      }
+      else {
+        tmp += string(1, current);
+      }
+    }
+
+    if (!tmp.empty()) {
+      result.push_back(tmp);
     }
     return result;
+
+    // The implemenation copied from the internet seemed to introduce
+    // non-deterministic behavior.
+    // Let's stick with our own naive implementation for now.
+    // TODO Use a good implementation for this.
   }
 
   string Util::regexReplace(string input, string pattern, string replacement) {
@@ -91,6 +104,12 @@ namespace CCS {
       }
       result += *it;
     }
+    return result;
+  }
+
+  string Util::removePrefixSuffix(string input) {
+    string result = Util::regexReplace(input, "^[\"\\[]+", "");
+    result = Util::regexReplace(result, "[\"\\]]+$", "");
     return result;
   }
 }

@@ -15,15 +15,21 @@ namespace CCS {
 
     static bool _compareVariableLength(std::string var1, std::string var2);
 
-    static std::string processString(std::string raw, std::map<std::string, std::string> variables);
+    static std::string processString(
+      std::string raw,
+      std::map<std::string,std::string> variables,
+      std::string pattern = "\\$(_ARGS\\.)?[A-Z0-9_]+"
+    );
 
     static void logError(std::string message);
 
-    static std::vector<std::string> splitString(std::string &input, const char *delimiter);
+    static std::vector<std::string> splitString(std::string &input, char delimiter);
 
     static std::string regexReplace(std::string input, std::string pattern, std::string replacement);
 
     static std::string joinStrVector(std::vector<std::string> input, char separator);
+
+    static std::string removePrefixSuffix(std::string input);
   };
 }
 

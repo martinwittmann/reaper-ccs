@@ -19,6 +19,7 @@ namespace CCS {
     sessions = Session::getSessions(sessionsDir);
     lastSession = config->getLastSessionId();
     currentSession = loadSession(lastSession, actions);
+    actions->invokeAction("[slmk3.set_main_screens_to_knob_layout]");
   }
 
   Ccs::~Ccs() {

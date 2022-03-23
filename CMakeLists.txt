@@ -64,6 +64,5 @@ message("boost inc:${Boost_INCLUDE_DIRS}")
 
 add_executable(ccs_exec src/main.cpp ${SOURCE_FILES})
 target_link_libraries(ccs_exec ${YAML_CPP} stdc++fs)
-#target_include_directories(ccs_exec PRIVATE WDL/swell)
-
+target_include_directories(ccs_exec PRIVATE WDL/swell)
 set_target_properties(ccs_exec PROPERTIES OUTPUT_NAME "ccs")

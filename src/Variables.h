@@ -15,11 +15,14 @@ namespace CCS {
 
     static std::string replaceVariables(std::string, std::map<std::string,std::string> variables);
 
-    static void replaceVariables(
+    static void replaceVariables(YAML::Node &yaml, std::map<std::string,std::string> variables);
+
+    /*
+    static std::string replaceArgumentVariables(
       YAML::Node &yaml,
-      std::map<std::string,
-      std::string> variables
+      std::map<std::string,std::string> variables
     );
+    */
   };
 }
 

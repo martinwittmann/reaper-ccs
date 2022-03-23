@@ -1,6 +1,6 @@
 #include "csurf.h"
 #include <iostream>
-//#include "BaseConfig.cpp"
+#include "Ccs.h"
 
 class CSurf_NovationSlMk3 : public IReaperControlSurface {
     int m_midi_in_dev,m_midi_out_dev;
@@ -20,6 +20,7 @@ public:
     CSurf_NovationSlMk3(int indev, int outdev, int *errStats) {
       m_midi_in_dev = indev;
       m_midi_out_dev = outdev;
+
 
       // Create midi hardware access.
       if (m_midi_in_dev >= 0) {
@@ -49,7 +50,8 @@ public:
         m_midiin->start();
       }
 
-      //config = new BaseConfig("/home/martin/.config/REAPER/ccs/");
+      // TODO How to get the reaper resource dir via the api?
+      auto ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/");
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) {
@@ -238,7 +240,7 @@ static HWND configFunc(const char *type_string, HWND parent, const char *initCon
 
 
 reaper_csurf_reg_t csurf_novation_slmk3_reg = {
-  "NOVATIONSLMK",
+  "NOVATIONSLMKIII",
   // !WANT_LOCALIZE_STRINGS_BEGIN:csurf_type
   __LOCALIZE_VERFMT("Novation SL MK III", "csurf"),
   // !WANT_LOCALIZE_STRINGS_END

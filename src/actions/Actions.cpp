@@ -27,10 +27,11 @@ namespace CCS {
   void Actions::invokeAction(std::string rawAction) {
     auto invokation = new ActionInvokation(rawAction);
     Action action = getAction(invokation->providerId, invokation->actionId);
-    invokeAction(action, invokation->arguments);
+    action.invoke(invokation->arguments);
   }
 
   Action Actions::getAction(std::string providerId, std::string actionId) {
+    int a = 1;
     for (auto it = actions.begin(); it != actions.end(); ++it) {
       Action action = *it;
       if (action.getProviderId() == providerId && action.getId() == actionId) {

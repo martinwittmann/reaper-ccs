@@ -63,13 +63,13 @@ namespace CCS {
   }
 
   bool BaseConfig::keyExists(string key) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, yaml);
     return actualNode[keyParts.back()];
   }
 
   bool BaseConfig::keyExists(string key, YAML::Node *rootNode) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
     return actualNode[keyParts.back()];
   }
@@ -79,7 +79,7 @@ namespace CCS {
   }
 
   string BaseConfig::getValue(string key, YAML::Node *rootNode) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
     YAML::Node resultNode = actualNode[keyParts.back()];
     if (resultNode) {
@@ -89,25 +89,30 @@ namespace CCS {
   }
 
   vector<string> BaseConfig::getListValues(string key) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, yaml);
     return actualNode[keyParts.back()].as<vector<string>>();
   }
 
   vector<string> BaseConfig::getListValues(string key, YAML::Node *rootNode) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
-    return actualNode[keyParts.back()].as<vector<string>>();
+    if (actualNode[keyParts.back()]) {
+      return actualNode[keyParts.back()].as<vector<string>>();
+    }
+
+    vector<string> result;
+    return result;
   }
 
   YAML::Node BaseConfig::getMapValue(string key) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, yaml);
     return actualNode[keyParts.back()];
   }
 
   YAML::Node BaseConfig::getMapValue(string key, YAML::Node *rootNode) {
-    vector<string> keyParts = Util::splitString(key, &keySeparator);
+    vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
     return actualNode[keyParts.back()];
   }

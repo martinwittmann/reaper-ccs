@@ -11,6 +11,8 @@
 #include "actions/ActionProvider.h"
 #include "actions/Actions.h"
 #include "Variables.h"
+#include "sdk/reaper_plugin.h"
+#include <iostream>
 
 namespace CCS {
 
@@ -22,17 +24,19 @@ namespace CCS {
   MidiController::MidiController(
     string configFilename,
     int deviceId,
+    //midi_Output *output,
     Actions* actionsManager
-    //midi_Output *output
   ) : ActionProvider(actionsManager) {
     config = new MidiControllerConfig(configFilename);
     controllerId = config->getValue("id");
     name = config->getValue("name");
     registerActionProvider(controllerId);
+    //midiOutput = output;
 
-    //this->midiOutput = output;
     this->defaultStatusByte = Util::hexToInt(config->getValue("default_status"));
+
     initializeControls();
+    createActions();
   }
 
   MidiController::~MidiController() {
@@ -87,7 +91,25 @@ namespace CCS {
   }
 
   void MidiController::actionCallback(std::string actionName, std::vector<std::string> arguments) {
+    if (actionName == "send_midi_message") {
+      /*
+      struct MIDI_event_t {
+        int frame_offset;
+        int size; // bytes used by midi_message, can be >3, but should never be <3, even if a short 1 or 2 byte msg
+        unsigned char midi_message[4]; // size is number of bytes valid -- can be more than 4!
+      }
+      */
+      /*
+      MIDI_event_t message = {
+        .frame_offset = 0,
 
+      };
+
+
+      midiOutput->SendMsg(&message, 0);
+      // frame_offset can be <0 for "instant" if supported
+      */
+    }
   }
 
   void MidiController::createActions() {
@@ -95,12 +117,13 @@ namespace CCS {
     // midi messages;
 
     auto provider = dynamic_cast<ActionProvider*>(this);
-    providedActions.push_back(new Action(
+    auto sendMidiAction = new Action(
       controllerId,
       "send_midi_message",
       provider
-    ));
-
+    );
+    providedActions.push_back(sendMidiAction);
+    actionsManager->registerAction(*sendMidiAction);
 
     // Get Actions from config.
     YAML::Node actionsNode = config->getMapValue("actions");
@@ -114,6 +137,7 @@ namespace CCS {
         variables
       );
       providedActions.push_back(action);
+      actionsManager->registerAction(*action);
     }
   }
 
@@ -165,13 +189,24 @@ namespace CCS {
         }
 
         // Now add the current macro action.
-        result.push_back(subAction);
+        result.push_back("[" + controllerId + "." + Util::removePrefixSuffix(subAction) + "]");
       }
       else {
         // Here subAction is simply a string of midi messages, possibly containing
         // variables.
         midiMessages.push_back(subAction);
       }
+    }
+
+    // At the and we need to add an action for the rest of the added midi messages.
+    if (!midiMessages.empty()) {
+      // Since the current action is not a midi action, but the last one(s)
+      // were, we need to add the accumulated send midi actions before adding
+      // the current macro action.
+      string rawMessage = Util::joinStrVector(midiMessages, ' ');
+      string midiMessage = "[" + controllerId + ".send_midi_message:" + rawMessage + "]";
+      midiMessages.clear();
+      result.push_back(midiMessage);
     }
     return result;
   }
@@ -180,10 +215,6 @@ namespace CCS {
     // If the string contains brackets we think it's a macro action because we
     // define that macros/subactions are being called by using
     // [action_provider.action_id:argument1:argument2:...]
-    return rawAction.find("[") == -1;
-  }
-
-  void MidiController::sendMidiMessageToController(vector<string> arguments) {
-    // TODO Use the provided midi output to actually send the message.
+    return rawAction.find("[") != -1;
   }
 }

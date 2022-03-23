@@ -48,25 +48,30 @@ namespace CCS {
   }
 
   void Action::invoke(vector<string> arguments) {
-
-    if (type == "callback") {
-      actionProvider->actionCallback(actionId, arguments);
-    }
-    else if (type == "composite") {
-      // We map the given arguments in the same order as the vector of
-      // argument names we got in the constructor.
-      std::map<string, string> variables;
+    // We map the given arguments in the same order as the vector of
+    // argument names we got in the constructor.
+    std::map<string, string> argumentVariables;
+    if (!argumentNames.empty()) {
       for (auto i = 0; i < arguments.size(); i++) {
         string argumentValue = arguments.at(i);
         string argumentName = "_ARGS." + argumentNames.at(i);
-        variables.insert(std::pair(argumentName, argumentValue));
+        argumentVariables.insert(std::pair(argumentName, argumentValue));
       }
+    }
+
+    if (type == "callback") {
+      for (auto& argument: arguments) {
+        argument = Variables::replaceVariables(argument, argumentVariables);
+      }
+      actionProvider->actionCallback(actionId, arguments);
+    }
+    else if (type == "composite") {
 
       // Apply the arguments to every sub action.
-      for (auto it = subActions.begin(); it != subActions.end(); ++it) {
-        string rawAction = *it;
-        rawAction = Variables::replaceVariables(rawAction, variables);
-        actionsManager->invokeAction(rawAction);
+      for (auto subAction: subActions) {
+        string rawSubAction = subAction;
+        rawSubAction = Variables::replaceVariables(rawSubAction, argumentVariables);
+        actionsManager->invokeAction(rawSubAction);
       }
     }
   }

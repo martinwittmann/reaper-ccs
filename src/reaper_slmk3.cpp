@@ -272,11 +272,6 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hI
       return 0;
     }
 
-//    if (REAPERAPI_LoadAPI(rec->GetFunc) > 0) {
-//      debug("Returned 0 loadApi.");
-//      return 0;
-//    }
-
     if (!rec || rec->caller_version != REAPER_PLUGIN_VERSION || !rec->GetFunc) {
       debug("Returned 0 plugin version conflict.");
       return 0;

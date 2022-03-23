@@ -42,7 +42,7 @@ namespace CCS {
   void Session::setActivePage(int pageId) {
     activePage = pageId;
     Page* page = pages.at(pageId);
-    // TODO
+    // TODO implement changing page.
   }
 
   std::vector<string> Session::getSessions(string sessionsDir) {

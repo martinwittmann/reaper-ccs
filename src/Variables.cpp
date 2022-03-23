@@ -18,10 +18,27 @@ namespace CCS {
   }
 
   string Variables::replaceVariables(string input, map<string,string> variables) {
+    if (variables.empty()) {
+      return input;
+    }
     return Util::processString(input, variables);
   }
 
+  /*
+  // We need a separate method vor replacing argument variables since they come
+  // in the form of $_ARGS.MY_VARIABLE - which contains a dot.
+  string Variables::replaceArgumentVariables(string input, map<string,string> variables) {
+    if (variables.empty()) {
+      return input;
+    }
+    return Util::processString(input, variables, "\\$_ARGS.[A-Z0-9_]+");
+  }
+  */
+
   void Variables::replaceVariables(YAML::Node &yaml, map <string, string> variables) {
+    if (variables.empty()) {
+      return;
+    }
     switch (yaml.Type()) {
       case YAML::NodeType::Scalar:
         // Actually replace variables.
