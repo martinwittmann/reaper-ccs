@@ -17,7 +17,7 @@ namespace CCS {
 
   public:
     explicit ActionProvider(ActionsManager* actionsManager);
-    std::string getId();
+    std::string getProviderId();
     void registerActionProvider(std::string providerId);
     virtual void actionCallback(std::string actionName, std::vector<std::string> arguments);
 

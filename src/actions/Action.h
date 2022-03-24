@@ -54,7 +54,7 @@ namespace CCS {
 
     void invoke(vector<string> arguments, Session* session);
 
-    string getId();
+    string getActionId();
     string getProviderId();
   };
 }

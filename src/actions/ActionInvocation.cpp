@@ -26,11 +26,10 @@ namespace CCS {
       providerId = actionParts.at(0);
       actionId = actionParts.at(1);
 
-      if (actionId == "page") {
+      if (providerId == "page") {
         // Replace "page" with the currently active page id.
         Page* page = session->getActivePage();
-        actionId = Util::regexReplace(actionId, "^\\[page\\.", "[" + page->getId() + ".");
-        int a = 1;
+        providerId = page->getPageId();
       }
     }
 

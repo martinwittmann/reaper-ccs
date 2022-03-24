@@ -42,9 +42,12 @@ namespace CCS {
 
   void Session::setActivePage(int index) {
     Page* page = pages.at(index);
-    // TODO implement changing page.
-    page->setActive();
     activePage = page;
+    // TODO implement changing page.
+    // We need to call setAction after setting activePage here because the
+    // call of setActive invokes the activation actions which depend on an
+    // active page being set.
+    page->setActive();
   }
 
   Page* Session::getActivePage() {

@@ -26,7 +26,7 @@ namespace CCS {
     actionsManager->registerProvider(this);
   }
 
-  string ActionProvider::getId() {
+  string ActionProvider::getProviderId() {
     return id;
   }
 

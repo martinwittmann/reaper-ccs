@@ -44,7 +44,7 @@ namespace CCS {
   Action ActionsManager::getAction(std::string providerId, std::string actionId) {
     for (auto it = actions.begin(); it != actions.end(); ++it) {
       Action action = *it;
-      if (action.getProviderId() == providerId && action.getId() == actionId) {
+      if (action.getProviderId() == providerId && action.getActionId() == actionId) {
         return action;
       }
     }
@@ -58,7 +58,7 @@ namespace CCS {
   ActionProvider* ActionsManager::getProvider(std::string providerId) {
     for (auto it = providers.begin(); it != providers.end(); ++it) {
       ActionProvider* provider = *it;
-      if (provider->getId() == providerId) {
+      if (provider->getProviderId() == providerId) {
         return provider;
       }
     }

@@ -40,6 +40,7 @@ namespace CCS {
     void createActions();
     Action* createPageAction(string actionId, YAML::Node node);
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
+    string getPageId();
   };
 }
 

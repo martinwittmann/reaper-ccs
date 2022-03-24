@@ -18,6 +18,7 @@ namespace CCS {
     : ActionProvider(actionsManager) {
     config = new PageConfig(pagePath);
     pageId = config->getValue("id");
+    registerActionProvider(pageId);
     this->actionsManager = actionsManager;
     this->session = session;
     createActions();
@@ -25,9 +26,8 @@ namespace CCS {
 
   Page::~Page() {
     delete config;
-
-    for (auto it = providedActions.begin(); it != providedActions.end(); ++it) {
-      delete *it;
+    for (auto &action : providedActions) {
+      delete action;
     }
     providedActions.clear();
   }
@@ -118,9 +118,13 @@ namespace CCS {
     vector<string> result;
 
     vector<string>midiMessages;
-    for (auto &rawSubAction: rawSubActions) {
-      rawSubAction = Util::regexReplace(rawSubAction, "^\\[page\\.", "[" + pageId + ".");
+    for (auto rawSubAction: rawSubActions) {
+      result.push_back(Util::regexReplace(rawSubAction, "^\\[page\\.", "[" + pageId + "."));
     }
     return result;
+  }
+
+  string Page::getPageId() {
+    return pageId;
   }
 }

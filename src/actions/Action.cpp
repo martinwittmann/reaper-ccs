@@ -41,7 +41,7 @@ namespace CCS {
     this->actionProvider = actionProvider;
   }
 
-  string Action::getId() {
+  string Action::getActionId() {
     return actionId;
   }
 
