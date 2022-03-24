@@ -25,6 +25,10 @@ namespace CCS {
     lastSession = config->getLastSessionId();
     currentSession = loadSession(lastSession, actionsManager);
     subscribedEventIds = currentSession->getSubscribedMidiEventIds();
+    std::map<int,MidiEventSubscriber*>::iterator it;
+    for (it = subscribedEventIds.begin(); it != subscribedEventIds.end(); ++it) {
+      std::cout << "Subscribed to event id: " << it->first << "\n";
+    }
   }
 
   Ccs::~Ccs() {
@@ -38,12 +42,18 @@ namespace CCS {
   }
 
   void Ccs::onMidiEvent(MIDI_event_t* rawEvent) {
-    std::cout << "\nMidi Event received:\n";
-    std::cout << rawEvent->size << "\n";
-    std::cout << rawEvent->midi_message[0] << " " << rawEvent->midi_message[1] << "\n";
     int eventId = Util::getMidiEventId(
       rawEvent->midi_message[0],
       rawEvent->midi_message[1]
     );
+    if (subscribedEventIds.contains(eventId)) {
+      MidiEventSubscriber* subscriber = subscribedEventIds.at(eventId);
+      if (subscriber) {
+        subscriber->onMidiEvent(eventId, rawEvent->midi_message[2]);
+      }
+      else {
+        std::cout << "Subscriber not found\n";
+      }
+    }
   }
 }

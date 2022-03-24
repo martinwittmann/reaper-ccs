@@ -116,8 +116,8 @@ namespace CCS {
 
   void MidiController::_sendMidiMessage(vector<unsigned char>* buffer) {
 
-    Util::debug(controllerId + ": Send midi message:");
-    Util::debugMidiBuffer(buffer);
+    //Util::debug(controllerId + ": Send midi message:");
+    //Util::debugMidiBuffer(buffer);
 
     // I think this is a dirty hack, but I copied it from the examples and
     // the CSI source code.
@@ -281,7 +281,7 @@ namespace CCS {
   }
 
   int MidiController::getMidiEventIdForControl(string controlId) {
-    string dataByteRaw = config->getValue("controls." + controlId + ".message.data");
+    string dataByteRaw = config->getValue("controls." + controlId + ".message.data1");
     unsigned int dataByte = 0;
     if (!dataByteRaw.empty()) {
       dataByte = Util::hexToInt(dataByteRaw);
@@ -292,7 +292,8 @@ namespace CCS {
     if (!statusByteRaw.empty()) {
       statusByte = Util::hexToInt(statusByteRaw);
     }
-    return Util::getMidiEventId(statusByte, dataByte);
+    int result = Util::getMidiEventId(statusByte, dataByte);
+    return result;
   }
 
   string MidiController::getControllerId() {

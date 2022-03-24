@@ -138,7 +138,7 @@ namespace CCS {
   }
 
   void Page::onMidiEvent(int eventId, unsigned int dataByte) {
-    std::cout << "On midi event in page.";
+    std::cout << "On midi event in page.\n";
   }
 
 
@@ -146,7 +146,8 @@ namespace CCS {
     auto subscriber = dynamic_cast<MidiEventSubscriber*>(this);
     std::map<int,MidiEventSubscriber*> result;
     for (const auto &mapping: controlElementMappings) {
-      result.insert(std::pair(mapping->getMidiEventId(), subscriber));
+      int eventId = mapping->getMidiEventId();
+      result.insert(std::pair(eventId, subscriber));
     }
     return result;
   }
