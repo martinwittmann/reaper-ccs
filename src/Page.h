@@ -7,22 +7,29 @@
 #include "Util.h"
 #include "config/PageConfig.h"
 #include "actions/ActionsManager.h"
+#include "actions/ActionProvider.h"
 #include "actions/Action.h"
 
 namespace CCS {
 
+  class Session;
+
   namespace fse = std::experimental::filesystem;
   namespace fs = std::filesystem;
   using std::string;
+  using std::vector;
+
+  class Action;
 
   class Page : public ActionProvider {
     PageConfig *config;
-    ActionsManager *actionsManager;
+    ActionsManager* actionsManager;
+    Session* session;
     vector<Action*> providedActions;
     string pageId;
 
   public:
-    Page(string pagePath, ActionsManager* actionsManager);
+    Page(string pagePath, ActionsManager* actionsManager, Session* session);
 
     ~Page();
 

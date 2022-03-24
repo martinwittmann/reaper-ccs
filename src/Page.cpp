@@ -14,11 +14,12 @@ namespace CCS {
   namespace fs = std::filesystem;
   using std::string;
 
-  Page::Page(string pagePath, ActionsManager* actionsManager)
+  Page::Page(string pagePath, ActionsManager* actionsManager, Session* session)
     : ActionProvider(actionsManager) {
     config = new PageConfig(pagePath);
     pageId = config->getValue("id");
     this->actionsManager = actionsManager;
+    this->session = session;
     createActions();
   }
 
@@ -28,6 +29,7 @@ namespace CCS {
     for (auto it = providedActions.begin(); it != providedActions.end(); ++it) {
       delete *it;
     }
+    providedActions.clear();
   }
 
   bool Page::isPageConfigFile(fse::path path) {
@@ -44,8 +46,8 @@ namespace CCS {
   void Page::setActive() {
     // Invoke the actions defined in "on_activate";
     vector<string> initActionItems = config->getListValues("on_activate");
-    for (auto it : initActionItems) {
-      actionsManager->invokeAction(it);
+    for (auto rawAction : initActionItems) {
+      actionsManager->invokeAction(rawAction, session);
     }
   }
 

@@ -49,7 +49,7 @@ namespace CCS {
     return providerId;
   }
 
-  void Action::invoke(vector<string> arguments) {
+  void Action::invoke(vector<string> arguments, Session* session) {
     // We map the given arguments in the same order as the vector of
     // argument names we got in the constructor.
     std::map<string, string> argumentVariables;
@@ -77,7 +77,7 @@ namespace CCS {
       for (auto subAction: subActions) {
         string rawSubAction = subAction;
         rawSubAction = Variables::replaceVariables(rawSubAction, argumentVariables);
-        actionsManager->invokeAction(rawSubAction);
+        actionsManager->invokeAction(rawSubAction, session);
       }
     }
   }

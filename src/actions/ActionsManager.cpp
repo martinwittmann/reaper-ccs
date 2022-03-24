@@ -2,6 +2,7 @@
 #include "ActionInvocation.h"
 #include "Action.h"
 #include "../Util.h"
+#include "../Session.h"
 
 namespace CCS {
 
@@ -19,17 +20,21 @@ namespace CCS {
     providers.push_back(provider);
   }
 
-  void ActionsManager::invokeAction(Action action, vector<string> arguments) {
-    action.invoke(arguments);
+  void ActionsManager::invokeAction(
+    Action action,
+    vector<string> arguments,
+    Session* session
+  ) {
+    action.invoke(arguments, session);
   }
 
   // Note that we do not accept arguments here, because they are encoded in the
   // rawAction string and are unpacket in ActionInvokation.
-  void ActionsManager::invokeAction(std::string rawAction) {
-    auto invokation = new ActionInvokation(rawAction);
+  void ActionsManager::invokeAction(std::string rawAction, Session* session) {
+    auto invokation = new ActionInvokation(session, rawAction);
     try {
       Action action = getAction(invokation->providerId, invokation->actionId);
-      action.invoke(invokation->arguments);
+      action.invoke(invokation->arguments, session);
     }
     catch (...) {
       Util::error("Trying to invoke action that does not exist: " + rawAction);

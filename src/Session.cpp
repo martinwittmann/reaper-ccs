@@ -40,11 +40,15 @@ namespace CCS {
     }
   }
 
-  void Session::setActivePage(int pageId) {
-    activePage = pageId;
-    Page* page = pages.at(pageId);
+  void Session::setActivePage(int index) {
+    Page* page = pages.at(index);
     // TODO implement changing page.
     page->setActive();
+    activePage = page;
+  }
+
+  Page* Session::getActivePage() {
+    return activePage;
   }
 
   std::vector<string> Session::getSessions(string sessionsDir) {
@@ -109,7 +113,7 @@ namespace CCS {
     std::vector<string> pageNames = getPageNames();
     for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
       string pagePath = pagesDir + SEP + *it;
-      pages.push_back(new Page(pagePath, actionsManager));
+      pages.push_back(new Page(pagePath, actionsManager, this));
     }
   }
 

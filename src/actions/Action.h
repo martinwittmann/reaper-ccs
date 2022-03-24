@@ -8,6 +8,8 @@
 
 namespace CCS {
 
+  class Session;
+
   using std::string;
   using std::vector;
 
@@ -50,7 +52,7 @@ namespace CCS {
       ActionProvider* actionProvider
     );
 
-    void invoke(vector<string> arguments);
+    void invoke(vector<string> arguments, Session* session);
 
     string getId();
     string getProviderId();

@@ -3,10 +3,12 @@
 
 #include <string>
 #include <vector>
+#include "../Session.h"
 
 namespace CCS {
   class ActionInvokation {
     const char separator = ':';
+    Session* session;
 
   public:
     std::string providerId;
@@ -14,7 +16,11 @@ namespace CCS {
     std::vector<std::string> arguments;
 
 
-    ActionInvokation(std::string rawInvokation, std::string providerId = "");
+    ActionInvokation(
+      Session* session,
+      std::string rawInvokation,
+      std::string providerId = ""
+    );
 
     std::string removePrefixSuffix(std::string input);
   };

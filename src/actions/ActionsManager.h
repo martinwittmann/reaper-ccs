@@ -3,12 +3,13 @@
 
 #include <vector>
 #include <string>
-#include "ActionProvider.h"
-#include "Action.h"
 
 namespace CCS {
 
+
+  class Session;
   class Action;
+  class ActionProvider;
 
   class ActionsManager {
     std::vector<Action> actions;
@@ -21,8 +22,8 @@ namespace CCS {
     void registerAction(Action action);
     void registerProvider(ActionProvider* provider);
 
-    void invokeAction(Action action, std::vector<std::string> arguments);
-    void invokeAction(std::string rawAction);
+    void invokeAction(Action action, std::vector<std::string> arguments, Session* session);
+    void invokeAction(std::string rawAction, Session* session);
     Action getAction(std::string providerId, std::string actionId);
     ActionProvider* getProvider(Action action);
     ActionProvider* getProvider(std::string providerId);

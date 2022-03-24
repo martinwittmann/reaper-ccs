@@ -6,15 +6,16 @@
 #include "yaml-cpp/yaml.h"
 #include "globals.cpp"
 #include "config/SessionConfig.h"
-
-#include "Page.h"
-#include "MidiController.h"
-#include "actions/ActionsManager.h"
+#include "sdk/reaper_plugin.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
   namespace fs = std::filesystem;
   using std::string;
+
+  class ActionsManager;
+  class MidiController;
+  class Page;
 
   class Session {
     string path;
@@ -24,7 +25,7 @@ namespace CCS {
     SessionConfig* sessionConfig;
     std::vector<Page *> pages;
     std::vector<MidiController *> midiControllers;
-    int activePage = 0;
+    Page* activePage;
     ActionsManager* actionsManager;
     midi_Output* output;
 
@@ -46,6 +47,7 @@ namespace CCS {
     void loadMidiControllers();
 
     void setActivePage(int pageId);
+    Page* getActivePage();
   };
 }
 

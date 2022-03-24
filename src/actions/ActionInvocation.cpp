@@ -2,13 +2,20 @@
 #include <string>
 #include <vector>
 #include "../Util.h"
+#include "../Session.h"
+#include "../Page.h"
 
 using std::string;
 using std::vector;
 
 namespace CCS {
 
-  ActionInvokation::ActionInvokation(string rawInvokation, string providerId) {
+  ActionInvokation::ActionInvokation(
+    Session* session,
+    string rawInvokation,
+    string providerId
+  ) {
+    this->session = session;
     string invokation = Util::removePrefixSuffix(rawInvokation);
     vector<string> parts = Util::splitString(invokation, separator);
     string actionId = parts.at(0);
@@ -19,7 +26,12 @@ namespace CCS {
       providerId = actionParts.at(0);
       actionId = actionParts.at(1);
 
-
+      if (actionId == "page") {
+        // Replace "page" with the currently active page id.
+        Page* page = session->getActivePage();
+        actionId = Util::regexReplace(actionId, "^\\[page\\.", "[" + page->getId() + ".");
+        int a = 1;
+      }
     }
 
     this->actionId = actionId;

@@ -1,0 +1,50 @@
+Ccs:
+- Session
+- ActionsManager
+
+
+Session:
+- ActionsManager
+- Page
+- MidiController
+- midi_Output
+
+
+Page:
+- Session
+- ActionsManager
+- Action
+
+
+
+MidiController:
+- ActionProvider
+- MidiControlElement
+- Action
+- midi_Output
+
+
+ActionsManager:
+- Action
+- ActionProvider
+- Session
+
+Action:
+- ActionProvider
+- ActionsManager
+- Session
+
+
+ActionProvider:
+- ActionsManager
+
+
+ActionInvokation:
+- Session
+
+
+
+ActionsManager <> Session
+Page <> Session
+ActionsManager <> Action
+ActionsManager <> ActionsProvider
