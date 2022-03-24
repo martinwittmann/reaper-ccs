@@ -22,7 +22,7 @@ set(
   src/config/GlobalConfig.cpp
 
   src/actions/Action.cpp
-  src/actions/Actions.cpp
+  src/actions/ActionsManager.cpp
   src/actions/ActionProvider.cpp
   src/actions/ActionInvocation.cpp
 

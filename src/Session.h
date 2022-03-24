@@ -9,7 +9,7 @@
 
 #include "Page.h"
 #include "MidiController.h"
-#include "actions/Actions.h"
+#include "actions/ActionsManager.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

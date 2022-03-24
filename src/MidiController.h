@@ -11,7 +11,7 @@
 #include "config/MidiControllerConfig.h"
 #include <experimental/filesystem>
 #include "actions/Action.h"
-#include "actions/Actions.h"
+#include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "sdk/reaper_plugin.h"
 
@@ -57,7 +57,7 @@ namespace CCS {
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
 
     void actionCallback(string actionId, vector<string> arguments) override;
-    void createActions() override;
+    void createActions();
 
     void sendMidiMessage(string actionId, vector<string> arguments);
     void flushMidiMessagesBuffer();

@@ -1,31 +1,31 @@
-#include "Actions.h"
+#include "ActionsManager.h"
 #include "ActionInvocation.h"
 #include "Action.h"
 #include "../Util.h"
 
 namespace CCS {
 
-  Actions::Actions() {
+  ActionsManager::ActionsManager() {
   }
 
-  Actions::~Actions() {
+  ActionsManager::~ActionsManager() {
   }
 
-  void Actions::registerAction(Action action) {
+  void ActionsManager::registerAction(Action action) {
     actions.push_back(action);
   }
 
-  void Actions::registerProvider(ActionProvider *provider) {
+  void ActionsManager::registerProvider(ActionProvider *provider) {
     providers.push_back(provider);
   }
 
-  void Actions::invokeAction(Action action, vector<string> arguments) {
+  void ActionsManager::invokeAction(Action action, vector<string> arguments) {
     action.invoke(arguments);
   }
 
   // Note that we do not accept arguments here, because they are encoded in the
   // rawAction string and are unpacket in ActionInvokation.
-  void Actions::invokeAction(std::string rawAction) {
+  void ActionsManager::invokeAction(std::string rawAction) {
     auto invokation = new ActionInvokation(rawAction);
     //try {
       Action action = getAction(invokation->providerId, invokation->actionId);
@@ -38,7 +38,7 @@ namespace CCS {
     */
   }
 
-  Action Actions::getAction(std::string providerId, std::string actionId) {
+  Action ActionsManager::getAction(std::string providerId, std::string actionId) {
     int a = 1;
     for (auto it = actions.begin(); it != actions.end(); ++it) {
       Action action = *it;
@@ -49,11 +49,11 @@ namespace CCS {
     throw "Action not found";
   }
 
-  ActionProvider* Actions::getProvider(Action action) {
+  ActionProvider* ActionsManager::getProvider(Action action) {
     return getProvider(action.getProviderId());
   }
 
-  ActionProvider* Actions::getProvider(std::string providerId) {
+  ActionProvider* ActionsManager::getProvider(std::string providerId) {
     for (auto it = providers.begin(); it != providers.end(); ++it) {
       ActionProvider* provider = *it;
       if (provider->getId() == providerId) {

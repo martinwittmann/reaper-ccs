@@ -9,7 +9,7 @@
 #include "MidiController.h"
 #include "globals.cpp"
 #include "actions/ActionProvider.h"
-#include "actions/Actions.h"
+#include "actions/ActionsManager.h"
 #include "Variables.h"
 #include "sdk/reaper_plugin.h"
 #include <iostream>

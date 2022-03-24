@@ -3,7 +3,7 @@
 #include "config/GlobalConfig.h"
 #include "globals.cpp"
 #include "Ccs.h"
-#include "actions/Actions.h"
+#include "actions/ActionsManager.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

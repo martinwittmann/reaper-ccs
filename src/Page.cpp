@@ -4,7 +4,7 @@
 #include "config/PageConfig.h"
 #include "Page.h"
 #include "globals.cpp"
-#include "actions/Actions.h"
+#include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "Variables.h"
 

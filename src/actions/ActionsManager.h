@@ -10,13 +10,13 @@ namespace CCS {
 
   class Action;
 
-  class Actions {
+  class ActionsManager {
     std::vector<Action> actions;
     std::vector<ActionProvider*> providers;
 
   public:
-    Actions();
-    ~Actions();
+    ActionsManager();
+    ~ActionsManager();
 
     void registerAction(Action action);
     void registerProvider(ActionProvider* provider);

@@ -1,5 +1,5 @@
 #include "ActionProvider.h"
-#include "Actions.h"
+#include "ActionsManager.h"
 #include <string>
 
 namespace CCS {
@@ -31,8 +31,6 @@ namespace CCS {
   }
 
   void ActionProvider::actionCallback(string actionName, vector<string> arguments) {}
-
-  void ActionProvider::createActions() {}
 
   bool ActionProvider::isMacroAction(string rawAction) {
     // If the string contains brackets we think it's a macro action because we

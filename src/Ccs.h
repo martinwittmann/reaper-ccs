@@ -5,7 +5,7 @@
 #include "Session.h"
 #include "config/GlobalConfig.h"
 #include "globals.cpp"
-#include "actions/Actions.h"
+#include "actions/ActionsManager.h"
 #include "sdk/reaper_plugin.h"
 
 namespace CCS {
