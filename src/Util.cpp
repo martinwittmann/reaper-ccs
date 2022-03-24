@@ -167,4 +167,13 @@ namespace CCS {
     }
     std::cout << "\n";
   }
+
+  int Util::getMidiEventId(unsigned int statusByte, unsigned int data1Byte) {
+    // We create a larger integer by simply shifting the status byte 8 bits to
+    // the left and then adding the data1 bytes to the 8 rightmost bits.
+    int result = statusByte;
+    result = result << 8;
+    result = result | data1Byte;
+    return result;
+  }
 }

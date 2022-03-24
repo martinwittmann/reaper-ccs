@@ -14,6 +14,7 @@ namespace CCS {
   namespace fse = std::experimental::filesystem;
   namespace fs = std::filesystem;
   using std::string;
+  using std::vector;
 
   Session::Session(string sessionPath, ActionsManager* actionsManager, midi_Output* output) {
     path = sessionPath;
@@ -54,8 +55,8 @@ namespace CCS {
     return activePage;
   }
 
-  std::vector<string> Session::getSessions(string sessionsDir) {
-    std::vector<string> result;
+  vector<string> Session::getSessions(string sessionsDir) {
+    vector<string> result;
     std::set<string> sortedSessions;
     for (const auto &entry: fse::directory_iterator(sessionsDir)) {
       fse::path entry_path = fse::path(entry.path());
@@ -80,8 +81,8 @@ namespace CCS {
     return fse::exists(fse::path(session_filename));
   }
 
-  std::vector<string> Session::getPageNames() {
-    std::vector<string> result;
+  vector<string> Session::getPageNames() {
+    vector<string> result;
     std::set<string> sortedPages;
     for (const auto &entry: fse::directory_iterator(pagesDir)) {
       fse::path entry_path = fse::path(entry.path());
@@ -97,8 +98,8 @@ namespace CCS {
     return result;
   }
 
-  std::vector<string> Session::getMidiControllerNames() {
-    std::vector<string> result;
+  vector<string> Session::getMidiControllerNames() {
+    vector<string> result;
     for (const auto &entry: fse::directory_iterator(midiControllersDir)) {
       fse::path entry_path = fse::path(entry.path());
       if (
@@ -113,7 +114,7 @@ namespace CCS {
   }
 
   void Session::loadSessionPages() {
-    std::vector<string> pageNames = getPageNames();
+    vector<string> pageNames = getPageNames();
     for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
       string pagePath = pagesDir + SEP + *it;
       pages.push_back(new Page(pagePath, actionsManager, this));
@@ -121,12 +122,21 @@ namespace CCS {
   }
 
   void Session::loadMidiControllers() {
-    std::vector<string> controllerNames = getMidiControllerNames();
+    vector<string> controllerNames = getMidiControllerNames();
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
       string controllerConfigFile = *it;
       midiControllers.push_back(
         new MidiController(controllerConfigFile, output, actionsManager)
       );
     }
+  }
+
+  vector<int> Session::getSubscribedMidiEventIds() {
+    vector<int> result;
+    for (auto controller : midiControllers) {
+      vector<int> newIds = controller->getSubscribedMidiEventIds();
+      result.insert(result.end(), newIds.begin(), newIds.end());
+    }
+    return result;
   }
 }

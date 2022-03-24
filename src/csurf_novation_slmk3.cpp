@@ -1,6 +1,7 @@
 #include "csurf.h"
 #include <iostream>
 #include "Ccs.h"
+#include "Util.h"
 
 class CSurf_NovationSlMk3 : public IReaperControlSurface {
     int m_midi_in_dev,m_midi_out_dev;
@@ -10,8 +11,10 @@ class CSurf_NovationSlMk3 : public IReaperControlSurface {
     WDL_String descspace;
     char configtmp[1024];
 
+    CCS::Ccs* ccs;
+
     void OnMIDIEvent(MIDI_event_t *evt) {
-      std::cout << "\nMidi Event received.\n";
+      ccs->onMidiEvent(evt);
     }
 
 public:
@@ -49,7 +52,7 @@ public:
       }
 
       // TODO How to get the reaper resource dir via the api?
-      auto ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/", m_midiout);
+      this->ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/", m_midiout);
     }
     ~CSurf_NovationSlMk3() {
       if (m_midiout) {

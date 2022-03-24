@@ -133,4 +133,18 @@ namespace CCS {
       state[arguments.at(0)] = arguments.at(1);
     }
   }
+
+  void Page::onMidiEvent(int eventId, unsigned int dataByte) {
+  }
+
+
+  vector<int> Page::getSubscribedMidiEventIds() {
+    vector<int> result;
+    YAML::Node controlsNode = config->getMapValue("mappings.controls");
+    for (const auto &control: controlsNode) {
+      auto controlId = control.first.as<string>();
+    }
+
+    return result;
+  }
 }

@@ -48,6 +48,8 @@ namespace CCS {
 
     void setActivePage(int pageId);
     Page* getActivePage();
+
+    std::vector<int> getSubscribedMidiEventIds();
   };
 }
 

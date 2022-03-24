@@ -39,6 +39,8 @@ namespace CCS {
     static std::string strToHexBytes(std::string input);
 
     static void debugMidiBuffer(std::vector<unsigned char>* buffer);
+
+    static int getMidiEventId(unsigned int statusByte, unsigned int data1Byte);
   };
 }
 

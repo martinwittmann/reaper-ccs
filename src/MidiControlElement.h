@@ -37,6 +37,8 @@ namespace CCS {
     static int getType(string type);
 
     MidiEventType getEventType();
+
+    int getInputEventId();
   };
 }
 

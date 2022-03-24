@@ -30,6 +30,7 @@ set(
   src/MidiController.cpp
   src/MidiControlElement.cpp
   src/MidiEventType.cpp
+  src/MidiEventSubscriber.cpp
   src/Page.cpp
   src/Session.cpp
   src/Util.cpp

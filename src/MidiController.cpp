@@ -273,4 +273,12 @@ namespace CCS {
     return result;
   }
 
+  vector<int> MidiController::getSubscribedMidiEventIds() {
+    vector<int> result;
+    for (auto control : controls) {
+      result.push_back(control->getInputEventId());
+    }
+    return result;
+  }
+
 }

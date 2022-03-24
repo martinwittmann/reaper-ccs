@@ -10,6 +10,7 @@
 #include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "actions/Action.h"
+#include "MidiEventSubscriber.h"
 
 namespace CCS {
 
@@ -22,7 +23,7 @@ namespace CCS {
 
   class Action;
 
-  class Page : public ActionProvider {
+class Page : public ActionProvider, public MidiEventSubscriber {
     PageConfig *config;
     ActionsManager* actionsManager;
     Session* session;
@@ -47,6 +48,9 @@ namespace CCS {
     string getPageId();
 
     void actionCallback(string actionName, vector<string> arguments);
+
+    vector<int> getSubscribedMidiEventIds();
+    void onMidiEvent(int eventId, unsigned int dataByte);
   };
 }
 

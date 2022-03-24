@@ -29,6 +29,8 @@ namespace CCS {
     ~Ccs();
 
     Session *loadSession(string sessionId, ActionsManager* actionsManager);
+
+    void onMidiEvent(MIDI_event_t* rawEvent);
   };
 }
 

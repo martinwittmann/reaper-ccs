@@ -1,6 +1,7 @@
 #include <string>
 #include "MidiEventType.cpp"
 #include "MidiControlElement.h"
+#include "Util.h"
 
 namespace CCS {
   using std::string;
@@ -30,5 +31,9 @@ namespace CCS {
 
   MidiEventType MidiControlElement::getEventType() {
     return MidiEventType{statusByte, data1Byte};
+  }
+
+  int MidiControlElement::getInputEventId() {
+    return Util::getMidiEventId(statusByte, data1Byte);
   }
 }
