@@ -3,10 +3,11 @@
 
 #include <string>
 #include "MidiEventType.cpp"
-#include "MidiController.h"
 
 namespace CCS {
   using std::string;
+
+  class MidiController;
 
   /**
    * This represents a single control/ui element on a midi controller
@@ -34,7 +35,12 @@ namespace CCS {
     const static int ENCODER_RELATIVE = 2;
     const static int FADER = 3;
 
-    MidiControlElement(string typeName, unsigned int status, unsigned int data1);
+    MidiControlElement(
+      string typeName,
+      unsigned int status,
+      unsigned int data1,
+      MidiController* midiController
+    );
 
     static int getType(string type);
 

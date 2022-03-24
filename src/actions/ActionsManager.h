@@ -1,13 +1,12 @@
-#ifndef CCS_ACTIONS_H
-#define CCS_ACTIONS_H
+#ifndef CCS_ACTIONS_MANAGER_H
+#define CCS_ACTIONS_MANAGER_H
 
 #include <vector>
 #include <string>
+#include "../Session.h"
 
 namespace CCS {
 
-
-  class Session;
   class Action;
   class ActionProvider;
 

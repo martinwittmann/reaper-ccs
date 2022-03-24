@@ -56,13 +56,12 @@ namespace CCS {
       if (config->keyExists("status", &controlNode)) {
         status = Util::hexToInt(config->getValue("status", &controlNode));
       }
-
-      auto controlElement = new MidiControlElement(
+      controls.push_back(new MidiControlElement(
         config->getValue("type", &controlNode),
         status,
-        Util::hexToInt(config->getValue("message.data1", &controlNode))
-      );
-      controls.push_back(controlElement);
+        Util::hexToInt(config->getValue("message.data1", &controlNode)),
+        this
+      ));
     }
   }
 

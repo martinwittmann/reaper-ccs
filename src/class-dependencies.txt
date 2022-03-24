@@ -13,6 +13,8 @@ Page:
 - Session
 - ActionsManager
 - Action
+- MidiControlElementMapping
+
 
 MidiController:
 - ActionProvider
@@ -36,14 +38,18 @@ ActionProvider:
 ActionInvokation:
 - Session
 
+MidiControlElement:
+- MidiController
 
 MidiControlElementMapping:
 - MidiController
+- MidiEventSubscriber
 
-
-
+MidiEventSubscriber:
+- [nothing]
 
 ActionsManager <> Session
 Page <> Session
 ActionsManager <> Action
 ActionsManager <> ActionsProvider
+MidiController <> MidiControlElement

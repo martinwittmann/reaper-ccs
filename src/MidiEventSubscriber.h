@@ -1,3 +1,6 @@
+#ifndef CCS_MIDI_EVENT_SUBSCRIBER
+#define CCS_MIDI_EVENT_SUBSCRIBER
+
 #include <vector>
 
 namespace CCS {
@@ -10,3 +13,5 @@ namespace CCS {
     void subscribeToMidiEvents();
   };
 }
+
+#endif

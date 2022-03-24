@@ -9,10 +9,12 @@ namespace CCS {
   MidiControlElementMapping::MidiControlElementMapping(
     string rawControlId,
     YAML::Node config,
-    MidiController* midiController
+    MidiController* midiController,
+    MidiEventSubscriber* subscriber
   ) {
     this->config = config;
     this->midiController = midiController;
+    this->subscriber = subscriber;
     std::vector idParts = Util::splitString(rawControlId, '.');
     controllerId = idParts.at(0);
     controlId = idParts.at(1);

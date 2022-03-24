@@ -1,3 +1,6 @@
+#ifndef CCS_MIDI_CONTROL_ELEMENT_MAPPING
+#define CCS_MIDI_CONTROL_ELEMENT_MAPPING
+
 #include <string>
 #include <vector>
 #include "yaml-cpp/yaml.h"
@@ -7,7 +10,8 @@
 namespace CCS {
   class MidiControlElementMapping {
     YAML::Node config;
-    MidiController* controller;
+    MidiController* midiController;
+    MidiEventSubscriber* subscriber;
     std::string controlId;
     std::string controllerId;
 
@@ -22,3 +26,5 @@ namespace CCS {
     int getMidiEventId();
   };
 }
+
+#endif

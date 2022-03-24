@@ -28,7 +28,7 @@ namespace CCS {
     string controllerId;
     string name;
     midi_Output *midiOutput;
-    vector<MidiControlElement *> controls;
+    vector<MidiControlElement*> controls;
     MidiControllerConfig *config;
     unsigned int defaultStatusByte;
     ActionProvider* actionProvider;

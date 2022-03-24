@@ -14,11 +14,13 @@ namespace CCS {
   MidiControlElement::MidiControlElement(
     string typeName,
     unsigned int status,
-    unsigned int data1
+    unsigned int data1,
+    MidiController* midiController
   ) {
-    type = MidiControlElement::getType(typeName);
+    type = getType(typeName);
     statusByte = status;
     data1Byte = data1;
+    this->midiController = midiController;
   }
 
   int MidiControlElement::getType(string type) {
