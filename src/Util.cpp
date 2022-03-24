@@ -19,7 +19,7 @@ namespace CCS {
   using std::map;
   using std::stoul;
 
-  unsigned int Util::hexToInt(string hex) {
+  unsigned char Util::hexToInt(string hex) {
     return stoul(hex, nullptr, 16);
   }
 
@@ -148,7 +148,7 @@ namespace CCS {
       if (i != 0) {
         result += " ";
       }
-      stream << boost::format("%x") % int(input[i]);
+      stream << boost::format("%2x") % boost::io::group(std::setw(2), std::setfill('0'), int(input[i]));
       result += stream.str();
       // stream.clear() does not what I expected. See:
       // https://stackoverflow.com/questions/20731/how-do-you-clear-a-stringstream-variable
@@ -168,7 +168,13 @@ namespace CCS {
     std::cout << "\n";
   }
 
-  int Util::getMidiEventId(unsigned int statusByte, unsigned int data1Byte) {
+  string Util::formatHexByte(unsigned char byte) {
+    std::stringstream stream;
+    stream << boost::format("%2x") % boost::io::group(std::setw(2), std::setfill('0'), int(byte));
+    return stream.str();
+  }
+
+  int Util::getMidiEventId(unsigned char statusByte, unsigned char data1Byte) {
     // We create a larger integer by simply shifting the status byte 8 bits to
     // the left and then adding the data1 bytes to the 8 rightmost bits.
     int result = statusByte;

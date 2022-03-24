@@ -50,17 +50,37 @@ namespace CCS {
     YAML::Node controlConfigs = config->getMapValue("controls");
 
     for (const auto &item: controlConfigs) {
-      auto id = item.first.as<string>();
+      auto controlId = item.first.as<string>();
       YAML::Node controlNode = item.second;
-      unsigned int status = defaultStatusByte;
+      unsigned char status = defaultStatusByte;
       if (config->keyExists("status", &controlNode)) {
         status = Util::hexToInt(config->getValue("status", &controlNode));
       }
+
+      // The values for press and release are only used for type: button.
+      // Here we default to values that most midi controllers will use:
+      // 0x7F for press and 0x00 for release.
+      // The reason why we're always handing them over is, that it's less
+      // code and easier to organize than call different constructors for
+      // different control types.
+      unsigned char data2Press = 0x7F;
+      if (config->keyExists("data2_press", &controlNode)) {
+        status = Util::hexToInt(config->getValue("data2_press", &controlNode));
+      }
+
+      unsigned char data2Release = 0x00;
+      if (config->keyExists("data2_release", &controlNode)) {
+        status = Util::hexToInt(config->getValue("data2_release", &controlNode));
+      }
+
       controls.push_back(new MidiControlElement(
+        controlId,
         config->getValue("type", &controlNode),
         status,
         Util::hexToInt(config->getValue("message.data1", &controlNode)),
-        this
+        this,
+        data2Press,
+        data2Release
       ));
     }
   }
@@ -130,7 +150,7 @@ namespace CCS {
     // size of data depending on the number of bytes our message will have.
     struct {
       MIDI_event_t message;
-      char data[4096];
+      unsigned char data[4096];
     } event;
 
     event.message.frame_offset = 0;
@@ -282,13 +302,13 @@ namespace CCS {
 
   int MidiController::getMidiEventIdForControl(string controlId) {
     string dataByteRaw = config->getValue("controls." + controlId + ".message.data1");
-    unsigned int dataByte = 0;
+    unsigned char dataByte = 0;
     if (!dataByteRaw.empty()) {
       dataByte = Util::hexToInt(dataByteRaw);
     }
 
     string statusByteRaw = config->getValue("controls." + controlId + ".message.status");
-    unsigned int statusByte = defaultStatusByte;
+    unsigned char statusByte = defaultStatusByte;
     if (!statusByteRaw.empty()) {
       statusByte = Util::hexToInt(statusByteRaw);
     }
@@ -298,5 +318,14 @@ namespace CCS {
 
   string MidiController::getControllerId() {
     return controllerId;
+  }
+
+  MidiControlElement* MidiController::getMidiControlElement(string id) {
+    for (auto control : controls) {
+      if (control->getId() == id) {
+        return control;
+      }
+    }
+    throw "Could not find midi control element with id " + id;
   }
 }

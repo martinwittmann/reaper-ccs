@@ -8,7 +8,7 @@ namespace CCS {
     return result;
   }
 
-  void MidiEventSubscriber::onMidiEvent(int eventId, unsigned int dataByte) {}
+  void MidiEventSubscriber::onMidiEvent(int eventId, unsigned char dataByte) {}
 
   void MidiEventSubscriber::subscribeToMidiEvents() {
     subscribedMidiEventIds = getSubscribedMidiEventIds();

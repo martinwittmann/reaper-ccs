@@ -12,22 +12,27 @@ namespace CCS {
    * Note that we do not use leds and other feedback elements here.
    */
   MidiControlElement::MidiControlElement(
+    string controlId,
     string typeName,
-    unsigned int status,
-    unsigned int data1,
-    MidiController* midiController
+    unsigned char status,
+    unsigned char data1,
+    MidiController* midiController,
+    unsigned char onPressData2,
+    unsigned char onReleaseData2
   ) {
+    this->controlId = controlId;
     type = getType(typeName);
     statusByte = status;
     data1Byte = data1;
     this->midiController = midiController;
+    this->onPressData2 = onPressData2;
+    this->onReleaseData2 = onReleaseData2;
   }
 
   int MidiControlElement::getType(string type) {
     if (type == "button") return BUTTON;
-    if (type == "fader") return FADER;
-    if (type == "encoder_absolute") return ENCODER_ABSOLUTE;
-    if (type == "encoder_relative") return ENCODER_RELATIVE;
+    if (type == "absolute") return ABSOLUTE;
+    if (type == "relative") return RELATIVE;
     return UNKNOWN_CONTROL_TYPE;
   }
 

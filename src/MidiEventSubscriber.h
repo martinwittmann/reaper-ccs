@@ -11,7 +11,7 @@ namespace CCS {
 
   public:
     virtual std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
-    virtual void onMidiEvent(int eventId, unsigned int dataByte);
+    virtual void onMidiEvent(int eventId, unsigned char dataByte);
     void subscribeToMidiEvents();
   };
 }

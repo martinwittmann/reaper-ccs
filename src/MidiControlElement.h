@@ -15,6 +15,7 @@ namespace CCS {
    * Note that we do not use leds and other feedback elements here.
    */
   class MidiControlElement {
+    string controlId;
     int type;
     // The status byte of the midi message received for this control element.
     // We assume that the status stays the same, no matter which action this
@@ -24,22 +25,27 @@ namespace CCS {
     // as data1.
     // For relative encoders we also expect status and data1 to stay the same
     // the the received data2 byte to contain the direction and speed information.
-    unsigned int statusByte;
-    unsigned int data1Byte;
+    unsigned char statusByte;
+    unsigned char data1Byte;
+
+    unsigned char onPressData2;
+    unsigned char onReleaseData2;
     MidiController* midiController;
 
   public:
     const static int UNKNOWN_CONTROL_TYPE = -1;
     const static int BUTTON = 0;
-    const static int ENCODER_ABSOLUTE = 1;
-    const static int ENCODER_RELATIVE = 2;
-    const static int FADER = 3;
+    const static int ABSOLUTE = 1;
+    const static int RELATIVE = 2;
 
     MidiControlElement(
+      string controlId,
       string typeName,
-      unsigned int status,
-      unsigned int data1,
-      MidiController* midiController
+      unsigned char status,
+      unsigned char data1,
+      MidiController* midiController,
+      unsigned char onPressData2 = 0x7F,
+      unsigned char onReleaseData2 = 0x00
     );
 
     static int getType(string type);

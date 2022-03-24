@@ -8,22 +8,28 @@
 #include "MidiEventSubscriber.h"
 
 namespace CCS {
-  class MidiControlElementMapping {
+  class MidiControlElementMapping : public MidiEventSubscriber {
+    int midiEventId;
     YAML::Node config;
-    MidiController* midiController;
-    MidiEventSubscriber* subscriber;
+    MidiControlElement* midiControlElement;
     std::string controlId;
     std::string controllerId;
 
   public:
+    static const int BUTTON = 0;
+    static const int ENCODER_RELATIVE = 0;
+
     MidiControlElementMapping(
+      int midiEventId,
       std::string rawControlId,
       YAML::Node config,
-      MidiController* controller,
-      MidiEventSubscriber* subscriber
+      MidiControlElement* controller
     );
 
     int getMidiEventId();
+
+    void onMidiEvent(int eventId, unsigned char dataByte) override;
+    void createMidiControlElementMappings();
   };
 }
 

@@ -30,7 +30,7 @@ namespace CCS {
     midi_Output *midiOutput;
     vector<MidiControlElement*> controls;
     MidiControllerConfig *config;
-    unsigned int defaultStatusByte;
+    unsigned char defaultStatusByte;
     ActionProvider* actionProvider;
     vector<Action*> providedActions;
     bool shouldBufferMidiMessages = false;
@@ -66,6 +66,8 @@ namespace CCS {
 
     int getMidiEventIdForControl(string controlId);
     string getControllerId();
+
+    MidiControlElement* getMidiControlElement(string id);
   };
 }
 

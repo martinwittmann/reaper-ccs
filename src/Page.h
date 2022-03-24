@@ -24,7 +24,7 @@ namespace CCS {
 
   class Action;
 
-class Page : public ActionProvider, public MidiEventSubscriber {
+class Page : public ActionProvider {
     PageConfig *config;
     ActionsManager* actionsManager;
     Session* session;
@@ -37,24 +37,16 @@ class Page : public ActionProvider, public MidiEventSubscriber {
 
   public:
     Page(string pagePath, ActionsManager* actionsManager, Session* session);
-
     ~Page();
-
     static bool isPageConfigFile(fse::path path);
-
     void setActive();
-
     void createActions();
     Action* createPageAction(string actionId, YAML::Node node);
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
     string getPageId();
-
     void actionCallback(string actionName, vector<string> arguments);
-
-    std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
-
-    void onMidiEvent(int eventId, unsigned int dataByte) override;
     void createMidiControlElementMappings();
+    std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
   };
 }
 

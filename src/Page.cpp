@@ -137,16 +137,11 @@ namespace CCS {
     }
   }
 
-  void Page::onMidiEvent(int eventId, unsigned int dataByte) {
-    std::cout << "On midi event in page.\n";
-  }
-
-
   std::map<int,MidiEventSubscriber*> Page::getSubscribedMidiEventIds() {
-    auto subscriber = dynamic_cast<MidiEventSubscriber*>(this);
     std::map<int,MidiEventSubscriber*> result;
     for (const auto &mapping: controlElementMappings) {
       int eventId = mapping->getMidiEventId();
+      auto subscriber = dynamic_cast<MidiEventSubscriber*>(mapping);
       result.insert(std::pair(eventId, subscriber));
     }
     return result;
@@ -154,18 +149,19 @@ namespace CCS {
 
   void Page::createMidiControlElementMappings() {
     YAML::Node controlsNode = config->getMapValue("mappings.controls");
-    auto subscriber = dynamic_cast<MidiEventSubscriber*>(this);
 
     for (const auto &controlConfig: controlsNode) {
       auto controlId = controlConfig.first.as<string>();
       auto controlParts = Util::splitString(controlId, '.');
       string midiControllerId = controlParts.at(0);
       MidiController* midiController = session->getMidiController(midiControllerId);
+      MidiControlElement* controlEl = midiController->getMidiControlElement(controlId);
+      int midiEventId = midiController->getMidiEventIdForControl(controlId);
       controlElementMappings.push_back(new MidiControlElementMapping(
+        midiEventId,
         controlId,
         controlConfig.second,
-        midiController,
-        subscriber
+        controlEl
       ));
     }
   }

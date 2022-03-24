@@ -11,7 +11,7 @@ namespace CCS {
   class Util {
     YAML::Node config;
   public:
-    static unsigned int hexToInt(std::string hex);
+    static unsigned char hexToInt(std::string hex);
 
     static bool _compareVariableLength(std::string var1, std::string var2);
 
@@ -40,7 +40,9 @@ namespace CCS {
 
     static void debugMidiBuffer(std::vector<unsigned char>* buffer);
 
-    static int getMidiEventId(unsigned int statusByte, unsigned int data1Byte);
+    static int getMidiEventId(unsigned char statusByte, unsigned char data1Byte);
+
+    static std::string formatHexByte(unsigned char byte);
   };
 }
 
