@@ -2,11 +2,13 @@
 #define CCS_CCS_H
 
 #include <string>
+#include <map>
 #include "Session.h"
 #include "config/GlobalConfig.h"
 #include "globals.cpp"
 #include "actions/ActionsManager.h"
 #include "sdk/reaper_plugin.h"
+#include "MidiEventSubscriber.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -22,6 +24,7 @@ namespace CCS {
     GlobalConfig *config;
     ActionsManager* actionsManager;
     midi_Output* output;
+    std::map<int,MidiEventSubscriber*> subscribedEventIds;
 
   public:
     Ccs(string baseDir, midi_Output* output);

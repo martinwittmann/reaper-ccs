@@ -37,7 +37,6 @@ namespace CCS {
     this->type = "callback";
     this->providerId = providerId;
     this->actionId = actionId;
-    this->callback = callback;
     this->actionProvider = actionProvider;
   }
 

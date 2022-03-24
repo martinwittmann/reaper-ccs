@@ -20,7 +20,6 @@ namespace CCS {
     this->output = output;
     config = new GlobalConfig(baseDir + "config" + YAML_EXT);
     actionsManager = new ActionsManager();
-    vector<int> subscribedEventIds;
 
     sessions = Session::getSessions(sessionsDir);
     lastSession = config->getLastSessionId();

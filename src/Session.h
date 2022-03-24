@@ -7,6 +7,7 @@
 #include "globals.cpp"
 #include "config/SessionConfig.h"
 #include "sdk/reaper_plugin.h"
+#include "MidiEventSubscriber.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -49,7 +50,7 @@ namespace CCS {
     void setActivePage(int pageId);
     Page* getActivePage();
 
-    std::vector<int> getSubscribedMidiEventIds();
+    std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
 
     MidiController* getMidiController(std::string id);
   };

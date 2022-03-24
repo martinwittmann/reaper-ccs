@@ -51,8 +51,9 @@ class Page : public ActionProvider, public MidiEventSubscriber {
 
     void actionCallback(string actionName, vector<string> arguments);
 
-    vector<int> getSubscribedMidiEventIds();
-    void onMidiEvent(int eventId, unsigned int dataByte);
+    std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
+
+    void onMidiEvent(int eventId, unsigned int dataByte) override;
     void createMidiControlElementMappings();
   };
 }

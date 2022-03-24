@@ -2,8 +2,9 @@
 
 namespace CCS {
 
-  std::vector<int> MidiEventSubscriber::getSubscribedMidiEventIds() {
-    std::vector<int> result;
+  // This is supposed to be overriden by the derived class.
+  std::map<int,MidiEventSubscriber*> MidiEventSubscriber::getSubscribedMidiEventIds() {
+    std::map<int,MidiEventSubscriber*> result;
     return result;
   }
 

@@ -7,12 +7,14 @@
 #include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "Variables.h"
+#include <iostream>
 
 namespace CCS {
 
   namespace fse = std::experimental::filesystem;
   namespace fs = std::filesystem;
   using std::string;
+  using std::vector;
 
   Page::Page(string pagePath, ActionsManager* actionsManager, Session* session)
     : ActionProvider(actionsManager) {
@@ -22,6 +24,7 @@ namespace CCS {
     this->actionsManager = actionsManager;
     this->session = session;
     createActions();
+    createMidiControlElementMappings();
   }
 
   Page::~Page() {
@@ -128,20 +131,22 @@ namespace CCS {
     return pageId;
   }
 
-  void Page::actionCallback(std::string actionName, std::vector<std::string> arguments) {
+  void Page::actionCallback(string actionName, vector<string> arguments) {
     if (actionName == "set_state") {
       state[arguments.at(0)] = arguments.at(1);
     }
   }
 
   void Page::onMidiEvent(int eventId, unsigned int dataByte) {
+    std::cout << "On midi event in page.";
   }
 
 
-  vector<int> Page::getSubscribedMidiEventIds() {
-    vector<int> result;
+  std::map<int,MidiEventSubscriber*> Page::getSubscribedMidiEventIds() {
+    auto subscriber = dynamic_cast<MidiEventSubscriber*>(this);
+    std::map<int,MidiEventSubscriber*> result;
     for (const auto &mapping: controlElementMappings) {
-      result.push_back(mapping->getMidiEventId());
+      result.insert(std::pair(mapping->getMidiEventId(), subscriber));
     }
     return result;
   }

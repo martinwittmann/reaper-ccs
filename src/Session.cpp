@@ -27,8 +27,9 @@ namespace CCS {
     this->actionsManager = actionsManager;
     sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
     this->output = output;
-    loadSessionPages();
+
     loadMidiControllers();
+    loadSessionPages();
 
     // TODO Find a better way to load a page.
     setActivePage(0);
@@ -131,13 +132,8 @@ namespace CCS {
     }
   }
 
-  vector<int> Session::getSubscribedMidiEventIds() {
-    vector<int> result;
-    for (auto controller : midiControllers) {
-      vector<int> newIds = controller->getSubscribedMidiEventIds();
-      result.insert(result.end(), newIds.begin(), newIds.end());
-    }
-    return result;
+  std::map<int,MidiEventSubscriber*> Session::getSubscribedMidiEventIds() {
+    return activePage->getSubscribedMidiEventIds();
   }
 
   MidiController* Session::getMidiController(std::string id) {
