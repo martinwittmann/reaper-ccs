@@ -27,7 +27,6 @@ namespace CCS {
   class MidiController : public ActionProvider {
     string controllerId;
     string name;
-    int midiDeviceId;
     midi_Output *midiOutput;
     vector<MidiControlElement *> controls;
     MidiControllerConfig *config;
@@ -41,9 +40,8 @@ namespace CCS {
   public:
     MidiController(
       string configFilename,
-      int deviceId,
       midi_Output *output,
-      Actions* actionManager
+      Actions* actionsManager
     );
 
     ~MidiController();
@@ -53,20 +51,13 @@ namespace CCS {
     static bool isMidiControllerConfigFile(fse::path path);
     vector<MidiEventType> getMidiEventTypes();
 
-    void createActions();
 
-
-    Action* createMidiControllerAction(
-      string actionId,
-      YAML::Node node,
-      std::map<string,string> variables
-    );
-
-    bool isMacroAction(string rawAction);
+    Action* createMidiControllerAction(string actionId, YAML::Node node);
 
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
 
     void actionCallback(string actionId, vector<string> arguments) override;
+    void createActions() override;
 
     void sendMidiMessage(string actionId, vector<string> arguments);
     void flushMidiMessagesBuffer();

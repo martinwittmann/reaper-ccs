@@ -23,7 +23,6 @@ namespace CCS {
 
   MidiController::MidiController(
     string configFilename,
-    int deviceId,
     midi_Output *output,
     Actions* actionsManager
   ) : ActionProvider(actionsManager) {
@@ -191,19 +190,14 @@ namespace CCS {
       auto actionId = item.first.as<string>();
       Action* action = createMidiControllerAction(
         actionId,
-        item.second,
-        variables
+        item.second
       );
       providedActions.push_back(action);
       actionsManager->registerAction(*action);
     }
   }
 
-  Action* MidiController::createMidiControllerAction(
-    string actionId,
-    YAML::Node node,
-    std::map<string,string> variables
-  ) {
+  Action* MidiController::createMidiControllerAction(string actionId, YAML::Node node) {
     vector<string> rawSubActions = config->getListValues("message", &node);
     vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
     vector<string> argumentNames = config->getListValues("arguments", &node);
@@ -241,12 +235,12 @@ namespace CCS {
       // This means that we need to preprocess each message item here and add
       // the appropriate action.
 
-
       // For each message item, check if it is an action/macro (contains []).
       // If not add the [controllerId.sendMidiMessage:messageString] action.
       // Also try to merge multiple subsequent send midi messages into a single
       // send midi message to not add performance bottlenecks by sending lots
       // of small messages after each other.
+      isMacroAction("dfs");
       if (isMacroAction(subAction)) {
         if (!midiMessages.empty()) {
           // Since the current action is not a midi action, but the last one(s)
@@ -281,10 +275,4 @@ namespace CCS {
     return result;
   }
 
-  bool MidiController::isMacroAction(string rawAction) {
-    // If the string contains brackets we think it's a macro action because we
-    // define that macros/subactions are being called by using
-    // [action_provider.action_id:argument1:argument2:...]
-    return rawAction.find("[") != -1;
-  }
 }

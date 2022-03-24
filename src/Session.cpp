@@ -119,13 +119,11 @@ namespace CCS {
   }
 
   void Session::loadMidiControllers() {
-    // Hardcoded for testing.
-    const int deviceId = 0;
     std::vector<string> controllerNames = getMidiControllerNames();
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
       string controllerConfigFile = *it;
       midiControllers.push_back(
-        new MidiController(controllerConfigFile, deviceId, output, actions)
+        new MidiController(controllerConfigFile, output, actions)
       );
     }
   }

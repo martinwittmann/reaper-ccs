@@ -7,6 +7,7 @@
 #include "Util.h"
 #include "config/PageConfig.h"
 #include "actions/Actions.h"
+#include "actions/Action.h"
 
 namespace CCS {
 
@@ -14,18 +15,24 @@ namespace CCS {
   namespace fs = std::filesystem;
   using std::string;
 
-  class Page {
+  class Page : public ActionProvider {
     PageConfig *config;
-    Actions *actionManager;
+    Actions *actionsManager;
+    vector<Action*> providedActions;
+    string pageId;
 
   public:
-    Page(string pagePath, Actions* actionManager);
+    Page(string pagePath, Actions* actionsManager);
 
     ~Page();
 
     static bool isPageConfigFile(fse::path path);
 
     void setActive();
+
+    void createActions() override;
+    Action* createPageAction(string actionId, YAML::Node node);
+    vector<string> getProcessedSubActions(vector<string> rawSubActions);
   };
 }
 
