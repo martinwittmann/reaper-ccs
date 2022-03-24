@@ -2,6 +2,7 @@
 #define CCS_PAGE_H
 
 #include <string>
+#include <map>
 #include <experimental/filesystem>
 #include "yaml-cpp/yaml.h"
 #include "Util.h"
@@ -27,6 +28,9 @@ namespace CCS {
     Session* session;
     vector<Action*> providedActions;
     string pageId;
+    // A map of string variables that can be set via a page action.
+    // Example: [page.set_state:name:value]
+    std::map<string,string> state;
 
   public:
     Page(string pagePath, ActionsManager* actionsManager, Session* session);
@@ -41,6 +45,8 @@ namespace CCS {
     Action* createPageAction(string actionId, YAML::Node node);
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
     string getPageId();
+
+    void actionCallback(string actionName, vector<string> arguments);
   };
 }
 

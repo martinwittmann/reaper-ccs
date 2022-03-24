@@ -127,4 +127,10 @@ namespace CCS {
   string Page::getPageId() {
     return pageId;
   }
+
+  void Page::actionCallback(std::string actionName, std::vector<std::string> arguments) {
+    if (actionName == "set_state") {
+      state[arguments.at(0)] = arguments.at(1);
+    }
+  }
 }

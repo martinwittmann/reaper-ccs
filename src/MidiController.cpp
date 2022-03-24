@@ -16,8 +16,6 @@
 
 namespace CCS {
 
-  typedef void (ActionProvider::*pActionCallback)(vector<string>);
-
   using std::string;
   using std::vector;
 
