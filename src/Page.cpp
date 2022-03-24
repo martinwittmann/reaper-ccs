@@ -14,13 +14,12 @@ namespace CCS {
   namespace fs = std::filesystem;
   using std::string;
 
-  Page::Page(string pagePath, Actions* actionsManager)
+  Page::Page(string pagePath, ActionsManager* actionsManager)
     : ActionProvider(actionsManager) {
     config = new PageConfig(pagePath);
     pageId = config->getValue("id");
     this->actionsManager = actionsManager;
     createActions();
-    int a = 1;
   }
 
   Page::~Page() {

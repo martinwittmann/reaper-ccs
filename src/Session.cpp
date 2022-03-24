@@ -15,7 +15,7 @@ namespace CCS {
   namespace fs = std::filesystem;
   using std::string;
 
-  Session::Session(string sessionPath, Actions* actions, midi_Output* output) {
+  Session::Session(string sessionPath, ActionsManager* actionsManager, midi_Output* output) {
     path = sessionPath;
     pagesDir = path + SEP + "pages";
     midiControllersDir = fse::path(path)
@@ -23,18 +23,13 @@ namespace CCS {
       .parent_path()
       .append("controllers")
       .string();
-    this->actions = actions;
+    this->actionsManager = actionsManager;
     sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
     this->output = output;
     loadSessionPages();
     loadMidiControllers();
 
-    // Invoke the actions defined in "on_activate";
-    vector<string> initActionItems = sessionConfig->getListValues("on_activate");
-    for (auto it : initActionItems) {
-      actions->invokeAction(it);
-    }
-
+    // TODO Find a better way to load a page.
     setActivePage(0);
   }
 
@@ -114,7 +109,7 @@ namespace CCS {
     std::vector<string> pageNames = getPageNames();
     for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
       string pagePath = pagesDir + SEP + *it;
-      pages.push_back(new Page(pagePath, actions));
+      pages.push_back(new Page(pagePath, actionsManager));
     }
   }
 
@@ -123,7 +118,7 @@ namespace CCS {
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
       string controllerConfigFile = *it;
       midiControllers.push_back(
-        new MidiController(controllerConfigFile, output, actions)
+        new MidiController(controllerConfigFile, output, actionsManager)
       );
     }
   }

@@ -41,7 +41,7 @@ namespace CCS {
     MidiController(
       string configFilename,
       midi_Output *output,
-      Actions* actionsManager
+      ActionsManager* actionsManager
     );
 
     ~MidiController();

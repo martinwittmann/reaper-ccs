@@ -7,16 +7,16 @@
 namespace CCS {
 
   // We need to forward declare actions to not get into cyclic dependencies.
-  class Actions;
+  class ActionsManager;
 
   class ActionProvider {
     std::string id;
 
   protected:
-    Actions* actionsManager;
+    ActionsManager* actionsManager;
 
   public:
-    explicit ActionProvider(Actions* actionsManager);
+    explicit ActionProvider(ActionsManager* actionsManager);
     std::string getId();
     void registerActionProvider(std::string providerId);
     virtual void actionCallback(std::string actionName, std::vector<std::string> arguments);

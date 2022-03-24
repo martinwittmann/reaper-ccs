@@ -15,11 +15,11 @@ namespace CCS {
     pluginsDir = baseDir + "plugins";
     this->output = output;
     config = new GlobalConfig(baseDir + "config" + YAML_EXT);
-    actions = new Actions();
+    actionsManager = new ActionsManager();
 
     sessions = Session::getSessions(sessionsDir);
     lastSession = config->getLastSessionId();
-    currentSession = loadSession(lastSession, actions);
+    currentSession = loadSession(lastSession, actionsManager);
   }
 
   Ccs::~Ccs() {
@@ -27,8 +27,8 @@ namespace CCS {
   }
 
 
-  Session* Ccs::loadSession(string sessionId, Actions* actions) {
+  Session* Ccs::loadSession(string sessionId, ActionsManager* actionsManager) {
     string sessionPath = sessionsDir + SEP + sessionId;
-    return new Session(sessionPath, actions, output);
+    return new Session(sessionPath, actionsManager, output);
   }
 }

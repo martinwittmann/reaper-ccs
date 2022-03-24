@@ -17,7 +17,7 @@ namespace CCS {
   // registerActionProvider.
   // I know, this is a side-effect situation, but until I find a cleaner way
   // we're sticking with this.
-  ActionProvider::ActionProvider(Actions* actionsManager) {
+  ActionProvider::ActionProvider(ActionsManager* actionsManager) {
     this->actionsManager = actionsManager;
   }
 

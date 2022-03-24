@@ -18,7 +18,7 @@ namespace CCS {
     vector<string> argumentNames,
     vector<string> argumentTypes,
     vector<string> subActions,
-    Actions* actionsManager
+    ActionsManager* actionsManager
   ) {
     this->type = "composite";
     this->providerId = providerId;

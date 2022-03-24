@@ -27,19 +27,16 @@ namespace CCS {
   // rawAction string and are unpacket in ActionInvokation.
   void ActionsManager::invokeAction(std::string rawAction) {
     auto invokation = new ActionInvokation(rawAction);
-    //try {
+    try {
       Action action = getAction(invokation->providerId, invokation->actionId);
       action.invoke(invokation->arguments);
-      /*
     }
     catch (...) {
       Util::error("Trying to invoke action that does not exist: " + rawAction);
     }
-    */
   }
 
   Action ActionsManager::getAction(std::string providerId, std::string actionId) {
-    int a = 1;
     for (auto it = actions.begin(); it != actions.end(); ++it) {
       Action action = *it;
       if (action.getProviderId() == providerId && action.getId() == actionId) {

@@ -20,7 +20,7 @@ namespace CCS {
     std::vector<string> sessions;
     Session *currentSession;
     GlobalConfig *config;
-    Actions* actions;
+    ActionsManager* actionsManager;
     midi_Output* output;
 
   public:
@@ -28,7 +28,7 @@ namespace CCS {
 
     ~Ccs();
 
-    Session *loadSession(string sessionId, Actions* actions);
+    Session *loadSession(string sessionId, ActionsManager* actionsManager);
   };
 }
 

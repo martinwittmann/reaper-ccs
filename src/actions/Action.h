@@ -27,7 +27,7 @@ namespace CCS {
     vector<string> argumentNames;
     vector<string> argumentTypes;
 
-    Actions* actionsManager;
+    ActionsManager* actionsManager;
 
     ActionProvider* actionProvider;
 
@@ -40,7 +40,7 @@ namespace CCS {
       vector<string> argumentNames,
       vector<string> argumentTypes,
       vector<string> subActions,
-      Actions* actionsManager
+      ActionsManager* actionsManager
     );
 
     // This creates an action of type CALLBACK.

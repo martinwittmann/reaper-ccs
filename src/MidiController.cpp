@@ -24,7 +24,7 @@ namespace CCS {
   MidiController::MidiController(
     string configFilename,
     midi_Output *output,
-    Actions* actionsManager
+    ActionsManager* actionsManager
   ) : ActionProvider(actionsManager) {
     config = new MidiControllerConfig(configFilename);
     controllerId = config->getValue("id");

@@ -17,12 +17,12 @@ namespace CCS {
 
   class Page : public ActionProvider {
     PageConfig *config;
-    Actions *actionsManager;
+    ActionsManager *actionsManager;
     vector<Action*> providedActions;
     string pageId;
 
   public:
-    Page(string pagePath, Actions* actionsManager);
+    Page(string pagePath, ActionsManager* actionsManager);
 
     ~Page();
 
