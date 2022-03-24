@@ -92,39 +92,65 @@ namespace CCS {
 
   void MidiController::actionCallback(std::string actionName, std::vector<std::string> arguments) {
     if (actionName == "send_midi_message") {
-      Util::debug(controllerId + ": Send midi message: " + arguments.at(0));
-      vector<unsigned char> bytes = Util::splitToBytes(arguments.at(0));
-
-      // I think this is a dirty hack, but I copied it from the examples and
-      // the CSI source code.
-      // I believe that we define a custom struct and additionally to the midi
-      // event reserve enough memory to hold our additional bytes.
-      // Additional because for some reason MIDI_event_t hard-codes messages to
-      // be 4 bytes long. This seems to work though.
-      // Additionally, I think we need to reseve more memory than actually
-      // because I could not find a way of creating a struct and define the
-      // size of data depending on the number of bytes our message will have.
-      struct {
-        MIDI_event_t message;
-        char data[1024];
-      } event;
-
-      event.message.frame_offset = 0;
-      event.message.size = bytes.size();
-      for (int i = 0; i < bytes.size(); ++i) {
-        event.message.midi_message[i] = bytes.at(i);
-      }
-
-      #ifndef MOCK_MIDI
-      if (midiOutput) {
-        midiOutput->SendMsg(&event.message, -1);
-      }
-      else {
-        Util::debug("Midi output not available");
-      }
-      #endif
-
+      return sendMidiMessage(actionName, arguments);
     }
+    else if (actionName == "buffer_messages") {
+      shouldBufferMidiMessages = true;
+    }
+    else if (actionName == "end_buffer") {
+      shouldBufferMidiMessages = false;
+      flushMidiMessagesBuffer();
+    }
+  }
+
+  void MidiController::flushMidiMessagesBuffer() {
+    return _sendMidiMessage(&midiMessagesBuffer);
+    midiMessagesBuffer.clear();
+  }
+
+  void MidiController::sendMidiMessage(std::string actionName, std::vector<std::string> arguments) {
+    vector<unsigned char> bytes = Util::splitToBytes(arguments.at(0));
+    if (shouldBufferMidiMessages) {
+      midiMessagesBuffer.insert(midiMessagesBuffer.end(), bytes.begin(), bytes.end());
+    }
+    else {
+      _sendMidiMessage(&bytes);
+    }
+  }
+
+  void MidiController::_sendMidiMessage(vector<unsigned char>* buffer) {
+
+    Util::debug(controllerId + ": Send midi message:");
+    Util::debugMidiBuffer(buffer);
+
+    // I think this is a dirty hack, but I copied it from the examples and
+    // the CSI source code.
+    // I believe that we define a custom struct and additionally to the midi
+    // event reserve enough memory to hold our additional bytes.
+    // Additional because for some reason MIDI_event_t hard-codes messages to
+    // be 4 bytes long. This seems to work though.
+    // Additionally, I think we need to reserve more memory than actually
+    // because I could not find a way of creating a struct and define the
+    // size of data depending on the number of bytes our message will have.
+    struct {
+      MIDI_event_t message;
+      char data[4096];
+    } event;
+
+    event.message.frame_offset = 0;
+    event.message.size = buffer->size();
+    for (int i = 0; i < buffer->size(); ++i) {
+      event.message.midi_message[i] = buffer->at(i);
+    }
+
+#ifndef MOCK_MIDI
+    if (midiOutput) {
+      midiOutput->SendMsg(&event.message, -1);
+    }
+    else {
+      Util::debug("Midi output not available");
+    }
+#endif
   }
 
   void MidiController::createActions() {
@@ -132,6 +158,7 @@ namespace CCS {
     // midi messages;
 
     auto provider = dynamic_cast<ActionProvider*>(this);
+
     auto sendMidiAction = new Action(
       controllerId,
       "send_midi_message",
@@ -139,6 +166,22 @@ namespace CCS {
     );
     providedActions.push_back(sendMidiAction);
     actionsManager->registerAction(*sendMidiAction);
+
+    auto startBufferingMidiMessagesAction = new Action(
+      controllerId,
+      "buffer_messages",
+      provider
+    );
+    providedActions.push_back(startBufferingMidiMessagesAction);
+    actionsManager->registerAction(*startBufferingMidiMessagesAction);
+
+    auto flushMidiMessagesBufferAction = new Action(
+      controllerId,
+      "end_buffer",
+      provider
+    );
+    providedActions.push_back(flushMidiMessagesBufferAction);
+    actionsManager->registerAction(*flushMidiMessagesBufferAction);
 
     // Get Actions from config.
     YAML::Node actionsNode = config->getMapValue("actions");

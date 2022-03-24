@@ -34,7 +34,10 @@ namespace CCS {
     unsigned int defaultStatusByte;
     ActionProvider* actionProvider;
     vector<Action*> providedActions;
+    bool shouldBufferMidiMessages = false;
+    vector<unsigned char> midiMessagesBuffer;
 
+    void _sendMidiMessage(vector<unsigned char>* buffer);
   public:
     MidiController(
       string configFilename,
@@ -52,7 +55,6 @@ namespace CCS {
 
     void createActions();
 
-    void sendMidiMessageToController(vector<string> arguments);
 
     Action* createMidiControllerAction(
       string actionId,
@@ -65,6 +67,9 @@ namespace CCS {
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
 
     void actionCallback(string actionId, vector<string> arguments) override;
+
+    void sendMidiMessage(string actionId, vector<string> arguments);
+    void flushMidiMessagesBuffer();
   };
 }
 

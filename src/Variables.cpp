@@ -11,7 +11,10 @@ namespace CCS {
     map <string, string> result;
     for (const auto &item: variablesNode) {
       auto key = item.first.as<string>();
-      auto value = item.second.as<string>();
+      string value;
+      if (item.second && item.second.Type() != YAML::NodeType::Null) {
+        value = item.second.as<string>();
+      }
       result.insert(std::pair(key, value));
     }
     return result;
@@ -37,8 +40,9 @@ namespace CCS {
         // For maps we simply recurse.
         for (const auto &item: yaml) {
           auto node = item.second;
-          string dd = item.first.as<string>();
-          replaceVariables(node, variables);
+          if (node && node.Type() != YAML::NodeType::Null) {
+            replaceVariables(node, variables);
+          }
         }
         break;
       case YAML::NodeType::Sequence:

@@ -59,7 +59,6 @@ namespace CCS {
         string argumentType = argumentTypes.at(i);
         if (argumentType == "string") {
           argumentValue = Util::strToHexBytes(argumentValue);
-          int a = 1;
         }
         string argumentName = "_ARGS." + argumentNames.at(i);
         argumentVariables.insert(std::pair(argumentName, argumentValue));

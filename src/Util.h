@@ -37,6 +37,8 @@ namespace CCS {
     static std::vector<unsigned char> splitToBytes(std::string &input);
 
     static std::string strToHexBytes(std::string input);
+
+    static void debugMidiBuffer(std::vector<unsigned char>* buffer);
   };
 }
 

@@ -9,6 +9,8 @@
 #include <vector>
 #include <sstream>
 #include "boost/format.hpp"
+#include "boost/format/group.hpp"
+#include <iomanip>
 
 namespace CCS {
 
@@ -82,9 +84,11 @@ namespace CCS {
       }
     }
 
-    if (!tmp.empty()) {
-      result.push_back(tmp);
-    }
+    // Note that we add tmp unconditionally.
+    // If it's not empty we need to add the last part, but if it is empty this
+    // means that the last character was the delimiter and that we need to add
+    // the empty item as expected.
+    result.push_back(tmp);
     return result;
 
     // The implemenation copied from the internet seemed to introduce
@@ -151,5 +155,16 @@ namespace CCS {
       stream.str(std::string());
     }
     return result;
+  }
+
+  void Util::debugMidiBuffer(std::vector<unsigned char>* buffer) {
+    std::cout << "[MIDI OUTPUT]\n";
+    for (auto it = buffer->begin(); it != buffer->end(); ++it) {
+      if (it != buffer->begin()) {
+        std::cout << " ";
+      }
+      std::cout << boost::format("%2x") % boost::io::group(std::setw(2), std::setfill('0'), int(*it)) ;
+    }
+    std::cout << "\n";
   }
 }
