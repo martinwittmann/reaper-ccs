@@ -29,6 +29,7 @@ set(
   src/Ccs.cpp
   src/MidiController.cpp
   src/MidiControlElement.cpp
+  src/MidiControlElementMapping.cpp
   src/MidiEventType.cpp
   src/MidiEventSubscriber.cpp
   src/Page.cpp

@@ -3,6 +3,7 @@
 
 #include <string>
 #include "MidiEventType.cpp"
+#include "MidiController.h"
 
 namespace CCS {
   using std::string;
@@ -24,6 +25,7 @@ namespace CCS {
     // the the received data2 byte to contain the direction and speed information.
     unsigned int statusByte;
     unsigned int data1Byte;
+    MidiController* midiController;
 
   public:
     const static int UNKNOWN_CONTROL_TYPE = -1;

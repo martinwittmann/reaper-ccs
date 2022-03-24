@@ -281,4 +281,22 @@ namespace CCS {
     return result;
   }
 
+  int MidiController::getMidiEventIdForControl(string controlId) {
+    string dataByteRaw = config->getValue("controls." + controlId + ".message.data");
+    unsigned int dataByte = 0;
+    if (!dataByteRaw.empty()) {
+      dataByte = Util::hexToInt(dataByteRaw);
+    }
+
+    string statusByteRaw = config->getValue("controls." + controlId + ".message.status");
+    unsigned int statusByte = defaultStatusByte;
+    if (!statusByteRaw.empty()) {
+      statusByte = Util::hexToInt(statusByteRaw);
+    }
+    return Util::getMidiEventId(statusByte, dataByte);
+  }
+
+  string MidiController::getControllerId() {
+    return controllerId;
+  }
 }

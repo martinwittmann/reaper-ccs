@@ -11,6 +11,7 @@
 #include "actions/ActionProvider.h"
 #include "actions/Action.h"
 #include "MidiEventSubscriber.h"
+#include "MidiControlElementMapping.h"
 
 namespace CCS {
 
@@ -32,6 +33,7 @@ class Page : public ActionProvider, public MidiEventSubscriber {
     // A map of string variables that can be set via a page action.
     // Example: [page.set_state:name:value]
     std::map<string,string> state;
+    vector<MidiControlElementMapping*> controlElementMappings;
 
   public:
     Page(string pagePath, ActionsManager* actionsManager, Session* session);
@@ -51,6 +53,7 @@ class Page : public ActionProvider, public MidiEventSubscriber {
 
     vector<int> getSubscribedMidiEventIds();
     void onMidiEvent(int eventId, unsigned int dataByte);
+    void createMidiControlElementMappings();
   };
 }
 

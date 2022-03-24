@@ -139,4 +139,13 @@ namespace CCS {
     }
     return result;
   }
+
+  MidiController* Session::getMidiController(std::string id) {
+    for (auto controller : midiControllers) {
+      if (controller->getControllerId() == id) {
+        return controller;
+      }
+    }
+    throw "No midi controller with id: '" + id + "' found.";
+  }
 }

@@ -63,6 +63,9 @@ namespace CCS {
     void flushMidiMessagesBuffer();
 
     vector<int> getSubscribedMidiEventIds();
+
+    int getMidiEventIdForControl(string controlId);
+    string getControllerId();
   };
 }
 

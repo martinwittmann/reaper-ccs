@@ -140,11 +140,27 @@ namespace CCS {
 
   vector<int> Page::getSubscribedMidiEventIds() {
     vector<int> result;
-    YAML::Node controlsNode = config->getMapValue("mappings.controls");
-    for (const auto &control: controlsNode) {
-      auto controlId = control.first.as<string>();
+    for (const auto &mapping: controlElementMappings) {
+      result.push_back(mapping->getMidiEventId());
     }
-
     return result;
+  }
+
+  void Page::createMidiControlElementMappings() {
+    YAML::Node controlsNode = config->getMapValue("mappings.controls");
+    auto subscriber = dynamic_cast<MidiEventSubscriber*>(this);
+
+    for (const auto &controlConfig: controlsNode) {
+      auto controlId = controlConfig.first.as<string>();
+      auto controlParts = Util::splitString(controlId, '.');
+      string midiControllerId = controlParts.at(0);
+      MidiController* midiController = session->getMidiController(midiControllerId);
+      controlElementMappings.push_back(new MidiControlElementMapping(
+        controlId,
+        controlConfig.second,
+        midiController,
+        subscriber
+      ));
+    }
   }
 }

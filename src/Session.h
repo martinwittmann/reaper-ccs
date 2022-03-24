@@ -50,6 +50,8 @@ namespace CCS {
     Page* getActivePage();
 
     std::vector<int> getSubscribedMidiEventIds();
+
+    MidiController* getMidiController(std::string id);
   };
 }
 

@@ -89,17 +89,11 @@ namespace CCS {
     if (resultNode) {
       return resultNode.as<string>();
     }
-    throw "Did not find values for key: '" + key + "'";
+    return "";
   }
 
   vector<string> BaseConfig::getListValues(string key) {
-    vector<string> keyParts = Util::splitString(key, keySeparator);
-    YAML::Node actualNode = _getValue(keyParts, yaml);
-    if (actualNode[keyParts.back()] && actualNode[keyParts.back()].Type() != YAML::NodeType::Null) {
-      return actualNode[keyParts.back()].as<vector<string>>();
-    }
-    vector<string> result;
-    return result;
+    return getListValues(key, &yaml);
   }
 
   vector<string> BaseConfig::getListValues(string key, YAML::Node *rootNode) {
@@ -114,29 +108,17 @@ namespace CCS {
   }
 
   YAML::Node BaseConfig::getMapValue(string key) {
-    vector<string> keyParts = Util::splitString(key, keySeparator);
-    YAML::Node actualNode = _getValue(keyParts, yaml);
-    try {
-      return actualNode[keyParts.back()];
-    }
-    catch (YAML::BadConversion &e) {
-      string message = "getMapValue: " + key;
-      Util::debug(message);
-      throw message;
-    }
+    return getMapValue(key, &yaml);
   }
 
   YAML::Node BaseConfig::getMapValue(string key, YAML::Node *rootNode) {
     vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
-    try {
+    if (actualNode[keyParts.back()] && !actualNode[keyParts.back()].IsNull()) {
       return actualNode[keyParts.back()];
     }
-    catch (YAML::BadConversion &e) {
-      string message = "getMapValue: " + key;
-      Util::debug(message);
-      throw message;
-    }
+    YAML::Node result;
+    return result;
   }
 
   YAML::Node BaseConfig::_getValue(vector<string> keyParts, YAML::Node node) {

@@ -9,20 +9,16 @@ Session:
 - MidiController
 - midi_Output
 
-
 Page:
 - Session
 - ActionsManager
 - Action
-
-
 
 MidiController:
 - ActionProvider
 - MidiControlElement
 - Action
 - midi_Output
-
 
 ActionsManager:
 - Action
@@ -34,13 +30,16 @@ Action:
 - ActionsManager
 - Session
 
-
 ActionProvider:
 - ActionsManager
 
-
 ActionInvokation:
 - Session
+
+
+MidiControlElementMapping:
+- MidiController
+
 
 
 
