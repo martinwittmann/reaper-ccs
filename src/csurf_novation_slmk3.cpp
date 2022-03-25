@@ -101,7 +101,7 @@ public:
       }
 
       if (pollingIndex % 6 == 0) {
-        ccs->pollReaperData();
+        ccs->reaperApi->pollReaperData();
       }
 
       pollingIndex++;
