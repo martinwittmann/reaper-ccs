@@ -17,6 +17,8 @@ namespace CCS {
     }
   }
 
+  void ReaperDataTracker::getData() {}
+
   bool ReaperDataTracker::isChanged() {
     return false;
   }
