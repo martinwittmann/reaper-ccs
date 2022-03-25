@@ -8,6 +8,7 @@
 #include "config/SessionConfig.h"
 #include "sdk/reaper_plugin.h"
 #include "MidiEventSubscriber.h"
+#include "ReaperApi.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -29,9 +30,15 @@ namespace CCS {
     Page* activePage;
     ActionsManager* actionsManager;
     midi_Output* output;
+    ReaperApi* reaperApi;
 
   public:
-    Session(string sessionPath, ActionsManager* actionsManager, midi_Output* output);
+    Session(
+      string sessionPath,
+      ActionsManager* actionsManager,
+      midi_Output* output,
+      ReaperApi* reaperApi
+    );
 
     ~Session();
 

@@ -2,6 +2,7 @@
 #define CCS_MIDI_CONTROL_ELEMENT_H
 
 #include <string>
+#include <vector>
 #include "MidiEventType.cpp"
 
 namespace CCS {
@@ -16,7 +17,7 @@ namespace CCS {
    */
   class MidiControlElement {
     string controlId;
-    int type;
+    short controlType;
     // The status byte of the midi message received for this control element.
     // We assume that the status stays the same, no matter which action this
     // element triggers.
@@ -27,7 +28,6 @@ namespace CCS {
     // the the received data2 byte to contain the direction and speed information.
     unsigned char statusByte;
     unsigned char data1Byte;
-
     unsigned char onPressData2;
     unsigned char onReleaseData2;
     MidiController* midiController;
@@ -40,7 +40,7 @@ namespace CCS {
 
     MidiControlElement(
       string controlId,
-      string typeName,
+      short controlType,
       unsigned char status,
       unsigned char data1,
       MidiController* midiController,
@@ -48,11 +48,17 @@ namespace CCS {
       unsigned char onReleaseData2 = 0x00
     );
 
-    static int getType(string type);
-
+    short getType();
+    string getControlId();
+    static short getTypeByName(string type);
     MidiEventType getEventType();
-
     int getInputEventId();
+    short getOnPressValue();
+    short getOnReleaseValue();
+
+    void onChange(std::vector<int>);
+    void onButtonPress(std::vector<int>);
+    void onButtonRelease(std::vector<int>);
   };
 }
 

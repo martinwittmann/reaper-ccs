@@ -7,6 +7,7 @@
 #include "Util.h"
 #include "actions/ActionsManager.h"
 #include <iostream>
+#include "reaper/ReaperApi.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -20,13 +21,14 @@ namespace CCS {
     this->output = output;
     config = new GlobalConfig(baseDir + "config" + YAML_EXT);
     actionsManager = new ActionsManager();
+    reaperApi = new ReaperApi();
 
     sessions = Session::getSessions(sessionsDir);
     lastSession = config->getLastSessionId();
     currentSession = loadSession(lastSession, actionsManager);
-    subscribedEventIds = currentSession->getSubscribedMidiEventIds();
+    subscribedMidiEventIds = currentSession->getSubscribedMidiEventIds();
     std::map<int,MidiEventSubscriber*>::iterator it;
-    for (it = subscribedEventIds.begin(); it != subscribedEventIds.end(); ++it) {
+    for (it = subscribedMidiEventIds.begin(); it != subscribedMidiEventIds.end(); ++it) {
       std::cout << "Subscribed to event id: " << it->first << "\n";
     }
   }
@@ -38,7 +40,7 @@ namespace CCS {
 
   Session* Ccs::loadSession(string sessionId, ActionsManager* actionsManager) {
     string sessionPath = sessionsDir + SEP + sessionId;
-    return new Session(sessionPath, actionsManager, output);
+    return new Session(sessionPath, actionsManager, output, reaperApi);
   }
 
   void Ccs::onMidiEvent(MIDI_event_t* rawEvent) {
@@ -46,8 +48,8 @@ namespace CCS {
       rawEvent->midi_message[0],
       rawEvent->midi_message[1]
     );
-    if (subscribedEventIds.contains(eventId)) {
-      MidiEventSubscriber* subscriber = subscribedEventIds.at(eventId);
+    if (subscribedMidiEventIds.contains(eventId)) {
+      MidiEventSubscriber* subscriber = subscribedMidiEventIds.at(eventId);
       if (subscriber) {
         subscriber->onMidiEvent(eventId, rawEvent->midi_message[2]);
       }

@@ -12,6 +12,7 @@
 #include "actions/Action.h"
 #include "MidiEventSubscriber.h"
 #include "MidiControlElementMapping.h"
+#include "ReaperApi.h"
 
 namespace CCS {
 
@@ -34,9 +35,15 @@ class Page : public ActionProvider {
     // Example: [page.set_state:name:value]
     std::map<string,string> state;
     vector<MidiControlElementMapping*> controlElementMappings;
+    ReaperApi* reaperApi;
 
   public:
-    Page(string pagePath, ActionsManager* actionsManager, Session* session);
+    Page(
+      string pagePath,
+      ActionsManager* actionsManager,
+      Session* session,
+      ReaperApi* reaperApi
+    );
     ~Page();
     static bool isPageConfigFile(fse::path path);
     void setActive();

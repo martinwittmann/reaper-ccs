@@ -9,6 +9,7 @@
 #include "actions/ActionsManager.h"
 #include "sdk/reaper_plugin.h"
 #include "MidiEventSubscriber.h"
+#include "ReaperApi.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -24,9 +25,12 @@ namespace CCS {
     GlobalConfig *config;
     ActionsManager* actionsManager;
     midi_Output* output;
-    std::map<int,MidiEventSubscriber*> subscribedEventIds;
+    std::map<int,MidiEventSubscriber*> subscribedMidiEventIds;
+    std::vector<string> subscribedReaperEvents;
 
   public:
+    ReaperApi* reaperApi;
+
     Ccs(string baseDir, midi_Output* output);
 
     ~Ccs();
@@ -34,6 +38,8 @@ namespace CCS {
     Session *loadSession(string sessionId, ActionsManager* actionsManager);
 
     void onMidiEvent(MIDI_event_t* rawEvent);
+
+    void pollReaperData();
   };
 }
 

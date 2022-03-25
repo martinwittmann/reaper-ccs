@@ -6,30 +6,50 @@
 #include "yaml-cpp/yaml.h"
 #include "MidiController.h"
 #include "MidiEventSubscriber.h"
+#include "reaper/ReaperEventSubscriber.h"
+#include "reaper/ReaperApi.h"
+#include "config/MappingConfig.h"
 
 namespace CCS {
-  class MidiControlElementMapping : public MidiEventSubscriber {
+  class MidiControlElementMapping :
+    public MidiEventSubscriber,
+    public ReaperEventSubscriber
+  {
     int midiEventId;
-    YAML::Node config;
-    MidiControlElement* midiControlElement;
+    MappingConfig* config;
+    MidiControlElement* controlElement;
     std::string controlId;
     std::string controllerId;
+    short controlType;
+    short onPressValue;
+    short onReleaseValue;
+    short value;
+    MediaTrack* reaperTrack;
+    ReaperApi* api;
 
   public:
-    static const int BUTTON = 0;
-    static const int ENCODER_RELATIVE = 0;
 
     MidiControlElementMapping(
       int midiEventId,
-      std::string rawControlId,
+      std::string controlId,
       YAML::Node config,
-      MidiControlElement* controller
+      MidiControlElement* controlElement,
+      ReaperApi* api
     );
+
+    ~MidiControlElementMapping();
 
     int getMidiEventId();
 
-    void onMidiEvent(int eventId, unsigned char dataByte) override;
-    void createMidiControlElementMappings();
+    void onMidiEvent(int eventId, unsigned char data2) override;
+    MediaTrack* getTrack(int trackIndex);
+    std::string getFxParameterName(
+      MediaTrack* track,
+      int fxId,
+      int parameterId
+    );
+
+    int getNumTracks();
   };
 }
 

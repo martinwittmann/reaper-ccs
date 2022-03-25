@@ -7,6 +7,7 @@ class CSurf_NovationSlMk3 : public IReaperControlSurface {
     int m_midi_in_dev,m_midi_out_dev;
     midi_Output *m_midiout;
     midi_Input *m_midiin;
+    char pollingIndex = 0;
 
     WDL_String descspace;
     char configtmp[1024];
@@ -98,27 +99,59 @@ public:
         MIDI_event_t *evts;
         while ((evts = list->EnumItems(&l))) OnMIDIEvent(evts);
       }
+
+      if (pollingIndex % 6 == 0) {
+        ccs->pollReaperData();
+      }
+
+      pollingIndex++;
+      // Reset after 12 times. 12 because its dividable by 2, 3, 4 and 6.
+      // Since the internet says that Run is supposed to be called ~30 times
+      // per second we can use pollingIndex with a modulo to run things
+      // 15, 10, 8 and 5 times per second to not use too much resources.
+      if (pollingIndex % 12 == 0) {
+        pollingIndex = 0;
+      }
     }
 
-    void SetSurfaceVolume(MediaTrack *trackid, double volume) { }
-    void SetSurfacePan(MediaTrack *trackid, double pan) { }
-    void SetSurfaceMute(MediaTrack *trackid, bool mute) { }
-    void SetSurfaceSelected(MediaTrack *trackid, bool selected) { }
-    void SetSurfaceSolo(MediaTrack *trackid, bool solo) { }
-    void SetSurfaceRecArm(MediaTrack *trackid, bool recarm) { }
-    void SetPlayState(bool play, bool pause, bool rec) { }
-    void SetRepeatState(bool rep) {}
 
+    void SetPlayState(bool play, bool pause, bool record) {
+      if (play && !pause && !record) {
+        this->ccs->reaperApi->triggerOnPlay();
+      }
+    }
+
+    void SetRepeatState(bool repeat) {
+      this->ccs->reaperApi->triggerOnRepeatChanged(repeat);
+    }
+
+    void SetSurfaceVolume(MediaTrack *track, double volume) {
+      this->ccs->reaperApi->triggerOnTrackVolumeChanged(track, volume);
+    }
+
+    void SetSurfaceMute(MediaTrack *track, bool mute) {
+      this->ccs->reaperApi->onTrackMuteChanged(track, mute);
+    }
+
+    void SetSurfaceSolo(MediaTrack *track, bool solo) {
+      this->ccs->reaperApi->onTrackMuteChanged(track, solo);
+    }
+
+    void SetSurfaceRecArm(MediaTrack *track, bool recarm) {
+      this->ccs->reaperApi->onTrackMuteChanged(track, recarm);
+    }
+
+
+    void SetSurfacePan(MediaTrack *trackid, double pan) { }
+    void SetSurfaceSelected(MediaTrack *trackid, bool selected) { }
     void SetTrackTitle(MediaTrack *trackid, const char *title) { }
 
-    bool IsKeyDown(int key)
-    {
+    bool IsKeyDown(int key) {
       return false;
     }
 
 
-    virtual int Extended(int call, void *parm1, void *parm2, void *parm3)
-    {
+    virtual int Extended(int call, void *parm1, void *parm2, void *parm3) {
       DEFAULT_DEVICE_REMAP()
       return 0;
     }

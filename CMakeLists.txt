@@ -18,6 +18,7 @@ set(
   src/config/BaseConfig.cpp
   src/config/PageConfig.cpp
   src/config/SessionConfig.cpp
+  src/config/MappingConfig.cpp
   src/config/MidiControllerConfig.cpp
   src/config/GlobalConfig.cpp
 
@@ -25,6 +26,10 @@ set(
   src/actions/ActionsManager.cpp
   src/actions/ActionProvider.cpp
   src/actions/ActionInvocation.cpp
+
+  src/reaper/ReaperApi.cpp
+  src/reaper/ReaperEventSubscriber.cpp
+  src/reaper/ReaperDataTracker.cpp
 
   src/Ccs.cpp
   src/MidiController.cpp

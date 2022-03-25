@@ -16,38 +16,28 @@ namespace CCS {
     const char keySeparator = '.';
 
   public:
-    BaseConfig(std::string filename, bool allowExtendConfig, std::string extendKeyName = "extends");
+    BaseConfig(
+      std::string filename,
+      bool allowExtendConfig,
+      std::string extendKeyName = "extends"
+    );
 
+    BaseConfig(YAML::Node* root);
     YAML::Node loadConfig(std::string filename);
-
     void replaceVariables();
-
     void mergeYaml(YAML::Node target, YAML::Node const &source);
-
     bool keyExists(std::string key);
-
     bool keyExists(std::string key, YAML::Node *rootNode);
-
     std::string getValue(std::string key);
-
     std::string getValue(std::string key, YAML::Node *rootNode);
-
     std::vector<std::string> getListValues(std::string key);
-
     std::vector<std::string> getListValues(std::string key, YAML::Node *rootNode);
-
     YAML::Node getMapValue(std::string key);
-
     YAML::Node getMapValue(std::string key, YAML::Node *rootNode);
-
     YAML::Node _getValue(std::vector<std::string> keyParts, YAML::Node node);
-
     std::vector<std::string> debugNode(YAML::Node node);
-
     void mergeYamlNode(YAML::Node target, YAML::Node const &source);
-
     void mergeYamlMap(YAML::Node target, YAML::Node const &source);
-
     void mergeYamlSequences(YAML::Node target, YAML::Node const &source);
   };
 }

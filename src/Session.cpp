@@ -9,6 +9,7 @@
 #include "Page.h"
 #include "MidiController.h"
 #include "actions/ActionsManager.h"
+#include "ReaperApi.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -16,7 +17,12 @@ namespace CCS {
   using std::string;
   using std::vector;
 
-  Session::Session(string sessionPath, ActionsManager* actionsManager, midi_Output* output) {
+  Session::Session(
+    string sessionPath,
+    ActionsManager* actionsManager,
+    midi_Output* output,
+    ReaperApi* reaperApi
+  ) {
     path = sessionPath;
     pagesDir = path + SEP + "pages";
     midiControllersDir = fse::path(path)
@@ -27,6 +33,7 @@ namespace CCS {
     this->actionsManager = actionsManager;
     sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
     this->output = output;
+    this->reaperApi = reaperApi;
 
     loadMidiControllers();
     loadSessionPages();
@@ -118,7 +125,12 @@ namespace CCS {
     vector<string> pageNames = getPageNames();
     for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
       string pagePath = pagesDir + SEP + *it;
-      pages.push_back(new Page(pagePath, actionsManager, this));
+      pages.push_back(new Page(
+        pagePath,
+        actionsManager,
+        this,
+        reaperApi
+      ));
     }
   }
 

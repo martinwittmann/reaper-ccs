@@ -75,9 +75,9 @@ namespace CCS {
 
       controls.push_back(new MidiControlElement(
         controlId,
-        config->getValue("type", &controlNode),
+        MidiControlElement::getTypeByName(config->getValue("type", &controlNode)),
         status,
-        Util::hexToInt(config->getValue("message.data1", &controlNode)),
+        Util::hexToInt(config->getValue("data1", &controlNode)),
         this,
         data2Press,
         data2Release
@@ -322,7 +322,7 @@ namespace CCS {
 
   MidiControlElement* MidiController::getMidiControlElement(string id) {
     for (auto control : controls) {
-      if (control->getId() == id) {
+      if (control->getControlId() == id) {
         return control;
       }
     }

@@ -13,7 +13,7 @@ namespace CCS {
    */
   MidiControlElement::MidiControlElement(
     string controlId,
-    string typeName,
+    short controlType,
     unsigned char status,
     unsigned char data1,
     MidiController* midiController,
@@ -21,7 +21,7 @@ namespace CCS {
     unsigned char onReleaseData2
   ) {
     this->controlId = controlId;
-    type = getType(typeName);
+    this->controlType = controlType;
     statusByte = status;
     data1Byte = data1;
     this->midiController = midiController;
@@ -29,18 +29,46 @@ namespace CCS {
     this->onReleaseData2 = onReleaseData2;
   }
 
-  int MidiControlElement::getType(string type) {
+  short MidiControlElement::getTypeByName(string type) {
     if (type == "button") return BUTTON;
     if (type == "absolute") return ABSOLUTE;
     if (type == "relative") return RELATIVE;
     return UNKNOWN_CONTROL_TYPE;
   }
 
+  short MidiControlElement::getType() {
+    return controlType;
+  }
+
   MidiEventType MidiControlElement::getEventType() {
     return MidiEventType{statusByte, data1Byte};
   }
 
+  string MidiControlElement::getControlId() {
+    return controlId;
+  }
+
   int MidiControlElement::getInputEventId() {
     return Util::getMidiEventId(statusByte, data1Byte);
+  }
+
+  short MidiControlElement::getOnPressValue() {
+    return onPressData2;
+  }
+
+  short MidiControlElement::getOnReleaseValue() {
+    return onReleaseData2;
+  }
+
+  void MidiControlElement::onChange(std::vector<int> b) {
+
+  }
+
+  void MidiControlElement::onButtonPress(std::vector<int> b) {
+
+  }
+
+  void MidiControlElement::onButtonRelease(std::vector<int> b) {
+
   }
 }

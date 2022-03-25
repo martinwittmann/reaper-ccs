@@ -7,6 +7,7 @@
 #include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "Variables.h"
+#include "ReaperApi.h"
 #include <iostream>
 
 namespace CCS {
@@ -16,13 +17,18 @@ namespace CCS {
   using std::string;
   using std::vector;
 
-  Page::Page(string pagePath, ActionsManager* actionsManager, Session* session)
-    : ActionProvider(actionsManager) {
+  Page::Page(
+    string pagePath,
+    ActionsManager* actionsManager,
+    Session* session,
+    ReaperApi* reaperApi
+  ) : ActionProvider(actionsManager) {
     config = new PageConfig(pagePath);
     pageId = config->getValue("id");
     registerActionProvider(pageId);
     this->actionsManager = actionsManager;
     this->session = session;
+    this->reaperApi = reaperApi;
     createActions();
     createMidiControlElementMappings();
   }
@@ -151,9 +157,11 @@ namespace CCS {
     YAML::Node controlsNode = config->getMapValue("mappings.controls");
 
     for (const auto &controlConfig: controlsNode) {
-      auto controlId = controlConfig.first.as<string>();
-      auto controlParts = Util::splitString(controlId, '.');
-      string midiControllerId = controlParts.at(0);
+      auto rawControlId = controlConfig.first.as<string>();
+      auto controlIdParts = Util::splitString(rawControlId, '.');
+      string midiControllerId = controlIdParts.at(0);
+      string controlId = controlIdParts.at(1);
+
       MidiController* midiController = session->getMidiController(midiControllerId);
       MidiControlElement* controlEl = midiController->getMidiControlElement(controlId);
       int midiEventId = midiController->getMidiEventIdForControl(controlId);
@@ -161,7 +169,8 @@ namespace CCS {
         midiEventId,
         controlId,
         controlConfig.second,
-        controlEl
+        controlEl,
+        reaperApi
       ));
     }
   }

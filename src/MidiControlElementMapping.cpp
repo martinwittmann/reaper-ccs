@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include "Util.h"
+#include "config/MappingConfig.h"
+#include "reaper/ReaperApi.h"
 
 namespace CCS {
 
@@ -9,22 +11,73 @@ namespace CCS {
 
   MidiControlElementMapping::MidiControlElementMapping(
     int midiEventId,
-    string rawControlId,
-    YAML::Node config,
-    MidiControlElement* midiControlElement
+    string controlId,
+    YAML::Node configRoot,
+    MidiControlElement* controlElement,
+    ReaperApi* api
   ) {
     this->midiEventId = midiEventId;
-    this->config = config;
-    this->midiControlElement = midiControlElement;
-    std::vector idParts = Util::splitString(rawControlId, '.');
-    string controllerId = idParts.at(0);
-    this->controllerId = controllerId;
-    string controlId = idParts.at(1);
+    config = new MappingConfig(&configRoot);
+    this->controlElement = controlElement;
     this->controlId = controlId;
+    controlType = controlElement->getType();
+    onPressValue = controlElement->getOnPressValue();
+    onReleaseValue = controlElement->getOnReleaseValue();
+    this->api = api;
   }
 
-  void MidiControlElementMapping::onMidiEvent(int eventId, unsigned char dataByte) {
-    std::cout << "Midi event data: " << Util::formatHexByte(dataByte) << "\n";
+  MediaTrack* MidiControlElementMapping::getTrack(int trackIndex) {
+    return CSurf_TrackFromID(trackIndex, false);
   }
 
+  int MidiControlElementMapping::getNumTracks() {
+    return CSurf_NumTracks(false);
+  }
+
+  string MidiControlElementMapping::getFxParameterName(
+    MediaTrack* track,
+    int fxId,
+    int parameterId
+  ) {
+    char buffer[32];
+    buffer[0] = 0;
+    TrackFX_GetParamName(track, fxId, parameterId, buffer, sizeof(buffer));
+    return string(buffer);
+  };
+
+  MidiControlElementMapping::~MidiControlElementMapping() {
+    delete config;
+  }
+
+  void MidiControlElementMapping::onMidiEvent(int eventId, unsigned char data2) {
+    std::cout << "Midi event data: " << Util::formatHexByte(data2) << "\n";
+    switch (controlType) {
+      case MidiControlElement::BUTTON:
+        if (data2 == onPressValue) {
+          value = data2;
+          //onButtonPress(eventId, data2);
+        }
+        else if (data2 == onReleaseValue) {
+          value = data2;
+          //onButtonRelease(eventId, data2);
+        }
+        break;
+
+      case MidiControlElement::ABSOLUTE:
+        value = data2;
+        //onChange(eventId, data2);
+        break;
+
+      case MidiControlElement::RELATIVE:
+        std::cout << 64 - data2 << "\n";
+        char diff = 64 - data2;
+        value += diff;
+        //onChange(eventId, data2);
+        break;
+    }
+  }
+
+  int MidiControlElementMapping::getMidiEventId() {
+    return midiEventId;
+  }
 }
