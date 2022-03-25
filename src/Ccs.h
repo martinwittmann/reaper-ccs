@@ -9,7 +9,7 @@
 #include "actions/ActionsManager.h"
 #include "sdk/reaper_plugin.h"
 #include "MidiEventSubscriber.h"
-#include "ReaperApi.h"
+#include "reaper/ReaperApi.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

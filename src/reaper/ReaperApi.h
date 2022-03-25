@@ -42,10 +42,10 @@ namespace CCS {
     void triggerOnStop();
     void triggerOnRepeatChanged(bool repeat);
 
-    void triggerOnTrackVolumeChanged(bool repeat);
-    void triggerOnTrackMuteChanged(bool repeat);
-    void triggerOnTrackSoloChanged(bool repeat);
-    void triggerOnTrackRecordArmChanged(bool repeat);
+    void triggerOnTrackVolumeChanged(MediaTrack* track, double volume);
+    void triggerOnTrackMuteChanged(MediaTrack* track, bool repeat);
+    void triggerOnTrackSoloChanged(MediaTrack* track, bool repeat);
+    void triggerOnTrackRecordArmChanged(MediaTrack* track, bool repeat);
 
     void triggerOnFxParamChanged();
     void subscribeToEvent(int eventId, ReaperEventSubscriber* subscriber);

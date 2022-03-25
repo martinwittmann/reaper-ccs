@@ -45,11 +45,22 @@ MidiControlElementMapping:
 - MidiController
 - MidiEventSubscriber
 
-MidiEventSubscriber:
-- [nothing]
+
+ReaperApi:
+- ReaperDataTracker
+- ReaperEventSubscriber
+
+ReaperDatatracker:
+- ReaperApi
+
+ReaperEventSubscriber:
+- nothing
+
 
 ActionsManager <> Session
 Page <> Session
 ActionsManager <> Action
 ActionsManager <> ActionsProvider
 MidiController <> MidiControlElement
+
+ReaperApi <> ReaperDataTracker
