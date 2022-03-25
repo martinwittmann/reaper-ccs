@@ -130,15 +130,15 @@ public:
     }
 
     void SetSurfaceMute(MediaTrack *track, bool mute) {
-      this->ccs->reaperApi->onTrackMuteChanged(track, mute);
+      this->ccs->reaperApi->triggerOnTrackMuteChanged(track, mute);
     }
 
     void SetSurfaceSolo(MediaTrack *track, bool solo) {
-      this->ccs->reaperApi->onTrackMuteChanged(track, solo);
+      this->ccs->reaperApi->triggerOnTrackSoloChanged(track, solo);
     }
 
     void SetSurfaceRecArm(MediaTrack *track, bool recarm) {
-      this->ccs->reaperApi->onTrackMuteChanged(track, recarm);
+      this->ccs->reaperApi->triggerOnTrackRecordArmChanged(track, recarm);
     }
 
 

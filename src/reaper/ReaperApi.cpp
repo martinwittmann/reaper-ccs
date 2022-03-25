@@ -59,28 +59,28 @@ namespace CCS {
     }
   };
 
-  void ReaperApi::triggerOnTrackVolumeChanged(bool volume) {
+  void ReaperApi::triggerOnTrackVolumeChanged(MediaTrack* track, double volume) {
     std::vector subscribers = subscribersMap.at(ON_TRACK_VOLUME_CHANGED);
     for (auto subscriber: subscribers) {
       subscriber->onTrackVolumeChanged(volume);
     }
   }
 
-  void ReaperApi::triggerOnTrackMuteChanged(bool mute) {
+  void ReaperApi::triggerOnTrackMuteChanged(MediaTrack* track, bool mute) {
     std::vector subscribers = subscribersMap.at(ON_TRACK_MUTE_CHANGED);
     for (auto subscriber: subscribers) {
       subscriber->onTrackMuteChanged(mute);
     }
   }
 
-  void ReaperApi::triggerOnTrackSoloChanged(bool solo) {
+  void ReaperApi::triggerOnTrackSoloChanged(MediaTrack* track, bool solo) {
     std::vector subscribers = subscribersMap.at(ON_TRACK_SOLO_CHANGED);
     for (auto subscriber: subscribers) {
       subscriber->onTrackSoloChanged(solo);
     }
   }
 
-  void ReaperApi::triggerOnTrackRecordArmChanged(bool recordArm) {
+  void ReaperApi::triggerOnTrackRecordArmChanged(MediaTrack* track, bool recordArm) {
     std::vector subscribers = subscribersMap.at(ON_TRACK_RECORD_ARM_CHANGED);
     for (auto subscriber: subscribers) {
       subscriber->onTrackRecordArmChanged(recordArm);
@@ -97,6 +97,8 @@ namespace CCS {
 
   void ReaperApi::pollReaperData() {
     // Retrieve the data we're susbcribed to and trigger the according events.
-    for (auto)
+    for (auto tracker : trackers) {
+      tracker->update();
+    }
   }
 }

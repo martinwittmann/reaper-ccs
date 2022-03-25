@@ -12,7 +12,7 @@
 #include "actions/Action.h"
 #include "MidiEventSubscriber.h"
 #include "MidiControlElementMapping.h"
-#include "ReaperApi.h"
+#include "reaper/ReaperApi.h"
 
 namespace CCS {
 
