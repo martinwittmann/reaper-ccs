@@ -2,6 +2,7 @@
 #include "ReaperApi.h"
 #include "../sdk/reaper_plugin.h"
 #include "../sdk/reaper_plugin_functions.h"
+#include <iostream>
 
 namespace CCS {
   // eventType corresponds to one of the event types in ReaperApi.h
@@ -39,14 +40,21 @@ namespace CCS {
     return false;
   }
 
-  void ReaperTrackFxParam::triggerEvent() {
-    apiManager->triggerOnFxParamChanged();
+  void ReaperTrackFxParam::triggerEvent(
+    MediaTrack* track,
+    int fxId,
+    int paramId,
+    double value
+  ) {
+    apiManager->triggerOnFxParameterChanged(track, fxId, paramId, value);
   }
 
   void ReaperTrackFxParam::getData() {
     char buffer[512];
     buffer[0] = 0;
-    int val = TrackFX_GetParamNormalized(track, fxId, paramId);
+    double val = TrackFX_GetParamNormalized(track, fxId, paramId);
+    std::cout << val << "\n";
     TrackFX_GetFormattedParamValue(track, fxId, paramId, buffer, sizeof(buffer));
+    std::cout << buffer << "\n";
   }
 }

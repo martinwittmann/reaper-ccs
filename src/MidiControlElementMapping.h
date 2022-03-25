@@ -49,7 +49,12 @@ namespace CCS {
       int parameterId
     );
 
-    int getNumTracks();
+    void onFxParameterChanged(
+      MediaTrack* track,
+      int fxId,
+      int paramId,
+      double value
+    ) override;
   };
 }
 

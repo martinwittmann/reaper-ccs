@@ -24,26 +24,22 @@ namespace CCS {
     onPressValue = controlElement->getOnPressValue();
     onReleaseValue = controlElement->getOnReleaseValue();
     this->api = api;
+
+    if (controlId == "encoder1") {
+      auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
+      MediaTrack* track = this->api->getTrack(1);
+      this->api->subscribeToFxParameterChanged(
+        track,
+        0,
+        0,
+        subscriber
+      );
+    }
   }
 
   MediaTrack* MidiControlElementMapping::getTrack(int trackIndex) {
     return CSurf_TrackFromID(trackIndex, false);
   }
-
-  int MidiControlElementMapping::getNumTracks() {
-    return CSurf_NumTracks(false);
-  }
-
-  string MidiControlElementMapping::getFxParameterName(
-    MediaTrack* track,
-    int fxId,
-    int parameterId
-  ) {
-    char buffer[32];
-    buffer[0] = 0;
-    TrackFX_GetParamName(track, fxId, parameterId, buffer, sizeof(buffer));
-    return string(buffer);
-  };
 
   MidiControlElementMapping::~MidiControlElementMapping() {
     delete config;
@@ -79,5 +75,15 @@ namespace CCS {
 
   int MidiControlElementMapping::getMidiEventId() {
     return midiEventId;
+  }
+
+  void MidiControlElementMapping::onFxParameterChanged(
+    MediaTrack *track,
+    int fxId,
+    int paramId,
+    double value
+    ) {
+    std::cout << "Fx param changed:\n";
+    std::cout << fxId << " " << paramId << " " << value << "\n";
   }
 }

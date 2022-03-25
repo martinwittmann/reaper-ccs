@@ -1,5 +1,6 @@
 #include "ReaperApi.h"
 #include <vector>
+#include "../sdk/reaper_plugin_functions.h"
 
 namespace CCS {
 
@@ -7,11 +8,55 @@ namespace CCS {
 
   }
 
-  void ReaperApi::subscribeToEvent(int eventId, ReaperEventSubscriber* subscriber) {
-    if (isSubscribedToEvent(subscriber, eventId)) {
+  int ReaperApi::getNumTracks() {
+    return CSurf_NumTracks(false);
+  }
+
+  string ReaperApi::getFxParameterName(
+    MediaTrack* track,
+    int fxId,
+    int parameterId
+  ) {
+    char buffer[32];
+    buffer[0] = 0;
+    TrackFX_GetParamName(track, fxId, parameterId, buffer, sizeof(buffer));
+    return string(buffer);
+  };
+
+  void ReaperApi::subscribeToFxParameterChanged(
+    MediaTrack* track,
+    int fxId,
+    int paramId,
+    ReaperEventSubscriber* subscriber
+  ) {
+    if (isSubscribedToFxParameterChanged(track, fxId, paramId, subscriber)) {
       return;
     }
-    subscribersMap.at(eventId).push_back(subscriber);
+    auto subscription = new FxParameterChangedSubscription(
+      track,
+      fxId,
+      paramId,
+      subscriber
+    );
+    fxParamChangedSubscriptions.push_back(subscription);
+  }
+
+  bool ReaperApi::isSubscribedToFxParameterChanged(
+    MediaTrack* track,
+    int fxId,
+    int paramId,
+    ReaperEventSubscriber* subscriber
+  ) {
+    for (auto subscription : fxParamChangedSubscriptions) {
+      if (
+        subscription->track == track &&
+        subscription->fxId == fxId &&
+        subscription->paramId == paramId &&
+        subscription->subscriber == subscriber) {
+        return true;
+      }
+    }
+    return false;
   }
 
   bool ReaperApi::isSubscribedToEvent(ReaperEventSubscriber* subscriber, int eventId) {
@@ -27,28 +72,28 @@ namespace CCS {
   void ReaperApi::triggerOnPlay() {
     std::vector subscribers = subscribersMap.at(ON_PLAY);
     for (auto subscriber: subscribers) {
-      subscriber->onFxParameterChanged();
+      subscriber->onPlay();
     }
   };
 
   void ReaperApi::triggerOnPause() {
     std::vector subscribers = subscribersMap.at(ON_PAUSE);
     for (auto subscriber: subscribers) {
-      subscriber->onFxParameterChanged();
+      subscriber->onPlay();
     }
   };
 
   void ReaperApi::triggerOnRecord() {
     std::vector subscribers = subscribersMap.at(ON_RECORD);
     for (auto subscriber: subscribers) {
-      subscriber->onFxParameterChanged();
+      subscriber->onRecord();
     }
   };
 
   void ReaperApi::triggerOnStop() {
     std::vector subscribers = subscribersMap.at(ON_STOP);
     for (auto subscriber: subscribers) {
-      subscriber->onFxParameterChanged();
+      subscriber->onStop();
     }
   };
 
@@ -87,18 +132,26 @@ namespace CCS {
     }
   }
 
-  void ReaperApi::triggerOnFxParamChanged() {
-    std::vector subscribers = subscribersMap.at(ON_FX_PARAM_CHANGED);
-    for (auto subscriber: subscribers) {
-      subscriber->onFxParameterChanged();
+  void ReaperApi::triggerOnFxParameterChanged(
+    MediaTrack* track,
+    int fxId,
+    int paramId,
+    double value
+  ) {
+    std::vector subscriptions = fxParamChangedSubscriptions;
+    for (auto subscription: subscriptions) {
+      subscription->subscriber->onFxParameterChanged(track, fxId, paramId, value);
     }
   };
 
-
   void ReaperApi::pollReaperData() {
-    // Retrieve the data we're susbcribed to and trigger the according events.
+    // Retrieve the data we're subscribed to and trigger the corresponding events.
     for (auto tracker : trackers) {
       tracker->update();
     }
+  }
+
+  MediaTrack* ReaperApi::getTrack(int id) {
+    return CSurf_TrackFromID(id, false);
   }
 }

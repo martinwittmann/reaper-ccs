@@ -1,6 +1,8 @@
 #ifndef CCS_REAPER_EVENT_SUBSCRIBER
 #define CCS_REAPER_EVENT_SUBSCRIBER
 
+#include "../sdk/reaper_plugin.h"
+
 namespace CCS {
   class ReaperEventSubscriber {
 
@@ -13,7 +15,12 @@ namespace CCS {
     virtual void onTrackMuteChanged(bool mute);
     virtual void onTrackSoloChanged(bool solo);
     virtual void onTrackRecordArmChanged(bool recordArm);
-    virtual void onFxParameterChanged();
+    virtual void onFxParameterChanged(
+      MediaTrack* track,
+      int fxId,
+      int paramId,
+      double value
+    );
   };
 }
 

@@ -37,7 +37,12 @@ namespace CCS {
       int paramId,
       ReaperApi* apiManager
     );
-    void triggerEvent() override;
+    void triggerEvent(
+      MediaTrack* track,
+      int fxId,
+      int paramId,
+      double value
+    );
     void getData() override;
     bool isChanged() override;
   };

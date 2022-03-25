@@ -10,5 +10,10 @@ namespace CCS {
   void ReaperEventSubscriber::onTrackMuteChanged(bool mute) {}
   void ReaperEventSubscriber::onTrackSoloChanged(bool solo) {}
   void ReaperEventSubscriber::onTrackRecordArmChanged(bool recordArm) {}
-  void ReaperEventSubscriber::onFxParameterChanged() {}
+  void ReaperEventSubscriber::onFxParameterChanged(
+    MediaTrack* track,
+    int fxId,
+    int paramId,
+    double value
+  ) {}
 }

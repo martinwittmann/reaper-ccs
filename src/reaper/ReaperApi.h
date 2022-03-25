@@ -6,6 +6,7 @@
 #include <map>
 #include "ReaperEventSubscriber.h"
 #include "ReaperDataTracker.h"
+#include "FxParameterChangedSubscription.h"
 
 namespace CCS {
 
@@ -14,7 +15,8 @@ namespace CCS {
 
   class ReaperApi {
     std::map<int, vector<ReaperEventSubscriber*>> subscribersMap;
-    std::vector<ReaperDataTracker*> trackers;
+    vector<FxParameterChangedSubscription*> fxParamChangedSubscriptions;
+    vector<ReaperDataTracker*> trackers;
 
   public:
 
@@ -33,8 +35,29 @@ namespace CCS {
     static const unsigned short ON_FX_PARAM_CHANGED = 2000;
 
     ReaperApi();
-    void pollReaperData();
 
+    void subscribeToFxParameterChanged(
+      MediaTrack* track,
+      int fxId,
+      int paramId,
+      ReaperEventSubscriber* subscriber
+    );
+
+    bool isSubscribedToFxParameterChanged(
+      MediaTrack* track,
+      int fxId,
+      int paramId,
+      ReaperEventSubscriber* subscriber
+    );
+
+    int getNumTracks();
+    string getFxParameterName(
+      MediaTrack* track,
+      int fxId,
+      int parameterId
+    );
+
+    void pollReaperData();
 
     void triggerOnPlay();
     void triggerOnPause();
@@ -47,9 +70,16 @@ namespace CCS {
     void triggerOnTrackSoloChanged(MediaTrack* track, bool repeat);
     void triggerOnTrackRecordArmChanged(MediaTrack* track, bool repeat);
 
-    void triggerOnFxParamChanged();
+    void triggerOnFxParameterChanged(
+      MediaTrack* track,
+      int fxId,
+      int paramId,
+      double value
+    );
     void subscribeToEvent(int eventId, ReaperEventSubscriber* subscriber);
     bool isSubscribedToEvent(ReaperEventSubscriber* subscriber, int eventId);
+
+    MediaTrack* getTrack(int id);
   };
 }
 
