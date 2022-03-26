@@ -4,6 +4,13 @@
 #include "../sdk/reaper_plugin.h"
 
 namespace CCS {
+
+  /**
+   * Classes can derive from ReaperEventSubscriber if they want to provide
+   * callbacks for certain events in reaper.
+   * In order for these callbacks to actually be called they need to subscribe
+   * to specific events by calling reaperApi->subscribeTo[event type]() methods.
+   */
   class ReaperEventSubscriber {
 
   public:

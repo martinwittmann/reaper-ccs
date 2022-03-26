@@ -4,157 +4,152 @@
 #include "Util.h"
 
 class CSurf_NovationSlMk3 : public IReaperControlSurface {
-    int m_midi_in_dev,m_midi_out_dev;
-    midi_Output *m_midiout;
-    midi_Input *m_midiin;
-    char pollingIndex = 0;
-
-    WDL_String descspace;
-    char configtmp[1024];
-
-    CCS::Ccs* ccs;
-
-    void OnMIDIEvent(MIDI_event_t *evt) {
-      ccs->onMidiEvent(evt);
-    }
+  int m_midi_in_dev,m_midi_out_dev;
+  midi_Output *m_midiout;
+  midi_Input *m_midiin;
+  char pollingIndex = 0;
+  WDL_String descspace;
+  char configtmp[1024];
+  CCS::Ccs* ccs;
 
 public:
-    CSurf_NovationSlMk3(int indev, int outdev, int *errStats) {
-      m_midi_in_dev = indev;
-      m_midi_out_dev = outdev;
+  CSurf_NovationSlMk3(int indev, int outdev, int *errStats) {
+    m_midi_in_dev = indev;
+    m_midi_out_dev = outdev;
 
-
-      // Create midi hardware access.
-      if (m_midi_in_dev >= 0) {
-        m_midiin = CreateMIDIInput(m_midi_in_dev);
-      }
-      else {
-        m_midiin = NULL;
-      }
-
-      if (m_midi_out_dev >= 0) {
-        m_midiout = CreateThreadedMIDIOutput(CreateMIDIOutput(
-          m_midi_out_dev,
-          false,
-          NULL
-        ));
-      }
-      else {
-        m_midiout = NULL;
-      }
-
-      if (errStats) {
-        if (m_midi_in_dev >=0  && !m_midiin) *errStats|=1;
-        if (m_midi_out_dev >=0  && !m_midiout) *errStats|=2;
-      }
-
-      if (m_midiin) {
-        m_midiin->start();
-      }
-
-      // TODO How to get the reaper resource dir via the api?
-      this->ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/", m_midiout);
+    // Create midi hardware access.
+    if (m_midi_in_dev >= 0) {
+      m_midiin = CreateMIDIInput(m_midi_in_dev);
     }
-    ~CSurf_NovationSlMk3() {
-      if (m_midiout) {
-        DELETE_ASYNC(m_midiout);
-      }
-      if (m_midiin) {
-        DELETE_ASYNC(m_midiin);
-      }
+    else {
+      m_midiin = NULL;
     }
 
-    const char *GetTypeString() { return "Novation SL MK III"; }
-    const char *GetDescString() {
-      descspace.SetFormatted(
-        512,
-        __LOCALIZE_VERFMT("Novation SL MK III (Device %d,%d)", "csurf"),
-        m_midi_in_dev,
-        m_midi_out_dev
-      );
-      return descspace.Get();
+    if (m_midi_out_dev >= 0) {
+      m_midiout = CreateThreadedMIDIOutput(CreateMIDIOutput(
+        m_midi_out_dev,
+        false,
+        NULL
+      ));
     }
-    const char *GetConfigString() {
-      // String of configuration data. We just store the midi device ids as integers.
-      sprintf(configtmp, "0 0 %d %d", m_midi_in_dev, m_midi_out_dev);
-      return configtmp;
+    else {
+      m_midiout = NULL;
     }
 
-    void CloseNoReset() {
-      if (m_midiout) {
-        DELETE_ASYNC(m_midiout);
-        m_midiout = 0;
-      }
-      if (m_midiin) {
-        DELETE_ASYNC(m_midiin);
-        m_midiin = 0;
-      }
+    if (errStats) {
+      if (m_midi_in_dev >=0  && !m_midiin) *errStats|=1;
+      if (m_midi_out_dev >=0  && !m_midiout) *errStats|=2;
     }
 
-    void Run() {
-      if (m_midiin) {
-        m_midiin->SwapBufs(timeGetTime());
-        int l = 0;
-        MIDI_eventlist *list = m_midiin->GetReadBuf();
-        MIDI_event_t *evts;
-        while ((evts = list->EnumItems(&l))) OnMIDIEvent(evts);
-      }
+    if (m_midiin) {
+      m_midiin->start();
+    }
 
-      if (pollingIndex % 6 == 0) {
-        ccs->reaperApi->pollReaperData();
-      }
+    // TODO How to get the reaper resource dir via the api?
+    this->ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/", m_midiout);
+  }
+  ~CSurf_NovationSlMk3() {
+    if (m_midiout) {
+      DELETE_ASYNC(m_midiout);
+    }
+    if (m_midiin) {
+      DELETE_ASYNC(m_midiin);
+    }
+  }
 
-      pollingIndex++;
-      // Reset after 12 times. 12 because its dividable by 2, 3, 4 and 6.
-      // Since the internet says that Run is supposed to be called ~30 times
-      // per second we can use pollingIndex with a modulo to run things
-      // 15, 10, 8 and 5 times per second to not use too much resources.
-      if (pollingIndex % 12 == 0) {
-        pollingIndex = 0;
+  const char *GetTypeString() { return "Novation SL MK III"; }
+  const char *GetDescString() {
+    descspace.SetFormatted(
+      512,
+      __LOCALIZE_VERFMT("Novation SL MK III (Device %d,%d)", "csurf"),
+      m_midi_in_dev,
+      m_midi_out_dev
+    );
+    return descspace.Get();
+  }
+  const char *GetConfigString() {
+    // String of configuration data. We just store the midi device ids as integers.
+    sprintf(configtmp, "0 0 %d %d", m_midi_in_dev, m_midi_out_dev);
+    return configtmp;
+  }
+
+  void CloseNoReset() {
+    if (m_midiout) {
+      DELETE_ASYNC(m_midiout);
+      m_midiout = 0;
+    }
+    if (m_midiin) {
+      DELETE_ASYNC(m_midiin);
+      m_midiin = 0;
+    }
+  }
+
+  void Run() {
+    if (m_midiin) {
+      m_midiin->SwapBufs(timeGetTime());
+      int l = 0;
+      MIDI_eventlist *list = m_midiin->GetReadBuf();
+      MIDI_event_t *event;
+      while ((event = list->EnumItems(&l))) {
+        ccs->onMidiEvent(event);
       }
     }
 
-
-    void SetPlayState(bool play, bool pause, bool record) {
-      if (play && !pause && !record) {
-        this->ccs->reaperApi->triggerOnPlay();
-      }
+    if (pollingIndex % 6 == 0) {
+      ccs->reaperApi->pollReaperData();
     }
 
-    void SetRepeatState(bool repeat) {
-      this->ccs->reaperApi->triggerOnRepeatChanged(repeat);
+    pollingIndex++;
+    // Reset after 12 times. 12 because its dividable by 2, 3, 4 and 6.
+    // Since the internet says that Run is supposed to be called ~30 times
+    // per second we can use pollingIndex with a modulo to run things
+    // 15, 10, 8 and 5 times per second to not use too much resources.
+    if (pollingIndex % 12 == 0) {
+      pollingIndex = 0;
     }
+  }
 
-    void SetSurfaceVolume(MediaTrack *track, double volume) {
-      this->ccs->reaperApi->triggerOnTrackVolumeChanged(track, volume);
+
+  void SetPlayState(bool play, bool pause, bool record) {
+    if (play && !pause && !record) {
+      this->ccs->reaperApi->triggerOnPlay();
     }
+  }
 
-    void SetSurfaceMute(MediaTrack *track, bool mute) {
-      this->ccs->reaperApi->triggerOnTrackMuteChanged(track, mute);
-    }
+  void SetRepeatState(bool repeat) {
+    this->ccs->reaperApi->triggerOnRepeatChanged(repeat);
+  }
 
-    void SetSurfaceSolo(MediaTrack *track, bool solo) {
-      this->ccs->reaperApi->triggerOnTrackSoloChanged(track, solo);
-    }
+  void SetSurfaceVolume(MediaTrack *track, double volume) {
+    this->ccs->reaperApi->triggerOnTrackVolumeChanged(track, volume);
+  }
 
-    void SetSurfaceRecArm(MediaTrack *track, bool recarm) {
-      this->ccs->reaperApi->triggerOnTrackRecordArmChanged(track, recarm);
-    }
+  void SetSurfaceMute(MediaTrack *track, bool mute) {
+    this->ccs->reaperApi->triggerOnTrackMuteChanged(track, mute);
+  }
+
+  void SetSurfaceSolo(MediaTrack *track, bool solo) {
+    this->ccs->reaperApi->triggerOnTrackSoloChanged(track, solo);
+  }
+
+  void SetSurfaceRecArm(MediaTrack *track, bool recarm) {
+    this->ccs->reaperApi->triggerOnTrackRecordArmChanged(track, recarm);
+  }
 
 
-    void SetSurfacePan(MediaTrack *trackid, double pan) { }
-    void SetSurfaceSelected(MediaTrack *trackid, bool selected) { }
-    void SetTrackTitle(MediaTrack *trackid, const char *title) { }
+  void SetSurfacePan(MediaTrack *trackid, double pan) { }
+  void SetSurfaceSelected(MediaTrack *trackid, bool selected) { }
+  void SetTrackTitle(MediaTrack *trackid, const char *title) { }
 
-    bool IsKeyDown(int key) {
-      return false;
-    }
+  bool IsKeyDown(int key) {
+    return false;
+  }
 
 
-    virtual int Extended(int call, void *parm1, void *parm2, void *parm3) {
-      DEFAULT_DEVICE_REMAP()
-      return 0;
-    }
+  virtual int Extended(int call, void *parm1, void *parm2, void *parm3) {
+    DEFAULT_DEVICE_REMAP()
+    return 0;
+  }
 };
 
 static void parseParms(const char *str, int parms[4]) {
@@ -261,8 +256,6 @@ static WDL_DLGRET dlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 static HWND configFunc(const char *type_string, HWND parent, const char *initConfigString) {
-  std::cout << "\nconfigFunc: " << initConfigString << "\n";
-
   return CreateDialogParam(
     g_hInst,
     MAKEINTRESOURCE(IDD_SURFACEEDIT_SLMK3),

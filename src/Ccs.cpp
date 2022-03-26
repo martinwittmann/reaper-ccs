@@ -8,6 +8,7 @@
 #include "actions/ActionsManager.h"
 #include <iostream>
 #include "reaper/ReaperApi.h"
+#include "Test.cpp"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -31,6 +32,11 @@ namespace CCS {
     for (it = subscribedMidiEventIds.begin(); it != subscribedMidiEventIds.end(); ++it) {
       std::cout << "Subscribed to event id: " << it->first << "\n";
     }
+
+    Test* test = new Test();
+    auto subscriber = dynamic_cast<ReaperEventSubscriber*>(test);
+    MediaTrack* track1 = reaperApi->getTrack(0);
+    reaperApi->subscribeToFxParameterChanged(track1, 0, 1, subscriber);
   }
 
   Ccs::~Ccs() {

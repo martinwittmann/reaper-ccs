@@ -1,7 +1,6 @@
 #ifndef CCS_REAPER_DATA_TRACKER_H
 #define CCS_REAPER_DATA_TRACKER_H
 
-//#include "ReaperApi.h"
 #include "../sdk/reaper_plugin.h"
 
 namespace CCS {
@@ -23,28 +22,6 @@ namespace CCS {
     virtual bool isChanged();
     virtual void getData();
     virtual void triggerEvent();
-  };
-
-  class ReaperTrackFxParam : public ReaperDataTracker {
-    MediaTrack* track;
-    int fxId;
-    int paramId;
-
-  public:
-    ReaperTrackFxParam(
-      MediaTrack* track,
-      int fxId,
-      int paramId,
-      ReaperApi* apiManager
-    );
-    void triggerEvent(
-      MediaTrack* track,
-      int fxId,
-      int paramId,
-      double value
-    );
-    void getData() override;
-    bool isChanged() override;
   };
 }
 

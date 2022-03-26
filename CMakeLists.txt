@@ -43,6 +43,8 @@ set(
   src/Util.cpp
   src/Variables.cpp
 
+  src/Test.cpp
+
   WDL/swell/swell-modstub-generic.cpp
 )
 

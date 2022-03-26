@@ -30,16 +30,10 @@ namespace CCS {
 
   public:
     ReaperApi* reaperApi;
-
     Ccs(string baseDir, midi_Output* output);
-
     ~Ccs();
-
     Session *loadSession(string sessionId, ActionsManager* actionsManager);
-
     void onMidiEvent(MIDI_event_t* rawEvent);
-
-    void pollReaperData();
   };
 }
 
