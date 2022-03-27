@@ -12,7 +12,6 @@
 #define LOCALIZE_IMPORT_PREFIX "csurf_"
 #include "../reaper/localize-import.h"
 #include "../reaper/csurf.h"
-#include "../WDL/setthreadname.h"
 
 #ifndef _WIN32
 #include "../WDL/swell/swell-dlggen.h"

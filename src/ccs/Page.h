@@ -10,9 +10,9 @@
 #include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "actions/Action.h"
-#include "MidiEventSubscriber.h"
-#include "MidiControlElementMapping.h"
-#include "reaper/ReaperApi.h"
+#include "midi/MidiEventSubscriber.h"
+#include "midi/MidiControlElementMapping.h"
+#include "../reaper-api/ReaperApi.h"
 
 namespace CCS {
 

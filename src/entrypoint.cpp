@@ -1,4 +1,5 @@
 #include "control_surface.cpp"
+#include "reaper/reaper_plugin.h"
 #include "reaper/reaper_plugin_functions.h"
 
 void debug(std::string message) {

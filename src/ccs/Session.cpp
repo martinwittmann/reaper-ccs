@@ -7,9 +7,9 @@
 #include "config/SessionConfig.h"
 #include "Session.h"
 #include "Page.h"
-#include "MidiController.h"
+#include "midi/MidiController.h"
 #include "actions/ActionsManager.h"
-#include "reaper/ReaperApi.h"
+#include "../reaper-api/ReaperApi.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

@@ -1289,6 +1289,54 @@ public:
 
 
 
+/*
+** Control Surface API
+*/
+
+class ReaProject;
+class MediaTrack;
+class MediaItem;
+class MediaItem_Take;
+class TrackEnvelope;
+
+class IReaperControlSurface
+{
+  public:
+    IReaperControlSurface() { }
+    virtual ~IReaperControlSurface() { }
+
+    virtual const char *GetTypeString()=0; // simple unique string with only A-Z, 0-9, no spaces or other chars
+    virtual const char *GetDescString()=0; // human readable description (can include instance specific info)
+    virtual const char *GetConfigString()=0; // string of configuration data
+
+    virtual void CloseNoReset() { } // close without sending "reset" messages, prevent "reset" being sent on destructor
+
+
+    virtual void Run() { } // called 30x/sec or so.
+
+
+    // these will be called by the host when states change etc
+    virtual void SetTrackListChange() { }
+    virtual void SetSurfaceVolume(MediaTrack *trackid, double volume) { }
+    virtual void SetSurfacePan(MediaTrack *trackid, double pan) { }
+    virtual void SetSurfaceMute(MediaTrack *trackid, bool mute) { }
+    virtual void SetSurfaceSelected(MediaTrack *trackid, bool selected) { }
+    virtual void SetSurfaceSolo(MediaTrack *trackid, bool solo) { } // trackid==master means "any solo"
+    virtual void SetSurfaceRecArm(MediaTrack *trackid, bool recarm) { }
+    virtual void SetPlayState(bool play, bool pause, bool rec) { }
+    virtual void SetRepeatState(bool rep) { }
+    virtual void SetTrackTitle(MediaTrack *trackid, const char *title) { }
+    virtual bool GetTouchState(MediaTrack *trackid, int isPan) { return false; }
+    virtual void SetAutoMode(int mode) { } // automation mode for current track
+
+    virtual void ResetCachedVolPanStates() { } // good to flush your control states here
+
+    virtual void OnTrackSelection(MediaTrack *trackid) { } // track was selected
+
+    virtual bool IsKeyDown(int key) { return false; } // VK_CONTROL, VK_MENU, VK_SHIFT, etc, whatever makes sense for your surface
+
+    virtual int Extended(int call, void *parm1, void *parm2, void *parm3) { return 0; } // return 0 if unsupported
+};
 
 #define CSURF_EXT_RESET 0x0001FFFF // clear all surface state and reset (harder reset than SetTrackListChange)
 #define CSURF_EXT_SETINPUTMONITOR 0x00010001 // parm1=(MediaTrack*)track, parm2=(int*)recmonitor

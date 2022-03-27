@@ -3,17 +3,17 @@
 
 #include <string>
 #include <vector>
-#include "csurf.h"
+#include "../../reaper/csurf.h"
 #include "MidiControlElement.h"
 #include "yaml-cpp/yaml.h"
-#include "Util.h"
+#include "../Util.h"
 #include "MidiEventType.cpp"
-#include "config/MidiControllerConfig.h"
+#include "../config/MidiControllerConfig.h"
 #include <experimental/filesystem>
-#include "actions/Action.h"
-#include "actions/ActionsManager.h"
-#include "actions/ActionProvider.h"
-#include "sdk/reaper_plugin.h"
+#include "../actions/Action.h"
+#include "../actions/ActionsManager.h"
+#include "../actions/ActionProvider.h"
+#include "../../reaper/reaper_plugin.h"
 
 namespace CCS {
 

@@ -5,7 +5,6 @@
 #ifndef REAPER_CONTROL_SURFACE_H
 #define REAPER_CONTROL_SURFACE_H
 
-#include "IReaperControlSurface.h"
 #include "ThreadedMidiOutput.h"
 #include <string>
 #include "csurf.h"

@@ -1,9 +1,9 @@
 #include "MidiControlElementMapping.h"
 #include <vector>
 #include <iostream>
-#include "Util.h"
-#include "config/MappingConfig.h"
-#include "reaper/ReaperApi.h"
+#include "../Util.h"
+#include "../config/MappingConfig.h"
+#include "../../reaper-api/ReaperApi.h"
 
 namespace CCS {
 

@@ -1,7 +1,6 @@
 #include "ThreadedMidiOutput.h"
 #include "reaper_plugin.h"
-#include "../WDL/mutex.h"
-#include "../WDL/ptrlist.h"
+#include "../WDL/setthreadname.h"
 
 namespace Reaper {
 

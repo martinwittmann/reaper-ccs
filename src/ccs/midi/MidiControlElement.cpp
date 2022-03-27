@@ -1,7 +1,7 @@
 #include <string>
 #include "MidiEventType.cpp"
 #include "MidiControlElement.h"
-#include "Util.h"
+#include "../Util.h"
 
 namespace CCS {
   using std::string;

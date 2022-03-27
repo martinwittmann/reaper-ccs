@@ -10,8 +10,6 @@
 
 namespace CCS {
 
-  class MediaTrack;
-
   using std::string;
   using std::vector;
 

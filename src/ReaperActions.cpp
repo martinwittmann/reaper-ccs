@@ -3,7 +3,7 @@
 //
 
 #include "ReaperActions.h"
-#include "sdk/reaper_plugin.h"
+#include "reaper/reaper_plugin.h"
 
 
 namespace CCS {

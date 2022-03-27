@@ -1,5 +1,6 @@
 #include "ReaperApi.h"
 #include <vector>
+#include "../reaper/reaper_plugin.h"
 #include "../reaper/reaper_plugin_functions.h"
 #include <iostream>
 

@@ -7,7 +7,7 @@
 #include "Util.h"
 #include "actions/ActionsManager.h"
 #include <iostream>
-#include "reaper/ReaperApi.h"
+#include "../reaper-api/ReaperApi.h"
 #include "Test.cpp"
 
 namespace CCS {

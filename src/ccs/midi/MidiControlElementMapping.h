@@ -6,9 +6,9 @@
 #include "yaml-cpp/yaml.h"
 #include "MidiController.h"
 #include "MidiEventSubscriber.h"
-#include "reaper/ReaperEventSubscriber.h"
-#include "reaper/ReaperApi.h"
-#include "config/MappingConfig.h"
+#include "../../reaper-api/ReaperEventSubscriber.h"
+#include "../../reaper-api/ReaperApi.h"
+#include "../config/MappingConfig.h"
 
 namespace CCS {
   class MidiControlElementMapping :
