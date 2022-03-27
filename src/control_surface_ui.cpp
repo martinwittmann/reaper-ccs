@@ -1,4 +1,5 @@
 #include "reaper/csurf.h"
+#include "reaper/reaper_plugin_functions.h"
 
 static WDL_DLGRET process_ui(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
   switch (uMsg) {

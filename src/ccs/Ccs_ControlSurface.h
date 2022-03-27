@@ -11,7 +11,7 @@ namespace CCS {
     char pollingIndex = 0;
 
   public:
-    Ccs_ControlSurface(int *errorStats);
+    explicit Ccs_ControlSurface(int *errorStats);
     ~Ccs_ControlSurface();
     void Run() override;
     void SetPlayState(bool play, bool pause, bool record) override;

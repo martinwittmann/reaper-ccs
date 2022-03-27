@@ -1,5 +1,6 @@
 #include "Ccs_ControlSurface.h"
 #include "../reaper/reaper_plugin_functions.h"
+//#include "../WDL/swell/swell-functions.h"
 
 namespace CCS {
 
@@ -10,6 +11,8 @@ namespace CCS {
     strcpy(resourcePath, GetResourcePath());
     this->ccs = new CCS::Ccs(std::string(resourcePath), m_midiOutput);
   }
+
+  Ccs_ControlSurface::~Ccs_ControlSurface() { }
 
   void Ccs_ControlSurface::Run() {
     if (m_midiInput) {

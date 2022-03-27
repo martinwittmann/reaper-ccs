@@ -4,18 +4,17 @@
  */
 
 #define REAPERAPI_IMPLEMENT
-#include <iostream>
-#include <string>
-#include "../reaper/reaper_plugin.h"
+#include "reaper_plugin.h"
+#include "resource.h"
 
 #define LOCALIZE_IMPORT_PREFIX "csurf_"
-#include "../reaper/localize-import.h"
+#include "localize-import.h"
 
 #ifndef _WIN32
 #include "../WDL/swell/swell-dlggen.h"
-#include "../reaper/res.rc_mac_dlg"
+#include "res.rc_mac_dlg"
 #include "../WDL/swell/swell-menugen.h"
-#include "../reaper/res.rc_mac_menu"
+#include "res.rc_mac_menu"
 #endif
 
 // This file is supposed to contain the functions
