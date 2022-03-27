@@ -1,7 +1,7 @@
 #include "ReaperDataTracker.h"
 #include "ReaperApi.h"
-#include "../sdk/reaper_plugin.h"
-#include "../sdk/reaper_plugin_functions.h"
+#include "../reaper/reaper_plugin.h"
+#include "../reaper/reaper_plugin_functions.h"
 #include <iostream>
 
 namespace CCS {

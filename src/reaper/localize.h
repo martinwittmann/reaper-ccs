@@ -5,6 +5,6 @@
 #define LOCALIZE_NO_DIALOG_MENU_REDEF
 #endif
 
-#include "WDL/localize/localize.h"
+#include "../WDL/localize/localize.h"
 
 #endif

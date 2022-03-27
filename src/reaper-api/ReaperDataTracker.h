@@ -1,7 +1,7 @@
 #ifndef CCS_REAPER_DATA_TRACKER_H
 #define CCS_REAPER_DATA_TRACKER_H
 
-#include "../sdk/reaper_plugin.h"
+#include "../reaper/reaper_plugin.h"
 
 namespace CCS {
   // Since reaper does not provide callback for things like fx parameter

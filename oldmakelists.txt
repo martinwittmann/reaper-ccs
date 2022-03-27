@@ -12,11 +12,8 @@ add_definitions(-DSWELL_PROVIDED_BY_APP -DNOMINMAX)
 
 set(
   SOURCE_FILES
-
-  WDL/swell/swell-modstub-generic.cpp
-  src/reaper/IReaperControlSurface.h
-  src/reaper/ThreadedMidiOutput.cpp
-  src/reaper/ControlSurface.cpp
+  src/reaper_slmk3.cpp
+  src/_old_csurf_slmk3.cpp
 
   src/ccs/config/BaseConfig.cpp
   src/ccs/config/PageConfig.cpp
@@ -46,9 +43,13 @@ set(
   src/ccs/Util.cpp
   src/ccs/Variables.cpp
 
-  src/ccs/Ccs_ControlSurface.cpp
   src/ccs/Test.cpp
-)
+
+  WDL/swell/swell-modstub-generic.cpp
+  src/ReaperActions.cpp
+  src/reaper/IReaperControlSurface.h
+  src/reaper/ThreadedMidiOutput.cpp
+  src/reaper/ControlSurface.cpp src/reaper/ControlSurface.h src/Ccs_ControlSurface.cpp src/Ccs_ControlSurface.h)
 
 set(
   REAPER_SOURCE_FILES

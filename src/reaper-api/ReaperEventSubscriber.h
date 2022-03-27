@@ -1,7 +1,7 @@
 #ifndef CCS_REAPER_EVENT_SUBSCRIBER
 #define CCS_REAPER_EVENT_SUBSCRIBER
 
-#include "../sdk/reaper_plugin.h"
+#include "../reaper/reaper_plugin.h"
 
 namespace CCS {
 

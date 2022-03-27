@@ -1,7 +1,7 @@
 #include "FxParameterChangedSubscription.h"
 #include <iostream>
 #include <string>
-#include "../sdk/reaper_plugin_functions.h"
+#include "../reaper/reaper_plugin_functions.h"
 #include "ReaperDataTracker.h"
 #include "ReaperApi.h"
 

@@ -4,10 +4,10 @@
 #include "reaper_plugin.h"
 #include "localize.h"
 
-#include "WDL/db2val.h"
-#include "WDL/wdlstring.h"
-#include "WDL/wdlcstring.h"
-#include "WDL/win32_utf8.h"
+#include "../WDL/db2val.h"
+#include "../WDL/wdlstring.h"
+#include "../WDL/wdlcstring.h"
+#include "../WDL/win32_utf8.h"
 #include <stdio.h>
 #include "resource.h"
 
@@ -275,21 +275,6 @@ extern MediaTrack *(*GetTrack)(ReaProject *proj, int tridx);
 extern bool (*GetTrackMIDILyrics)(MediaTrack *tr, int flag, char *buf, int *buflen);
 extern void (*CSurf_OnOscControlMessage)(const char* msg, const float* arg);
 
-void OscLocalMessageToHost(const char* msg, const double* value);
-
-extern int *g_config_csurf_rate;
-extern int *g_config_zoommode;
-
-extern int* g_vu_minvol;
-extern int* g_vu_maxvol;
-extern int* g_config_vudecay;
-
-extern int __g_projectconfig_timemode2;
-extern int __g_projectconfig_timemode;
-extern int __g_projectconfig_timeoffs;
-extern int __g_projectconfig_measoffs;
-extern int __g_projectconfig_autoxfade;
-extern int __g_projectconfig_metronome_en;
 
 /*
 ** REAPER command message defines

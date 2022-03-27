@@ -1,9 +1,10 @@
 #include "ReaperApi.h"
 #include <vector>
-#include "../sdk/reaper_plugin_functions.h"
+#include "../reaper/reaper_plugin_functions.h"
 #include <iostream>
 
 namespace CCS {
+
 
   ReaperApi::ReaperApi() {
 

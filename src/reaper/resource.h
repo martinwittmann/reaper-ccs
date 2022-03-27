@@ -2,13 +2,7 @@
 // Microsoft Developer Studio generated include file.
 // Used by res.rc
 //
-#define IDD_OSC_LISTEN                  102
-#define IDD_SURFACEEDIT_MCU             264
-#define IDD_SURFACEEDIT_MCU1            265
-#define IDD_SURFACEEDIT_OSC             266
-#define IDD_SURFACEEDIT_HUI             267
-#define IDD_SURFACEEDIT_WWW             268
-#define IDD_SURFACEEDIT_SLMK3           269
+#define IDD_SURFACEEDIT_CCS             269
 #define IDC_CHECK1                      1000
 #define IDC_COMBO2                      1001
 #define IDC_COMBO3                      1002
@@ -32,14 +26,3 @@
 #define IDC_EDIT1_LBL                   1276
 #define IDC_EDIT2_LBL                   1277
 #define IDC_EDIT2_LBL2                  1278
-
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        105
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1024
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif
