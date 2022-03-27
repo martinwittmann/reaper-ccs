@@ -1,5 +1,6 @@
 #include "ControlSurface.h"
 #include "csurf.h"
+#include "reaper_plugin_functions.h"
 
 namespace Reaper {
 

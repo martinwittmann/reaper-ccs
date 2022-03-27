@@ -7,11 +7,9 @@
 #include <iostream>
 #include <string>
 #include "../reaper/reaper_plugin.h"
-#include "../reaper/reaper_plugin_functions.h"
 
 #define LOCALIZE_IMPORT_PREFIX "csurf_"
 #include "../reaper/localize-import.h"
-#include "../reaper/csurf.h"
 
 #ifndef _WIN32
 #include "../WDL/swell/swell-dlggen.h"
@@ -20,32 +18,12 @@
 #include "../reaper/res.rc_mac_menu"
 #endif
 
-// This file is supposed to contain a function reaper_extension_entrypoint()
-// which we call from here to set up the extension.
+// This file is supposed to contain the functions
+// load_reaper_extension() and unload_reaper_extension().
+// These are being called from in here to set up the extension.
 // We do this in order to abstract away the more complicated and not so clean
 // aspects of creating reaper extensions.
 #include "../entrypoint.cpp"
-
-
-
-extern reaper_csurf_reg_t csurf_novation_slmk3_reg;
-
-/*
-void (*VkbStuffMessage)(MIDI_event_t *evt, bool wantCurChan);
-MediaTrack* (*GetLastTouchedTrack)();
-const char* (*GetOscCfgDir)();
-bool (*WDL_ChooseDirectory)(HWND parent, const char *text, const char *initialdir, char *fn, int fnsize, bool preservecwd);
-char* (*WDL_ChooseFileForOpen)(HWND, const char*, const char*, const char*, const char*, const char*, bool, bool, const char*, void*,
-                               int (*Plugin_Register)(const char *name, void *infostruct);
-MediaTrack *(*GetTrack)(ReaProject *proj, int tridx);
-
-#ifdef _WIN32
-  HINSTANCE hInstance
-#else
- struct SWELL_DialogResourceIndex*
-#endif
-);
-*/
 
 HWND g_hwnd;
 

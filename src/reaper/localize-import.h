@@ -11,7 +11,7 @@
 #error you must include localize-import.h before localize.h, sorry
 #endif
 
-#include "WDL/localize/localize-import.h"
+#include "../WDL/localize/localize-import.h"
 
 #ifndef _REAPER_LOCALIZE_IMPORT_H_
 #define _REAPER_LOCALIZE_IMPORT_H_

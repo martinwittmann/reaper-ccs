@@ -7,8 +7,6 @@
 #include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "Variables.h"
-#include "../reaper-api/ReaperApi.h"
-#include <iostream>
 
 namespace CCS {
 

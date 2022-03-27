@@ -1,7 +1,3 @@
-//
-// Created by martin on 27.03.22.
-//
-
 #ifndef REAPER_CONTROL_SURFACE_H
 #define REAPER_CONTROL_SURFACE_H
 

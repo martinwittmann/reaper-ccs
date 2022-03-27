@@ -1,9 +1,6 @@
 #include "MidiControlElementMapping.h"
 #include <vector>
 #include <iostream>
-#include "../Util.h"
-#include "../config/MappingConfig.h"
-#include "../../reaper-api/ReaperApi.h"
 
 namespace CCS {
 
@@ -37,10 +34,6 @@ namespace CCS {
       );
       */
     }
-  }
-
-  MediaTrack* MidiControlElementMapping::getTrack(int trackIndex) {
-    return CSurf_TrackFromID(trackIndex, false);
   }
 
   MidiControlElementMapping::~MidiControlElementMapping() {

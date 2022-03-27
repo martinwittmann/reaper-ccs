@@ -14,7 +14,6 @@ set(
   SOURCE_FILES
 
   WDL/swell/swell-modstub-generic.cpp
-  src/reaper/IReaperControlSurface.h
   src/reaper/ThreadedMidiOutput.cpp
   src/reaper/ControlSurface.cpp
 
@@ -48,6 +47,8 @@ set(
 
   src/ccs/Ccs_ControlSurface.cpp
   src/ccs/Test.cpp
+
+  src/reaper/reaper_extension.cpp
 )
 
 set(

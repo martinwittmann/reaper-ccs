@@ -34,6 +34,11 @@ extern HWND g_hwnd;
 /* 
 ** Calls back to REAPER (all validated on load)
 */
+
+
+/*
+
+
 extern double (*DB2SLIDER)(double x);
 extern double (*SLIDER2DB)(double y);
 extern int (*GetNumMIDIInputs)(); 
@@ -274,6 +279,7 @@ extern int (*AddProjectMarker2)(ReaProject* __proj, bool isrgn, double pos, doub
 extern MediaTrack *(*GetTrack)(ReaProject *proj, int tridx);
 extern bool (*GetTrackMIDILyrics)(MediaTrack *tr, int flag, char *buf, int *buflen);
 extern void (*CSurf_OnOscControlMessage)(const char* msg, const float* arg);
+*/
 
 
 /*

@@ -1,9 +1,5 @@
-//
-// Created by martin on 27.03.22.
-//
-
 #include "Ccs_ControlSurface.h"
-#include "../reaper/csurf.h"
+#include "../reaper/reaper_plugin_functions.h"
 
 namespace CCS {
 
