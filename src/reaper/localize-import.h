@@ -22,7 +22,6 @@
     *(VstIntPtr *)&importedLocalizeInitializeDialog = hostcb(NULL,0xdeadbeef,0xdeadf00d,0,(void*)"__localizeInitializeDialog",0.0); \
     *(VstIntPtr *)&importedLocalizePrepareDialog = hostcb(NULL,0xdeadbeef,0xdeadf00d,0,(void*)"__localizePrepareDialog",0.0);
 
-
 #define IMPORT_LOCALIZE_RPLUG(rec) \
   *(void **)&importedLocalizeFunc = rec->GetFunc("__localizeFunc"); \
   *(void **)&importedLocalizeMenu = rec->GetFunc("__localizeMenu"); \

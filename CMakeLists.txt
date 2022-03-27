@@ -15,38 +15,41 @@ set(
   src/reaper_slmk3.cpp
   src/csurf_novation_slmk3.cpp
 
-  src/config/BaseConfig.cpp
-  src/config/PageConfig.cpp
-  src/config/SessionConfig.cpp
-  src/config/MappingConfig.cpp
-  src/config/MidiControllerConfig.cpp
-  src/config/GlobalConfig.cpp
+  src/ccs/config/BaseConfig.cpp
+  src/ccs/config/PageConfig.cpp
+  src/ccs/config/SessionConfig.cpp
+  src/ccs/config/MappingConfig.cpp
+  src/ccs/config/MidiControllerConfig.cpp
+  src/ccs/config/GlobalConfig.cpp
 
-  src/actions/Action.cpp
-  src/actions/ActionsManager.cpp
-  src/actions/ActionProvider.cpp
-  src/actions/ActionInvocation.cpp
+  src/ccs/actions/Action.cpp
+  src/ccs/actions/ActionsManager.cpp
+  src/ccs/actions/ActionProvider.cpp
+  src/ccs/actions/ActionInvocation.cpp
 
-  src/reaper/FxParameterChangedSubscription.cpp
-  src/reaper/ReaperDataTracker.cpp
-  src/reaper/ReaperApi.cpp
-  src/reaper/ReaperEventSubscriber.cpp
+  src/reaper-api/FxParameterChangedSubscription.cpp
+  src/reaper-api/ReaperDataTracker.cpp
+  src/reaper-api/ReaperApi.cpp
+  src/reaper-api/ReaperEventSubscriber.cpp
 
-  src/Ccs.cpp
-  src/MidiController.cpp
-  src/MidiControlElement.cpp
-  src/MidiControlElementMapping.cpp
-  src/MidiEventType.cpp
-  src/MidiEventSubscriber.cpp
-  src/Page.cpp
-  src/Session.cpp
-  src/Util.cpp
-  src/Variables.cpp
+  src/ccs/Ccs.cpp
+  src/ccs/midi/MidiController.cpp
+  src/ccs/midi/MidiControlElement.cpp
+  src/ccs/midi/MidiControlElementMapping.cpp
+  src/ccs/midi/MidiEventType.cpp
+  src/ccs/midi/MidiEventSubscriber.cpp
+  src/ccs/Page.cpp
+  src/ccs/Session.cpp
+  src/ccs/Util.cpp
+  src/ccs/Variables.cpp
 
-  src/Test.cpp
+  src/ccs/Test.cpp
 
   WDL/swell/swell-modstub-generic.cpp
-  src/ReaperActions.cpp src/ReaperActions.h)
+  src/ReaperActions.cpp
+  src/reaper/IReaperControlSurface.h
+  src/reaper/ThreadedMidiOutput.cpp
+)
 
 set(
   REAPER_SOURCE_FILES

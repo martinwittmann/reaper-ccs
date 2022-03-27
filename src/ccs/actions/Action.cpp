@@ -3,7 +3,7 @@
 #include <functional>
 #include "Action.h"
 #include "../Variables.h"
-#include "../MidiController.h"
+#include "../midi/MidiController.h"
 
 namespace CCS {
 

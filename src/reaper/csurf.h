@@ -1,7 +1,7 @@
 #ifndef _CSURF_H_
 #define _CSURF_H_
 
-#include "sdk/reaper_plugin.h"
+#include "reaper_plugin.h"
 #include "localize.h"
 
 #include "WDL/db2val.h"
@@ -334,6 +334,4 @@ midi_Output *CreateThreadedMIDIOutput(midi_Output *output); // returns null on n
       if ((int)(INT_PTR)parm1 == 0 && m_midi_in_dev == (int)(INT_PTR)parm2) { m_midi_in_dev = (int)(INT_PTR)parm3; return 1; }  \
       else if ((int)(INT_PTR)parm1 == 1 && m_midi_out_dev == (int)(INT_PTR)parm2) { m_midi_out_dev = (int)(INT_PTR)parm3; return 1; } \
     }
-
-
 #endif

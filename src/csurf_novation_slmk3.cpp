@@ -1,7 +1,7 @@
-#include "csurf.h"
+#include "reaper/csurf.h"
 #include <iostream>
-#include "Ccs.h"
-#include "Util.h"
+#include "ccs/Ccs.h"
+#include "ccs/Util.h"
 
 class CSurf_NovationSlMk3 : public IReaperControlSurface {
   int m_midi_in_dev,m_midi_out_dev;
