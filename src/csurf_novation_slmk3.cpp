@@ -45,8 +45,9 @@ public:
       m_midiin->start();
     }
 
-    // TODO How to get the reaper resource dir via the api?
-    this->ccs = new CCS::Ccs("/home/martin/.config/REAPER/ccs/", m_midiout);
+    char resourcePath[1024];
+    strcpy(resourcePath, GetResourcePath());
+    this->ccs = new CCS::Ccs(std::string(resourcePath), m_midiout);
   }
   ~CSurf_NovationSlMk3() {
     if (m_midiout) {
@@ -95,7 +96,7 @@ public:
       }
     }
 
-    if (pollingIndex % 6 == 0) {
+    if (pollingIndex % 30 == 0) {
       ccs->reaperApi->pollReaperData();
     }
 
@@ -104,7 +105,7 @@ public:
     // Since the internet says that Run is supposed to be called ~30 times
     // per second we can use pollingIndex with a modulo to run things
     // 15, 10, 8 and 5 times per second to not use too much resources.
-    if (pollingIndex % 12 == 0) {
+    if (pollingIndex % 30 == 0) {
       pollingIndex = 0;
     }
   }
@@ -135,21 +136,6 @@ public:
   void SetSurfaceRecArm(MediaTrack *track, bool recarm) {
     this->ccs->reaperApi->triggerOnTrackRecordArmChanged(track, recarm);
   }
-
-
-  void SetSurfacePan(MediaTrack *trackid, double pan) { }
-  void SetSurfaceSelected(MediaTrack *trackid, bool selected) { }
-  void SetTrackTitle(MediaTrack *trackid, const char *title) { }
-
-  bool IsKeyDown(int key) {
-    return false;
-  }
-
-
-  virtual int Extended(int call, void *parm1, void *parm2, void *parm3) {
-    DEFAULT_DEVICE_REMAP()
-    return 0;
-  }
 };
 
 static void parseParms(const char *str, int parms[4]) {
@@ -169,7 +155,11 @@ static void parseParms(const char *str, int parms[4]) {
   }
 }
 
-static IReaperControlSurface *createFunc(const char *type_string, const char *configString, int *errStats) {
+static IReaperControlSurface *createFunc(
+  const char *type_string,
+  const char *configString,
+  int *errStats
+) {
   int parms[4];
   parseParms(configString,parms);
   // Since I was not yet able to actually store a control surface, let's always use the
@@ -267,14 +257,13 @@ static HWND configFunc(const char *type_string, HWND parent, const char *initCon
 
 
 reaper_csurf_reg_t csurf_novation_slmk3_reg = {
-  "NOVATIONSLMKIII",
+  "NOVATIONSLMK3",
   // !WANT_LOCALIZE_STRINGS_BEGIN:csurf_type
   __LOCALIZE_VERFMT("Novation SL MK III", "csurf"),
   // !WANT_LOCALIZE_STRINGS_END
   createFunc,
   configFunc,
 };
-
 
 
 

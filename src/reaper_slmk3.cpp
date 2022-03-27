@@ -223,6 +223,17 @@ char* (*WDL_ChooseFileForOpen)(HWND, const char*, const char*, const char*, cons
 );
 
 
+bool (*GetTrackName)(MediaTrack* track, char *buf, int buflen);
+bool (*TrackFX_GetParameterStepSizes)(
+  MediaTrack*track,
+  int fxId,
+  int paramId,
+  double* step,
+  double* minStep,
+  double* maxStep,
+  double* isToggle
+);
+
 int (*GetNumTracks)();
 void (*format_timestr)(double, char *, int);
 void (*guidToString)(GUID *g, char *dest);
@@ -267,19 +278,12 @@ int __g_projectconfig_metronome_en;
 
 extern "C" {
 REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hInstance, reaper_plugin_info_t *rec) {
+
+  if (rec != nullptr) {
     debug("Plugin entrypoint executed.");
-    if (!rec || rec->caller_version != REAPER_PLUGIN_VERSION || !rec->GetFunc) {
-      return 0;
-    }
-
-    if (!rec || rec->caller_version != REAPER_PLUGIN_VERSION || !rec->GetFunc) {
-      debug("Returned 0 plugin version conflict.");
-      return 0;
-    }
-
     g_hwnd = rec->hwnd_main;
     int errcnt = 0;
-    #define IMPAPI(x) if (!((*((void **)&(x)) = (void *)rec->GetFunc(#x)))) errcnt++;
+#define IMPAPI(x) if (!((*((void **)&(x)) = (void *)rec->GetFunc(#x)))) errcnt++;
 
     debug("Plugin entrypoint executed.");
 
@@ -481,11 +485,19 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE hI
     IMPAPI(SetExtState)
     IMPAPI(GetSet_LoopTimeRange2)
 
+    IMPAPI(GetTrackName)
+    IMPAPI(TrackFX_GetParameterStepSizes)
+
     rec->Register("csurf", &csurf_novation_slmk3_reg);
+    //rec->Register("custom_action", &)
 
     debug("Returned 1.");
     return 1;
+  } else {
+    debug("Extension unloaded");
+    return 0;
   }
+}
 }
 
 #ifndef _WIN32 // MAC resources

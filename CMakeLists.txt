@@ -46,7 +46,7 @@ set(
   src/Test.cpp
 
   WDL/swell/swell-modstub-generic.cpp
-)
+  src/ReaperActions.cpp src/ReaperActions.h)
 
 set(
   REAPER_SOURCE_FILES

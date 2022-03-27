@@ -10,18 +10,10 @@ namespace CCS {
     this->apiManager = apiManager;
   }
 
-  void ReaperDataTracker::update() {
-    // Retrieve the data.
-    getData();
-    if (isChanged()) {
-      triggerEvent();
-    }
+  void ReaperDataTracker::update(bool triggerOnChange) {
+    // This method is supposed to retrieve the current value, check if the value
+    // has changed and call triggerEvent if it did.
   }
 
-  void ReaperDataTracker::getData() {}
-
-  bool ReaperDataTracker::isChanged() {
-    return false;
-  }
   void ReaperDataTracker::triggerEvent() {}
 }

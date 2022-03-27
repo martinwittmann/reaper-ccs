@@ -164,7 +164,7 @@ namespace CCS {
       midiOutput->SendMsg(&event.message, -1);
     }
     else {
-      Util::debug("Midi output not available");
+      //Util::debug("Midi output not available");
     }
 #endif
   }

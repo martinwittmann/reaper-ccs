@@ -26,6 +26,7 @@ namespace CCS {
     this->api = api;
 
     if (controlId == "encoder1") {
+      /*
       auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
       MediaTrack* track = this->api->getTrack(1);
       this->api->subscribeToFxParameterChanged(
@@ -34,6 +35,7 @@ namespace CCS {
         0,
         subscriber
       );
+      */
     }
   }
 

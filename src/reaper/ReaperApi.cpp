@@ -51,10 +51,10 @@ namespace CCS {
   ) {
     for (auto subscription : fxParamChangedSubscriptions) {
       if (
-        subscription->track == track &&
-        subscription->fxId == fxId &&
-        subscription->paramId == paramId &&
-        subscription->subscriber == subscriber) {
+        subscription->getTrack() == track &&
+        subscription->getFxId() == fxId &&
+        subscription->getParamId() == paramId &&
+        subscription->getSubscriber() == subscriber) {
         return true;
       }
     }
@@ -170,15 +170,13 @@ namespace CCS {
   ) {
     std::vector subscriptions = fxParamChangedSubscriptions;
     for (auto subscription: subscriptions) {
-      subscription->subscriber->onFxParameterChanged(track, fxId, paramId, value);
+      subscription->getSubscriber()->onFxParameterChanged(track, fxId, paramId, value);
     }
   };
 
   void ReaperApi::pollReaperData() {
     // Retrieve the data we're subscribed to and trigger the corresponding events.
-    std::cout << "polling. " << trackers.size() << " trackers active\n";
-    for (auto tracker : trackers) {
-      std::cout << "tracker update run\n";
+    for (auto tracker : fxParamChangedSubscriptions) {
       tracker->update();
     }
   }

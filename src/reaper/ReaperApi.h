@@ -16,7 +16,6 @@ namespace CCS {
   class ReaperApi {
     std::map<int, vector<ReaperEventSubscriber*>> subscribersMap;
     vector<FxParameterChangedSubscription*> fxParamChangedSubscriptions;
-    vector<ReaperDataTracker*> trackers;
 
   public:
 

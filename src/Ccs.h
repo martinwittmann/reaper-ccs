@@ -16,6 +16,8 @@ namespace CCS {
   using std::string;
 
   class Ccs {
+    string resourceDir;
+    string ccsDir;
     string sessionsDir;
     string controllersDir;
     string pluginsDir;

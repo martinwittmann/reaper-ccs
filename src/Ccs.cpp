@@ -16,11 +16,16 @@ namespace CCS {
   using std::vector;
 
   Ccs::Ccs(string baseDir, midi_Output* output) {
-    sessionsDir = baseDir + "sessions";
-    controllersDir = baseDir + "controllers";
-    pluginsDir = baseDir + "plugins";
+    resourceDir = baseDir;
+    const char separator = fse::path::preferred_separator;
+    ccsDir = resourceDir + separator + "ccs" + separator;
+
+    sessionsDir = ccsDir + "sessions";
+    controllersDir = ccsDir + "controllers";
+    pluginsDir = ccsDir + "fx_plugins";
+
     this->output = output;
-    config = new GlobalConfig(baseDir + "config" + YAML_EXT);
+    config = new GlobalConfig(ccsDir + "config" + YAML_EXT);
     actionsManager = new ActionsManager();
     reaperApi = new ReaperApi();
 
@@ -35,8 +40,8 @@ namespace CCS {
 
     Test* test = new Test();
     auto subscriber = dynamic_cast<ReaperEventSubscriber*>(test);
-    MediaTrack* track1 = reaperApi->getTrack(0);
-    reaperApi->subscribeToFxParameterChanged(track1, 0, 1, subscriber);
+    MediaTrack* track1 = reaperApi->getTrack(1);
+    reaperApi->subscribeToFxParameterChanged(track1, 0, 3, subscriber);
   }
 
   Ccs::~Ccs() {

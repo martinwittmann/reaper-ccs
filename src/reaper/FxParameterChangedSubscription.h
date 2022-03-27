@@ -3,18 +3,27 @@
 
 #include "ReaperEventSubscriber.h"
 #include "ReaperDataTracker.h"
+#include <string>
 
 namespace CCS {
 
   class ReaperApi;
 
-  class FxParameterChangedSubscription : ReaperDataTracker {
-  public:
+  class FxParameterChangedSubscription : public ReaperDataTracker {
     MediaTrack* track;
     int fxId;
     int paramId;
     ReaperEventSubscriber* subscriber;
     double currentValue;
+    double newValue;
+    double minValue;
+    double maxValue;
+    double midValue;
+    std::string trackName;
+    std::string fxName;
+    std::string paramName;
+
+  public:
 
     FxParameterChangedSubscription(
       MediaTrack* track,
@@ -24,9 +33,13 @@ namespace CCS {
       ReaperApi* apiManager
     );
 
-    virtual void triggerEvent();
-    void getData() override;
-    bool isChanged() override;
+    void triggerEvent() override;
+    void update(bool triggerOnChange = false) override;
+
+    MediaTrack* getTrack();
+    int getFxId();
+    int getParamId();
+    ReaperEventSubscriber* getSubscriber();
   };
 }
 
