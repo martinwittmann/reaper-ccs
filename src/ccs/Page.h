@@ -55,6 +55,7 @@ class Page : public ActionProvider {
     void actionCallback(string actionName, vector<string> arguments);
     void createMidiControlElementMappings();
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
+    std::map<string,string> *getState();
   };
 }
 

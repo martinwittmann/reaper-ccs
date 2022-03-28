@@ -3,6 +3,9 @@
 #include <iostream>
 #include "../FxPlugins.h"
 #include "../../reaper/reaper_plugin_functions.h"
+#include "yaml-cpp/yaml.h"
+#include "MidiControlElementAction.h"
+#include "../Page.h"
 
 namespace CCS {
 
@@ -14,7 +17,7 @@ namespace CCS {
     YAML::Node configRoot,
     MidiControlElement *controlElement,
     ReaperApi *api,
-    FxPlugins *pluginManager
+    Session *session
   ) {
     m_midiEventId = midiEventId;
     m_config = new MappingConfig(&configRoot);
@@ -24,10 +27,11 @@ namespace CCS {
     m_onPressValue = controlElement->getOnPressValue();
     m_onReleaseValue = controlElement->getOnReleaseValue();
     m_api = api;
-    m_pluginManager = pluginManager;
+    m_session = session;
 
     m_paramMapping = m_config->getValue("mapping");
     if (!m_paramMapping.empty()) {
+      m_hasMappedFxParam = true;
       setMappingValues(m_paramMapping);
 
       auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
@@ -38,6 +42,47 @@ namespace CCS {
         subscriber
       );
     }
+
+    createActions();
+  }
+
+  void MidiControlElementMapping::createActions() {
+    const YAML::Node actions = m_config->getNode("actions");
+    if (!actions) {
+      return;
+    }
+
+    for (auto &rawAction : actions) {
+      YAML::Node item = rawAction;
+      if (item.Type() == YAML::NodeType::Scalar) {
+        // Only a single action was provided.
+        m_actions.push_back(new MidiControlElementAction(item.as<string>()));
+      }
+      else {
+        if (m_config->keyExists("conditions", &item)) {
+          YAML::Node conditions = item["conditions"];
+          m_config->getListValues("actions", &item);
+          m_actions.push_back(new MidiControlElementAction(
+            m_config->getListValues("actions", &item),
+            &conditions
+          ));
+        }
+        else {
+          m_actions.push_back(new MidiControlElementAction(
+            m_config->getListValues("actions", &item)
+          ));
+        }
+      }
+    }
+  }
+
+  void MidiControlElementMapping::invokeActions() {
+    for (auto action : m_actions) {
+      action->invoke(
+        m_session,
+        Util::byteToHex(m_value)
+      );
+    }
   }
 
   MidiControlElementMapping::~MidiControlElementMapping() {
@@ -45,7 +90,6 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::onMidiEvent(int eventId, unsigned char data2) {
-    std::cout << "Midi event data: " << Util::formatHexByte(data2) << "\n";
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
@@ -64,8 +108,6 @@ namespace CCS {
         break;
 
       case MidiControlElement::RELATIVE:
-        std::cout << "relative event\n";
-        std::cout << 64 - data2 << "\n";
         char diff = 64 - data2;
         m_value += diff;
         //onChange(eventId, data2);
@@ -81,10 +123,15 @@ namespace CCS {
     MediaTrack *track,
     int fxId,
     int paramId,
-    double value
-    ) {
-    std::cout << "Fx param changed:\n";
-    std::cout << fxId << " " << paramId << " " << value << "\n";
+    double value,
+    double minValue,
+    double maxValue
+  ) {
+    m_value = Util::get7BitValue(value, minValue, maxValue);
+    std::cout << "changed " << paramId << "\n";
+    if (m_hasMappedFxParam) {
+      invokeActions();
+    }
   }
 
   void MidiControlElementMapping::setMappingValues(string rawMapping) {
@@ -105,6 +152,8 @@ namespace CCS {
     m_mappedFxId = stoi(fxIdPart) - 1;
 
     string paramIdPart = parts.at(2);
-    m_mappedParamId = m_pluginManager->getParamId(m_mappedTrack, m_mappedFxId, paramIdPart);
+    m_mappedParamId = m_session
+      ->getPluginManager()
+      ->getParamId(m_mappedTrack, m_mappedFxId, paramIdPart);
   }
 }

@@ -30,16 +30,16 @@ namespace CCS {
     void addCondition(std::string key, std::string value);
 
     void invoke(
-      ActionsManager *manager,
       Session *session,
-      std::vector<string> variables
+      std::string value
     );
 
-    bool conditionsAreMet(vector <string> variables);
+    bool conditionsAreMet(std::map<string,string> variables);
 
-    bool conditionIsMet(midi_control_element_action_condition, vector <string> variables);
-
-    bool conditionIsMet(midi_control_element_action_condition condition, map <string, string> variables);
+    bool conditionIsMet(
+      midi_control_element_action_condition condition,
+      std::map<string,string> variables
+    );
   };
 }
 #endif

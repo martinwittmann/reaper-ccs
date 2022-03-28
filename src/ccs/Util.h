@@ -21,8 +21,6 @@ namespace CCS {
       std::string pattern = "\\$(_ARGS\\.)?[A-Z0-9_]+!?"
     );
 
-    static void logError(std::string message);
-
     static std::vector<std::string> splitString(std::string &input, char delimiter);
 
     static std::string regexReplace(std::string input, std::string pattern, std::string replacement);
@@ -35,18 +33,17 @@ namespace CCS {
 
     static std::string removePrefixSuffix(std::string input);
 
-    static void debug(std::string message);
-    static void error(std::string message);
-
     static std::vector<unsigned char> splitToBytes(std::string &input);
 
     static std::string strToHexBytes(std::string input);
 
-    static void debugMidiBuffer(std::vector<unsigned char> *buffer);
-
     static int getMidiEventId(unsigned char statusByte, unsigned char data1Byte);
 
     static std::string formatHexByte(unsigned char byte);
+
+    static std::string byteToHex(unsigned char byte);
+
+    static short get7BitValue(double value, double minValue, double maxValue);
   };
 }
 

@@ -79,7 +79,6 @@ namespace CCS {
     }
     std::vector subscribers = subscribersMap.at(ON_PLAY);
     for (auto subscriber: subscribers) {
-      std::cout << "onplay subscriber\n";
       subscriber->onPlay();
     }
   };
@@ -168,11 +167,27 @@ namespace CCS {
     MediaTrack *track,
     int fxId,
     int paramId,
-    double value
+    double value,
+    double minValue,
+    double maxValue
   ) {
     std::vector subscriptions = fxParamChangedSubscriptions;
     for (auto subscription: subscriptions) {
-      subscription->getSubscriber()->onFxParameterChanged(track, fxId, paramId, value);
+      if (
+        subscription->getTrack() != track ||
+        subscription->getFxId() != fxId ||
+        subscription->getParamId() != paramId
+      ) {
+        continue;
+      }
+      subscription->getSubscriber()->onFxParameterChanged(
+        track,
+        fxId,
+        paramId,
+        value,
+        minValue,
+        maxValue
+      );
     }
   };
 
@@ -185,5 +200,16 @@ namespace CCS {
 
   MediaTrack *ReaperApi::getTrack(int id) {
     return CSurf_TrackFromID(id, false);
+  }
+
+  std::tuple<double,double> ReaperApi::getFxParameterMinMax(
+    MediaTrack *track,
+    int fxId,
+    int paramId
+  ) {
+    double minValue;
+    double maxValue;
+    TrackFX_GetParam(track, fxId, paramId, &minValue, &maxValue);
+    return std::tuple<double,double>(minValue, maxValue);
   }
 }

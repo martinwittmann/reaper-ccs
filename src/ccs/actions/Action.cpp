@@ -60,6 +60,15 @@ namespace CCS {
           argumentValue = Util::strToHexBytes(argumentValue);
         }
         string argumentName = "_ARGS." + argumentNames.at(i);
+
+        // We need to make sure that arguments retrieved from user created
+        // configs are at least 2 characters long. Otherwise the sent messages
+        // are incorrect.
+        // TODO Are the values supposed to be base10 and converted?
+        // Right now we're using them as is. This will break quite easily.
+        if (argumentType == "byte" && !argumentValue.empty() && argumentValue.size() < 2) {
+          argumentValue = "0" + argumentValue;
+        }
         argumentVariables.insert(std::pair(argumentName, argumentValue));
       }
     }

@@ -1,10 +1,13 @@
 #include "MidiControlElementAction.h"
 #include <vector>
+#include <map>
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include "../Util.h"
 #include "../actions/ActionsManager.h"
 #include "../Session.h"
+#include <iostream>
+#include "../Page.h"
 
 namespace CCS {
   using std::string;
@@ -27,7 +30,10 @@ namespace CCS {
       return;
     }
 
-    // We can iterate the same way over sequences and maps, so no check is needed.
+    if (conditions->Type() != YAML::NodeType::Map) {
+      throw "MidiControlElementAction(): Conditions must be a yaml map.";
+    }
+
     for (auto const &conditionRow: *conditions) {
       addCondition(conditionRow.first.as<string>(), conditionRow.second.as<string>());
     }
@@ -35,10 +41,10 @@ namespace CCS {
 
   void MidiControlElementAction::addCondition(string key, string value) {
     string op;
-    if (Util::regexMatch(key, "\\.is")) {
+    if (Util::regexMatch(key, "is$")) {
       op = "is";
     }
-    else if (Util::regexMatch(key, "\\.isnot")) {
+    else if (Util::regexMatch(key, "isnot$")) {
       op = "isnot";
     }
     else {
@@ -53,7 +59,7 @@ namespace CCS {
     });
   }
 
-  bool MidiControlElementAction::conditionsAreMet(vector<string> variables) {
+  bool MidiControlElementAction::conditionsAreMet(std::map<string,string> variables) {
     for (auto condition : m_conditions) {
       if (!conditionIsMet(condition, variables)) {
         return false;
@@ -64,25 +70,43 @@ namespace CCS {
 
   bool MidiControlElementAction::conditionIsMet(
     midi_control_element_action_condition condition,
-    map<string,string> variables
+    std::map<string,string> variables
   ) {
-    string leftSide = Util::processString(condition.variable, variables);
+    string leftSide = Util::processString(condition.variable, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
+    string rightSide = Util::processString(condition.value, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
     if (condition.comparison_operator == "is" || condition.comparison_operator == "equals") {
-      return
+      return leftSide == rightSide;
     }
+    else if (
+      condition.comparison_operator == "isnot" ||
+      condition.comparison_operator == "notis" ||
+      condition.comparison_operator == "notequals" ||
+      condition.comparison_operator == "equalsnot"
+    ) {
+      return leftSide != rightSide;
+    }
+
+    throw "Unknown condition operator";
   }
 
   void MidiControlElementAction::invoke(
-    ActionsManager *manager,
     Session *session,
-    vector<string> variables
+    string value
   ) {
+    std::map<string,string> variables;
+    variables.insert(std::pair("VALUE", value));
+
+    for (auto &item : *session->getActivePage()->getState()) {
+      variables.insert(std::pair("_STATE." + item.first, item.second));
+    }
+
     if (!conditionsAreMet(variables)) {
       return;
     }
 
-    for (auto action : m_actions) {
-      manager->invokeAction(action, session);
+    for (auto rawAction : m_actions) {
+      string action = Util::processString(rawAction, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
+      session->getActionsManager()->invokeAction(action, session);
     }
   }
 }

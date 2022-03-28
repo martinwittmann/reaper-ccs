@@ -31,10 +31,9 @@ extern "C" {
     REAPER_PLUGIN_HINSTANCE hInstance,
     reaper_plugin_info_t* rec
   ) {
-    // This should be reaper's main window.
-    g_hwnd = rec->hwnd_main;
-
     if (rec != nullptr) {
+      // This should be reaper's main window.
+      g_hwnd = rec->hwnd_main;
       return load_reaper_extension(rec);
     }
     else {

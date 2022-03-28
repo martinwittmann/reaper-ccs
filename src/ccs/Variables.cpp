@@ -43,8 +43,7 @@ namespace CCS {
           if (node && node.Type() != YAML::NodeType::Null) {
             replaceVariables(node, variables);
           }
-        }
-        break;
+        }break;
       case YAML::NodeType::Sequence:
         for (const auto &item: yaml) {
           auto node = item;
@@ -52,7 +51,7 @@ namespace CCS {
         }
         break;
       default:
-        Util::logError("Variables::replaceVariables: Unknown source node type");
+        throw "Variables::replaceVariables: Unknown source node type";
     }
   }
 }

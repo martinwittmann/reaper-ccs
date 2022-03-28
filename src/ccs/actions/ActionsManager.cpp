@@ -31,13 +31,16 @@ namespace CCS {
   // Note that we do not accept arguments here, because they are encoded in the
   // rawAction string and are unpacket in ActionInvokation.
   void ActionsManager::invokeAction(std::string rawAction, Session *session) {
+    int aa = 0;
     auto invokation = new ActionInvokation(session, rawAction);
     try {
+      aa++;
       Action action = getAction(invokation->providerId, invokation->actionId);
+      aa++;
       action.invoke(invokation->arguments, session);
     }
     catch (...) {
-      Util::error("Trying to invoke action that does not exist: " + rawAction);
+      throw "Trying to invoke action that does not exist: " + rawAction;
     }
   }
 

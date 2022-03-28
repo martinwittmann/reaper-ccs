@@ -70,7 +70,7 @@ namespace CCS {
         mergeYamlSequences(target, source);
         break;
       default:
-        Util::logError("BaseConfig::mergeYaml: Unknown source node type");
+        throw "BaseConfig::mergeYaml: Unknown source node type";
     }
   }
 
@@ -91,13 +91,21 @@ namespace CCS {
   }
 
   string BaseConfig::getValue(string key, YAML::Node *rootNode) {
-    vector<string> keyParts = Util::splitString(key, keySeparator);
-    YAML::Node actualNode = _getValue(keyParts, *rootNode);
-    YAML::Node resultNode = actualNode[keyParts.back()];
+    YAML::Node resultNode = getNode(key, rootNode);
     if (resultNode) {
       return resultNode.as<string>();
     }
     return "";
+  }
+
+  YAML::Node BaseConfig::getNode(string key) {
+    return getNode(key, &yaml);
+  }
+
+  YAML::Node BaseConfig::getNode(string key, YAML::Node *rootNode) {
+    vector<string> keyParts = Util::splitString(key, keySeparator);
+    YAML::Node actualNode = _getValue(keyParts, *rootNode);
+    return actualNode[keyParts.back()];
   }
 
   vector<string> BaseConfig::getListValues(string key) {

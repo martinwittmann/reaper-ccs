@@ -46,7 +46,6 @@ set(
   src/ccs/Variables.cpp
 
   src/ccs/Ccs_ControlSurface.cpp
-  src/ccs/Test.cpp
 
   src/reaper/reaper_extension.cpp
   src/ccs/config/FxPluginConfig.cpp

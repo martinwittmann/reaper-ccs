@@ -39,6 +39,9 @@ namespace CCS {
     void mergeYamlNode(YAML::Node target, YAML::Node const &source);
     void mergeYamlMap(YAML::Node target, YAML::Node const &source);
     void mergeYamlSequences(YAML::Node target, YAML::Node const &source);
+    YAML::Node getNode(std::string key, YAML::Node *rootNode);
+
+    YAML::Node getNode(std::string key);
   };
 }
 #endif

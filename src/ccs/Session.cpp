@@ -169,4 +169,8 @@ namespace CCS {
   FxPlugins *Session::getPluginManager() {
     return m_pluginManager;
   };
+
+  ActionsManager *Session::getActionsManager() {
+    return m_actionsManager;
+  }
 }

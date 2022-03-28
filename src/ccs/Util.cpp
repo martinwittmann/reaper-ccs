@@ -67,10 +67,6 @@ namespace CCS {
     return result;
   }
 
-  void Util::logError(string message) {
-    std::cout << "[ERROR] " << message << "\n";
-  }
-
   vector<string> Util::splitString(string &input, char delimiter) {
     vector<string> result;
     string tmp = "";
@@ -104,7 +100,9 @@ namespace CCS {
 
   bool Util::regexMatch(string input, string pattern) {
     std::regex regex = std::regex(pattern);
-    return std::regex_match(input, regex);
+    // We need to use regex_search, since regex_match only returns true if the
+    // whole input string matches.
+    return std::regex_search(input, regex);
   }
 
   string Util::cleanId(string input) {
@@ -131,15 +129,6 @@ namespace CCS {
     string result = Util::regexReplace(input, "^[\"\\[]+", "");
     result = Util::regexReplace(result, "[\"\\]]+$", "");
     return result;
-  }
-
-
-  void Util::debug(std::string message) {
-    std::cout << "[DEBUG] " + message + "\n";
-  }
-
-  void Util::error(std::string message) {
-    std::cout << "[ERROR] " + message + "\n";
   }
 
   vector<unsigned char> Util::splitToBytes(string &input) {
@@ -171,17 +160,6 @@ namespace CCS {
     return result;
   }
 
-  void Util::debugMidiBuffer(std::vector<unsigned char> *buffer) {
-    std::cout << "[MIDI OUTPUT]\n";
-    for (auto it = buffer->begin(); it != buffer->end(); ++it) {
-      if (it != buffer->begin()) {
-        std::cout << " ";
-      }
-      std::cout << boost::format("%2x") % boost::io::group(std::setw(2), std::setfill('0'), int(*it)) ;
-    }
-    std::cout << "\n";
-  }
-
   string Util::formatHexByte(unsigned char byte) {
     std::stringstream stream;
     stream << boost::format("%2x") % boost::io::group(std::setw(2), std::setfill('0'), int(byte));
@@ -195,5 +173,17 @@ namespace CCS {
     result = result << 8;
     result = result | data1Byte;
     return result;
+  }
+
+  short Util::get7BitValue(double value, double minValue, double maxValue) {
+    double range = maxValue - minValue;
+    int steps = 127;
+    double stepSize = range / steps;
+    short result = value / stepSize;
+    return result;
+  }
+
+  std::string Util::byteToHex(unsigned char byte) {
+    return Util::formatHexByte(byte);
   }
 }

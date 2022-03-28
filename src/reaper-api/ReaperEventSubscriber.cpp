@@ -14,6 +14,8 @@ namespace CCS {
     MediaTrack *track,
     int fxId,
     int paramId,
-    double value
+    double value,
+    double minValue,
+    double maxValue
   ) {}
 }

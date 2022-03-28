@@ -6,10 +6,6 @@
 #include "Ccs.h"
 #include "Util.h"
 #include "actions/ActionsManager.h"
-#include <iostream>
-#include "../reaper-api/ReaperApi.h"
-#include "Test.cpp"
-#include "../reaper/reaper_plugin_functions.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -35,9 +31,6 @@ namespace CCS {
     currentSession = loadSession(lastSession, actionsManager);
     subscribedMidiEventIds = currentSession->getSubscribedMidiEventIds();
     std::map<int,MidiEventSubscriber*>::iterator it;
-    for (it = subscribedMidiEventIds.begin(); it != subscribedMidiEventIds.end(); ++it) {
-      std::cout << "Subscribed to event id: " << it->first << "\n";
-    }
   }
 
   Ccs::~Ccs() {
@@ -59,9 +52,6 @@ namespace CCS {
       MidiEventSubscriber *subscriber = subscribedMidiEventIds.at(eventId);
       if (subscriber) {
         subscriber->onMidiEvent(eventId, rawEvent->midi_message[2]);
-      }
-      else {
-        std::cout << "Subscriber not found\n";
       }
     }
   }

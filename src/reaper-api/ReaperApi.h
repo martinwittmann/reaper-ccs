@@ -56,6 +56,12 @@ namespace CCS {
       int parameterId
     );
 
+    std::tuple<double,double> getFxParameterMinMax(
+      MediaTrack *track,
+      int fxId,
+      int parameterId
+    );
+
     void pollReaperData();
 
     void triggerOnPlay();
@@ -73,7 +79,9 @@ namespace CCS {
       MediaTrack *track,
       int fxId,
       int paramId,
-      double value
+      double value,
+      double minValue,
+      double maxValue
     );
     void subscribeToEvent(int eventId, ReaperEventSubscriber *subscriber);
     bool isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId);

@@ -40,7 +40,6 @@ namespace CCS {
   }
 
   void FxParameterChangedSubscription::update(bool triggerOnChange) {
-    //std::cout << "Updating FX param value: " << trackName << " / " << fxName << " / " << paramName << "\n";
     newValue = TrackFX_GetParamEx(
       track,
       fxId,
@@ -59,7 +58,14 @@ namespace CCS {
   }
 
   void FxParameterChangedSubscription::triggerEvent() {
-    apiManager->triggerOnFxParameterChanged(track, fxId, paramId, currentValue);
+    apiManager->triggerOnFxParameterChanged(
+      track,
+      fxId,
+      paramId,
+      currentValue,
+      minValue,
+      maxValue
+    );
   }
 
   MediaTrack *FxParameterChangedSubscription::getTrack() {

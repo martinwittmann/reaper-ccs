@@ -55,6 +55,8 @@ namespace CCS {
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
     MidiController *getMidiController(std::string id);
     FxPlugins *getPluginManager();
+
+    ActionsManager *getActionsManager();
   };
 }
 

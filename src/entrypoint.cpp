@@ -6,10 +6,6 @@
 #include <map>
 #include <string>
 
-void debug(std::string message) {
-  std::cout << "\n[DEBUG] " + message + "\n";
-}
-
 std::map<int, std::string> commandIds;
 
 bool reaper_hook_command(
@@ -37,12 +33,10 @@ bool reaper_hook_command(
  * Needs to return 1 on success.
  */
 int load_reaper_extension(reaper_plugin_info_t* reaper) {
-  debug("Plugin entrypoint executed.");
 
   // Try to import all api functions and stop if something went wrong.
   // See: https://forum.cockos.com/showthread.php?t=151862
   if (REAPERAPI_LoadAPI(reaper->GetFunc) > 0) {
-    debug("Could not load all Reaper Api functions.");
     return 0;
   }
 
@@ -56,6 +50,5 @@ int load_reaper_extension(reaper_plugin_info_t* reaper) {
 
 // This function needs to return 0;
 int unload_reaper_extension(reaper_plugin_info_t* reaper) {
-  debug("Extension unloaded");
   return 0;
 }

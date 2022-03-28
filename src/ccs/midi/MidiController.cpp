@@ -135,10 +135,6 @@ namespace CCS {
   }
 
   void MidiController::_sendMidiMessage(vector<unsigned char> *buffer) {
-
-    //Util::debug(controllerId + ": Send midi message:");
-    //Util::debugMidiBuffer(buffer);
-
     // I think this is a dirty hack, but I copied it from the examples and
     // the CSI source code.
     // I believe that we define a custom struct and additionally to the midi
@@ -153,18 +149,18 @@ namespace CCS {
       unsigned char data[4096];
     } event;
 
+    //std::cout << "send midi\n";
     event.message.frame_offset = 0;
     event.message.size = buffer->size();
     for (int i = 0; i < buffer->size(); ++i) {
+      //std::cout << Util::formatHexByte(buffer->at(i)) << " ";
       event.message.midi_message[i] = buffer->at(i);
     }
+    //std::cout << "\n\n";
 
 #ifndef MOCK_MIDI
     if (midiOutput) {
       midiOutput->SendMsg(&event.message, -1);
-    }
-    else {
-      //Util::debug("Midi output not available");
     }
 #endif
   }

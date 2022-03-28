@@ -9,7 +9,8 @@
 #include "../../reaper-api/ReaperEventSubscriber.h"
 #include "../../reaper-api/ReaperApi.h"
 #include "../config/MappingConfig.h"
-#include "../FxPlugins.h"
+#include "../Session.h"
+#include "MidiControlElementAction.h"
 
 namespace CCS {
   class MidiControlElementMapping :
@@ -25,14 +26,17 @@ namespace CCS {
     short m_onPressValue;
     short m_onReleaseValue;
     short m_value;
+
     MediaTrack *m_reaperTrack;
     ReaperApi *m_api;
-    FxPlugins *m_pluginManager;
+    Session *m_session;
 
     std::string m_paramMapping;
     MediaTrack *m_mappedTrack;
     int m_mappedFxId;
     int m_mappedParamId;
+    std::vector<MidiControlElementAction*> m_actions;
+    bool m_hasMappedFxParam = false;
 
   public:
 
@@ -42,7 +46,7 @@ namespace CCS {
       YAML::Node config,
       MidiControlElement *controlElement,
       ReaperApi *api,
-      FxPlugins *pluginManager
+      Session *session
     );
 
     ~MidiControlElementMapping();
@@ -50,21 +54,18 @@ namespace CCS {
     int getMidiEventId();
 
     void onMidiEvent(int eventId, unsigned char data2) override;
-    MediaTrack *getTrack(int trackIndex);
-    std::string getFxParameterName(
-      MediaTrack *track,
-      int fxId,
-      int parameterId
-    );
 
     void onFxParameterChanged(
       MediaTrack *track,
       int fxId,
       int paramId,
-      double value
+      double value,
+      double minValue,
+      double maxValue
     ) override;
-
     void setMappingValues(std::string rawMapping);
+    void createActions();
+    void invokeActions();
   };
 }
 

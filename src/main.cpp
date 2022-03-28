@@ -11,8 +11,7 @@ using std::string;
 // A simple executable for debugging purposes.
 int main() {
   string baseDir = "/home/martin/.config/REAPER";
-  auto ccs = new CCS::Ccs(baseDir, nullptr);
+  string result1 = CCS::Util::formatHexByte(1);
   int aa = 1;
-  delete ccs;
   return 0;
 }

@@ -169,8 +169,12 @@ namespace CCS {
         controlConfig.second,
         controlEl,
         m_reaperApi,
-        m_session->getPluginManager()
+        m_session
       ));
     }
+  }
+
+  std::map<string, string> *Page::getState() {
+    return &m_state;
   }
 }
