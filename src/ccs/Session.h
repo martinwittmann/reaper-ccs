@@ -26,21 +26,21 @@ namespace CCS {
     string m_midiControllersDir;
     string m_pluginsDir;
     string m_name;
-    SessionConfig* m_sessionConfig;
+    SessionConfig *m_sessionConfig;
     std::vector<Page *> m_pages;
     std::vector<MidiController *> m_midiControllers;
-    FxPlugins* m_pluginManager;
-    Page* m_activePage;
-    ActionsManager* m_actionsManager;
-    midi_Output* m_output;
-    ReaperApi* m_reaperApi;
+    FxPlugins *m_pluginManager;
+    Page *m_activePage;
+    ActionsManager *m_actionsManager;
+    midi_Output *m_output;
+    ReaperApi *m_reaperApi;
 
   public:
     Session(
       string sessionPath,
-      ActionsManager* actionsManager,
-      midi_Output* output,
-      ReaperApi* reaperApi
+      ActionsManager *actionsManager,
+      midi_Output *output,
+      ReaperApi *reaperApi
     );
 
     ~Session();
@@ -51,10 +51,10 @@ namespace CCS {
     void loadSessionPages();
     void loadMidiControllers();
     void setActivePage(int pageId);
-    Page* getActivePage();
+    Page *getActivePage();
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
-    MidiController* getMidiController(std::string id);
-    FxPlugins* getPluginManager();
+    MidiController *getMidiController(std::string id);
+    FxPlugins *getPluginManager();
   };
 }
 

@@ -25,17 +25,17 @@ namespace CCS {
     std::vector<string> sessions;
     Session *currentSession;
     GlobalConfig *config;
-    ActionsManager* actionsManager;
-    midi_Output* output;
+    ActionsManager *actionsManager;
+    midi_Output *output;
     std::map<int,MidiEventSubscriber*> subscribedMidiEventIds;
     std::vector<string> subscribedReaperEvents;
 
   public:
-    ReaperApi* reaperApi;
-    Ccs(string baseDir, midi_Output* output);
+    ReaperApi *reaperApi;
+    Ccs(string baseDir, midi_Output *output);
     ~Ccs();
-    Session *loadSession(string sessionId, ActionsManager* actionsManager);
-    void onMidiEvent(MIDI_event_t* rawEvent);
+    Session *loadSession(string sessionId, ActionsManager *actionsManager);
+    void onMidiEvent(MIDI_event_t *rawEvent);
   };
 }
 

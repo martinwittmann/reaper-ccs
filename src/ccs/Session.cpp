@@ -19,9 +19,9 @@ namespace CCS {
 
   Session::Session(
     string sessionPath,
-    ActionsManager* actionsManager,
-    midi_Output* output,
-    ReaperApi* reaperApi
+    ActionsManager *actionsManager,
+    midi_Output *output,
+    ReaperApi *reaperApi
   ) {
     m_path = sessionPath;
     m_pagesDir = m_path + SEP + "pages";
@@ -58,7 +58,7 @@ namespace CCS {
   }
 
   void Session::setActivePage(int index) {
-    Page* page = m_pages.at(index);
+    Page *page = m_pages.at(index);
     m_activePage = page;
     // TODO implement changing page.
     // We need to call setAction after setting activePage here because the
@@ -67,7 +67,7 @@ namespace CCS {
     page->setActive();
   }
 
-  Page* Session::getActivePage() {
+  Page *Session::getActivePage() {
     return m_activePage;
   }
 
@@ -157,7 +157,7 @@ namespace CCS {
     return m_activePage->getSubscribedMidiEventIds();
   }
 
-  MidiController* Session::getMidiController(std::string id) {
+  MidiController *Session::getMidiController(std::string id) {
     for (auto controller : m_midiControllers) {
       if (controller->getControllerId() == id) {
         return controller;
@@ -166,7 +166,7 @@ namespace CCS {
     throw "No midi controller with id: '" + id + "' found.";
   }
 
-  FxPlugins* Session::getPluginManager() {
+  FxPlugins *Session::getPluginManager() {
     return m_pluginManager;
   };
 }

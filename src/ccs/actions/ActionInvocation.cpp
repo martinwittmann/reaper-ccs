@@ -11,7 +11,7 @@ using std::vector;
 namespace CCS {
 
   ActionInvokation::ActionInvokation(
-    Session* session,
+    Session *session,
     string rawInvokation,
     string providerId
   ) {
@@ -28,7 +28,7 @@ namespace CCS {
 
       if (providerId == "page") {
         // Replace "page" with the currently active page id.
-        Page* page = session->getActivePage();
+        Page *page = session->getActivePage();
         providerId = page->getPageId();
       }
     }

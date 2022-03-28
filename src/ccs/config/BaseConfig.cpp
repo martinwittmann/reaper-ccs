@@ -27,7 +27,7 @@ namespace CCS {
     yaml = loadConfig(filename);
   }
 
-  BaseConfig::BaseConfig(YAML::Node* root) :
+  BaseConfig::BaseConfig(YAML::Node *root) :
     filename(""),
     allowExtendConfig(false),
     extendKeyName("")

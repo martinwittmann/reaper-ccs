@@ -22,7 +22,7 @@ namespace CCS {
   MidiController::MidiController(
     string configFilename,
     midi_Output *output,
-    ActionsManager* actionsManager
+    ActionsManager *actionsManager
   ) : ActionProvider(actionsManager) {
     config = new MidiControllerConfig(configFilename);
     controllerId = config->getValue("id");
@@ -134,7 +134,7 @@ namespace CCS {
     }
   }
 
-  void MidiController::_sendMidiMessage(vector<unsigned char>* buffer) {
+  void MidiController::_sendMidiMessage(vector<unsigned char> *buffer) {
 
     //Util::debug(controllerId + ": Send midi message:");
     //Util::debugMidiBuffer(buffer);
@@ -205,7 +205,7 @@ namespace CCS {
     std::map<string,string> variables = Variables::getVariables(variablesNode);
     for (const auto &item: actionsNode) {
       auto actionId = item.first.as<string>();
-      Action* action = createMidiControllerAction(
+      Action *action = createMidiControllerAction(
         actionId,
         item.second
       );
@@ -214,7 +214,7 @@ namespace CCS {
     }
   }
 
-  Action* MidiController::createMidiControllerAction(string actionId, YAML::Node node) {
+  Action *MidiController::createMidiControllerAction(string actionId, YAML::Node node) {
     vector<string> rawSubActions = config->getListValues("message", &node);
     vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
     vector<string> argumentNames = config->getListValues("arguments", &node);
@@ -320,7 +320,7 @@ namespace CCS {
     return controllerId;
   }
 
-  MidiControlElement* MidiController::getMidiControlElement(string id) {
+  MidiControlElement *MidiController::getMidiControlElement(string id) {
     for (auto control : controls) {
       if (control->getControlId() == id) {
         return control;

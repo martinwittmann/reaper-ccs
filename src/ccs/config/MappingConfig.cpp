@@ -5,5 +5,5 @@
 
 namespace CCS {
 
-  MappingConfig::MappingConfig(YAML::Node* root) : BaseConfig(root) {}
+  MappingConfig::MappingConfig(YAML::Node *root) : BaseConfig(root) {}
 }

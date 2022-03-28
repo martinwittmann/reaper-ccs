@@ -22,7 +22,7 @@ namespace CCS {
   using std::vector;
 
   /**
-   * This represents a midi controller
+    *This represents a midi controller
    */
   class MidiController : public ActionProvider {
     string controllerId;
@@ -31,17 +31,17 @@ namespace CCS {
     vector<MidiControlElement*> controls;
     MidiControllerConfig *config;
     unsigned char defaultStatusByte;
-    ActionProvider* actionProvider;
+    ActionProvider *actionProvider;
     vector<Action*> providedActions;
     bool shouldBufferMidiMessages = false;
     vector<unsigned char> midiMessagesBuffer;
 
-    void _sendMidiMessage(vector<unsigned char>* buffer);
+    void _sendMidiMessage(vector<unsigned char> *buffer);
   public:
     MidiController(
       string configFilename,
       midi_Output *output,
-      ActionsManager* actionsManager
+      ActionsManager *actionsManager
     );
 
     ~MidiController();
@@ -52,7 +52,7 @@ namespace CCS {
     vector<MidiEventType> getMidiEventTypes();
 
 
-    Action* createMidiControllerAction(string actionId, YAML::Node node);
+    Action *createMidiControllerAction(string actionId, YAML::Node node);
 
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
 
@@ -67,7 +67,7 @@ namespace CCS {
     int getMidiEventIdForControl(string controlId);
     string getControllerId();
 
-    MidiControlElement* getMidiControlElement(string id);
+    MidiControlElement *getMidiControlElement(string id);
   };
 }
 

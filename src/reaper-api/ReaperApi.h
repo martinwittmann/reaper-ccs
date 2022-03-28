@@ -36,22 +36,22 @@ namespace CCS {
     ReaperApi();
 
     void subscribeToFxParameterChanged(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int paramId,
-      ReaperEventSubscriber* subscriber
+      ReaperEventSubscriber *subscriber
     );
 
     bool isSubscribedToFxParameterChanged(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int paramId,
-      ReaperEventSubscriber* subscriber
+      ReaperEventSubscriber *subscriber
     );
 
     int getNumTracks();
     string getFxParameterName(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int parameterId
     );
@@ -64,21 +64,21 @@ namespace CCS {
     void triggerOnStop();
     void triggerOnRepeatChanged(bool repeat);
 
-    void triggerOnTrackVolumeChanged(MediaTrack* track, double volume);
-    void triggerOnTrackMuteChanged(MediaTrack* track, bool repeat);
-    void triggerOnTrackSoloChanged(MediaTrack* track, bool repeat);
-    void triggerOnTrackRecordArmChanged(MediaTrack* track, bool repeat);
+    void triggerOnTrackVolumeChanged(MediaTrack *track, double volume);
+    void triggerOnTrackMuteChanged(MediaTrack *track, bool repeat);
+    void triggerOnTrackSoloChanged(MediaTrack *track, bool repeat);
+    void triggerOnTrackRecordArmChanged(MediaTrack *track, bool repeat);
 
     void triggerOnFxParameterChanged(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int paramId,
       double value
     );
-    void subscribeToEvent(int eventId, ReaperEventSubscriber* subscriber);
-    bool isSubscribedToEvent(ReaperEventSubscriber* subscriber, int eventId);
+    void subscribeToEvent(int eventId, ReaperEventSubscriber *subscriber);
+    bool isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId);
 
-    MediaTrack* getTrack(int id);
+    MediaTrack *getTrack(int id);
   };
 }
 

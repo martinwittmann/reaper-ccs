@@ -14,11 +14,11 @@ namespace CCS {
 
   class ReaperDataTracker {
   protected:
-    ReaperApi* apiManager;
+    ReaperApi *apiManager;
 
   public:
-    ReaperDataTracker(ReaperApi* apiManager);
-    virtual void update(bool triggerOnChange = false);
+    ReaperDataTracker(ReaperApi *apiManager);
+    virtual void update(bool triggerOnChange = true);
     virtual void triggerEvent();
   };
 }

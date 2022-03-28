@@ -12,9 +12,9 @@ namespace CCS {
     int midiEventId,
     string controlId,
     YAML::Node configRoot,
-    MidiControlElement* controlElement,
-    ReaperApi* api,
-    FxPlugins* pluginManager
+    MidiControlElement *controlElement,
+    ReaperApi *api,
+    FxPlugins *pluginManager
   ) {
     m_midiEventId = midiEventId;
     m_config = new MappingConfig(&configRoot);

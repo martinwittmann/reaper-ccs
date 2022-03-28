@@ -17,20 +17,20 @@ namespace CCS {
     public ReaperEventSubscriber
   {
     int m_midiEventId;
-    MappingConfig* m_config;
-    MidiControlElement* m_controlElement;
+    MappingConfig *m_config;
+    MidiControlElement *m_controlElement;
     std::string m_controlId;
     std::string m_controllerId;
     short m_controlType;
     short m_onPressValue;
     short m_onReleaseValue;
     short m_value;
-    MediaTrack* m_reaperTrack;
-    ReaperApi* m_api;
-    FxPlugins* m_pluginManager;
+    MediaTrack *m_reaperTrack;
+    ReaperApi *m_api;
+    FxPlugins *m_pluginManager;
 
     std::string m_paramMapping;
-    MediaTrack* m_mappedTrack;
+    MediaTrack *m_mappedTrack;
     int m_mappedFxId;
     int m_mappedParamId;
 
@@ -40,9 +40,9 @@ namespace CCS {
       int midiEventId,
       std::string controlId,
       YAML::Node config,
-      MidiControlElement* controlElement,
-      ReaperApi* api,
-      FxPlugins* pluginManager
+      MidiControlElement *controlElement,
+      ReaperApi *api,
+      FxPlugins *pluginManager
     );
 
     ~MidiControlElementMapping();
@@ -50,15 +50,15 @@ namespace CCS {
     int getMidiEventId();
 
     void onMidiEvent(int eventId, unsigned char data2) override;
-    MediaTrack* getTrack(int trackIndex);
+    MediaTrack *getTrack(int trackIndex);
     std::string getFxParameterName(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int parameterId
     );
 
     void onFxParameterChanged(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int paramId,
       double value

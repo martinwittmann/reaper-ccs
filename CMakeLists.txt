@@ -51,7 +51,7 @@ set(
   src/reaper/reaper_extension.cpp
   src/ccs/config/FxPluginConfig.cpp
   src/ccs/FxPlugins.cpp src/ccs/FxPlugins.h
-)
+  src/ccs/midi/MidiControlElementAction.cpp src/ccs/midi/MidiControlElementAction.h)
 
 set(
   REAPER_SOURCE_FILES

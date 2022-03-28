@@ -11,9 +11,9 @@ namespace CCS {
   class MidiController;
 
   /**
-   * This represents a single control/ui element on a midi controller
-   * like a knob, a button, a fader,...
-   * Note that we do not use leds and other feedback elements here.
+    *This represents a single control/ui element on a midi controller
+    *like a knob, a button, a fader,...
+    *Note that we do not use leds and other feedback elements here.
    */
   class MidiControlElement {
     string controlId;
@@ -30,7 +30,7 @@ namespace CCS {
     unsigned char data1Byte;
     unsigned char onPressData2;
     unsigned char onReleaseData2;
-    MidiController* midiController;
+    MidiController *midiController;
 
   public:
     const static int UNKNOWN_CONTROL_TYPE = -1;
@@ -43,7 +43,7 @@ namespace CCS {
       short controlType,
       unsigned char status,
       unsigned char data1,
-      MidiController* midiController,
+      MidiController *midiController,
       unsigned char onPressData2 = 0x7F,
       unsigned char onReleaseData2 = 0x00
     );

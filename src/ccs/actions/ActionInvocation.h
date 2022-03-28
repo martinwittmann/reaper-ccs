@@ -8,7 +8,7 @@
 namespace CCS {
   class ActionInvokation {
     const char separator = ':';
-    Session* session;
+    Session *session;
 
   public:
     std::string providerId;
@@ -17,7 +17,7 @@ namespace CCS {
 
 
     ActionInvokation(
-      Session* session,
+      Session *session,
       std::string rawInvokation,
       std::string providerId = ""
     );

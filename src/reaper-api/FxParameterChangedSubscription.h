@@ -10,10 +10,10 @@ namespace CCS {
   class ReaperApi;
 
   class FxParameterChangedSubscription : public ReaperDataTracker {
-    MediaTrack* track;
+    MediaTrack *track;
     int fxId;
     int paramId;
-    ReaperEventSubscriber* subscriber;
+    ReaperEventSubscriber *subscriber;
     double currentValue;
     double newValue;
     double minValue;
@@ -26,20 +26,20 @@ namespace CCS {
   public:
 
     FxParameterChangedSubscription(
-      MediaTrack* track,
+      MediaTrack *track,
       int fxId,
       int paramId,
-      ReaperEventSubscriber* subscriber,
-      ReaperApi* apiManager
+      ReaperEventSubscriber *subscriber,
+      ReaperApi *apiManager
     );
 
     void triggerEvent() override;
-    void update(bool triggerOnChange = false) override;
+    void update(bool triggerOnChange = true) override;
 
-    MediaTrack* getTrack();
+    MediaTrack *getTrack();
     int getFxId();
     int getParamId();
-    ReaperEventSubscriber* getSubscriber();
+    ReaperEventSubscriber *getSubscriber();
   };
 }
 

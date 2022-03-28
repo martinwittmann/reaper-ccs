@@ -18,7 +18,7 @@ namespace CCS {
     vector<string> argumentNames,
     vector<string> argumentTypes,
     vector<string> subActions,
-    ActionsManager* actionsManager
+    ActionsManager *actionsManager
   ) {
     this->type = "composite";
     this->providerId = providerId;
@@ -32,7 +32,7 @@ namespace CCS {
   Action::Action(
     string providerId,
     string actionId,
-    ActionProvider* actionProvider
+    ActionProvider *actionProvider
   ) {
     this->type = "callback";
     this->providerId = providerId;
@@ -48,7 +48,7 @@ namespace CCS {
     return providerId;
   }
 
-  void Action::invoke(vector<string> arguments, Session* session) {
+  void Action::invoke(vector<string> arguments, Session *session) {
     // We map the given arguments in the same order as the vector of
     // argument names we got in the constructor.
     std::map<string, string> argumentVariables;

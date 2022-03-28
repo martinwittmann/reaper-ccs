@@ -6,7 +6,7 @@
 
 namespace CCS {
   // eventType corresponds to one of the event types in ReaperApi.h
-  ReaperDataTracker::ReaperDataTracker(ReaperApi* apiManager) {
+  ReaperDataTracker::ReaperDataTracker(ReaperApi *apiManager) {
     this->apiManager = apiManager;
   }
 

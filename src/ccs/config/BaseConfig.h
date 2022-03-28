@@ -22,7 +22,7 @@ namespace CCS {
       std::string extendKeyName = "extends"
     );
 
-    BaseConfig(YAML::Node* root);
+    BaseConfig(YAML::Node *root);
     YAML::Node loadConfig(std::string filename);
     void replaceVariables();
     void mergeYaml(YAML::Node target, YAML::Node const &source);

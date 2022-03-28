@@ -9,14 +9,13 @@
 namespace CCS {
 
   FxParameterChangedSubscription::FxParameterChangedSubscription(
-    MediaTrack* track,
+    MediaTrack *track,
     int fxId,
     int paramId,
-    ReaperEventSubscriber* subscriber,
-    ReaperApi* apiManager
+    ReaperEventSubscriber *subscriber,
+    ReaperApi *apiManager
   ) : ReaperDataTracker(apiManager) {
 
-    //std::cout << "Create subscription " << fxId << ":" << paramId << "\n";
     this->track = track;
     this->fxId = fxId;
     this->paramId = paramId;
@@ -50,8 +49,6 @@ namespace CCS {
       &maxValue,
       &midValue
     );
-    //std::cout << newValue << " " << minValue << " " << maxValue << " " << minValue << "\n";
-    //std::cout << "---\n";
 
     if (newValue != currentValue) {
       currentValue = newValue;
@@ -59,37 +56,13 @@ namespace CCS {
         triggerEvent();
       }
     }
-
-    double step;
-    double minStep;
-    double maxStep;
-    bool isToggle;
-    bool hui = TrackFX_GetParameterStepSizes(
-      track,
-      fxId,
-      paramId,
-      &step,
-      &minStep,
-      &maxStep,
-      &isToggle
-    );
-    //std::cout << currentValue << "\n";
-
-    //std::cout << hui << " " << " " << step << " " << minStep << " " << maxStep << " " << isToggle << "\n";
-
-    double val = TrackFX_GetParamNormalized(track, fxId, paramId);
-    //std::cout << currentValue << " " << val << "\n";
-    char buffer[512];
-    buffer[0] = 0;
-    TrackFX_GetFormattedParamValue(track, fxId, paramId, buffer, sizeof buffer);
-    std::cout << buffer << "\n";
   }
 
   void FxParameterChangedSubscription::triggerEvent() {
     apiManager->triggerOnFxParameterChanged(track, fxId, paramId, currentValue);
   }
 
-  MediaTrack* FxParameterChangedSubscription::getTrack() {
+  MediaTrack *FxParameterChangedSubscription::getTrack() {
     return track;
   }
 
@@ -101,7 +74,7 @@ namespace CCS {
     return paramId;
   }
 
-  ReaperEventSubscriber* FxParameterChangedSubscription::getSubscriber() {
+  ReaperEventSubscriber *FxParameterChangedSubscription::getSubscriber() {
     return subscriber;
   }
 }

@@ -7,16 +7,16 @@ namespace CCS {
   using std::string;
 
   /**
-   * This represents a single control/ui element on a midi controller
-   * like a knob, a button, a fader,...
-   * Note that we do not use leds and other feedback elements here.
+    *This represents a single control/ui element on a midi controller
+    *like a knob, a button, a fader,...
+    *Note that we do not use leds and other feedback elements here.
    */
   MidiControlElement::MidiControlElement(
     string controlId,
     short controlType,
     unsigned char status,
     unsigned char data1,
-    MidiController* midiController,
+    MidiController *midiController,
     unsigned char onPressData2,
     unsigned char onReleaseData2
   ) {

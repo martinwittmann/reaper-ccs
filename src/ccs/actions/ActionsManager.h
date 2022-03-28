@@ -19,13 +19,13 @@ namespace CCS {
     ~ActionsManager();
 
     void registerAction(Action action);
-    void registerProvider(ActionProvider* provider);
+    void registerProvider(ActionProvider *provider);
 
-    void invokeAction(Action action, std::vector<std::string> arguments, Session* session);
-    void invokeAction(std::string rawAction, Session* session);
+    void invokeAction(Action action, std::vector<std::string> arguments, Session *session);
+    void invokeAction(std::string rawAction, Session *session);
     Action getAction(std::string providerId, std::string actionId);
-    ActionProvider* getProvider(Action action);
-    ActionProvider* getProvider(std::string providerId);
+    ActionProvider *getProvider(Action action);
+    ActionProvider *getProvider(std::string providerId);
   };
 }
 

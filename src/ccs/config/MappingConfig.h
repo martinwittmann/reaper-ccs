@@ -10,7 +10,7 @@ namespace CCS {
 
   class MappingConfig : public BaseConfig {
   public:
-    explicit MappingConfig(YAML::Node* root);
+    explicit MappingConfig(YAML::Node *root);
   };
 }
 

@@ -24,8 +24,8 @@ namespace CCS {
     vector<string> subActions;
     vector<string> argumentNames;
     vector<string> argumentTypes;
-    ActionsManager* actionsManager;
-    ActionProvider* actionProvider;
+    ActionsManager *actionsManager;
+    ActionProvider *actionProvider;
 
   public:
 
@@ -36,17 +36,17 @@ namespace CCS {
       vector<string> argumentNames,
       vector<string> argumentTypes,
       vector<string> subActions,
-      ActionsManager* actionsManager
+      ActionsManager *actionsManager
     );
 
     // This creates an action of type CALLBACK.
     Action(
       string providerId,
       string actionId,
-      ActionProvider* actionProvider
+      ActionProvider *actionProvider
     );
 
-    void invoke(vector<string> arguments, Session* session);
+    void invoke(vector<string> arguments, Session *session);
 
     string getActionId();
     string getProviderId();

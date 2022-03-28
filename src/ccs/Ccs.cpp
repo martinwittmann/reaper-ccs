@@ -16,7 +16,7 @@ namespace CCS {
   using std::string;
   using std::vector;
 
-  Ccs::Ccs(string baseDir, midi_Output* output) {
+  Ccs::Ccs(string baseDir, midi_Output *output) {
     resourceDir = baseDir;
     const char separator = fse::path::preferred_separator;
     ccsDir = resourceDir + separator + "ccs" + separator;
@@ -38,17 +38,6 @@ namespace CCS {
     for (it = subscribedMidiEventIds.begin(); it != subscribedMidiEventIds.end(); ++it) {
       std::cout << "Subscribed to event id: " << it->first << "\n";
     }
-
-
-    Test* test = new Test();
-    auto subscriber = dynamic_cast<ReaperEventSubscriber*>(test);
-    MediaTrack* track1 = reaperApi->getTrack(1);
-
-    char buf[100] = "dco_lfo_value";
-    int ii = TrackFX_GetParamFromIdent(track1, 0, buf);
-    std::cout << "found fx param id " << ii << "\n";
-
-    reaperApi->subscribeToFxParameterChanged(track1, 0, 3, subscriber);
   }
 
   Ccs::~Ccs() {
@@ -56,18 +45,18 @@ namespace CCS {
   }
 
 
-  Session* Ccs::loadSession(string sessionId, ActionsManager* actionsManager) {
+  Session *Ccs::loadSession(string sessionId, ActionsManager *actionsManager) {
     string sessionPath = sessionsDir + SEP + sessionId;
     return new Session(sessionPath, actionsManager, output, reaperApi);
   }
 
-  void Ccs::onMidiEvent(MIDI_event_t* rawEvent) {
+  void Ccs::onMidiEvent(MIDI_event_t *rawEvent) {
     int eventId = Util::getMidiEventId(
       rawEvent->midi_message[0],
       rawEvent->midi_message[1]
     );
     if (subscribedMidiEventIds.contains(eventId)) {
-      MidiEventSubscriber* subscriber = subscribedMidiEventIds.at(eventId);
+      MidiEventSubscriber *subscriber = subscribedMidiEventIds.at(eventId);
       if (subscriber) {
         subscriber->onMidiEvent(eventId, rawEvent->midi_message[2]);
       }

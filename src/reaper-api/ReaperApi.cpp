@@ -16,7 +16,7 @@ namespace CCS {
   }
 
   string ReaperApi::getFxParameterName(
-    MediaTrack* track,
+    MediaTrack *track,
     int fxId,
     int parameterId
   ) {
@@ -27,10 +27,10 @@ namespace CCS {
   };
 
   void ReaperApi::subscribeToFxParameterChanged(
-    MediaTrack* track,
+    MediaTrack *track,
     int fxId,
     int paramId,
-    ReaperEventSubscriber* subscriber
+    ReaperEventSubscriber *subscriber
   ) {
     if (isSubscribedToFxParameterChanged(track, fxId, paramId, subscriber)) {
       return;
@@ -46,10 +46,10 @@ namespace CCS {
   }
 
   bool ReaperApi::isSubscribedToFxParameterChanged(
-    MediaTrack* track,
+    MediaTrack *track,
     int fxId,
     int paramId,
-    ReaperEventSubscriber* subscriber
+    ReaperEventSubscriber *subscriber
   ) {
     for (auto subscription : fxParamChangedSubscriptions) {
       if (
@@ -63,7 +63,7 @@ namespace CCS {
     return false;
   }
 
-  bool ReaperApi::isSubscribedToEvent(ReaperEventSubscriber* subscriber, int eventId) {
+  bool ReaperApi::isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId) {
     vector<ReaperEventSubscriber*> subscribers = subscribersMap.at(eventId);
     for (auto current : subscribers) {
       if (current == subscriber) {
@@ -124,7 +124,7 @@ namespace CCS {
     }
   };
 
-  void ReaperApi::triggerOnTrackVolumeChanged(MediaTrack* track, double volume) {
+  void ReaperApi::triggerOnTrackVolumeChanged(MediaTrack *track, double volume) {
     if (!subscribersMap.contains(ON_TRACK_VOLUME_CHANGED)) {
       return;
     }
@@ -134,7 +134,7 @@ namespace CCS {
     }
   }
 
-  void ReaperApi::triggerOnTrackMuteChanged(MediaTrack* track, bool mute) {
+  void ReaperApi::triggerOnTrackMuteChanged(MediaTrack *track, bool mute) {
     if (!subscribersMap.contains(ON_TRACK_MUTE_CHANGED)) {
       return;
     }
@@ -144,7 +144,7 @@ namespace CCS {
     }
   }
 
-  void ReaperApi::triggerOnTrackSoloChanged(MediaTrack* track, bool solo) {
+  void ReaperApi::triggerOnTrackSoloChanged(MediaTrack *track, bool solo) {
     if (!subscribersMap.contains(ON_TRACK_SOLO_CHANGED)) {
       return;
     }
@@ -154,7 +154,7 @@ namespace CCS {
     }
   }
 
-  void ReaperApi::triggerOnTrackRecordArmChanged(MediaTrack* track, bool recordArm) {
+  void ReaperApi::triggerOnTrackRecordArmChanged(MediaTrack *track, bool recordArm) {
     if (!subscribersMap.contains(ON_TRACK_RECORD_ARM_CHANGED)) {
       return;
     }
@@ -165,7 +165,7 @@ namespace CCS {
   }
 
   void ReaperApi::triggerOnFxParameterChanged(
-    MediaTrack* track,
+    MediaTrack *track,
     int fxId,
     int paramId,
     double value
@@ -183,7 +183,7 @@ namespace CCS {
     }
   }
 
-  MediaTrack* ReaperApi::getTrack(int id) {
+  MediaTrack *ReaperApi::getTrack(int id) {
     return CSurf_TrackFromID(id, false);
   }
 }

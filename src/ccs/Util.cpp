@@ -171,7 +171,7 @@ namespace CCS {
     return result;
   }
 
-  void Util::debugMidiBuffer(std::vector<unsigned char>* buffer) {
+  void Util::debugMidiBuffer(std::vector<unsigned char> *buffer) {
     std::cout << "[MIDI OUTPUT]\n";
     for (auto it = buffer->begin(); it != buffer->end(); ++it) {
       if (it != buffer->begin()) {

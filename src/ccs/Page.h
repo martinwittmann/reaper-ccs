@@ -27,29 +27,29 @@ namespace CCS {
   class Action;
 
 class Page : public ActionProvider {
-    PageConfig* m_config;
-    ActionsManager* m_actionsManager;
-    Session* m_session;
+    PageConfig *m_config;
+    ActionsManager *m_actionsManager;
+    Session *m_session;
     vector<Action*> m_providedActions;
     string m_pageId;
     // A map of string variables that can be set via a page action.
     // Example: [page.set_state:name:value]
     std::map<string,string> m_state;
     vector<MidiControlElementMapping*> m_controlElementMappings;
-    ReaperApi* m_reaperApi;
+    ReaperApi *m_reaperApi;
 
   public:
     Page(
       string pagePath,
-      ActionsManager* actionsManager,
-      Session* session,
-      ReaperApi* reaperApi
+      ActionsManager *actionsManager,
+      Session *session,
+      ReaperApi *reaperApi
     );
     ~Page();
     static bool isPageConfigFile(fse::path path);
     void setActive();
     void createActions();
-    Action* createPageAction(string actionId, YAML::Node node);
+    Action *createPageAction(string actionId, YAML::Node node);
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
     string getPageId();
     void actionCallback(string actionName, vector<string> arguments);

@@ -51,7 +51,7 @@ namespace CCS {
     return is_regular_file(path);
   }
 
-  FxPluginConfig* FxPlugins::getConfig(string nameId) {
+  FxPluginConfig *FxPlugins::getConfig(string nameId) {
     for (auto config : m_pluginConfigs) {
       string currentId = config->getValue("id");
       if (currentId == nameId) {
@@ -62,11 +62,11 @@ namespace CCS {
     throw "Config with id " + nameId + " not found!";
   }
 
-  int FxPlugins::getParamId(MediaTrack* track, int fxId, string strParamId) {
+  int FxPlugins::getParamId(MediaTrack *track, int fxId, string strParamId) {
     char buffer[256];
     TrackFX_GetFXName(track, fxId, buffer, sizeof buffer);
     string fxNameId = Util::cleanId(string(buffer));
-    FxPluginConfig* config = getConfig(fxNameId);
+    FxPluginConfig *config = getConfig(fxNameId);
     string rawId = config->getValue("parameters." + strParamId + ".id");
     return stoi(rawId);
   }
