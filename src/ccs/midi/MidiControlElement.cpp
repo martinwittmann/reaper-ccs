@@ -60,15 +60,9 @@ namespace CCS {
     return onReleaseData2;
   }
 
-  void MidiControlElement::onChange(std::vector<int> b) {
+  void MidiControlElement::onChange(short data) { }
 
-  }
+  void MidiControlElement::onButtonPress(short data) { }
 
-  void MidiControlElement::onButtonPress(std::vector<int> b) {
-
-  }
-
-  void MidiControlElement::onButtonRelease(std::vector<int> b) {
-
-  }
+  void MidiControlElement::onButtonRelease(short data) { }
 }

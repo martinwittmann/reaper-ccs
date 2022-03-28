@@ -56,9 +56,9 @@ namespace CCS {
     short getOnPressValue();
     short getOnReleaseValue();
 
-    void onChange(std::vector<int>);
-    void onButtonPress(std::vector<int>);
-    void onButtonRelease(std::vector<int>);
+    void onChange(short data);
+    void onButtonPress(short data);
+    void onButtonRelease(short data);
   };
 }
 

@@ -44,6 +44,8 @@ namespace CCS {
     static std::string byteToHex(unsigned char byte);
 
     static short get7BitValue(double value, double minValue, double maxValue);
+
+    static double getParamValueFrom7Bit(short value, double minValue, double maxValue);
   };
 }
 

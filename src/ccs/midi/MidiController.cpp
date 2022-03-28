@@ -297,13 +297,13 @@ namespace CCS {
   }
 
   int MidiController::getMidiEventIdForControl(string controlId) {
-    string dataByteRaw = config->getValue("controls." + controlId + ".message.data1");
+    string dataByteRaw = config->getValue("controls." + controlId + ".data1");
     unsigned char dataByte = 0;
     if (!dataByteRaw.empty()) {
       dataByte = Util::hexToInt(dataByteRaw);
     }
 
-    string statusByteRaw = config->getValue("controls." + controlId + ".message.status");
+    string statusByteRaw = config->getValue("controls." + controlId + ".status");
     unsigned char statusByte = defaultStatusByte;
     if (!statusByteRaw.empty()) {
       statusByte = Util::hexToInt(statusByteRaw);

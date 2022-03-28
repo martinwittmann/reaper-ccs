@@ -183,6 +183,13 @@ namespace CCS {
     return result;
   }
 
+  double Util::getParamValueFrom7Bit(short value, double minValue, double maxValue) {
+    double range = maxValue - minValue;
+    int steps = 127;
+    double stepSize = range / steps;
+    return double(value) * stepSize;
+  }
+
   std::string Util::byteToHex(unsigned char byte) {
     return Util::formatHexByte(byte);
   }

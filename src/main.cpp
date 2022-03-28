@@ -10,8 +10,13 @@ using std::string;
 
 // A simple executable for debugging purposes.
 int main() {
-  string baseDir = "/home/martin/.config/REAPER";
-  string result1 = CCS::Util::formatHexByte(1);
+  char a = 0x00;
+  char b = 0x7F;
+  char c = a + b;
+  c -= 1;
+  if (c == 0x7F) {
+    int g = 1;
+  }
   int aa = 1;
   return 0;
 }

@@ -25,9 +25,9 @@ namespace CCS {
       }
     }
 
-    if (pollingIndex % 30 == 0) {
+    //if (pollingIndex % 30 == 0) {
       ccs->reaperApi->pollReaperData();
-    }
+    //}
 
     pollingIndex++;
     // Reset after 12 times. 12 because its dividable by 2, 3, 4 and 6.

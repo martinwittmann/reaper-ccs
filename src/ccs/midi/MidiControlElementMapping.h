@@ -38,6 +38,10 @@ namespace CCS {
     std::vector<MidiControlElementAction*> m_actions;
     bool m_hasMappedFxParam = false;
 
+    double m_mappedMinValue;
+    double m_mappedMaxValue;
+    double m_mappedMidValue;
+
   public:
 
     MidiControlElementMapping(
@@ -66,6 +70,8 @@ namespace CCS {
     void setMappingValues(std::string rawMapping);
     void createActions();
     void invokeActions();
+
+    void addValueDiff(char diff);
   };
 }
 

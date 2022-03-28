@@ -41,6 +41,16 @@ namespace CCS {
         m_mappedParamId,
         subscriber
       );
+
+      double rawValue = TrackFX_GetParamEx(
+        m_mappedTrack,
+        m_mappedFxId,
+        m_mappedParamId,
+        &m_mappedMinValue,
+        &m_mappedMaxValue,
+        &m_mappedMidValue
+      );
+      m_value = Util::get7BitValue(rawValue, m_mappedMinValue, m_mappedMaxValue);
     }
 
     createActions();
@@ -104,14 +114,39 @@ namespace CCS {
 
       case MidiControlElement::ABSOLUTE:
         m_value = data2;
-        //onChange(eventId, data2);
+        m_controlElement->onChange(data2);
         break;
 
       case MidiControlElement::RELATIVE:
-        char diff = 64 - data2;
-        m_value += diff;
-        //onChange(eventId, data2);
+        char diff = 0;
+        if (data2 > 63) {
+          diff = data2 - 128;
+        }
+        else if (data2 < 63) {
+          diff = data2;
+        }
+        addValueDiff(diff);
+        m_controlElement->onChange(data2);
         break;
+    }
+
+    if (m_hasMappedFxParam) {
+      double newValue = Util::getParamValueFrom7Bit(
+        m_value,
+        m_mappedMinValue,
+        m_mappedMaxValue
+      );
+      TrackFX_SetParam(m_mappedTrack, m_mappedFxId, m_mappedParamId, newValue);
+    }
+  }
+
+  void MidiControlElementMapping::addValueDiff(char diff) {
+    m_value += diff;
+    if (m_value < 0) {
+      m_value = 0;
+    }
+    else if (m_value > 127) {
+      m_value = 127;
     }
   }
 
@@ -128,7 +163,6 @@ namespace CCS {
     double maxValue
   ) {
     m_value = Util::get7BitValue(value, minValue, maxValue);
-    std::cout << "changed " << paramId << "\n";
     if (m_hasMappedFxParam) {
       invokeActions();
     }
