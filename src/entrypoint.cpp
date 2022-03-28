@@ -21,7 +21,6 @@ bool reaper_hook_command(
   HWND hwnd
 ) {
   if (!commandIds.contains(commandId)) {
-    std::cout << commandId << "\n";
     return false;
   }
 

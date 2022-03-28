@@ -4,6 +4,8 @@
 #include "../ccs/Util.h"
 #include "yaml-cpp/yaml.h"
 
+using std::string;
+
 char name[128] = "CCS Write config file select Fx plugin";
 custom_action_register_t ccs_write_fx_plugin_config_action = {
   0,
@@ -16,93 +18,96 @@ custom_action_register_t ccs_write_fx_plugin_config_action = {
   name
 };
 
-void createEnumParameter(
+void create_enum_parameter(
   MediaTrack* track,
   int fxId,
   int paramId,
-  std::string fxName,
-  std::string paramName,
+  string fxName,
+  string paramName,
+  double minValue,
+  double maxValue,
   YAML::Node* root
 ) {
-  std::map<double, std::string> values;
+  std::map<double, string> values;
   char formattedValue[256];
-  double minValue;
-  double maxValue;
-
-  std::string strParamId = CCS::Util::cleanId(paramName);
+  string strParamId = CCS::Util::cleanId(paramName);
   (*root)["parameters"][strParamId]["type"] = "enum";
-
-  double oldValue = TrackFX_GetParam(track, fxId, paramId, &minValue, &maxValue);
 
   // Note that we start out by setting each param to its lowest value.
   // If we just iterated to 1, we might miss values if the current value is not
   // the lowest one.
-  // I think setting param values o to is ok and the correct way to do this.
-  TrackFX_SetParam(track, fxId, paramId, 0);
+  // Setting param values to its minValue.
+  TrackFX_SetParam(track, fxId, paramId, minValue);
 
   TrackFX_GetFormattedParamValue(track, fxId, paramId, formattedValue, sizeof formattedValue);
-  std::string currentValue = std::string(formattedValue);
+  string currentValue = string(formattedValue);
   values.insert(std::pair(0, currentValue));
-  std::string newValue;
+  string newValue;
 
   for (int i = int(minValue * 100); i <= int(maxValue * 100); ++i) {
     double tmpVal = double(i) / 100;
     TrackFX_SetParam(track, fxId, paramId, tmpVal);
     TrackFX_GetFormattedParamValue(track, fxId, paramId, formattedValue, sizeof formattedValue);
-    newValue = std::string(formattedValue);
+    newValue = string(formattedValue);
     if (newValue != currentValue) {
-      values.insert(std::pair(tmpVal, std::string(formattedValue)));
+      values.insert(std::pair(tmpVal, string(formattedValue)));
       currentValue = newValue;
     }
   }
-
-  // Reset the value back to its original value.
-  TrackFX_SetParam(track, fxId, paramId, oldValue);
 
   (*root)["parameters"][strParamId]["label"] = paramName;
   for (auto it = values.begin(); it != values.end(); ++it) {
     (*root)["parameters"][strParamId]["values"][it->second] = it->first;
   }
+
+  // Since the calling function takes care of setting the current parameter
+  // back to its original value, we don't need to.
 }
 
-void createRegularParameter(
+void create_regular_parameter(
   MediaTrack* track,
   int fxId,
   int paramId,
-  std::string fxName,
-  std::string paramName,
+  string fxName,
+  string paramName,
   double minValue,
   double maxValue,
   YAML::Node* root
 ) {
-  std::string strParamId = CCS::Util::cleanId(paramName);
+  string strParamId = CCS::Util::cleanId(paramName);
   (*root)["parameters"][strParamId]["label"] = paramName;
   (*root)["parameters"][strParamId]["min"] = minValue;
   (*root)["parameters"][strParamId]["max"] = maxValue;
 }
 
+bool is_enum_value(string input) {
+  using CCS::Util;
+  string result = Util::regexReplace(input, "Hz$", "");
+  result = Util::regexReplace(result, "m?s$", "");
+  result = Util::regexReplace(result, "\\s+", "");
+  return !CCS::Util::regexMatch(result, "[\\d.]+");
+}
+
 bool ccs_write_fx_plugin_config_callback() {
   MediaTrack* track = GetSelectedTrack2(0, 0, true);
-  std::cout << "Running action\n";
   if (!track) {
-    std::cout << "Aborting action\n";
     return false;
   }
 
   int trackNumber;
   int itemNumber;
-  int fxNumber;
-  int focussed = GetFocusedFX2(&trackNumber, &itemNumber, &fxNumber);
+  int fxId;
+  int focussed = GetFocusedFX2(&trackNumber, &itemNumber, &fxId);
   if (focussed != 1) {
     // This means that the fx is a take/item fx or no longer focussed but open.
     // For simplicity, let's keep it to track fx.
     return false;
   }
-  // The 8 MSB in fxNumber can have special meaning, which is not relevant for us.
+  // The 8 MSB in fxId can have special meaning, which is not relevant for us.
   // Strip it down to a short which has plenty of room.
   // For details see: https://www.reaper.fm/sdk/reascript/reascripthelp.html#GetFocusedFX2
-  fxNumber = short(fxNumber);
-  int numParams = TrackFX_GetNumParams(track, fxNumber);
+  fxId = short(fxId);
+  int numParams = TrackFX_GetNumParams(track, fxId);
 
 
   char fxName[256];
@@ -112,42 +117,47 @@ bool ccs_write_fx_plugin_config_callback() {
   double maxValue;
   double midValue;
 
-  TrackFX_GetFXName(track, fxNumber, fxName, sizeof fxName);
+  TrackFX_GetFXName(track, fxId, fxName, sizeof fxName);
 
   YAML::Node root;
-  root["name"] = std::string(fxName);
+  root["name"] = string(fxName);
   root["id"] = CCS::Util::cleanId(fxName);
-  std::string strParamName;
+  string strParamName;
 
-  for (int i = 0; i < numParams; ++i) {
+  for (int paramId = 0; paramId < numParams; ++paramId) {
     minValue = 0;
     maxValue = 0;
-    midValue = 0;
 
-    TrackFX_GetParamIdent(track, fxNumber, i, paramName, sizeof paramName);
-    //std::cout << "param name " << paramName << "\n";
 
-    TrackFX_GetFormattedParamValue(track, fxNumber, i, formattedValue, sizeof formattedValue);
-    std::string preprocessedValue = CCS::Util::regexReplace(std::string(formattedValue), "\\sHz$", "");
-    preprocessedValue = CCS::Util::regexReplace(std::string(formattedValue), "\\sm?s$", "");
+    TrackFX_GetParamIdent(track, fxId, paramId, paramName, sizeof paramName);
+    double oldValue = TrackFX_GetParam(track, fxId, paramId, &minValue, &maxValue);
+
+    // We're setting the param to its max value before detecting if this is an
+    // enum param because there are parameters that have 'off' for their lowest
+    // value and then are regular double values.
+    // Since as far as I know this does not exist for the highest value we can
+    // work around that problem this way.
+    TrackFX_SetParam(track, fxId, paramId, maxValue);
+    TrackFX_GetFormattedParamValue(track, fxId, paramId, formattedValue, sizeof formattedValue);
     strParamName = CCS::Util::regexReplace(paramName, "^[0-9:_]+", "");
-    bool isEnum = !CCS::Util::regexMatch(preprocessedValue, "[\\d.]+");
-    if (isEnum) {
-      createEnumParameter(
+    if (is_enum_value(string(formattedValue))) {
+      create_enum_parameter(
         track,
-        fxNumber,
-        i,
-        std::string(fxName),
+        fxId,
+        paramId,
+        string(fxName),
         strParamName,
+        minValue,
+        maxValue,
         &root
       );
     }
     else {
-      createRegularParameter(
+      create_regular_parameter(
         track,
-        fxNumber,
-        i,
-        std::string(fxName),
+        fxId,
+        paramId,
+        string(fxName),
         strParamName,
         minValue,
         maxValue,
@@ -155,7 +165,7 @@ bool ccs_write_fx_plugin_config_callback() {
       );
     }
 
-    //std::cout << "formatted value: " << formattedValue << "\n";
+    TrackFX_SetParam(track, fxId, paramId, oldValue);
   }
 
   char resourcePath[1024];
@@ -164,8 +174,8 @@ bool ccs_write_fx_plugin_config_callback() {
   emitter << root;
 
 
-  std::string pluginName = CCS::Util::cleanId(fxName);
-  std::string filename = std::string(resourcePath) + "/ccs/fx_plugins/" + pluginName + ".yml";
+  string pluginName = CCS::Util::cleanId(fxName);
+  string filename = string(resourcePath) + "/ccs/fx_plugins/" + pluginName + ".yml";
   std::ofstream file(filename);
   file << emitter.c_str();
   return true;
