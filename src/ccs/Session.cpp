@@ -23,17 +23,25 @@ namespace CCS {
     midi_Output* output,
     ReaperApi* reaperApi
   ) {
-    path = sessionPath;
-    pagesDir = path + SEP + "pages";
-    midiControllersDir = fse::path(path)
+    m_path = sessionPath;
+    m_pagesDir = m_path + SEP + "pages";
+    m_midiControllersDir = fse::path(m_path)
       .parent_path()
       .parent_path()
       .append("controllers")
       .string();
-    this->actionsManager = actionsManager;
-    sessionConfig = new SessionConfig(path + SEP + "session" + YAML_EXT);
-    this->output = output;
-    this->reaperApi = reaperApi;
+
+    m_pluginsDir = fse::path(m_path)
+      .parent_path()
+      .parent_path()
+      .append("fx_plugins")
+      .string();
+
+    m_pluginManager = new FxPlugins(m_pluginsDir);
+    m_actionsManager = actionsManager;
+    m_sessionConfig = new SessionConfig(m_path + SEP + "session" + YAML_EXT);
+    m_output = output;
+    m_reaperApi = reaperApi;
 
     loadMidiControllers();
     loadSessionPages();
@@ -43,15 +51,15 @@ namespace CCS {
   }
 
   Session::~Session() {
-    delete sessionConfig;
-    for (auto it = pages.begin(); it != pages.end(); ++it) {
+    delete m_sessionConfig;
+    for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
       delete *it;
     }
   }
 
   void Session::setActivePage(int index) {
-    Page* page = pages.at(index);
-    activePage = page;
+    Page* page = m_pages.at(index);
+    m_activePage = page;
     // TODO implement changing page.
     // We need to call setAction after setting activePage here because the
     // call of setActive invokes the activation actions which depend on an
@@ -60,7 +68,7 @@ namespace CCS {
   }
 
   Page* Session::getActivePage() {
-    return activePage;
+    return m_activePage;
   }
 
   vector<string> Session::getSessions(string sessionsDir) {
@@ -92,7 +100,7 @@ namespace CCS {
   vector<string> Session::getPageNames() {
     vector<string> result;
     std::set<string> sortedPages;
-    for (const auto &entry: fse::directory_iterator(pagesDir)) {
+    for (const auto &entry: fse::directory_iterator(m_pagesDir)) {
       fse::path entry_path = fse::path(entry.path());
       if (is_directory(entry_path) || !Page::isPageConfigFile(entry_path.string())) {
         continue;
@@ -108,7 +116,7 @@ namespace CCS {
 
   vector<string> Session::getMidiControllerNames() {
     vector<string> result;
-    for (const auto &entry: fse::directory_iterator(midiControllersDir)) {
+    for (const auto &entry: fse::directory_iterator(m_midiControllersDir)) {
       fse::path entry_path = fse::path(entry.path());
       if (
         is_directory(entry_path) ||
@@ -121,15 +129,16 @@ namespace CCS {
     return result;
   }
 
+
   void Session::loadSessionPages() {
     vector<string> pageNames = getPageNames();
     for (auto it = pageNames.begin(); it != pageNames.end(); ++it) {
-      string pagePath = pagesDir + SEP + *it;
-      pages.push_back(new Page(
+      string pagePath = m_pagesDir + SEP + *it;
+      m_pages.push_back(new Page(
         pagePath,
-        actionsManager,
+        m_actionsManager,
         this,
-        reaperApi
+        m_reaperApi
       ));
     }
   }
@@ -138,22 +147,26 @@ namespace CCS {
     vector<string> controllerNames = getMidiControllerNames();
     for (auto it = controllerNames.begin(); it != controllerNames.end(); ++it) {
       string controllerConfigFile = *it;
-      midiControllers.push_back(
-        new MidiController(controllerConfigFile, output, actionsManager)
+      m_midiControllers.push_back(
+        new MidiController(controllerConfigFile, m_output, m_actionsManager)
       );
     }
   }
 
   std::map<int,MidiEventSubscriber*> Session::getSubscribedMidiEventIds() {
-    return activePage->getSubscribedMidiEventIds();
+    return m_activePage->getSubscribedMidiEventIds();
   }
 
   MidiController* Session::getMidiController(std::string id) {
-    for (auto controller : midiControllers) {
+    for (auto controller : m_midiControllers) {
       if (controller->getControllerId() == id) {
         return controller;
       }
     }
     throw "No midi controller with id: '" + id + "' found.";
   }
+
+  FxPlugins* Session::getPluginManager() {
+    return m_pluginManager;
+  };
 }

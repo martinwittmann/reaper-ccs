@@ -9,6 +9,7 @@
 #include "../reaper/reaper_plugin.h"
 #include "midi/MidiEventSubscriber.h"
 #include "../reaper-api/ReaperApi.h"
+#include "FxPlugins.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -20,17 +21,19 @@ namespace CCS {
   class Page;
 
   class Session {
-    string path;
-    string pagesDir;
-    string midiControllersDir;
-    string name;
-    SessionConfig* sessionConfig;
-    std::vector<Page *> pages;
-    std::vector<MidiController *> midiControllers;
-    Page* activePage;
-    ActionsManager* actionsManager;
-    midi_Output* output;
-    ReaperApi* reaperApi;
+    string m_path;
+    string m_pagesDir;
+    string m_midiControllersDir;
+    string m_pluginsDir;
+    string m_name;
+    SessionConfig* m_sessionConfig;
+    std::vector<Page *> m_pages;
+    std::vector<MidiController *> m_midiControllers;
+    FxPlugins* m_pluginManager;
+    Page* m_activePage;
+    ActionsManager* m_actionsManager;
+    midi_Output* m_output;
+    ReaperApi* m_reaperApi;
 
   public:
     Session(
@@ -41,25 +44,17 @@ namespace CCS {
     );
 
     ~Session();
-
     static std::vector<string> getSessions(string sessionsDir);
-
     static bool isSessionFile(fse::path path);
-
     std::vector<string> getPageNames();
-
     std::vector<string> getMidiControllerNames();
-
     void loadSessionPages();
-
     void loadMidiControllers();
-
     void setActivePage(int pageId);
     Page* getActivePage();
-
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
-
     MidiController* getMidiController(std::string id);
+    FxPlugins* getPluginManager();
   };
 }
 

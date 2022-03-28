@@ -9,6 +9,7 @@
 #include <iostream>
 #include "../reaper-api/ReaperApi.h"
 #include "Test.cpp"
+#include "../reaper/reaper_plugin_functions.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -38,9 +39,15 @@ namespace CCS {
       std::cout << "Subscribed to event id: " << it->first << "\n";
     }
 
+
     Test* test = new Test();
     auto subscriber = dynamic_cast<ReaperEventSubscriber*>(test);
     MediaTrack* track1 = reaperApi->getTrack(1);
+
+    char buf[100] = "dco_lfo_value";
+    int ii = TrackFX_GetParamFromIdent(track1, 0, buf);
+    std::cout << "found fx param id " << ii << "\n";
+
     reaperApi->subscribeToFxParameterChanged(track1, 0, 3, subscriber);
   }
 

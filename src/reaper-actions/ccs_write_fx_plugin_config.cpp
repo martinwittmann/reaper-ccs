@@ -55,6 +55,7 @@ void create_enum_parameter(
     }
   }
 
+  (*root)["parameters"][strParamId]["id"] = paramId;
   (*root)["parameters"][strParamId]["label"] = paramName;
   for (auto it = values.begin(); it != values.end(); ++it) {
     (*root)["parameters"][strParamId]["values"][it->second] = it->first;
@@ -75,6 +76,7 @@ void create_regular_parameter(
   YAML::Node* root
 ) {
   string strParamId = CCS::Util::cleanId(paramName);
+  (*root)["parameters"][strParamId]["id"] = paramId;
   (*root)["parameters"][strParamId]["label"] = paramName;
   (*root)["parameters"][strParamId]["min"] = minValue;
   (*root)["parameters"][strParamId]["max"] = maxValue;
@@ -116,13 +118,13 @@ bool ccs_write_fx_plugin_config_callback() {
   double minValue;
   double maxValue;
   double midValue;
+  string strParamName;
 
   TrackFX_GetFXName(track, fxId, fxName, sizeof fxName);
 
   YAML::Node root;
   root["name"] = string(fxName);
   root["id"] = CCS::Util::cleanId(fxName);
-  string strParamName;
 
   for (int paramId = 0; paramId < numParams; ++paramId) {
     minValue = 0;
@@ -139,7 +141,7 @@ bool ccs_write_fx_plugin_config_callback() {
     // work around that problem this way.
     TrackFX_SetParam(track, fxId, paramId, maxValue);
     TrackFX_GetFormattedParamValue(track, fxId, paramId, formattedValue, sizeof formattedValue);
-    strParamName = CCS::Util::regexReplace(paramName, "^[0-9:_]+", "");
+    string strParamName = CCS::Util::regexReplace(paramName, "^[0-9:_]+", "");
     if (is_enum_value(string(formattedValue))) {
       create_enum_parameter(
         track,

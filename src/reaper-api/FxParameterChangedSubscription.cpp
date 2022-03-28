@@ -41,7 +41,7 @@ namespace CCS {
   }
 
   void FxParameterChangedSubscription::update(bool triggerOnChange) {
-    std::cout << "Updating FX param value: " << trackName << " / " << fxName << " / " << paramName << "\n";
+    //std::cout << "Updating FX param value: " << trackName << " / " << fxName << " / " << paramName << "\n";
     newValue = TrackFX_GetParamEx(
       track,
       fxId,

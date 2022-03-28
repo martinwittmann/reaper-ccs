@@ -49,6 +49,8 @@ set(
   src/ccs/Test.cpp
 
   src/reaper/reaper_extension.cpp
+  src/ccs/config/FxPluginConfig.cpp
+  src/ccs/FxPlugins.cpp src/ccs/FxPlugins.h
 )
 
 set(

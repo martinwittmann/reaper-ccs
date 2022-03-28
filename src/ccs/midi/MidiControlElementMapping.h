@@ -9,23 +9,30 @@
 #include "../../reaper-api/ReaperEventSubscriber.h"
 #include "../../reaper-api/ReaperApi.h"
 #include "../config/MappingConfig.h"
+#include "../FxPlugins.h"
 
 namespace CCS {
   class MidiControlElementMapping :
     public MidiEventSubscriber,
     public ReaperEventSubscriber
   {
-    int midiEventId;
-    MappingConfig* config;
-    MidiControlElement* controlElement;
-    std::string controlId;
-    std::string controllerId;
-    short controlType;
-    short onPressValue;
-    short onReleaseValue;
-    short value;
-    MediaTrack* reaperTrack;
-    ReaperApi* api;
+    int m_midiEventId;
+    MappingConfig* m_config;
+    MidiControlElement* m_controlElement;
+    std::string m_controlId;
+    std::string m_controllerId;
+    short m_controlType;
+    short m_onPressValue;
+    short m_onReleaseValue;
+    short m_value;
+    MediaTrack* m_reaperTrack;
+    ReaperApi* m_api;
+    FxPlugins* m_pluginManager;
+
+    std::string m_paramMapping;
+    MediaTrack* m_mappedTrack;
+    int m_mappedFxId;
+    int m_mappedParamId;
 
   public:
 
@@ -34,7 +41,8 @@ namespace CCS {
       std::string controlId,
       YAML::Node config,
       MidiControlElement* controlElement,
-      ReaperApi* api
+      ReaperApi* api,
+      FxPlugins* pluginManager
     );
 
     ~MidiControlElementMapping();
@@ -55,6 +63,8 @@ namespace CCS {
       int paramId,
       double value
     ) override;
+
+    void setMappingValues(std::string rawMapping);
   };
 }
 

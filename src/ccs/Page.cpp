@@ -21,22 +21,22 @@ namespace CCS {
     Session* session,
     ReaperApi* reaperApi
   ) : ActionProvider(actionsManager) {
-    config = new PageConfig(pagePath);
-    pageId = config->getValue("id");
-    registerActionProvider(pageId);
-    this->actionsManager = actionsManager;
-    this->session = session;
-    this->reaperApi = reaperApi;
+    m_config = new PageConfig(pagePath);
+    m_pageId = m_config->getValue("id");
+    registerActionProvider(m_pageId);
+    m_actionsManager = actionsManager;
+    m_session = session;
+    m_reaperApi = reaperApi;
     createActions();
     createMidiControlElementMappings();
   }
 
   Page::~Page() {
-    delete config;
-    for (auto &action : providedActions) {
+    delete m_config;
+    for (auto &action : m_providedActions) {
       delete action;
     }
-    providedActions.clear();
+    m_providedActions.clear();
   }
 
   bool Page::isPageConfigFile(fse::path path) {
@@ -52,9 +52,9 @@ namespace CCS {
 
   void Page::setActive() {
     // Invoke the actions defined in "on_activate";
-    vector<string> initActionItems = config->getListValues("on_activate");
+    vector<string> initActionItems = m_config->getListValues("on_activate");
     for (auto rawAction : initActionItems) {
-      actionsManager->invokeAction(rawAction, session);
+      actionsManager->invokeAction(rawAction, m_session);
     }
   }
 
@@ -73,16 +73,16 @@ namespace CCS {
     auto provider = dynamic_cast<ActionProvider*>(this);
 
     auto setStateAction = new Action(
-      pageId,
+      m_pageId,
       "set_state",
       provider
     );
-    providedActions.push_back(setStateAction);
+    m_providedActions.push_back(setStateAction);
     actionsManager->registerAction(*setStateAction);
 
     // Get Actions from config.
-    YAML::Node actionsNode = config->getMapValue("actions");
-    YAML::Node variablesNode = config->getMapValue("variables");
+    YAML::Node actionsNode = m_config->getMapValue("actions");
+    YAML::Node variablesNode = m_config->getMapValue("variables");
     std::map<string,string> variables = Variables::getVariables(variablesNode);
     for (const auto &item: actionsNode) {
       auto actionId = item.first.as<string>();
@@ -90,15 +90,15 @@ namespace CCS {
         actionId,
         item.second
       );
-      providedActions.push_back(action);
+      m_providedActions.push_back(action);
       actionsManager->registerAction(*action);
     }
   }
 
   Action* Page::createPageAction(string actionId, YAML::Node node) {
-    vector<string> rawSubActions = config->getListValues("message", &node);
+    vector<string> rawSubActions = m_config->getListValues("message", &node);
     vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
-    vector<string> argumentNames = config->getListValues("arguments", &node);
+    vector<string> argumentNames = m_config->getListValues("arguments", &node);
     vector<string> argumentTypes;
 
     for (auto &argument : argumentNames) {
@@ -112,7 +112,7 @@ namespace CCS {
     }
 
     return new Action(
-      pageId,
+      m_pageId,
       actionId,
       argumentNames,
       argumentTypes,
@@ -126,24 +126,24 @@ namespace CCS {
 
     vector<string>midiMessages;
     for (auto rawSubAction: rawSubActions) {
-      result.push_back(Util::regexReplace(rawSubAction, "^\\[page\\.", "[" + pageId + "."));
+      result.push_back(Util::regexReplace(rawSubAction, "^\\[page\\.", "[" + m_pageId + "."));
     }
     return result;
   }
 
   string Page::getPageId() {
-    return pageId;
+    return m_pageId;
   }
 
   void Page::actionCallback(string actionName, vector<string> arguments) {
     if (actionName == "set_state") {
-      state[arguments.at(0)] = arguments.at(1);
+      m_state[arguments.at(0)] = arguments.at(1);
     }
   }
 
   std::map<int,MidiEventSubscriber*> Page::getSubscribedMidiEventIds() {
     std::map<int,MidiEventSubscriber*> result;
-    for (const auto &mapping: controlElementMappings) {
+    for (const auto &mapping: m_controlElementMappings) {
       int eventId = mapping->getMidiEventId();
       auto subscriber = dynamic_cast<MidiEventSubscriber*>(mapping);
       result.insert(std::pair(eventId, subscriber));
@@ -152,7 +152,7 @@ namespace CCS {
   }
 
   void Page::createMidiControlElementMappings() {
-    YAML::Node controlsNode = config->getMapValue("mappings.controls");
+    YAML::Node controlsNode = m_config->getMapValue("mappings.controls");
 
     for (const auto &controlConfig: controlsNode) {
       auto rawControlId = controlConfig.first.as<string>();
@@ -160,15 +160,16 @@ namespace CCS {
       string midiControllerId = controlIdParts.at(0);
       string controlId = controlIdParts.at(1);
 
-      MidiController* midiController = session->getMidiController(midiControllerId);
+      MidiController* midiController = m_session->getMidiController(midiControllerId);
       MidiControlElement* controlEl = midiController->getMidiControlElement(controlId);
       int midiEventId = midiController->getMidiEventIdForControl(controlId);
-      controlElementMappings.push_back(new MidiControlElementMapping(
+      m_controlElementMappings.push_back(new MidiControlElementMapping(
         midiEventId,
         controlId,
         controlConfig.second,
         controlEl,
-        reaperApi
+        m_reaperApi,
+        m_session->getPluginManager()
       ));
     }
   }
