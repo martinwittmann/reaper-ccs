@@ -1,9 +1,36 @@
-#include "control_surface.cpp"
+#include "control-surfaces/ccs_control_surface.cpp"
+#include "reaper-actions/ccs_write_fx_plugin_config.cpp"
 #include "reaper/reaper_plugin.h"
 #include "reaper/reaper_plugin_functions.h"
+#include <iostream>
+#include <map>
+#include <string>
 
 void debug(std::string message) {
   std::cout << "\n[DEBUG] " + message + "\n";
+}
+
+std::map<int, std::string> commandIds;
+
+bool reaper_hook_command(
+  KbdSectionInfo *section,
+  int commandId,
+  int value,
+  int value2,
+  int relmode,
+  HWND hwnd
+) {
+  if (!commandIds.contains(commandId)) {
+    std::cout << commandId << "\n";
+    return false;
+  }
+
+  std::string actionName = commandIds.at(commandId);
+  if (actionName == "CCS_WRITE_FX_PLUGIN_CONFIG") {
+    return ccs_write_fx_plugin_config_callback();
+  }
+
+  return false;
 }
 
 /**
@@ -21,7 +48,10 @@ int load_reaper_extension(reaper_plugin_info_t* reaper) {
   }
 
   reaper->Register("csurf", &ccs_control_surface);
-  //reaper->Register("custom_action", &)
+
+  int commandId = reaper->Register("custom_action", &ccs_write_fx_plugin_config_action);
+  reaper->Register("hookcommand2", (void*)reaper_hook_command);
+  commandIds.insert(std::pair(commandId, "CCS_WRITE_FX_PLUGIN_CONFIG"));
   return 1;
 }
 

@@ -1,9 +1,7 @@
-#include "reaper/csurf.h"
-#include <iostream>
-#include "ccs/Ccs.h"
-#include "ccs/Util.h"
-#include "ccs/Ccs_ControlSurface.h"
-#include "control_surface_ui.cpp"
+#include "../reaper/csurf.h"
+#include "../ccs/Util.h"
+#include "../ccs/Ccs_ControlSurface.h"
+#include "../control_surface_ui.cpp"
 
 static IReaperControlSurface* control_surface_create(
   const char *type_string,

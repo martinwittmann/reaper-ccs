@@ -27,6 +27,10 @@ namespace CCS {
 
     static std::string regexReplace(std::string input, std::string pattern, std::string replacement);
 
+    static bool regexMatch(std::string input, std::string pattern);
+
+    static std::string cleanId(std::string input);
+
     static std::string joinStrVector(std::vector<std::string> input, char separator);
 
     static std::string removePrefixSuffix(std::string input);

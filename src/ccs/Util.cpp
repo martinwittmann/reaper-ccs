@@ -102,6 +102,20 @@ namespace CCS {
     return std::regex_replace(input, regexExpression, replacement);
   }
 
+  bool Util::regexMatch(string input, string pattern) {
+    std::regex regex = std::regex(pattern);
+    return std::regex_match(input, regex);
+  }
+
+  string Util::cleanId(string input) {
+    boost::algorithm::to_lower(input);
+    string result = Util::regexReplace(input, "[^a-z0-9]+", "_");
+    result = Util::regexReplace(result, "_+", "_");
+    result = Util::regexReplace(result, "^_", "");
+    result = Util::regexReplace(result, "_$", "");
+    return result;
+  }
+
   string Util::joinStrVector(vector<string> input, char separator) {
     string result;
     for (auto it = input.begin(); it != input.end(); ++it) {
