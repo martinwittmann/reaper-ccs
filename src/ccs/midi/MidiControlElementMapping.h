@@ -33,11 +33,15 @@ namespace CCS {
     ReaperApi *m_api;
     Session *m_session;
 
+    // The action types that are being used for the given control element.
+    std::vector<std::string> m_actionTypes;
+    std::string m_mappingType;
     std::string m_paramMapping;
+
     MediaTrack *m_mappedTrack;
     int m_mappedFxId;
     int m_mappedParamId;
-    std::vector<MidiControlElementAction*> m_actions;
+    std::map<std::string,std::vector<MidiControlElementAction*>> m_actions;
     bool m_hasMappedFxParam = false;
 
     double m_mappedMinValue;
@@ -72,9 +76,15 @@ namespace CCS {
     ) override;
     void initializeMappingValues(std::string rawMapping);
     void createActions();
-    void invokeActions();
+    void invokeActions(string actionType);
 
     void addValueDiff(char diff);
+
+    void toggleValue();
+
+    vector<MidiControlElementAction *> getActions(string eventKey);
+
+    vector <string> getAvailableActionTypes(short controlElementType);
   };
 }
 

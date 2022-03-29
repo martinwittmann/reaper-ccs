@@ -6,6 +6,7 @@
 #include "yaml-cpp/yaml.h"
 #include "MidiControlElementAction.h"
 #include "../Page.h"
+#include "../CcsException.h"
 
 namespace CCS {
 
@@ -32,6 +33,10 @@ namespace CCS {
     m_paramMapping = m_config->getValue("mapping");
     if (!m_paramMapping.empty()) {
       m_hasMappedFxParam = true;
+
+      m_actionTypes = getAvailableActionTypes(m_controlType);
+
+      m_mappingType = m_config->getValue("mapping_type");
       initializeMappingValues(m_paramMapping);
 
       auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
@@ -57,40 +62,71 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::createActions() {
-    const YAML::Node actions = m_config->getNode("actions");
+    for (auto eventType : m_actionTypes) {
+      m_actions.insert(std::pair(eventType, getActions(eventType)));
+    }
+  }
+
+  vector<string> MidiControlElementMapping::getAvailableActionTypes(short controlElementType) {
+    vector<string> result = {"on_value_change"};
+
+    if (controlElementType == MidiControlElement::BUTTON) {
+      result.push_back("on_press");
+      result.push_back("on_release");
+    }
+
+    return result;
+  }
+
+  vector<MidiControlElementAction*> MidiControlElementMapping::getActions(string eventKey) {
+    vector<MidiControlElementAction*> result;
+    const YAML::Node actions = m_config->getNode(eventKey);
     if (!actions) {
-      return;
+      return result;
     }
 
     for (auto &rawAction : actions) {
       YAML::Node item = rawAction;
       if (item.Type() == YAML::NodeType::Scalar) {
         // Only a single action was provided.
-        m_actions.push_back(new MidiControlElementAction(item.as<string>()));
+        result.push_back(new MidiControlElementAction(item.as<string>()));
       }
       else {
         if (m_config->keyExists("conditions", &item)) {
           YAML::Node conditions = item["conditions"];
           m_config->getListValues("actions", &item);
-          m_actions.push_back(new MidiControlElementAction(
+          result.push_back(new MidiControlElementAction(
             m_config->getListValues("actions", &item),
             &conditions
           ));
         }
         else {
-          m_actions.push_back(new MidiControlElementAction(
+          result.push_back(new MidiControlElementAction(
             m_config->getListValues("actions", &item)
           ));
         }
       }
     }
+
+    return result;
   }
 
-  void MidiControlElementMapping::invokeActions() {
-    for (auto action : m_actions) {
+  void MidiControlElementMapping::invokeActions(string actionType) {
+    vector<MidiControlElementAction*> actions;
+
+    for (auto type : m_actionTypes) {
+      if (type == actionType) {
+        actions = m_actions.at(actionType);
+        break;
+      }
+    }
+
+    for (auto action : actions) {
       action->invoke(
         m_session,
         Util::byteToHex(Util::get7BitValue(m_value, m_mappedMinValue, m_mappedMaxValue)),
+        Util::byteToHex(Util::get7BitValue(m_mappedMinValue, m_mappedMinValue, m_mappedMaxValue)),
+        Util::byteToHex(Util::get7BitValue(m_mappedMaxValue, m_mappedMinValue, m_mappedMaxValue)),
         m_formattedValue
       );
     }
@@ -100,16 +136,26 @@ namespace CCS {
     delete m_config;
   }
 
+  void MidiControlElementMapping::toggleValue() {
+    if (m_value == m_mappedMaxValue) {
+      m_value = m_mappedMinValue;
+    }
+    else {
+      m_value = m_mappedMaxValue;
+    }
+  }
+
   void MidiControlElementMapping::onMidiEvent(int eventId, unsigned char data2) {
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
-          m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
-          //onButtonPress(eventId, data2);
+          if (m_mappingType == "toggle") {
+            toggleValue();
+          }
+          m_controlElement->onButtonPress(data2);
         }
         else if (data2 == m_onReleaseValue) {
-          m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
-          //onButtonRelease(eventId, data2);
+          m_controlElement->onButtonRelease(data2);
         }
         break;
 
@@ -119,15 +165,6 @@ namespace CCS {
         break;
 
       case MidiControlElement::RELATIVE:
-        /*
-        char diff = 0;
-        if (data2 > 63) {
-          diff = data2 - 128;
-        }
-        else if (data2 < 63) {
-          diff = data2;
-        }
-        */
         addValueDiff(data2);
         m_controlElement->onChange(data2);
         break;
@@ -178,7 +215,7 @@ namespace CCS {
     m_value = value;
     m_formattedValue = formattedValue;
     if (m_hasMappedFxParam) {
-      invokeActions();
+      invokeActions("on_value_change");
     }
   }
 

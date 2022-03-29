@@ -88,13 +88,13 @@ namespace CCS {
     else if (type == "composite") {
       //Util::log("Executing composite action: " + actionId);
       // Apply the arguments to every sub action.
-      for (auto subAction: subActions) {
-        string rawSubAction = subAction;
-        rawSubAction = Variables::replaceVariables(rawSubAction, argumentVariables);
-        rawSubAction = Variables::replaceVariables(rawSubAction, *state, "state");
-        checkAction(rawSubAction);
-        //Util::log("- " + rawSubAction);
-        actionsManager->invokeAction(rawSubAction, session);
+      for (auto rawSubAction: subActions) {
+        string subAction = rawSubAction;
+        subAction = Variables::replaceVariables(subAction, argumentVariables);
+        subAction = Variables::replaceVariables(subAction, *state, "state");
+        checkAction(subAction);
+        //Util::log("- " + subAction);
+        actionsManager->invokeAction(subAction, session);
       }
       //Util::log("");
     }
