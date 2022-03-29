@@ -23,7 +23,7 @@ namespace CCS {
     ActionsManager *actionsManager,
     midi_Output *output,
     ReaperApi *reaperApi
-  ) {
+  ) : ActionProvider(actionsManager) {
     m_path = sessionPath;
     m_pagesDir = m_path + SEP + "pages";
     m_midiControllersDir = fse::path(m_path)
@@ -44,11 +44,13 @@ namespace CCS {
     m_output = output;
     m_reaperApi = reaperApi;
 
+    registerActionProvider("session");
+
     loadMidiControllers();
     loadSessionPages();
 
-    // TODO Find a better way to load a page.
-    setActivePage(0);
+    // We always start out on the first page we know.
+    setActivePage(m_pages.at(0)->getPageId());
   }
 
   Session::~Session() {
@@ -58,18 +60,27 @@ namespace CCS {
     }
   }
 
-  void Session::setActivePage(int index) {
+  Page *Session::getPage(string pageId) {
+    for (auto page : m_pages) {
+      if (page->getPageId() == pageId) {
+        return page;
+      }
+    }
+    throw CcsException("Trying to get unknown page: " + pageId);
+  }
+
+  void Session::setActivePage(string pageId) {
     try {
-      Page *page = m_pages.at(index);
+      Page *page = getPage(pageId);
       m_activePage = page;
-      // TODO implement changing page.
-      // We need to call setAction after setting activePage here because the
+
+      // We need to call setActive after setting activePage here because the
       // call of setActive invokes the activation actions which depend on an
       // active page being set.
       page->setActive();
     }
     catch (CcsException &e) {
-      Util::error("Exception in Session::setActivePage(" + std::to_string(index) + "):");
+      Util::error("Exception in Session::setActivePage(" + pageId + "):");
       Util::error(e.what());
     }
   }
@@ -179,5 +190,11 @@ namespace CCS {
 
   ActionsManager *Session::getActionsManager() {
     return m_actionsManager;
+  }
+
+  void Session::actionCallback(std::string actionName, std::vector<std::string> arguments) {
+    if (actionName == "load_page") {
+
+    }
   }
 }

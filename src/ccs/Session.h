@@ -10,6 +10,7 @@
 #include "midi/MidiEventSubscriber.h"
 #include "../reaper-api/ReaperApi.h"
 #include "FxPlugins.h"
+#include "actions/ActionProvider.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -20,7 +21,7 @@ namespace CCS {
   class MidiController;
   class Page;
 
-  class Session {
+  class Session : public ActionProvider {
     string m_path;
     string m_pagesDir;
     string m_midiControllersDir;
@@ -50,13 +51,17 @@ namespace CCS {
     std::vector<string> getMidiControllerNames();
     void loadSessionPages();
     void loadMidiControllers();
-    void setActivePage(int pageId);
+    void setActivePage(string pageId);
     Page *getActivePage();
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
     MidiController *getMidiController(std::string id);
     FxPlugins *getPluginManager();
 
     ActionsManager *getActionsManager();
+
+    Page *getPage(string pageId);
+
+    void actionCallback(std::string actionName, std::vector<std::string> arguments) override;
   };
 }
 

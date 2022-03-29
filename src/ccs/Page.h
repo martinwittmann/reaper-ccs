@@ -30,7 +30,6 @@ class Page : public ActionProvider {
     PageConfig *m_config;
     ActionsManager *m_actionsManager;
     Session *m_session;
-    vector<Action*> m_providedActions;
     string m_pageId;
     // A map of string variables that can be set via a page action.
     // Example: [page.set_state:name:value]

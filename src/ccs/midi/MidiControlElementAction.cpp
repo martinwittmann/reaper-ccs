@@ -100,6 +100,7 @@ namespace CCS {
     try {
       std::map<string, string> variables;
       variables.insert(std::pair("VALUE", value));
+      // Hack to add null-termination to the string. Otherwise it does not get shown on slmk3.
       variables.insert(std::pair("FORMATTED_VALUE", formattedValue));
       variables.insert(std::pair("MIN_VALUE", minValue));
       variables.insert(std::pair("MAX_VALUE", maxValue));

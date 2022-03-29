@@ -49,6 +49,32 @@ variables:
   COLOR7: 15
   COLOR8: 28
 
+  BUTTON1: 33
+  BUTTON2: 34
+  BUTTON3: 35
+  BUTTON4: 36
+  BUTTON5: 37
+  BUTTON6: 38
+  BUTTON7: 39
+  BUTTON8: 3A
+  BUTTON9: 3B
+  BUTTON10: 3C
+  BUTTON11: 3D
+  BUTTON12: 3E
+  BUTTON13: 3F
+  BUTTON14: 40
+  BUTTON15: 41
+  BUTTON16: 42
+  BUTTON17: 43
+  BUTTON18: 44
+  BUTTON19: 45
+  BUTTON20: 46
+  BUTTON21: 47
+  BUTTON22: 48
+  BUTTON23: 49
+  BUTTON24: 4A
+
+
 actions:
   set_display_encoders:
     message:
@@ -177,12 +203,24 @@ mappings:
   controls:
     slmk3.button1:
       label: $_PAGES.page1.name
-      action: set_active_page:page1
+      on_press:
+        - conditions:
+            $_CURRENT_PAGE.isnot: page1
+          actions:
+            - "[session.load_page:page1]"
 
     slmk3.button2:
       label: $_PAGES.page2.name
-      action: set_active_page:page2
+      on_press:
+        - conditions:
+            $_CURRENT_PAGE.isnot: page2
+          actions:
+            - "[session.load_page:page2]"
 
     slmk3.button3:
       label: $_PAGES.page3.name
-      action: set_active_page:page3
+      on_press:
+        - conditions:
+            $_CURRENT_PAGE.isnot: page3
+          actions:
+            - "[session.load_page:page3]"

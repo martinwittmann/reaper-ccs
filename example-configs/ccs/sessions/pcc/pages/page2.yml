@@ -3,7 +3,7 @@ name: $PART1_LABEL
 id: page_1
 on_activate:
   - "[page.set_state:CURRENT_COLOR:$PART1_COLOR]"
-  - "[page.set_display_buttons]"
+  - "[page.set_display_encoders]"
 
 
 variables:
@@ -12,14 +12,14 @@ variables:
   DISPLAY_BUTTONS: buttons
   DISPLAY_DEFAULT: encoders
 
-  ENCODER1_LABEL: LFO Amt
-  ENCODER2_LABEL: PW
-  ENCODER3_LABEL: LFO Rate
-  ENCODER4_LABEL: Test 1
-  ENCODER5_LABEL: Test 2
-  ENCODER6_LABEL: Test 3
-  ENCODER7_LABEL: Test 4
-  ENCODER8_LABEL: Test 5
+  ENCODER1_LABEL: Page 2
+  ENCODER2_LABEL: Page 2
+  ENCODER3_LABEL: Page 2
+  ENCODER4_LABEL: Page 2
+  ENCODER5_LABEL: Page 2
+  ENCODER6_LABEL: Page 2
+  ENCODER7_LABEL: Page 2
+  ENCODER8_LABEL: Page 2
 
   BUTTON1_LABEL: $PART1_LABEL
   BUTTON2_LABEL: $PART2_LABEL
@@ -155,7 +155,7 @@ mappings:
       mapping_type: enum
       on_value_change:
         - "[slmk3.set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
-        
+
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:

@@ -146,6 +146,9 @@ namespace CCS {
     if (actionName == "set_state") {
       m_state["_STATE." + arguments.at(0)] = arguments.at(1);
     }
+    else if (actionName == "set_active_page") {
+      m_session->setActivePage(arguments.at(0));
+    }
   }
 
   std::map<int,MidiEventSubscriber*> Page::getSubscribedMidiEventIds() {

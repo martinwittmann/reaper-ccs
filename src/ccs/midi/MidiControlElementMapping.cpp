@@ -30,11 +30,12 @@ namespace CCS {
     m_api = api;
     m_session = session;
 
+    m_actionTypes = getAvailableActionTypes(m_controlType);
     m_paramMapping = m_config->getValue("mapping");
+
     if (!m_paramMapping.empty()) {
       m_hasMappedFxParam = true;
 
-      m_actionTypes = getAvailableActionTypes(m_controlType);
 
       m_mappingType = m_config->getValue("mapping_type");
       initializeMappingValues(m_paramMapping);
@@ -149,7 +150,7 @@ namespace CCS {
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
-          if (m_mappingType == "toggle") {
+          if (m_hasMappedFxParam && m_mappingType == "toggle") {
             toggleValue();
           }
           invokeActions("on_press");

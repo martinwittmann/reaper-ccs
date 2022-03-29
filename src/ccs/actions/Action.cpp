@@ -69,7 +69,7 @@ namespace CCS {
         }
         string argumentType = m_argumentTypes.at(i);
         if (argumentType == "string") {
-          argumentValue = Util::strToHexBytes(argumentValue);
+          argumentValue = Util::strToHexBytes(argumentValue) + " 00";
         }
         string argumentName = "_ARGS." + m_argumentNames.at(i);
 
