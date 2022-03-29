@@ -5,6 +5,7 @@
 #include "../Util.h"
 #include "BaseConfig.h"
 #include "../Variables.h"
+#include "../CcsException.h"
 
 namespace CCS {
 
@@ -69,10 +70,13 @@ namespace CCS {
       case YAML::NodeType::Sequence:
         mergeYamlSequences(target, source);
         break;
+
+      case YAML::NodeType::Null:
+        // Nothing to do if source does not exist.
+        break;
+
       default:
-        string message = "BaseConfig::mergeYaml: Unknown source node type";
-        Util::error(message);
-        throw message;
+        throw CcsException("BaseConfig::mergeYaml: Unknown source node type");
     }
   }
 

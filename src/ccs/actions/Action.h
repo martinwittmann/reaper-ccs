@@ -15,17 +15,17 @@ namespace CCS {
 
   class Action {
     // A string identifier unique within the scope of the given provider id.
-    string actionId;
+    string m_actionId;
 
     // This can be the id of a midi controller, "reaper" for reaper actions
     // (see ActionProviderReaper class) or "ccs" for actions ccs itself provides.
-    string providerId;
-    string type;
-    vector<string> subActions;
-    vector<string> argumentNames;
-    vector<string> argumentTypes;
-    ActionsManager *actionsManager;
-    ActionProvider *actionProvider;
+    string m_providerId;
+    string m_type;
+    vector<string> m_subActions;
+    vector<string> m_argumentNames;
+    vector<string> m_argumentTypes;
+    ActionsManager *m_actionsManager;
+    ActionProvider *m_actionProvider;
 
   public:
 

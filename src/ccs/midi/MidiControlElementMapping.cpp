@@ -152,21 +152,19 @@ namespace CCS {
           if (m_mappingType == "toggle") {
             toggleValue();
           }
-          m_controlElement->onButtonPress(data2);
+          invokeActions("on_press");
         }
         else if (data2 == m_onReleaseValue) {
-          m_controlElement->onButtonRelease(data2);
+          invokeActions("on_release");
         }
         break;
 
       case MidiControlElement::ABSOLUTE:
         m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
-        m_controlElement->onChange(data2);
         break;
 
       case MidiControlElement::RELATIVE:
         addValueDiff(data2);
-        m_controlElement->onChange(data2);
         break;
     }
 

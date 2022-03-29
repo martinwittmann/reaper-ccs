@@ -61,7 +61,6 @@ namespace CCS {
     }
 
     string message = "Config with id " + nameId + " not found!";
-    Util::error(message);
     throw CcsException(message);
   }
 

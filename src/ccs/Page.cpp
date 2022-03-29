@@ -7,6 +7,7 @@
 #include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
 #include "Variables.h"
+#include "CcsException.h"
 
 namespace CCS {
 
@@ -52,9 +53,15 @@ namespace CCS {
 
   void Page::setActive() {
     // Invoke the actions defined in "on_activate";
-    vector<string> initActionItems = m_config->getListValues("on_activate");
-    for (auto rawAction : initActionItems) {
-      actionsManager->invokeAction(rawAction, m_session);
+    try {
+      vector<string> initActionItems = m_config->getListValues("on_activate");
+      for (auto rawAction : initActionItems) {
+        actionsManager->invokeAction(rawAction, m_session);
+      }
+    }
+    catch (CcsException &e) {
+      Util::error("Error setting active page:");
+      Util::error(e.what());
     }
   }
 

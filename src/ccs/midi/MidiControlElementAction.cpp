@@ -97,25 +97,31 @@ namespace CCS {
     const string &maxValue,
     const string &formattedValue
   ) {
-    std::map<string,string> variables;
-    variables.insert(std::pair("VALUE", value));
-    variables.insert(std::pair("FORMATTED_VALUE", formattedValue));
-    variables.insert(std::pair("MIN_VALUE", minValue));
-    variables.insert(std::pair("MAX_VALUE", maxValue));
+    try {
+      std::map<string, string> variables;
+      variables.insert(std::pair("VALUE", value));
+      variables.insert(std::pair("FORMATTED_VALUE", formattedValue));
+      variables.insert(std::pair("MIN_VALUE", minValue));
+      variables.insert(std::pair("MAX_VALUE", maxValue));
 
-    // Putting together stat before testing conditions, since conditions will
-    // depend on state variables.
-    for (auto &item : *session->getActivePage()->getState()) {
-      variables.insert(std::pair(item.first, item.second));
+      // Putting together stat before testing conditions, since conditions will
+      // depend on state variables.
+      for (auto &item: *session->getActivePage()->getState()) {
+        variables.insert(std::pair(item.first, item.second));
+      }
+
+      if (!conditionsAreMet(variables)) {
+        return;
+      }
+
+      for (auto rawAction: m_actions) {
+        string action = Variables::replaceVariables(rawAction, variables, "state");
+        session->getActionsManager()->invokeAction(action, session);
+      }
     }
-
-    if (!conditionsAreMet(variables)) {
-      return;
-    }
-
-    for (auto rawAction : m_actions) {
-      string action = Variables::replaceVariables(rawAction, variables, "state");
-      session->getActionsManager()->invokeAction(action, session);
+    catch (CcsException &e) {
+      Util::error("Error invoking action:");
+      Util::error(e.what());
     }
   }
 }

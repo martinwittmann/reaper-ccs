@@ -59,10 +59,4 @@ namespace CCS {
   short MidiControlElement::getOnReleaseValue() {
     return onReleaseData2;
   }
-
-  void MidiControlElement::onChange(short data) { }
-
-  void MidiControlElement::onButtonPress(short data) { }
-
-  void MidiControlElement::onButtonRelease(short data) { }
 }

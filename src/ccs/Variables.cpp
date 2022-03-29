@@ -1,5 +1,6 @@
 #include "Variables.h"
 #include "Util.h"
+#include "CcsException.h"
 
 namespace CCS {
 
@@ -14,6 +15,11 @@ namespace CCS {
       string value;
       if (item.second && item.second.Type() != YAML::NodeType::Null) {
         value = item.second.as<string>();
+        // Make sure that variables are not too short.
+        // TODO: How to deal with other types than byte?
+        if (!value.empty() && value.size() < 2) {
+          value = "0" + value;
+        }
       }
       result.insert(std::pair(key, value));
     }
@@ -61,9 +67,7 @@ namespace CCS {
         }
         break;
       default:
-        string message = "Variables::replaceVariables: Unknown source node type";
-        Util::error(message);
-        throw message;
+        throw CcsException("Variables::replaceVariables: Unknown source node type");
     }
   }
 }

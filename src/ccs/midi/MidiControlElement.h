@@ -55,10 +55,6 @@ namespace CCS {
     int getInputEventId();
     short getOnPressValue();
     short getOnReleaseValue();
-
-    void onChange(short data);
-    void onButtonPress(short data);
-    void onButtonRelease(short data);
   };
 }
 

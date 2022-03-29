@@ -224,6 +224,7 @@ namespace CCS {
   }
 
   void Util::error(string message, bool lineBreak) {
+    message = "CCS: " + message;
     if (lineBreak) {
       message += "\n";
     }
