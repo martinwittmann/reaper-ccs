@@ -4,13 +4,15 @@
 #include "../CcsException.h"
 #include "../Variables.h"
 #include "../Session.h"
+#include "../Page.h"
 #include "yaml-cpp/yaml.h"
 
 namespace CCS {
 
   using std::string;
 
-  CompositeAction::CompositeAction(YAML::Node actionRoot) {
+  CompositeAction::CompositeAction(string id, YAML::Node actionRoot) {
+    m_id = id;
     m_config = new CompositeActionConfig(&actionRoot);
 
     if (actionRoot.Type() == YAML::NodeType::Scalar) {
@@ -20,10 +22,12 @@ namespace CCS {
     }
     else if (actionRoot.Type() == YAML::NodeType::Sequence) {
       // This has a list of subactions.
+      int i = 0;
       for (auto rawSubAction : actionRoot) {
         YAML::Node item = rawSubAction;
-        CompositeAction *subAction = new CompositeAction(item);
+        CompositeAction *subAction = new CompositeAction(m_id + "." + string(m_id), item);
         m_subActions.push_back(subAction);
+        i++;
       }
     }
     else if (actionRoot.Type() == YAML::NodeType::Map) {
@@ -38,6 +42,7 @@ namespace CCS {
         throw CcsException("Trying to create a CompositeAction from a yaml map that does not contain the actions key.");
       }
 
+      // Set up conditions for this action.
       if (m_config->keyExists("conditions", &actionRoot)) {
         YAML::Node conditions = actionRoot["conditions"];
 
@@ -50,9 +55,23 @@ namespace CCS {
         }
       }
 
+      // Set up arguments.
+      m_argumentNames = m_config->getListValues("arguments", &actionRoot);
+      for (auto &argument : m_argumentNames) {
+        if (argument.substr(argument.length() - 1) == "!") {
+          argument = argument.substr(0, argument.length() - 1);
+          m_argumentTypes.push_back("string");
+        }
+        else {
+          m_argumentTypes.push_back("byte");
+        }
+      }
+
+      // Set up the actual subactions.
       for (auto rawSubAction : actionRoot["actions"]) {
         YAML::Node item = rawSubAction;
-        auto subAction = new CompositeAction(item);
+        string tmpId = m_id + "." + rawSubAction.first.as<string>();
+        auto subAction = new CompositeAction(tmpId, item);
         m_subActions.push_back(subAction);
       }
     }
@@ -111,7 +130,42 @@ namespace CCS {
     throw CcsException("Unknown condition operator");
   }
 
-  void CompositeAction::invoke(std::map<string, string> variables, Session *session) {
+  void CompositeAction::invoke(vector<string> arguments, Session *session) {
+
+    // We map the given arguments in the same order as the vector of
+    // argument names we got in the constructor.
+    std::map<string, string> argumentVariables;
+
+    if (!m_argumentNames.empty()) {
+      for (auto i = 0; i < arguments.size(); i++) {
+        string argumentValue = arguments.at(i);
+
+        if (i >= m_argumentNames.size()) {
+          // We received more arguments than we expect.
+          throw CcsException("Received unknown superfluous argument '" + argumentValue + "' for action " + m_id);
+        }
+        string argumentType = m_argumentTypes.at(i);
+        if (argumentType == "string") {
+          argumentValue = Util::strToHexBytes(argumentValue) + " 00";
+        }
+        string argumentName = "_ARGS." + m_argumentNames.at(i);
+
+        // We need to make sure that arguments retrieved from user created
+        // configs are at least 2 characters long. Otherwise the sent messages
+        // are incorrect.
+        // TODO Are the values supposed to be base10 and converted?
+        // Right now we're using them as is. This will break quite easily.
+        if (argumentType == "byte" && !argumentValue.empty() && argumentValue.size() < 2) {
+          argumentValue = "0" + argumentValue;
+        }
+        argumentVariables.insert(std::pair(argumentName, argumentValue));
+      }
+    }
+
+    invoke(argumentVariables, session);
+  }
+
+  void CompositeAction::invoke(std::map<string,string> variables, Session *session) {
     try {
       if (m_isSimpleAction) {
         return invokeSimpleAction(variables, session);
@@ -132,10 +186,12 @@ namespace CCS {
   }
 
   void CompositeAction::invokeSimpleAction(
-    std::map<string,string> variables,
+    std::map<string,string> arguments,
     Session *session
   ) {
-    string action = Variables::replaceVariables(m_simpleAction, variables, "state");
+    string action = Variables::replaceVariables(m_simpleAction, arguments);
+    std::map<string,string> *state = session->getActivePage()->getState();
+    action = Variables::replaceVariables(action, *state, "state");
     session->invokeAction(action, session);
   }
 

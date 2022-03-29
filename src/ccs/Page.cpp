@@ -85,7 +85,6 @@ namespace CCS {
     // Get Actions from config.
     YAML::Node actionsNode = m_config->getMapValue("actions");
     YAML::Node variablesNode = m_config->getMapValue("variables");
-    std::map<string,string> variables = Variables::getVariables(variablesNode);
     for (const auto &item: actionsNode) {
       auto actionId = item.first.as<string>();
       Action *action = createPageAction(
@@ -97,20 +96,8 @@ namespace CCS {
   }
 
   Action *Page::createPageAction(string actionId, YAML::Node node) {
-    vector<string> rawSubActions = m_config->getListValues("message", &node);
+    vector<string> rawSubActions = m_config->getListValues("actions", &node);
     vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
-    vector<string> argumentNames = m_config->getListValues("arguments", &node);
-    vector<string> argumentTypes;
-
-    for (auto &argument : argumentNames) {
-      if (argument.substr(argument.length() - 1) == "!") {
-        argument = argument.substr(0, argument.length() - 1);
-        argumentTypes.push_back("string");
-      }
-      else {
-        argumentTypes.push_back("byte");
-      }
-    }
 
     return new Action(
       m_pageId,

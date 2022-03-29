@@ -76,8 +76,16 @@ variables:
 
 
 actions:
+  set_selected_part:
+    arguments:
+      - HUI!
+    conditions:
+      $_STATE.DISPLAY.is: faders
+    actions:
+      - "[slmk3.set_knob_layout]"
+
   set_display_encoders:
-    message:
+    actions:
     - "[slmk3.set_knob_layout]"
     - "[slmk3.set_knob_label:$SCREEN1:$ENCODER1_LABEL]"
     - "[slmk3.set_knob_label:$SCREEN2:$ENCODER2_LABEL]"
@@ -119,7 +127,7 @@ actions:
     - "[page.set_state:DISPLAY:encoders]"
 
   set_display_buttons:
-    message:
+    actions:
     - "[slmk3.set_box_layout]"
     - "[slmk3.set_top_box_label:$SCREEN1:$BUTTON9_LABEL]"
     - "[slmk3.set_top_box_label:$SCREEN2:$BUTTON10_LABEL]"
@@ -189,7 +197,7 @@ actions:
   set_knob_top_bar_colors:
     arguments:
       - COLOR
-    message:
+    actions:
     - "[slmk3.set_knob_top_bar_color:$SCREEN1:$_STATE.CURRENT_COLOR]"
     - "[slmk3.set_knob_top_bar_color:$SCREEN2:$_STATE.CURRENT_COLOR]"
     - "[slmk3.set_knob_top_bar_color:$SCREEN3:$_STATE.CURRENT_COLOR]"

@@ -47,9 +47,7 @@ namespace CCS {
     Action(
       string providerId,
       string actionId,
-      vector<string> argumentNames,
-      vector<string> argumentTypes,
-      vector<string> subActions,
+      YAML::Node node,
       ActionsManager *actionsManager
     );
 

@@ -16,9 +16,13 @@ namespace CCS {
   } composite_action_condition;
 
   class CompositeAction {
+    std::string m_id;
     CompositeActionConfig *m_config;
     std::vector<CompositeAction* > m_subActions;
     std::vector<composite_action_condition> m_conditions;
+
+    std::vector<std::string> m_argumentNames;
+    std::vector<std::string> m_argumentTypes;
 
     bool m_isSimpleAction = false;
     // This will contain a string for a simple action. E.g.:
@@ -26,7 +30,7 @@ namespace CCS {
     std::string m_simpleAction;
 
   public:
-    explicit CompositeAction(YAML::Node actionRoot);
+    CompositeAction(std::string id, YAML::Node actionRoot);
 
     bool conditionsAreMet(std::map<string,string> variables);
 
@@ -36,7 +40,9 @@ namespace CCS {
 
     void invoke(std::map<string,string> variables, Session *session);
 
-    void invokeSimpleAction(std::map<string, string> variables, Session *session);
+    void invokeSimpleAction(std::map<string,string> arguments, Session *session);
+
+    void invoke(vector <string> arguments, Session *session);
   };
 }
 #endif
