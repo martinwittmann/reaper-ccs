@@ -1,7 +1,4 @@
 name: PCC - Live
 
-on_activate:
-  - "[slmk3.set_knob_layout]"
-
 required_midi_controllers:
   - slmk3

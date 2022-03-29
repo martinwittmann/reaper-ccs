@@ -2,6 +2,17 @@
 # on each page.
 # This is useful if variables and mappings should stay the same on all pages.
 variables:
+  SCREEN1: 00
+  SCREEN2: 01
+  SCREEN3: 02
+  SCREEN4: 03
+  SCREEN5: 04
+  SCREEN6: 05
+  SCREEN7: 06
+  SCREEN8: 07
+
+  COLOR_OFF: 00
+
   COLOR_LIGHT_BLUE: 25
   COLOR_RED: 05
   COLOR_YELLOW: 0D
@@ -16,7 +27,6 @@ variables:
   PART3_LABEL: Juno 3
   PART4_LABEL: Vital
   PART5_LABEL: 
-  PART5_LABEL: 
   PART6_LABEL: 
   PART7_LABEL: 
   PART8_LABEL: Mixer
@@ -30,16 +40,149 @@ variables:
   PART7_COLOR: 15
   PART8_COLOR: 28
 
+  COLOR1: 25
+  COLOR2: 05
+  COLOR3: 0D
+  COLOR4: 36
+  COLOR5: 54
+  COLOR6: 03
+  COLOR7: 15
+  COLOR8: 28
+
+actions:
+  set_display_encoders:
+    message:
+    - "[slmk3.set_knob_layout]"
+    - "[slmk3.set_knob_label:$SCREEN1:$ENCODER1_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN2:$ENCODER2_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN3:$ENCODER3_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN4:$ENCODER4_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN5:$ENCODER5_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN6:$ENCODER6_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN7:$ENCODER7_LABEL]"
+    - "[slmk3.set_knob_label:$SCREEN8:$ENCODER8_LABEL]"
+
+    - "[slmk3.set_knob_bottom_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
+
+    - "[slmk3.set_knob_bottom_color:$SCREEN1:$PART1_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN2:$PART2_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN3:$PART3_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN4:$PART4_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN5:$PART5_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN6:$PART6_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN7:$PART7_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
+
+    - "[slmk3.set_knob_color:$SCREEN1:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN2:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN3:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN4:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN5:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN6:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN7:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN8:$COLOR_WHITE]"
+
+    - "[slmk3.set_knob_lower_text_selected:$SCREEN1:01]"
+    - "[page.set_state:DISPLAY:encoders]"
+
+  set_display_buttons:
+    message:
+    - "[slmk3.set_box_layout]"
+    - "[slmk3.set_top_box_label:$SCREEN1:$BUTTON9_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN2:$BUTTON10_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN3:$BUTTON11_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN4:$BUTTON12_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN5:$BUTTON13_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN6:$BUTTON14_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN7:$BUTTON15_LABEL]"
+    - "[slmk3.set_top_box_label:$SCREEN8:$BUTTON16_LABEL]"
+
+    - "[slmk3.set_top_box_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.set_top_box_color:$SCREEN2:$COLOR2]"
+    - "[slmk3.set_top_box_color:$SCREEN3:$COLOR3]"
+    - "[slmk3.set_top_box_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.set_top_box_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.set_top_box_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.set_top_box_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.set_top_box_color:$SCREEN8:$COLOR8]"
+
+    - "[slmk3.set_center_box_label:$SCREEN1:$BUTTON17_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN2:$BUTTON18_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN3:$BUTTON19_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN4:$BUTTON20_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN5:$BUTTON21_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN6:$BUTTON22_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN7:$BUTTON23_LABEL]"
+    - "[slmk3.set_center_box_label:$SCREEN8:$BUTTON24_LABEL]"
+
+    - "[slmk3.set_center_box_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.set_center_box_color:$SCREEN2:$COLOR2]"
+    - "[slmk3.set_center_box_color:$SCREEN3:$COLOR3]"
+    - "[slmk3.set_center_box_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.set_center_box_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.set_center_box_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.set_center_box_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.set_center_box_color:$SCREEN8:$COLOR8]"
+
+    - "[slmk3.set_bottom_box_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.set_bottom_box_label:$SCREEN8:$PART8_LABEL]"
+
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN1:$PART1_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN2:$PART1_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN3:$PART1_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN4:$PART4_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN5:$PART5_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN6:$PART6_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
+    - "[slmk3.set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
+
+    - "[slmk3.set_bottom_box_selected:$SCREEN1:01]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN2:00]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN3:00]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN4:00]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN5:00]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN6:00]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN7:00]"
+    - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
+
+    - "[page.set_state:DISPLAY:buttons]"
+
+  set_knob_top_bar_colors:
+    arguments:
+      - COLOR
+    message:
+    - "[slmk3.set_knob_top_bar_color:$SCREEN1:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN2:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN3:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN4:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN5:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN6:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN7:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN8:$_STATE.CURRENT_COLOR]"
+
 mappings:
   controls:
-    button1:
+    slmk3.button1:
       label: $_PAGES.page1.name
       action: set_active_page:page1
 
-    button2:
+    slmk3.button2:
       label: $_PAGES.page2.name
       action: set_active_page:page2
 
-    button3:
+    slmk3.button3:
       label: $_PAGES.page3.name
       action: set_active_page:page3

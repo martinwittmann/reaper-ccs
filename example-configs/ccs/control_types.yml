@@ -1,0 +1,16 @@
+# This is just for documentation.
+types:
+  relative:
+    events:
+      - change
+      - increase
+      - decrease
+
+  absolute:
+    events:
+      - change
+
+  button:
+    events:
+      - press
+      - release

@@ -1,86 +1,215 @@
 name: Novation SL MKIII
 id: slmk3
-default_status: B0
+default_status: BF
 controls:
   encoder1:
-    type: encoder_relative
-    message:
-      data1: 15
+    type: relative
+    data1: 15
 
   encoder2:
-    type: encoder_relative
-    message:
-      data1: 16
+    type: relative
+    data1: 16
 
   encoder3:
-    type: encoder_relative
-    message:
-      data1: 17
+    type: relative
+    data1: 17
 
   encoder4:
-    type: encoder_relative
-    message:
-      data1: 18
+    type: relative
+    data1: 18
 
   encoder5:
-    type: encoder_relative
-    message:
-      data1: 19
+    type: relative
+    data1: 19
 
   encoder6:
-    type: encoder_relative
-    message:
-      data1: 1A
+    type: relative
+    data1: 1A
 
   encoder7:
-    type: encoder_relative
-    message:
-      data1: 1B
+    type: relative
+    data1: 1B
 
   encoder8:
-    type: encoder_relative
-    message:
-      data1: 1C
+    type: relative
+    data1: 1C
+
+  fader1:
+    type: relative
+    data1: 36
+
+  fader2:
+    type: relative
+    data1: 37
+
+  fader3:
+    type: relative
+    data1: 38
+
+  fader4:
+    type: relative
+    data1: 39
+
+  fader5:
+    type: relative
+    data1: 3A
+
+  fader6:
+    type: relative
+    data1: 3B
+
+  fader7:
+    type: relative
+    data1: 3C
+
+  fader8:
+    type: relative
+    data1: 3D
 
   button1:
     type: button
-    message:
-      data1: 33
+    data1: 33
+    data2_press: 7F
+    data2_release: 00
 
   button2:
     type: button
-    message:
-      data1: 34
+    data1: 34
+    data2_press: 7F
+    data2_release: 00
 
   button3:
     type: button
-    message:
-      data1: 35
+    data1: 35
+    data2_press: 7F
+    data2_release: 00
 
   button4:
     type: button
-    message:
-      data1: 36
+    data1: 36
+    data2_press: 7F
+    data2_release: 00
 
   button5:
     type: button
-    message:
-      data1: 37
+    data1: 37
+    data2_press: 7F
+    data2_release: 00
 
   button6:
     type: button
-    message:
-      data1: 38
+    data1: 38
+    data2_press: 7F
+    data2_release: 00
 
   button7:
     type: button
-    message:
-      data1: 39
+    data1: 39
+    data2_press: 7F
+    data2_release: 00
 
   button8:
     type: button
-    message:
-      data1: 3A
+    data1: 3A
+    data2_press: 7F
+    data2_release: 00
+
+  button9:
+    type: button
+    data1: 3B
+    data2_press: 7F
+    data2_release: 00
+
+  button10:
+    type: button
+    data1: 3C
+    data2_press: 7F
+    data2_release: 00
+
+  button11:
+    type: button
+    data1: 3D
+    data2_press: 7F
+    data2_release: 00
+
+  button12:
+    type: button
+    data1: 3E
+    data2_press: 7F
+    data2_release: 00
+
+  button13:
+    type: button
+    data1: 3F
+    data2_press: 7F
+    data2_release: 00
+
+  button14:
+    type: button
+    data1: 40
+    data2_press: 7F
+    data2_release: 00
+
+  button15:
+    type: button
+    data1: 41
+    data2_press: 7F
+    data2_release: 00
+
+  button16:
+    type: button
+    data1: 42
+    data2_press: 7F
+    data2_release: 00
+
+  button17:
+    type: button
+    data1: 43
+    data2_press: 7F
+    data2_release: 00
+
+  button18:
+    type: button
+    data1: 44
+    data2_press: 7F
+    data2_release: 00
+
+  button19:
+    type: button
+    data1: 45
+    data2_press: 7F
+    data2_release: 00
+
+  button20:
+    type: button
+    data1: 46
+    data2_press: 7F
+    data2_release: 00
+
+  button21:
+    type: button
+    data1: 47
+    data2_press: 7F
+    data2_release: 00
+
+  button22:
+    type: button
+    data1: 48
+    data2_press: 7F
+    data2_release: 00
+
+  button23:
+    type: button
+    data1: 49
+    data2_press: 7F
+    data2_release: 00
+
+  button24:
+    type: button
+    data1: 4A
+    data2_press: 7F
+    data2_release: 00
+
 
 variables:
   SYSEX_HEADER: F0 00 20 29 02 0A 01
@@ -91,6 +220,9 @@ variables:
   SCREEN3: 02
   SCREEN4: 03
   SCREEN5: 04
+  SCREEN6: 05
+  SCREEN7: 06
+  SCREEN8: 07
 
   SET_SCREEN_LAYOUT: 01
   SET_SCREEN_PROPERTY: 02
@@ -107,6 +239,12 @@ variables:
   # Documentation says there are not properties that can be set, but when
   # testing things it seemed like we can set text for 1 lines.
   # What else could be possible?
+
+
+  LABEL_KNOB: 00
+  LABEL_KNOB_VALUE: 01
+
+
 
   LAYOUT_KNOB: 01
   L_KNOB: 01
@@ -126,29 +264,29 @@ variables:
 
   LAYOUT_BOX: 02
   L_BOX: 02
-  L_KNOB_TOP_BOX_COLOR: 00
-  L_KNOB_CENTER_BOX_COLOR: 01
-  L_KNOB_BOTTOM_BAR_COLOR: 02
+  L_BOX_TOP_BOX_COLOR: 00
+  L_BOX_CENTER_BOX_COLOR: 01
+  L_BOX_BOTTOM_BAR_COLOR: 02
 
-  L_KNOB_TOP_BOX_SELECTED: 0
-  L_KNOB_CENTER_BOX_SELECTED: 1
-  L_KNOB_BOTTOM_BOX_SELECTED: 1
+  L_BOX_TOP_BOX_SELECTED: 0
+  L_BOX_CENTER_BOX_SELECTED: 1
+  L_BOX_BOTTOM_BOX_SELECTED: 2
 
-  L_KNOB_TEXT1: 00
-  L_KNOB_TEXT2: 01
-  L_KNOB_TEXT3: 02
-  L_KNOB_TEXT4: 03
-  L_KNOB_TEXT5: 04
-  L_KNOB_TEXT6: 05
+  L_BOX_TEXT1: 00
+  L_BOX_TEXT2: 01
+  L_BOX_TEXT3: 02
+  L_BOX_TEXT4: 03
+  L_BOX_TEXT5: 04
+  L_BOX_TEXT6: 05
 
-  CENTER_L_LEFT_BAR_COLOR: 0
-  CENTER_L_TOP_RIGHT_BAR_COLOR: 1
-  CENTER_L_BOTTOM_RIGHT_BAR_COLOR: 1
+  CENTER_L_LEFT_BAR_COLOR: 00
+  CENTER_L_TOP_RIGHT_BAR_COLOR: 01
+  CENTER_L_BOTTOM_RIGHT_BAR_COLOR: 01
 
-  CENTER_L_LEFT_TOP_TEXT: 0
-  CENTER_L_LEFT_BOTTOM_TEXT: 1
-  CENTER_L_RIGHT_TOP_TEXT: 2
-  CENTER_L_RIGHT_BOTTOM_TEXT: 3
+  CENTER_L_LEFT_TOP_TEXT: 00
+  CENTER_L_LEFT_BOTTOM_TEXT: 01
+  CENTER_L_RIGHT_TOP_TEXT: 02
+  CENTER_L_RIGHT_BOTTOM_TEXT: 03
 
   COLOR_WHITE: 03
   COLOR_RED: 05
@@ -159,9 +297,17 @@ variables:
   COLOR_VIOLET: 2D
   COLOR_ORANGE: 3C
 
+
 actions:
   # Combining multiple messages within 1 header and end does not
   # work. At least not the way it's implemented currently.
+  sysex_header:
+    message:
+      - $SYSEX_HEADER
+
+  sysex_end:
+    message:
+      - $SYSEX_END
 
   set_screen_layout:
     arguments:
@@ -194,6 +340,46 @@ actions:
       - 00
       - $SYSEX_END
 
+  set_label:
+    arguments:
+      - SCREEN_COLUMN
+      - LABEL_ID
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $_ARGS.LABEL_ID
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_knob_label:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT1
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_knob_value_label:
+    arguments:
+      - SCREEN_COLUMN
+      - VALUE!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_KNOB_TEXT2
+      - $_ARGS.VALUE
+      - $SYSEX_END
+
   set_knob_value:
     arguments:
       - SCREEN_COLUMN
@@ -220,48 +406,7 @@ actions:
       - $_ARGS.COLOR
       - $SYSEX_END
 
-  set_knob_label:
-    arguments:
-      - SCREEN_COLUMN
-      # '!' marks this argument as a text argument so that it's
-      # translated into midi compatible bytes.
-      - TEXT!
-    message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
-      - $_ARGS.SCREEN_COLUMN
-      - $PROPERTY_TYPE_TEXT
-      - $L_KNOB_TEXT1
-      - $_ARGS.TEXT
-      - $SYSEX_END
-
-  set_knob_label2:
-    arguments:
-      - SCREEN_COLUMN
-      - TEXT!
-    message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
-      - $_ARGS.SCREEN_COLUMN
-      - $PROPERTY_TYPE_TEXT
-      - $L_KNOB_TEXT2
-      - $_ARGS.TEXT
-      - $SYSEX_END
-
-  set_knob_label3:
-    arguments:
-      - SCREEN_COLUMN
-      - TEXT!
-    message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
-      - $_ARGS.SCREEN_COLUMN
-      - $PROPERTY_TYPE_TEXT
-      - $L_KNOB_TEXT3
-      - $_ARGS.TEXT
-      - $SYSEX_END
-
-  set_knob_label4:
+  set_knob_bottom_label:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
@@ -287,7 +432,7 @@ actions:
       - $_ARGS.SELECTED
       - $SYSEX_END
 
-  set_knob_top_color:
+  set_knob_top_bar_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
@@ -314,3 +459,151 @@ actions:
       - $_ARGS.COLOR
       - $SYSEX_END
 
+  set_box_layout:
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_LAYOUT
+      - $LAYOUT_BOX
+      - $SYSEX_END
+
+  set_box_label:
+    arguments:
+      - SCREEN_COLUMN
+      - LABEL
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $_ARGS.LABEL
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_top_box_label:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_BOX_TEXT1
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_center_box_label:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_BOX_TEXT3
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_bottom_box_label:
+    arguments:
+      - SCREEN_COLUMN
+      - TEXT!
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_TEXT
+      - $L_BOX_TEXT6
+      - $_ARGS.TEXT
+      - $SYSEX_END
+
+  set_button_color:
+    arguments:
+      - BUTTON
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - BF
+      - $_ARGS.BUTTON
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+  set_box_bottom_bar_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_BOX_BOTTOM_BAR_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+  set_top_box_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_BOX_TOP_BOX_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+  set_top_box_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_BOX_TOP_BOX_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+  set_center_box_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_BOX_CENTER_BOX_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+  set_bottom_box_color:
+    arguments:
+      - SCREEN_COLUMN
+      - COLOR
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_COLOR
+      - $L_BOX_BOTTOM_BOX_COLOR
+      - $_ARGS.COLOR
+      - $SYSEX_END
+
+  set_bottom_box_selected:
+    arguments:
+      - SCREEN_COLUMN
+      - SELECTED
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_VALUE
+      - $L_BOX_BOTTOM_BOX_SELECTED
+      - $_ARGS.SELECTED
+      - $SYSEX_END

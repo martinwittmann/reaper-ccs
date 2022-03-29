@@ -1,0 +1,489 @@
+name: "VSTi: TAL U-No-LX-V2 (TAL-Togu Audio Line)"
+id: vsti_tal_u_no_lx_v2_tal_togu_audio_line
+parameters:
+  modulation:
+    id: 0
+    label: modulation
+    min: 0
+    max: 1
+  dco_lfo_value:
+    id: 1
+    label: dco_lfo_value
+    min: 0
+    max: 1
+  dco_pwm_value:
+    id: 2
+    label: dco_pwm_value
+    min: 0
+    max: 1
+  dco_pwm_mode:
+    type: enum
+    id: 3
+    label: dco_pwm_mode
+    values:
+      ENV: 0
+      MAN: 0.25
+      LFO: 0.75
+  dco_pulse_enabled:
+    type: enum
+    id: 4
+    label: dco_pulse_enabled
+    values:
+      OFF: 0
+      ON: 0.5
+  dco_saw_enabled:
+    type: enum
+    id: 5
+    label: dco_saw_enabled
+    values:
+      OFF: 0
+      ON: 0.5
+  dco_sub_osc_enabled:
+    type: enum
+    id: 6
+    label: dco_sub_osc_enabled
+    values:
+      OFF: 0
+      ON: 0.5
+  dco_sub_osc_volume:
+    id: 7
+    label: dco_sub_osc_volume
+    min: 0
+    max: 1
+  dco_noise_volume:
+    id: 8
+    label: dco_noise_volume
+    min: 0
+    max: 1
+  dco_hp_filter:
+    id: 9
+    label: dco_hp_filter
+    min: 0
+    max: 1
+  filter_cutoff:
+    id: 10
+    label: filter_cutoff
+    min: 0
+    max: 1
+  filter_resonance:
+    id: 11
+    label: filter_resonance
+    min: 0
+    max: 1
+  filter_env_mode:
+    type: enum
+    id: 12
+    label: filter_env_mode
+    values:
+      NEG: 0
+      POS: 0.5
+  filter_env:
+    id: 13
+    label: filter_env
+    min: 0
+    max: 1
+  filter_modulation:
+    id: 14
+    label: filter_modulation
+    min: 0
+    max: 1
+  filter_keyboard:
+    id: 15
+    label: filter_keyboard
+    min: 0
+    max: 1
+  master_volume:
+    id: 16
+    label: master_volume
+    min: 0
+    max: 1
+  master_fine_tune:
+    id: 17
+    label: master_fine_tune
+    min: 0
+    max: 1
+  master_octave_transpose:
+    type: enum
+    id: 18
+    label: master_octave_transpose
+    values:
+      -1: 0
+      0: 0.25
+      +1: 0.75
+  vca_mode:
+    type: enum
+    id: 19
+    label: vca_mode
+    values:
+      GATE: 0
+      ENV: 0.5
+  attack:
+    id: 20
+    label: attack
+    min: 0
+    max: 1
+  decay:
+    id: 21
+    label: decay
+    min: 0
+    max: 1
+  sustain:
+    id: 22
+    label: sustain
+    min: 0
+    max: 1
+  release:
+    id: 23
+    label: release
+    min: 0
+    max: 1
+  lfo_rate:
+    type: enum
+    id: 24
+    label: lfo_rate
+    values:
+      16/1: 0
+      15/1: 0.02
+      14/1: 0.050000000000000003
+      13/1: 0.089999999999999997
+      12/1: 0.12
+      11/1: 0.14999999999999999
+      10/1: 0.17999999999999999
+      9/1: 0.20999999999999999
+      8/1: 0.25
+      7/1: 0.28000000000000003
+      6/1: 0.31
+      5/1: 0.34000000000000002
+      4/1: 0.38
+      3/1: 0.40999999999999998
+      2/1: 0.44
+      1/1.: 0.46999999999999997
+      2/1T: 0.5
+      1/1: 0.54000000000000004
+      1/2.: 0.56999999999999995
+      1/1T: 0.59999999999999998
+      1/2: 0.63
+      1/4.: 0.67000000000000004
+      1/2T: 0.69999999999999996
+      1/4: 0.72999999999999998
+      1/8.: 0.76000000000000001
+      1/4T: 0.80000000000000004
+      1/8: 0.82999999999999996
+      1/16.: 0.85999999999999999
+      1/8T: 0.89000000000000001
+      1/16: 0.92000000000000004
+      1/32.: 0.95999999999999996
+      1/16T: 0.98999999999999999
+  lfo_delay:
+    id: 25
+    label: lfo_delay
+    min: 0
+    max: 1
+  lfo_trigger_mode:
+    type: enum
+    id: 26
+    label: lfo_trigger_mode
+    values:
+      SYNC: 0
+      FREE: 0.25
+      NOTE TRIG: 0.75
+  lfo_trigger_enabled:
+    type: enum
+    id: 27
+    label: lfo_trigger_enabled
+    values:
+      OFF: 0
+      ON: 0.5
+  lfo_trigger_active:
+    type: enum
+    id: 28
+    label: lfo_trigger_active
+    values:
+      OFF: 0
+      ON: 0.5
+  lfo_waveform:
+    type: enum
+    id: 29
+    label: lfo_waveform
+    values:
+      SINE: 0
+      TRIANGLE: 0.13
+      SAW: 0.38
+      REC: 0.63
+      RND: 0.88
+  chorus_1:
+    type: enum
+    id: 30
+    label: chorus_1
+    values:
+      OFF: 0
+      ON: 0.5
+  chorus_2:
+    type: enum
+    id: 31
+    label: chorus_2
+    values:
+      OFF: 0
+      ON: 0.5
+  arp_enabled:
+    type: enum
+    id: 32
+    label: arp_enabled
+    values:
+      OFF: 0
+      ON: 0.5
+  arp_sync_enabled:
+    type: enum
+    id: 33
+    label: arp_sync_enabled
+    values:
+      OFF: 0
+      ON: 0.5
+  arp_mode:
+    type: enum
+    id: 34
+    label: arp_mode
+    values:
+      DOWN: 0
+      UP & DOWN: 0.25
+      UP: 0.75
+  arp_range:
+    id: 35
+    label: arp_range
+    min: 0
+    max: 1
+  arp_rate:
+    id: 36
+    label: arp_rate
+    min: 0
+    max: 1
+  arp_locked:
+    type: enum
+    id: 37
+    label: arp_locked
+    values:
+      OFF: 0
+      ON: 0.5
+  control_velocity_volume:
+    id: 38
+    label: control_velocity_volume
+    min: 0
+    max: 1
+  control_velocity_envelope:
+    id: 39
+    label: control_velocity_envelope
+    min: 0
+    max: 1
+  control_pitch_bend_filter:
+    id: 40
+    label: control_pitch_bend_filter
+    min: 0
+    max: 1
+  control_pitch_bend_dco:
+    id: 41
+    label: control_pitch_bend_dco
+    min: 0
+    max: 1
+  portamento_mode:
+    type: enum
+    id: 42
+    label: portamento_mode
+    values:
+      OFF: 0
+      ON: 0.25
+      ALWAYS: 0.75
+  portamento_intensity:
+    id: 43
+    label: portamento_intensity
+    min: 0
+    max: 1
+  midi_learn:
+    id: 44
+    label: midi_learn
+    min: 0
+    max: 1
+  panic:
+    id: 45
+    label: panic
+    min: 0
+    max: 1
+  voice_hold:
+    id: 46
+    label: voice_hold
+    min: 0
+    max: 1
+  trigger_arp_by_midi_channel_16:
+    id: 47
+    label: trigger_arp_by_midi_channel_16
+    min: 0
+    max: 1
+  clock_sync:
+    id: 48
+    label: clock_sync
+    min: 0
+    max: 1
+  host_sync:
+    id: 49
+    label: host_sync
+    min: 0
+    max: 1
+  max_voices:
+    id: 50
+    label: max_voices
+    min: 0
+    max: 1
+  keytranspose:
+    id: 51
+    label: keytranspose
+    min: 0
+    max: 1
+  unused:
+    id: 52
+    label: unused_
+    min: 0
+    max: 1
+  special_mode:
+    type: enum
+    id: 53
+    label: special_mode
+    values:
+      NORMAL: 0
+      AS PLAYED: 0.17000000000000001
+      RANDOM: 0.5
+      U & D II: 0.83999999999999997
+  lfo_inverted:
+    id: 54
+    label: lfo_inverted
+    min: 0
+    max: 1
+  portamento_poly:
+    id: 55
+    label: portamento_poly
+    min: 0
+    max: 1
+  sound_engine_off:
+    id: 56
+    label: sound_engine_off
+    min: 0
+    max: 1
+  next_preset:
+    id: 57
+    label: next_preset
+    min: 0
+    max: 1
+  previous_preset:
+    id: 58
+    label: previous_preset
+    min: 0
+    max: 1
+  pitch_wheel:
+    id: 59
+    label: pitch_wheel
+    min: 0
+    max: 1
+  modulation_wheel:
+    id: 60
+    label: modulation_wheel
+    min: 0
+    max: 1
+  midi_clear:
+    id: 61
+    label: midi_clear
+    min: 0
+    max: 1
+  midi_lock:
+    id: 62
+    label: midi_lock
+    min: 0
+    max: 1
+  mpe_enabled:
+    id: 63
+    label: MPE_enabled
+    min: 0
+    max: 1
+  portamento_time:
+    id: 64
+    label: portamento_time
+    min: 0
+    max: 1
+  fx_lock:
+    type: enum
+    id: 65
+    label: FX_Lock
+    values:
+      OFF: 0
+      ON: 0.5
+  fx_reverb_dry_wet:
+    id: 66
+    label: FX_Reverb_Dry___Wet
+    min: 0
+    max: 1
+  fx_reverb_size:
+    id: 67
+    label: FX_Reverb_Size
+    min: 0
+    max: 1
+  fx_reverb_delay:
+    id: 68
+    label: FX_Reverb_Delay
+    min: 0
+    max: 1
+  fx_reverb_tone:
+    id: 69
+    label: FX_Reverb_Tone
+    min: 0
+    max: 1
+  fx_delay_dry_wet:
+    id: 70
+    label: FX_Delay_Dry___Wet
+    min: 0
+    max: 1
+  fx_delay_time:
+    id: 71
+    label: FX_Delay_Time
+    min: 0
+    max: 1
+  fx_delay_sync:
+    id: 72
+    label: FX_Delay_Sync
+    min: 0
+    max: 1
+  fx_delay_spread:
+    id: 73
+    label: FX_Delay_Spread
+    min: 0
+    max: 1
+  fx_delay_tone:
+    id: 74
+    label: FX_Delay_Tone
+    min: 0
+    max: 1
+  fx_delay_feedback:
+    id: 75
+    label: FX_Delay_Feedback
+    min: 0
+    max: 1
+  mts_microtuning_active:
+    id: 76
+    label: MTS_Microtuning_Active
+    min: 0
+    max: 1
+  bypass:
+    type: enum
+    id: 77
+    label: bypass
+    values:
+      normal: 0
+      bypassed: 0.5
+  wet:
+    id: 78
+    label: wet
+    min: 0
+    max: 1
+  delta:
+    type: enum
+    id: 79
+    label: delta
+    values:
+      normal: 0
+      enabled: 0.51000000000000001

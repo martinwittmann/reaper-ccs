@@ -20,6 +20,10 @@ parameters:
       - ENV
       - MAN
       - LFO
+    values:
+      ENV: 0
+      MAN: 0.25
+      LFO: 0.5
 
   dco_saw_enabled:
     id: 5
