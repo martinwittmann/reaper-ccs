@@ -21,6 +21,13 @@ namespace CCS {
     this->actionsManager = actionsManager;
   }
 
+  ActionProvider::~ActionProvider() {
+    for (auto &action : m_providedActions) {
+      delete action;
+    }
+    m_providedActions.clear();
+  }
+
   void ActionProvider::registerActionProvider(string providerId) {
     id = providerId;
     actionsManager->registerProvider(this);
@@ -37,5 +44,10 @@ namespace CCS {
     // define that macros/subactions are being called by using
     // [action_provider.action_id:argument1:argument2:...]
     return rawAction.find("[") != -1;
+  }
+
+  void ActionProvider::provideAction(Action *action) {
+    m_providedActions.push_back(action);
+    actionsManager->registerAction(action);
   }
 }

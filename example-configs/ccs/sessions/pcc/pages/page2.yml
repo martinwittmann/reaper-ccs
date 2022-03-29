@@ -1,6 +1,6 @@
 extends: _default
 name: $PART1_LABEL
-id: page_1
+id: page2
 on_activate:
   - "[page.set_state:CURRENT_COLOR:$PART1_COLOR]"
   - "[page.set_display_encoders]"

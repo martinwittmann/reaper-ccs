@@ -46,11 +46,19 @@ namespace CCS {
 
     registerActionProvider("session");
 
+    auto provider = dynamic_cast<ActionProvider*>(this);
+    auto loadPageAction = new Action(
+      "session",
+      "load_page",
+      provider
+    );
+    provideAction(loadPageAction);
+
     loadMidiControllers();
     loadSessionPages();
 
     // We always start out on the first page we know.
-    setActivePage(m_pages.at(0)->getPageId());
+    loadPage(m_pages.at(0)->getPageId());
   }
 
   Session::~Session() {
@@ -69,7 +77,7 @@ namespace CCS {
     throw CcsException("Trying to get unknown page: " + pageId);
   }
 
-  void Session::setActivePage(string pageId) {
+  void Session::loadPage(string pageId) {
     try {
       Page *page = getPage(pageId);
       m_activePage = page;
@@ -80,7 +88,7 @@ namespace CCS {
       page->setActive();
     }
     catch (CcsException &e) {
-      Util::error("Exception in Session::setActivePage(" + pageId + "):");
+      Util::error("Exception in Session::loadPage(" + pageId + "):");
       Util::error(e.what());
     }
   }
@@ -194,7 +202,7 @@ namespace CCS {
 
   void Session::actionCallback(std::string actionName, std::vector<std::string> arguments) {
     if (actionName == "load_page") {
-
+      loadPage(arguments.at(0));
     }
   }
 }

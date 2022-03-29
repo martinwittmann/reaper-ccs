@@ -51,7 +51,7 @@ namespace CCS {
     std::vector<string> getMidiControllerNames();
     void loadSessionPages();
     void loadMidiControllers();
-    void setActivePage(string pageId);
+    void loadPage(string pageId);
     Page *getActivePage();
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
     MidiController *getMidiController(std::string id);

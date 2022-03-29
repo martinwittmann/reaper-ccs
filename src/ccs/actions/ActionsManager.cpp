@@ -13,7 +13,7 @@ namespace CCS {
   ActionsManager::~ActionsManager() {
   }
 
-  void ActionsManager::registerAction(Action action) {
+  void ActionsManager::registerAction(Action *action) {
     actions.push_back(action);
   }
 
@@ -39,9 +39,9 @@ namespace CCS {
 
   Action ActionsManager::getAction(std::string providerId, std::string actionId) {
     for (auto it = actions.begin(); it != actions.end(); ++it) {
-      Action action = *it;
-      if (action.getProviderId() == providerId && action.getActionId() == actionId) {
-        return action;
+      Action *action = *it;
+      if (action->getProviderId() == providerId && action->getActionId() == actionId) {
+        return *action;
       }
     }
     throw CcsException("Action not found: " + providerId + "." + actionId);

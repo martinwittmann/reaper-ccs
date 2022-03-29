@@ -34,10 +34,6 @@ namespace CCS {
 
   Page::~Page() {
     delete m_config;
-    for (auto &action : m_providedActions) {
-      delete action;
-    }
-    m_providedActions.clear();
   }
 
   bool Page::isPageConfigFile(fse::path path) {
@@ -84,8 +80,7 @@ namespace CCS {
       "set_state",
       provider
     );
-    m_providedActions.push_back(setStateAction);
-    actionsManager->registerAction(*setStateAction);
+    provideAction(setStateAction);
 
     // Get Actions from config.
     YAML::Node actionsNode = m_config->getMapValue("actions");
@@ -97,8 +92,7 @@ namespace CCS {
         actionId,
         item.second
       );
-      m_providedActions.push_back(action);
-      actionsManager->registerAction(*action);
+      provideAction(action);
     }
   }
 
@@ -145,9 +139,6 @@ namespace CCS {
   void Page::actionCallback(string actionName, vector<string> arguments) {
     if (actionName == "set_state") {
       m_state["_STATE." + arguments.at(0)] = arguments.at(1);
-    }
-    else if (actionName == "set_active_page") {
-      m_session->setActivePage(arguments.at(0));
     }
   }
 

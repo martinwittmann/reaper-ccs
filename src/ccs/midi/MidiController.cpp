@@ -177,24 +177,21 @@ namespace CCS {
       "send_midi_message",
       provider
     );
-    providedActions.push_back(sendMidiAction);
-    actionsManager->registerAction(*sendMidiAction);
+    provideAction(sendMidiAction);
 
     auto startBufferingMidiMessagesAction = new Action(
       controllerId,
       "buffer_messages",
       provider
     );
-    providedActions.push_back(startBufferingMidiMessagesAction);
-    actionsManager->registerAction(*startBufferingMidiMessagesAction);
+    provideAction(startBufferingMidiMessagesAction);
 
     auto flushMidiMessagesBufferAction = new Action(
       controllerId,
       "end_buffer",
       provider
     );
-    providedActions.push_back(flushMidiMessagesBufferAction);
-    actionsManager->registerAction(*flushMidiMessagesBufferAction);
+    provideAction(flushMidiMessagesBufferAction);
 
     // Get Actions from config.
     YAML::Node actionsNode = config->getMapValue("actions");
@@ -206,8 +203,7 @@ namespace CCS {
         actionId,
         item.second
       );
-      providedActions.push_back(action);
-      actionsManager->registerAction(*action);
+      provideAction(action);
     }
   }
 
