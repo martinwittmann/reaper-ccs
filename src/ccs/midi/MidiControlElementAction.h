@@ -31,7 +31,8 @@ namespace CCS {
 
     void invoke(
       Session *session,
-      std::string value
+      std::string value,
+      std::string formattedValue
     );
 
     bool conditionsAreMet(std::map<string,string> variables);

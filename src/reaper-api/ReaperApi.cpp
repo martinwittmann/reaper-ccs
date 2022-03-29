@@ -169,7 +169,8 @@ namespace CCS {
     int paramId,
     double value,
     double minValue,
-    double maxValue
+    double maxValue,
+    string formattedValue
   ) {
     std::vector subscriptions = fxParamChangedSubscriptions;
     for (auto subscription: subscriptions) {
@@ -186,7 +187,8 @@ namespace CCS {
         paramId,
         value,
         minValue,
-        maxValue
+        maxValue,
+        formattedValue
       );
     }
   };

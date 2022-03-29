@@ -92,10 +92,12 @@ namespace CCS {
 
   void MidiControlElementAction::invoke(
     Session *session,
-    string value
+    string value,
+    string formattedValue
   ) {
     std::map<string,string> variables;
     variables.insert(std::pair("VALUE", value));
+    variables.insert(std::pair("FORMATTED_VALUE", formattedValue));
 
     // Putting together stat before testing conditions, since conditions will
     // depend on state variables.

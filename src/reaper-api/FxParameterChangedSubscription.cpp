@@ -16,41 +16,47 @@ namespace CCS {
     ReaperApi *apiManager
   ) : ReaperDataTracker(apiManager) {
 
-    this->track = track;
-    this->fxId = fxId;
-    this->paramId = paramId;
-    this->subscriber = subscriber;
+    m_track = track;
+    m_fxId = fxId;
+    m_paramId = paramId;
+    m_subscriber = subscriber;
 
 
     char buffer[512];
     buffer[0] = 0;
     GetTrackName(track, buffer, sizeof buffer);
-    this->trackName = std::string(buffer);
+    m_trackName = std::string(buffer);
 
     memset(buffer, 0, sizeof buffer);
     TrackFX_GetFXName(track, fxId, buffer, sizeof buffer);
-    this->fxName = std::string(buffer);
+    m_fxName = std::string(buffer);
 
     memset(buffer, 0, sizeof buffer);
     TrackFX_GetParamName(track, fxId, paramId, buffer, sizeof buffer);
-    this->paramName = std::string(buffer);
+    m_paramName = std::string(buffer);
 
     // Set the current values when initializing but don't trigger the event.
     update(false);
   }
 
   void FxParameterChangedSubscription::update(bool triggerOnChange) {
-    newValue = TrackFX_GetParamEx(
-      track,
-      fxId,
-      paramId,
-      &minValue,
-      &maxValue,
-      &midValue
+    double newValue = TrackFX_GetParamEx(
+      m_track,
+      m_fxId,
+      m_paramId,
+      &m_minValue,
+      &m_maxValue,
+      &m_midValue
     );
 
-    if (newValue != currentValue) {
-      currentValue = newValue;
+    if (newValue != m_currentValue) {
+      m_currentValue = newValue;
+
+      // Only update the formatted value if we know the actual value has changed.
+      char formattedValue[64];
+      TrackFX_GetFormattedParamValue(m_track, m_fxId, m_paramId, formattedValue, sizeof formattedValue);
+      m_formattedValue = std::string(formattedValue);
+
       if (triggerOnChange) {
         triggerEvent();
       }
@@ -59,28 +65,29 @@ namespace CCS {
 
   void FxParameterChangedSubscription::triggerEvent() {
     apiManager->triggerOnFxParameterChanged(
-      track,
-      fxId,
-      paramId,
-      currentValue,
-      minValue,
-      maxValue
+      m_track,
+      m_fxId,
+      m_paramId,
+      m_currentValue,
+      m_minValue,
+      m_maxValue,
+      m_formattedValue
     );
   }
 
   MediaTrack *FxParameterChangedSubscription::getTrack() {
-    return track;
+    return m_track;
   }
 
   int FxParameterChangedSubscription::getFxId() {
-    return fxId;
+    return m_fxId;
   }
 
   int FxParameterChangedSubscription::getParamId() {
-    return paramId;
+    return m_paramId;
   }
 
   ReaperEventSubscriber *FxParameterChangedSubscription::getSubscriber() {
-    return subscriber;
+    return m_subscriber;
   }
 }

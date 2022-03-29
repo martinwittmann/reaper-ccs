@@ -1,4 +1,5 @@
 #include "ReaperEventSubscriber.h"
+#include <string>
 
 namespace CCS {
 
@@ -16,6 +17,7 @@ namespace CCS {
     int paramId,
     double value,
     double minValue,
-    double maxValue
+    double maxValue,
+    std::string formattedValue
   ) {}
 }

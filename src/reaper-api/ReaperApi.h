@@ -81,7 +81,8 @@ namespace CCS {
       int paramId,
       double value,
       double minValue,
-      double maxValue
+      double maxValue,
+      string formattedValue
     );
     void subscribeToEvent(int eventId, ReaperEventSubscriber *subscriber);
     bool isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId);

@@ -27,6 +27,7 @@ namespace CCS {
     short m_onReleaseValue;
     // We store the current value as double like reaper and convert it when needed.
     double m_value;
+    std::string m_formattedValue;
 
     MediaTrack *m_reaperTrack;
     ReaperApi *m_api;
@@ -66,9 +67,10 @@ namespace CCS {
       int paramId,
       double value,
       double minValue,
-      double maxValue
+      double maxValue,
+      std::string formattedValue
     ) override;
-    void setMappingValues(std::string rawMapping);
+    void initializeMappingValues(std::string rawMapping);
     void createActions();
     void invokeActions();
 

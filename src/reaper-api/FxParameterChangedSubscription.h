@@ -10,18 +10,18 @@ namespace CCS {
   class ReaperApi;
 
   class FxParameterChangedSubscription : public ReaperDataTracker {
-    MediaTrack *track;
-    int fxId;
-    int paramId;
-    ReaperEventSubscriber *subscriber;
-    double currentValue;
-    double newValue;
-    double minValue;
-    double maxValue;
-    double midValue;
-    std::string trackName;
-    std::string fxName;
-    std::string paramName;
+    MediaTrack *m_track;
+    int m_fxId;
+    int m_paramId;
+    ReaperEventSubscriber *m_subscriber;
+    double m_currentValue;
+    double m_minValue;
+    double m_maxValue;
+    double m_midValue;
+    std::string m_formattedValue;
+    std::string m_trackName;
+    std::string m_fxName;
+    std::string m_paramName;
 
   public:
 

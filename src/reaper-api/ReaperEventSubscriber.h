@@ -2,6 +2,7 @@
 #define CCS_REAPER_EVENT_SUBSCRIBER
 
 #include "../reaper/reaper_plugin.h"
+#include <string>
 
 namespace CCS {
 
@@ -28,7 +29,8 @@ namespace CCS {
       int paramId,
       double value,
       double minValue,
-      double maxValue
+      double maxValue,
+      std::string formattedValue
     );
   };
 }

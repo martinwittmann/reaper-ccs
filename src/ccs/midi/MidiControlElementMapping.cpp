@@ -32,7 +32,7 @@ namespace CCS {
     m_paramMapping = m_config->getValue("mapping");
     if (!m_paramMapping.empty()) {
       m_hasMappedFxParam = true;
-      setMappingValues(m_paramMapping);
+      initializeMappingValues(m_paramMapping);
 
       auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
       this->m_api->subscribeToFxParameterChanged(
@@ -90,7 +90,8 @@ namespace CCS {
     for (auto action : m_actions) {
       action->invoke(
         m_session,
-        Util::byteToHex(Util::get7BitValue(m_value, m_mappedMinValue, m_mappedMaxValue))
+        Util::byteToHex(Util::get7BitValue(m_value, m_mappedMinValue, m_mappedMaxValue)),
+        m_formattedValue
       );
     }
   }
@@ -171,15 +172,17 @@ namespace CCS {
     int paramId,
     double value,
     double minValue,
-    double maxValue
+    double maxValue,
+    string formattedValue
   ) {
     m_value = value;
+    m_formattedValue = formattedValue;
     if (m_hasMappedFxParam) {
       invokeActions();
     }
   }
 
-  void MidiControlElementMapping::setMappingValues(string rawMapping) {
+  void MidiControlElementMapping::initializeMappingValues(string rawMapping) {
     std::vector<string> parts = Util::splitString(rawMapping, '.');
     string trackPart = parts.at(0);
     trackPart = Util::regexReplace(trackPart, "[^0-9]+", "");
