@@ -70,7 +70,9 @@ namespace CCS {
         mergeYamlSequences(target, source);
         break;
       default:
-        throw "BaseConfig::mergeYaml: Unknown source node type";
+        string message = "BaseConfig::mergeYaml: Unknown source node type";
+        Util::error(message);
+        throw message;
     }
   }
 

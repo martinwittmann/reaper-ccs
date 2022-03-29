@@ -31,16 +31,15 @@ namespace CCS {
   // Note that we do not accept arguments here, because they are encoded in the
   // rawAction string and are unpacket in ActionInvokation.
   void ActionsManager::invokeAction(std::string rawAction, Session *session) {
-    int aa = 0;
     auto invokation = new ActionInvokation(session, rawAction);
     try {
-      aa++;
       Action action = getAction(invokation->providerId, invokation->actionId);
-      aa++;
       action.invoke(invokation->arguments, session);
     }
     catch (...) {
-      throw "Trying to invoke action that does not exist: " + rawAction;
+      string message = "Trying to invoke action that does not exist: " + rawAction;
+      Util::error(message);
+      throw message;
     }
   }
 
@@ -51,7 +50,9 @@ namespace CCS {
         return action;
       }
     }
-    throw "Action not found";
+    string message = "Action not found";
+    Util::error(message);
+    throw message;
   }
 
   ActionProvider *ActionsManager::getProvider(Action action) {
@@ -65,6 +66,8 @@ namespace CCS {
         return provider;
       }
     }
-    throw "ActionProvider not found";
+    string message = "ActionProvider not found";
+    Util::error(message);
+    throw message;
   }
 }

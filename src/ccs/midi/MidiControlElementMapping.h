@@ -25,7 +25,8 @@ namespace CCS {
     short m_controlType;
     short m_onPressValue;
     short m_onReleaseValue;
-    short m_value;
+    // We store the current value as double like reaper and convert it when needed.
+    double m_value;
 
     MediaTrack *m_reaperTrack;
     ReaperApi *m_api;

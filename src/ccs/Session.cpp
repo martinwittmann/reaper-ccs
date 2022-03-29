@@ -163,7 +163,9 @@ namespace CCS {
         return controller;
       }
     }
-    throw "No midi controller with id: '" + id + "' found.";
+    string message = "No midi controller with id: '" + id + "' found.";
+    Util::error(message);
+    throw message;
   }
 
   FxPlugins *Session::getPluginManager() {

@@ -59,7 +59,9 @@ namespace CCS {
       }
     }
 
-    throw "Config with id " + nameId + " not found!";
+    string message = "Config with id " + nameId + " not found!";
+    Util::error(message);
+    throw message;
   }
 
   int FxPlugins::getParamId(MediaTrack *track, int fxId, string strParamId) {

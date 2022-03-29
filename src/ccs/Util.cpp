@@ -11,6 +11,7 @@
 #include "boost/format.hpp"
 #include "boost/format/group.hpp"
 #include <iomanip>
+#include "../reaper/reaper_plugin_functions.h"
 
 namespace CCS {
 
@@ -27,19 +28,24 @@ namespace CCS {
     return var1.length() > var2.length();
   }
 
-  string Util::processString(string raw, map<string, string> variables, string pattern) {
+  vector<string> Util::getUsedVariables(string input, string pattern) {
     std::regex variables_regex = std::regex(pattern);
+    vector<string> result;
     // Find all variables used in this string.
     auto matches = std::sregex_iterator(
-      raw.begin(),
-      raw.end(),
+      input.begin(),
+      input.end(),
       variables_regex
     );
-    vector<string> used_variables;
     for (std::sregex_iterator it = matches; it != std::sregex_iterator(); ++it) {
       std::smatch match = *it;
-      used_variables.push_back(it->str());
+      result.push_back(it->str());
     }
+    return result;
+  }
+
+  string Util::processString(string raw, map<string, string> variables, string pattern) {
+    vector<string> used_variables = Util::getUsedVariables(raw, pattern);
 
     if (used_variables.empty()) {
       // There's nothing to do if no variables are used.
@@ -192,5 +198,35 @@ namespace CCS {
 
   std::string Util::byteToHex(unsigned char byte) {
     return Util::formatHexByte(byte);
+  }
+
+  void Util::log(string message, bool lineBreak) {
+    std::cout << message;
+    if (lineBreak) {
+      std::cout << "\n";
+    }
+  }
+
+  void Util::log(int message, bool lineBreak) {
+    Util::log(std::to_string(message), lineBreak);
+  }
+
+  void Util::log(char message, bool lineBreak) {
+    Util::log(std::to_string(message), lineBreak);
+  }
+
+  void Util::log(short message, bool lineBreak) {
+    Util::log(std::to_string(message), lineBreak);
+  }
+
+  void Util::log(double message, bool lineBreak) {
+    Util::log(std::to_string(message), lineBreak);
+  }
+
+  void Util::error(string message, bool lineBreak) {
+    if (lineBreak) {
+      message += "\n";
+    }
+    ShowConsoleMsg(message.c_str());
   }
 }

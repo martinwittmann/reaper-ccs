@@ -137,7 +137,7 @@ namespace CCS {
 
   void Page::actionCallback(string actionName, vector<string> arguments) {
     if (actionName == "set_state") {
-      m_state[arguments.at(0)] = arguments.at(1);
+      m_state["_STATE." + arguments.at(0)] = arguments.at(1);
     }
   }
 

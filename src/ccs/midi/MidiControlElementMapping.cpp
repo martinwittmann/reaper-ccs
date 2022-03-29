@@ -50,7 +50,7 @@ namespace CCS {
         &m_mappedMaxValue,
         &m_mappedMidValue
       );
-      m_value = Util::get7BitValue(rawValue, m_mappedMinValue, m_mappedMaxValue);
+      m_value = rawValue;
     }
 
     createActions();
@@ -90,7 +90,7 @@ namespace CCS {
     for (auto action : m_actions) {
       action->invoke(
         m_session,
-        Util::byteToHex(m_value)
+        Util::byteToHex(Util::get7BitValue(m_value, m_mappedMinValue, m_mappedMaxValue))
       );
     }
   }
@@ -103,21 +103,22 @@ namespace CCS {
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
-          m_value = data2;
+          m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
           //onButtonPress(eventId, data2);
         }
         else if (data2 == m_onReleaseValue) {
-          m_value = data2;
+          m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
           //onButtonRelease(eventId, data2);
         }
         break;
 
       case MidiControlElement::ABSOLUTE:
-        m_value = data2;
+        m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
         m_controlElement->onChange(data2);
         break;
 
       case MidiControlElement::RELATIVE:
+        /*
         char diff = 0;
         if (data2 > 63) {
           diff = data2 - 128;
@@ -125,28 +126,38 @@ namespace CCS {
         else if (data2 < 63) {
           diff = data2;
         }
-        addValueDiff(diff);
+        */
+        addValueDiff(data2);
         m_controlElement->onChange(data2);
         break;
     }
 
     if (m_hasMappedFxParam) {
-      double newValue = Util::getParamValueFrom7Bit(
-        m_value,
-        m_mappedMinValue,
-        m_mappedMaxValue
-      );
-      TrackFX_SetParam(m_mappedTrack, m_mappedFxId, m_mappedParamId, newValue);
+      TrackFX_SetParam(m_mappedTrack, m_mappedFxId, m_mappedParamId, m_value);
     }
   }
 
-  void MidiControlElementMapping::addValueDiff(char diff) {
-    m_value += diff;
-    if (m_value < 0) {
-      m_value = 0;
+  void MidiControlElementMapping::addValueDiff(char rawDiff) {
+    double diff;
+    if (rawDiff > 63) {
+      rawDiff = rawDiff - 128;
     }
-    else if (m_value > 127) {
-      m_value = 127;
+    else if (rawDiff < 63) {
+      rawDiff = rawDiff;
+    }
+
+    diff = Util::getParamValueFrom7Bit(rawDiff, m_mappedMinValue, m_mappedMaxValue);
+
+    // To give users better / finer control over parameters we only apply half
+    // of the diff we're getting from the controller. Otherwise the distance
+    // between min and max is not that big.
+    m_value += diff / 2;
+
+    if (m_value < m_mappedMinValue) {
+      m_value = m_mappedMinValue;
+    }
+    else if (m_value > m_mappedMaxValue) {
+      m_value = m_mappedMaxValue;
     }
   }
 
@@ -162,7 +173,7 @@ namespace CCS {
     double minValue,
     double maxValue
   ) {
-    m_value = Util::get7BitValue(value, minValue, maxValue);
+    m_value = value;
     if (m_hasMappedFxParam) {
       invokeActions();
     }

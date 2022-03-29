@@ -9,20 +9,13 @@ namespace CCS {
 
     static std::map<std::string, std::string> getVariables(YAML::Node &variablesNode);
 
-    static std::map<std::string, std::string> getVariables(
-      std::vector<std::string> argumentNames
+    static std::string replaceVariables(
+      std::string input,
+      std::map<std::string,std::string> variables,
+      std::string type = "default"
     );
-
-    static std::string replaceVariables(std::string, std::map<std::string,std::string> variables);
 
     static void replaceVariables(YAML::Node &yaml, std::map<std::string,std::string> variables);
-
-    /*
-    static std::string replaceArgumentVariables(
-      YAML::Node &yaml,
-      std::map<std::string,std::string> variables
-    );
-    */
   };
 }
 

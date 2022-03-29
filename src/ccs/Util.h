@@ -46,6 +46,16 @@ namespace CCS {
     static short get7BitValue(double value, double minValue, double maxValue);
 
     static double getParamValueFrom7Bit(short value, double minValue, double maxValue);
+
+    static void log(std::string message, bool lineBreak = true);
+    static void log(char message, bool lineBreak = true);
+    static void log(short message, bool lineBreak = true);
+    static void log(int message, bool lineBreak = true);
+    static void log(double message, bool lineBreak = true);
+
+    static std::vector<std::string> getUsedVariables(std::string input, std::string pattern);
+
+    static void error(std::string message, bool lineBreak = true);
   };
 }
 

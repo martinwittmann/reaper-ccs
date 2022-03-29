@@ -6,8 +6,9 @@
 #include "../Util.h"
 #include "../actions/ActionsManager.h"
 #include "../Session.h"
-#include <iostream>
 #include "../Page.h"
+#include "../Variables.h"
+
 
 namespace CCS {
   using std::string;
@@ -31,7 +32,9 @@ namespace CCS {
     }
 
     if (conditions->Type() != YAML::NodeType::Map) {
-      throw "MidiControlElementAction(): Conditions must be a yaml map.";
+      string message = "MidiControlElementAction(): Conditions must be a yaml map.";
+      Util::error(message);
+      throw message;
     }
 
     for (auto const &conditionRow: *conditions) {
@@ -48,7 +51,9 @@ namespace CCS {
       op = "isnot";
     }
     else {
-      throw "MidiControlElementAction::addCondition(): Unknown operator";
+      string message = "MidiControlElementAction::addCondition(): Unknown operator";
+      Util::error(message);
+      throw message;
     }
 
     string variable = Util::regexReplace(key, "\\.is(not)?$", "");
@@ -72,8 +77,8 @@ namespace CCS {
     midi_control_element_action_condition condition,
     std::map<string,string> variables
   ) {
-    string leftSide = Util::processString(condition.variable, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
-    string rightSide = Util::processString(condition.value, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
+    string leftSide = Variables::replaceVariables(condition.variable, variables, "state");
+    string rightSide = Variables::replaceVariables(condition.value, variables, "state");
     if (condition.comparison_operator == "is" || condition.comparison_operator == "equals") {
       return leftSide == rightSide;
     }
@@ -86,7 +91,9 @@ namespace CCS {
       return leftSide != rightSide;
     }
 
-    throw "Unknown condition operator";
+    string message = "Unknown condition operator";
+    Util::error(message);
+    throw message;
   }
 
   void MidiControlElementAction::invoke(
@@ -96,8 +103,10 @@ namespace CCS {
     std::map<string,string> variables;
     variables.insert(std::pair("VALUE", value));
 
+    // Putting together stat before testing conditions, since conditions will
+    // depend on state variables.
     for (auto &item : *session->getActivePage()->getState()) {
-      variables.insert(std::pair("_STATE." + item.first, item.second));
+      variables.insert(std::pair(item.first, item.second));
     }
 
     if (!conditionsAreMet(variables)) {
@@ -105,7 +114,7 @@ namespace CCS {
     }
 
     for (auto rawAction : m_actions) {
-      string action = Util::processString(rawAction, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
+      string action = Variables::replaceVariables(rawAction, variables, "state");
       session->getActionsManager()->invokeAction(action, session);
     }
   }

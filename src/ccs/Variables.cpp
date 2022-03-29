@@ -20,11 +20,21 @@ namespace CCS {
     return result;
   }
 
-  string Variables::replaceVariables(string input, map<string,string> variables) {
+  string Variables::replaceVariables(
+    string input,
+    map<string,string> variables,
+    string type
+  ) {
     if (variables.empty()) {
       return input;
     }
-    return Util::processString(input, variables);
+
+    if (type == "state") {
+      return Util::processString(input, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
+    }
+    else {
+      return Util::processString(input, variables, "\\$(_ARGS\\.)?[A-Z0-9_]+!?");
+    }
   }
 
   void Variables::replaceVariables(YAML::Node &yaml, map <string, string> variables) {
@@ -51,7 +61,9 @@ namespace CCS {
         }
         break;
       default:
-        throw "Variables::replaceVariables: Unknown source node type";
+        string message = "Variables::replaceVariables: Unknown source node type";
+        Util::error(message);
+        throw message;
     }
   }
 }

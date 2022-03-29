@@ -4,6 +4,7 @@
 #include "Action.h"
 #include "../Variables.h"
 #include "../midi/MidiController.h"
+#include "../Page.h"
 
 namespace CCS {
 
@@ -73,20 +74,37 @@ namespace CCS {
       }
     }
 
+    std::map<string,string> *state = session->getActivePage()->getState();
+
     if (type == "callback") {
+      //Util::log("Executing callback action: " + actionId);
       for (auto& argument: arguments) {
         argument = Variables::replaceVariables(argument, argumentVariables);
+        argument = Variables::replaceVariables(argument, *state, "state");
       }
       actionProvider->actionCallback(actionId, arguments);
     }
     else if (type == "composite") {
-
+      //Util::log("Executing composite action: " + actionId);
       // Apply the arguments to every sub action.
       for (auto subAction: subActions) {
         string rawSubAction = subAction;
         rawSubAction = Variables::replaceVariables(rawSubAction, argumentVariables);
+        rawSubAction = Variables::replaceVariables(rawSubAction, *state, "state");
+        checkAction(rawSubAction);
+        //Util::log("- " + rawSubAction);
         actionsManager->invokeAction(rawSubAction, session);
       }
+      //Util::log("");
+    }
+  }
+
+  void checkAction(string action) {
+    string pattern = "\\$(_(STATE|ARGS)\\.)?[A-Z0-9_]+!?";
+    if (Util::getUsedVariables(action, pattern).size() > 0) {
+      string message = "Unkown variable in action: " + action;
+      Util::error(message);
+      throw message;
     }
   }
 }

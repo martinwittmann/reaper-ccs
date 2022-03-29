@@ -322,6 +322,8 @@ namespace CCS {
         return control;
       }
     }
-    throw "Could not find midi control element with id " + id;
+    string message = "Could not find midi control element with id " + id;
+    Util::error(message);
+    throw message;
   }
 }
