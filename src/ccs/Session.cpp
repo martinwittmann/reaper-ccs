@@ -205,4 +205,8 @@ namespace CCS {
       loadPage(arguments.at(0));
     }
   }
+
+  void Session::invokeAction(std::string action, Session* session) {
+    getActionsManager()->invokeAction(action, session);
+  };
 }

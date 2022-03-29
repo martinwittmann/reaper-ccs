@@ -10,7 +10,7 @@
 #include "../../reaper-api/ReaperApi.h"
 #include "../config/MappingConfig.h"
 #include "../Session.h"
-#include "MidiControlElementAction.h"
+#include "../actions/CompositeAction.h"
 
 namespace CCS {
   class MidiControlElementMapping :
@@ -41,7 +41,7 @@ namespace CCS {
     MediaTrack *m_mappedTrack;
     int m_mappedFxId;
     int m_mappedParamId;
-    std::map<std::string,std::vector<MidiControlElementAction*>> m_actions;
+    std::map<std::string,CompositeAction*> m_actions;
     bool m_hasMappedFxParam = false;
 
     double m_mappedMinValue;
@@ -80,9 +80,8 @@ namespace CCS {
 
     void addValueDiff(char diff);
 
+    std::map<string,string> getActionVariables();
     void toggleValue();
-
-    vector<MidiControlElementAction *> getActions(string eventKey);
 
     vector <string> getAvailableActionTypes(short controlElementType);
   };

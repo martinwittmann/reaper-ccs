@@ -13,6 +13,20 @@ namespace CCS {
   using std::string;
   using std::vector;
 
+  /**
+   * Actions are functions that can be invoked in order to send midi messages
+   * do do anything in a callback function.
+   * There are 2 types of actions:
+   * - callback
+   * - composite
+   *
+   * Callback actions simply execute the ActionProvider's callback with the
+   * action id and any given arguments.
+   *
+   * Composite actions are basically lists of action calls. Think of them as
+   * macros.
+   */
+
   class Action {
     // A string identifier unique within the scope of the given provider id.
     string m_actionId;

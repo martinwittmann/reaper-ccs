@@ -16,7 +16,7 @@ namespace CCS {
   } midi_control_element_action_condition;
 
   class MidiControlElementAction {
-    std::vector<std::string> m_actions;
+    std::vector<std::string> m_subActions;
     std::vector<midi_control_element_action_condition> m_conditions;
 
   public:
@@ -30,11 +30,8 @@ namespace CCS {
     void addCondition(std::string key, std::string value);
 
     void invoke(
-      Session *session,
-      const std::string &value,
-      const std::string &minValue,
-      const std::string &maxValue,
-      const std::string &formattedValue
+      std::map<string, string> variables,
+      Session *session
     );
 
     bool conditionsAreMet(std::map<string,string> variables);

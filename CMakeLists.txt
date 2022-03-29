@@ -50,7 +50,10 @@ set(
   src/reaper/reaper_extension.cpp
   src/ccs/config/FxPluginConfig.cpp
   src/ccs/FxPlugins.cpp src/ccs/FxPlugins.h
-  src/ccs/midi/MidiControlElementAction.cpp src/ccs/midi/MidiControlElementAction.h src/ccs/CcsException.cpp src/ccs/CcsException.h)
+  src/ccs/CcsException.cpp
+  src/ccs/actions/CompositeAction.cpp
+  src/ccs/config/CompositeActionConfig.cpp
+)
 
 set(
   REAPER_SOURCE_FILES

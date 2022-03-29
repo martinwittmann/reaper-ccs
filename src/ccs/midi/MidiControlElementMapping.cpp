@@ -4,9 +4,9 @@
 #include "../FxPlugins.h"
 #include "../../reaper/reaper_plugin_functions.h"
 #include "yaml-cpp/yaml.h"
-#include "MidiControlElementAction.h"
 #include "../Page.h"
 #include "../CcsException.h"
+#include "../actions/CompositeAction.h"
 
 namespace CCS {
 
@@ -64,7 +64,8 @@ namespace CCS {
 
   void MidiControlElementMapping::createActions() {
     for (auto eventType : m_actionTypes) {
-      m_actions.insert(std::pair(eventType, getActions(eventType)));
+      const YAML::Node actionConfig = m_config->getNode(eventType);
+      m_actions.insert(std::pair(eventType, new CompositeAction(actionConfig)));
     }
   }
 
@@ -79,58 +80,50 @@ namespace CCS {
     return result;
   }
 
-  vector<MidiControlElementAction*> MidiControlElementMapping::getActions(string eventKey) {
-    vector<MidiControlElementAction*> result;
-    const YAML::Node actions = m_config->getNode(eventKey);
-    if (!actions) {
-      return result;
+  void MidiControlElementMapping::invokeActions(string actionType) {
+    if (!m_actions.contains(actionType)) {
+      return;
     }
+    CompositeAction *action = m_actions.at(actionType);
+    auto variables = getActionVariables();
+    action->invoke(variables, session);
+  }
 
-    for (auto &rawAction : actions) {
-      YAML::Node item = rawAction;
-      if (item.Type() == YAML::NodeType::Scalar) {
-        // Only a single action was provided.
-        result.push_back(new MidiControlElementAction(item.as<string>()));
-      }
-      else {
-        if (m_config->keyExists("conditions", &item)) {
-          YAML::Node conditions = item["conditions"];
-          m_config->getListValues("actions", &item);
-          result.push_back(new MidiControlElementAction(
-            m_config->getListValues("actions", &item),
-            &conditions
-          ));
-        }
-        else {
-          result.push_back(new MidiControlElementAction(
-            m_config->getListValues("actions", &item)
-          ));
-        }
-      }
+  std::map<string,string> MidiControlElementMapping::getActionVariables() {
+    std::map<string,string> result;
+    string valueStr = Util::byteToHex(Util::get7BitValue(
+      m_value,
+      m_mappedMinValue,
+      m_mappedMaxValue
+    ));
+    result.insert(std::pair("VALUE", valueStr));
+
+    string formattedStr = Util::byteToHex(Util::get7BitValue(
+      m_mappedMinValue,
+      m_mappedMinValue,
+      m_mappedMaxValue
+    ));
+    result.insert(std::pair("FORMATTED_VALUE", formattedStr));
+
+    string minValueStr = Util::byteToHex(Util::get7BitValue(
+      m_mappedMaxValue,
+      m_mappedMinValue,
+      m_mappedMaxValue
+    ));
+    result.insert(std::pair("MIN_VALUE", minValueStr));
+
+    string maxValueStr = Util::byteToHex(Util::get7BitValue(
+      m_mappedMaxValue,
+      m_mappedMinValue,
+      m_mappedMaxValue
+    ));
+    result.insert(std::pair("MAX_VALUE", maxValueStr));
+
+    for (auto &item: *m_session->getActivePage()->getState()) {
+      result.insert(std::pair(item.first, item.second));
     }
 
     return result;
-  }
-
-  void MidiControlElementMapping::invokeActions(string actionType) {
-    vector<MidiControlElementAction*> actions;
-
-    for (auto type : m_actionTypes) {
-      if (type == actionType) {
-        actions = m_actions.at(actionType);
-        break;
-      }
-    }
-
-    for (auto action : actions) {
-      action->invoke(
-        m_session,
-        Util::byteToHex(Util::get7BitValue(m_value, m_mappedMinValue, m_mappedMaxValue)),
-        Util::byteToHex(Util::get7BitValue(m_mappedMinValue, m_mappedMinValue, m_mappedMaxValue)),
-        Util::byteToHex(Util::get7BitValue(m_mappedMaxValue, m_mappedMinValue, m_mappedMaxValue)),
-        m_formattedValue
-      );
-    }
   }
 
   MidiControlElementMapping::~MidiControlElementMapping() {
