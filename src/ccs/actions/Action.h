@@ -50,6 +50,8 @@ namespace CCS {
 
     string getActionId();
     string getProviderId();
+
+    void checkAction(string action);
   };
 }
 

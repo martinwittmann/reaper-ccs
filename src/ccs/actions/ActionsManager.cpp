@@ -3,6 +3,7 @@
 #include "Action.h"
 #include "../Util.h"
 #include "../Session.h"
+#include "../CcsException.h"
 
 namespace CCS {
 
@@ -32,15 +33,8 @@ namespace CCS {
   // rawAction string and are unpacket in ActionInvokation.
   void ActionsManager::invokeAction(std::string rawAction, Session *session) {
     auto invokation = new ActionInvokation(session, rawAction);
-    try {
-      Action action = getAction(invokation->providerId, invokation->actionId);
-      action.invoke(invokation->arguments, session);
-    }
-    catch (...) {
-      string message = "Trying to invoke action that does not exist: " + rawAction;
-      Util::error(message);
-      throw message;
-    }
+    Action action = getAction(invokation->providerId, invokation->actionId);
+    action.invoke(invokation->arguments, session);
   }
 
   Action ActionsManager::getAction(std::string providerId, std::string actionId) {
@@ -50,9 +44,7 @@ namespace CCS {
         return action;
       }
     }
-    string message = "Action not found";
-    Util::error(message);
-    throw message;
+    throw CcsException("Action not found: " + providerId + "." + actionId);
   }
 
   ActionProvider *ActionsManager::getProvider(Action action) {
@@ -66,8 +58,6 @@ namespace CCS {
         return provider;
       }
     }
-    string message = "ActionProvider not found";
-    Util::error(message);
-    throw message;
+    throw CcsException("ActionProvider not found: " + providerId);
   }
 }

@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../reaper/reaper_plugin_functions.h"
 #include "Util.h"
+#include "CcsException.h"
 
 namespace CCS {
 
@@ -61,7 +62,7 @@ namespace CCS {
 
     string message = "Config with id " + nameId + " not found!";
     Util::error(message);
-    throw message;
+    throw CcsException(message);
   }
 
   int FxPlugins::getParamId(MediaTrack *track, int fxId, string strParamId) {

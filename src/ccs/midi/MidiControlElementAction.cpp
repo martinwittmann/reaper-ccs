@@ -8,7 +8,7 @@
 #include "../Session.h"
 #include "../Page.h"
 #include "../Variables.h"
-
+#include "../CcsException.h"
 
 namespace CCS {
   using std::string;
@@ -32,9 +32,7 @@ namespace CCS {
     }
 
     if (conditions->Type() != YAML::NodeType::Map) {
-      string message = "MidiControlElementAction(): Conditions must be a yaml map.";
-      Util::error(message);
-      throw message;
+      throw CcsException("MidiControlElementAction(): Conditions must be a yaml map.");
     }
 
     for (auto const &conditionRow: *conditions) {
@@ -51,9 +49,7 @@ namespace CCS {
       op = "isnot";
     }
     else {
-      string message = "MidiControlElementAction::addCondition(): Unknown operator";
-      Util::error(message);
-      throw message;
+      throw CcsException("midicontrolelementaction::addcondition(): unknown operator");
     }
 
     string variable = Util::regexReplace(key, "\\.is(not)?$", "");
@@ -91,9 +87,7 @@ namespace CCS {
       return leftSide != rightSide;
     }
 
-    string message = "Unknown condition operator";
-    Util::error(message);
-    throw message;
+    throw CcsException("Unknown condition operator");
   }
 
   void MidiControlElementAction::invoke(

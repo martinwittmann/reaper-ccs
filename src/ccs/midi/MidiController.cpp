@@ -13,6 +13,7 @@
 #include "../Variables.h"
 #include "../../reaper/reaper_plugin.h"
 #include <iostream>
+#include "../CcsException.h"
 
 namespace CCS {
 
@@ -322,8 +323,6 @@ namespace CCS {
         return control;
       }
     }
-    string message = "Could not find midi control element with id " + id;
-    Util::error(message);
-    throw message;
+    throw CcsException("Could not find midi control element with id " + id);
   }
 }

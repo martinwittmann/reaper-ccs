@@ -5,6 +5,7 @@
 #include "../Variables.h"
 #include "../midi/MidiController.h"
 #include "../Page.h"
+#include "../CcsException.h"
 
 namespace CCS {
 
@@ -99,12 +100,12 @@ namespace CCS {
     }
   }
 
-  void checkAction(string action) {
+  void Action::checkAction(string action) {
     string pattern = "\\$(_(STATE|ARGS)\\.)?[A-Z0-9_]+!?";
     if (Util::getUsedVariables(action, pattern).size() > 0) {
       string message = "Unkown variable in action: " + action;
       Util::error(message);
-      throw message;
+      throw CcsException(message);
     }
   }
 }

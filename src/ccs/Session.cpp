@@ -10,6 +10,7 @@
 #include "midi/MidiController.h"
 #include "actions/ActionsManager.h"
 #include "../reaper-api/ReaperApi.h"
+#include "CcsException.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -58,13 +59,19 @@ namespace CCS {
   }
 
   void Session::setActivePage(int index) {
-    Page *page = m_pages.at(index);
-    m_activePage = page;
-    // TODO implement changing page.
-    // We need to call setAction after setting activePage here because the
-    // call of setActive invokes the activation actions which depend on an
-    // active page being set.
-    page->setActive();
+    try {
+      Page *page = m_pages.at(index);
+      m_activePage = page;
+      // TODO implement changing page.
+      // We need to call setAction after setting activePage here because the
+      // call of setActive invokes the activation actions which depend on an
+      // active page being set.
+      page->setActive();
+    }
+    catch (CcsException &e) {
+      Util::error("Exception in Session::setActivePage(" + std::to_string(index) + "):");
+      Util::error(e.what());
+    }
   }
 
   Page *Session::getActivePage() {
