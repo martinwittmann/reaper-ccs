@@ -239,4 +239,20 @@ namespace CCS {
     std::ofstream file(filename);
     file << emitter.c_str();
   }
+
+  std::string Util::compactString(std::string input) {
+    std::string result = input;
+    result = Util::regexReplace(result, "_+", " ");
+    std::vector<std::string> parts = Util::splitString(result, ' ');
+    result = "";
+    for (auto part : parts) {
+      std::string tmp = part;
+      boost::to_lower(tmp);
+      tmp[0] = std::toupper(tmp[0]);
+      result += tmp;
+    }
+
+    result = Util::regexReplace(result, "I(i+)", "I$1");
+    return result;
+  }
 }

@@ -34,7 +34,7 @@ variables:
   BUTTON10_LABEL: Saw
   BUTTON11_LABEL: Sub
   BUTTON12_LABEL: F-Env
-  BUTTON13_LABEL: AmpEnv/G
+  BUTTON13_LABEL: A-Env/G
   BUTTON14_LABEL: ""
   BUTTON15_LABEL: Chor I
   BUTTON16_LABEL: Chor II
@@ -71,8 +71,7 @@ variables:
 
 
 mappings:
-  ontrols:
-
+  controls:
     slmk3.encoder1:
       mapping: track1.fx1.dco_lfo_value
       on_value_change:
@@ -137,11 +136,13 @@ mappings:
             $VALUE.is: $MAX_VALUE
           actions:
           - "[slmk3.set_button_color:$BUTTON9:$COLOR_WHITE]"
+          - "[slmk3.set_top_box_selected:$SCREEN1:01]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
           - "[slmk3.set_button_color:$BUTTON9:$COLOR_OFF]"
+          - "[slmk3.set_top_box_selected:$SCREEN1:00]"
 
       on_press:
         - conditions:

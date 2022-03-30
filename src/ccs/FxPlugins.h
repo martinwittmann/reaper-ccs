@@ -22,6 +22,10 @@ namespace CCS {
     bool isFxPluginConfigFile(fse::path path);
     FxPluginConfig *getConfig(std::string nameId);
     int getParamId(MediaTrack *track, int fxId, std::string strParamId);
+
+    FxPluginConfig *getConfig(MediaTrack *track, int fxId);
+
+    std::map<std::string,double> getParamEnumValues(MediaTrack *track, int fxId, std::string paramId);
   };
 }
 

@@ -87,7 +87,18 @@ namespace CCS {
     void subscribeToEvent(int eventId, ReaperEventSubscriber *subscriber);
     bool isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId);
 
-    MediaTrack *getTrack(int id);
+    ReaProject *getProject(int index = -1);
+    MediaTrack *getTrack(int index = 0);
+
+    void setFxParameterValue(MediaTrack *track, int fxId, int paramId, double value);
+
+    std::string getFormattedParamValue(MediaTrack* track, int fxId, int paramId);
+
+    std::tuple<double,double,double,double> getParamValueEx(
+      MediaTrack *track,
+      int paramId,
+      int fxId
+    );
   };
 }
 

@@ -201,6 +201,8 @@ namespace CCS {
   }
 
   MediaTrack *ReaperApi::getTrack(int id) {
+    // Note that track 0 is the master track. Since we're using
+    // 1-based indices in the configs we can simply convert this to int.
     return CSurf_TrackFromID(id, false);
   }
 
@@ -213,5 +215,51 @@ namespace CCS {
     double maxValue;
     TrackFX_GetParam(track, fxId, paramId, &minValue, &maxValue);
     return std::tuple<double,double>(minValue, maxValue);
+  }
+
+  ReaProject *ReaperApi::getProject(int index) {
+    return EnumProjects(index, nullptr, 0);
+  }
+
+  void ReaperApi::setFxParameterValue(
+    MediaTrack *track,
+    int fxId,
+    int paramId,
+    double value
+  ) {
+    TrackFX_SetParam(track, fxId, paramId, value);
+  }
+
+  std::string ReaperApi::getFormattedParamValue(MediaTrack* track, int fxId, int paramId) {
+    char formattedValue[64];
+    TrackFX_GetFormattedParamValue(
+      track,
+      fxId,
+      paramId,
+      formattedValue,
+      sizeof formattedValue
+    );
+    return std::string(formattedValue);
+  }
+
+  std::tuple<double,double,double,double> ReaperApi::getParamValueEx(
+    MediaTrack * track,
+    int paramId,
+    int fxId
+  ) {
+
+    double minValue;
+    double maxValue;
+    double midValue;
+    double rawValue = TrackFX_GetParamEx(
+      track,
+      fxId,
+      paramId,
+      &minValue,
+      &maxValue,
+      &midValue
+    );
+
+    return { rawValue, minValue, maxValue, midValue };
   }
 }

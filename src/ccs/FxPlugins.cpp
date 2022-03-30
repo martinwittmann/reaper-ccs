@@ -59,17 +59,44 @@ namespace CCS {
         return config;
       }
     }
-
-    string message = "Config with id " + nameId + " not found!";
-    throw CcsException(message);
+    throw CcsException("Config with id " + nameId + " not found!");
   }
 
-  int FxPlugins::getParamId(MediaTrack *track, int fxId, string strParamId) {
+  FxPluginConfig *FxPlugins::getConfig(MediaTrack *track, int fxId) {
     char buffer[256];
     TrackFX_GetFXName(track, fxId, buffer, sizeof buffer);
     string fxNameId = Util::cleanId(string(buffer));
-    FxPluginConfig *config = getConfig(fxNameId);
+    return getConfig(fxNameId);
+  }
+
+  int FxPlugins::getParamId(MediaTrack *track, int fxId, string strParamId) {
+    FxPluginConfig *config = getConfig(track, fxId);
     string rawId = config->getValue("parameters." + strParamId + ".id");
     return stoi(rawId);
+  }
+
+  std::map<string,double> FxPlugins::getParamEnumValues(
+    MediaTrack *track,
+    int fxId,
+    string paramId
+  ) {
+    FxPluginConfig *config = getConfig(track, fxId);
+    std::map<string,double> result;
+
+    string type = config->getValue("parameters." + paramId + ".type");
+    if (config->getValue("parameters." + paramId + ".type") != "enum") {
+      string message = "Trying to get available parameter enum values for fxId ";
+      string label = config->getValue("parameters." + paramId + ".label");
+      message += std::to_string(fxId) + ": " + label;
+      message += ", which is not an enum parameter.";
+      Util::error(message);
+    }
+
+    YAML::Node valuesNode = config->getMapValue("parameters." + paramId + ".values");
+    for (auto node : valuesNode) {
+      result.insert(std::pair(node.first.as<string>(), node.second.as<double>()));
+    }
+
+    return result;
   }
 }

@@ -78,11 +78,36 @@ variables:
 actions:
   set_selected_part:
     arguments:
-      - HUI!
+      - PART
     conditions:
-      $_STATE.DISPLAY.is: faders
+      $_STATE.SELECTED_PART.isnot: PART
     actions:
-      - "[slmk3.set_knob_layout]"
+      - conditions:
+          $_STATE.DISPLAY.is: encoders
+        actions:
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN1:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN2:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN3:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN4:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN5:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN6:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN7:00]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN8:00]"
+        - "[slmk3.set_knob_lower_text_selected:$_ARGS.PART:01]"
+        - "[slmk3.set_button_color:$_ARGS.PART:01]"
+
+      - conditions:
+          $_STATE.DISPLAY.is: buttons
+        actions:
+        - "[slmk3.set_bottom_box_selected:$SCREEN1:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN2:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN3:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN4:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN5:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN6:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN7:00]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
+        - "[slmk3.set_bottom_box_selected:$_ARGS.PART:01]"
 
   set_display_encoders:
     actions:

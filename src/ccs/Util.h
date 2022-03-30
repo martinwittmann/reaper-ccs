@@ -58,6 +58,8 @@ namespace CCS {
     static void error(std::string message, bool lineBreak = true);
 
     static void debugYaml(YAML::Node node);
+
+    static std::string compactString(std::string input);
   };
 }
 

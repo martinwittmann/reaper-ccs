@@ -2,11 +2,11 @@
 #include <vector>
 #include <iostream>
 #include "../FxPlugins.h"
-#include "../../reaper/reaper_plugin_functions.h"
 #include "yaml-cpp/yaml.h"
 #include "../Page.h"
 #include "../CcsException.h"
 #include "../actions/CompositeAction.h"
+#include "../../reaper/reaper_plugin_functions.h"
 
 namespace CCS {
 
@@ -35,28 +35,41 @@ namespace CCS {
 
     if (!m_paramMapping.empty()) {
       m_hasMappedFxParam = true;
-
+      initializeMappingValues(m_paramMapping);
 
       m_mappingType = m_config->getValue("mapping_type");
-      initializeMappingValues(m_paramMapping);
+      if (m_mappingType == "enum") {
+        m_enumValues = m_session
+          ->getPluginManager()
+          ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
+      }
 
       auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
       this->m_api->subscribeToFxParameterChanged(
-        m_mappedTrack,
-        m_mappedFxId,
-        m_mappedParamId,
+        m_track,
+        m_fxId,
+        m_paramId,
         subscriber
       );
 
-      double rawValue = TrackFX_GetParamEx(
-        m_mappedTrack,
-        m_mappedFxId,
-        m_mappedParamId,
-        &m_mappedMinValue,
-        &m_mappedMaxValue,
-        &m_mappedMidValue
+      // Retrieve the current values on initialization.
+      const auto [value, minValue, maxValue, midValue] = m_api->getParamValueEx(
+        m_track,
+        m_fxId,
+        m_paramId
       );
-      m_value = rawValue;
+      m_value = value;
+      m_minValue = minValue;
+      m_maxValue = maxValue;
+      m_midValue = midValue;
+
+      m_formattedValue = m_api->getFormattedParamValue(
+        m_track,
+        m_fxId,
+        m_paramId
+      );
+
+      updateControlElement();
     }
 
     createActions();
@@ -97,29 +110,25 @@ namespace CCS {
     std::map<string,string> result;
     string valueStr = Util::byteToHex(Util::get7BitValue(
       m_value,
-      m_mappedMinValue,
-      m_mappedMaxValue
+      m_minValue,
+      m_maxValue
     ));
     result.insert(std::pair("VALUE", valueStr));
 
-    string formattedStr = Util::byteToHex(Util::get7BitValue(
-      m_mappedMinValue,
-      m_mappedMinValue,
-      m_mappedMaxValue
-    ));
+    string formattedStr = Util::compactString(m_formattedValue);
     result.insert(std::pair("FORMATTED_VALUE", formattedStr));
 
     string minValueStr = Util::byteToHex(Util::get7BitValue(
-      m_mappedMaxValue,
-      m_mappedMinValue,
-      m_mappedMaxValue
+      m_maxValue,
+      m_minValue,
+      m_maxValue
     ));
     result.insert(std::pair("MIN_VALUE", minValueStr));
 
     string maxValueStr = Util::byteToHex(Util::get7BitValue(
-      m_mappedMaxValue,
-      m_mappedMinValue,
-      m_mappedMaxValue
+      m_maxValue,
+      m_minValue,
+      m_maxValue
     ));
     result.insert(std::pair("MAX_VALUE", maxValueStr));
 
@@ -135,11 +144,11 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::toggleValue() {
-    if (m_value == m_mappedMaxValue) {
-      m_value = m_mappedMinValue;
+    if (m_value == m_maxValue) {
+      m_value = m_minValue;
     }
     else {
-      m_value = m_mappedMaxValue;
+      m_value = m_maxValue;
     }
   }
 
@@ -147,8 +156,13 @@ namespace CCS {
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
-          if (m_hasMappedFxParam && m_mappingType == "toggle") {
-            toggleValue();
+          if (m_hasMappedFxParam) {
+            if (m_mappingType == "toggle") {
+              toggleValue();
+            }
+            else if (m_mappingType == "enum") {
+              setNextEnumValue();
+            }
           }
           invokeActions("on_press");
         }
@@ -158,7 +172,7 @@ namespace CCS {
         break;
 
       case MidiControlElement::ABSOLUTE:
-        m_value = Util::getParamValueFrom7Bit(data2, m_mappedMinValue, m_mappedMaxValue);
+        m_value = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
         break;
 
       case MidiControlElement::RELATIVE:
@@ -167,7 +181,7 @@ namespace CCS {
     }
 
     if (m_hasMappedFxParam) {
-      TrackFX_SetParam(m_mappedTrack, m_mappedFxId, m_mappedParamId, m_value);
+      m_api->setFxParameterValue(m_track, m_fxId, m_paramId, m_value);
     }
   }
 
@@ -180,18 +194,18 @@ namespace CCS {
       rawDiff = rawDiff;
     }
 
-    diff = Util::getParamValueFrom7Bit(rawDiff, m_mappedMinValue, m_mappedMaxValue);
+    diff = Util::getParamValueFrom7Bit(rawDiff, m_minValue, m_maxValue);
 
     // To give users better / finer control over parameters we only apply half
     // of the diff we're getting from the controller. Otherwise the distance
     // between min and max is not that big.
     m_value += diff / 2;
 
-    if (m_value < m_mappedMinValue) {
-      m_value = m_mappedMinValue;
+    if (m_value < m_minValue) {
+      m_value = m_minValue;
     }
-    else if (m_value > m_mappedMaxValue) {
-      m_value = m_mappedMaxValue;
+    else if (m_value > m_maxValue) {
+      m_value = m_maxValue;
     }
   }
 
@@ -219,22 +233,39 @@ namespace CCS {
     std::vector<string> parts = Util::splitString(rawMapping, '.');
     string trackPart = parts.at(0);
     trackPart = Util::regexReplace(trackPart, "[^0-9]+", "");
-    // Note that in reaper, track 0 is the master track. Since we're using
-    // 1-based indices in the configs we can simply convert this to int.
-    // ???
-    // For some reason using the 1-based index does not work, but the
-    // zero-based index does?!
-    int trackId = stoi(trackPart) - 1;
-    m_mappedTrack = GetTrack(0, trackId);
+    int trackId = stoi(trackPart);
+    m_track = m_api->getTrack(trackId);
 
     string fxIdPart = parts.at(1);
     fxIdPart = Util::regexReplace(fxIdPart, "[^0-9]+", "");
     // Also 1-based indices, but there is not special fx index 0 in reaper.
-    m_mappedFxId = stoi(fxIdPart) - 1;
+    m_fxId = stoi(fxIdPart) - 1;
 
-    string paramIdPart = parts.at(2);
-    m_mappedParamId = m_session
+    m_paramIdStr = parts.at(2);
+    m_paramId = m_session
       ->getPluginManager()
-      ->getParamId(m_mappedTrack, m_mappedFxId, paramIdPart);
+      ->getParamId(m_track, m_fxId, m_paramIdStr);
+  }
+
+  void MidiControlElementMapping::setNextEnumValue() {
+    auto it = m_enumValues.find(m_formattedValue);
+    double tmpVal;
+    string tmpLabel;
+    it++;
+    if (it == m_enumValues.end()) {
+      // We were at the end already.
+      m_value = m_enumValues.begin()->second;
+      tmpLabel = m_enumValues.begin()->first;
+      tmpVal = m_value;
+    }
+    else {
+      m_value = it->second;
+      tmpLabel = it->first;
+      tmpVal = m_value;
+    }
+  }
+
+  void MidiControlElementMapping::updateControlElement() {
+    invokeActions("on_value_change");
   }
 }

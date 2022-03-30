@@ -37,16 +37,19 @@ namespace CCS {
     std::vector<std::string> m_actionTypes;
     std::string m_mappingType;
     std::string m_paramMapping;
+    // A map of label:parameterValue for each available enum value.
+    std::map<string,double> m_enumValues;
 
-    MediaTrack *m_mappedTrack;
-    int m_mappedFxId;
-    int m_mappedParamId;
+    MediaTrack *m_track;
+    int m_fxId;
+    int m_paramId;
+    std::string m_paramIdStr;
     std::map<std::string,CompositeAction*> m_actions;
     bool m_hasMappedFxParam = false;
 
-    double m_mappedMinValue;
-    double m_mappedMaxValue;
-    double m_mappedMidValue;
+    double m_minValue;
+    double m_maxValue;
+    double m_midValue;
 
   public:
 
@@ -84,6 +87,10 @@ namespace CCS {
     void toggleValue();
 
     vector <string> getAvailableActionTypes(short controlElementType);
+
+    void setNextEnumValue();
+
+    void updateControlElement();
   };
 }
 
