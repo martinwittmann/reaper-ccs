@@ -3,7 +3,18 @@ name: $PART1_LABEL
 id: page1
 on_activate:
   - "[page.set_state:CURRENT_COLOR:$PART1_COLOR]"
-  - "[page.display_buttons]"
+  - conditions:
+      $_STATE.DISPLAY.is: ""
+    actions:
+      - "[page.display_encoders]"
+  - conditions:
+      $_STATE.DISPLAY.is: "encoders"
+    actions:
+      - "[page.display_encoders]"
+  - conditions:
+      $_STATE.DISPLAY.is: "buttons"
+    actions:
+      - "[page.display_buttons]"
 
 
 variables:

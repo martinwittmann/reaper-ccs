@@ -1,3 +1,7 @@
+initial_state:
+  DISPLAY: encoders
+  CURRENT_COLOR: $PART1_COLOR
+
 # To save lots of repetition, allow settings defaults that can be overriden
 # on each page.
 # This is useful if variables and mappings should stay the same on all pages.
@@ -79,8 +83,8 @@ actions:
   set_selected_part:
     arguments:
       - PART
-    conditions:
-      $_STATE.SELECTED_PART.isnot: PART
+      - BUTTON
+      - COLOR
     actions:
       - conditions:
           $_STATE.DISPLAY.is: encoders
@@ -94,7 +98,6 @@ actions:
         - "[slmk3.set_knob_lower_text_selected:$SCREEN7:00]"
         - "[slmk3.set_knob_lower_text_selected:$SCREEN8:00]"
         - "[slmk3.set_knob_lower_text_selected:$_ARGS.PART:01]"
-        - "[slmk3.set_button_color:$_ARGS.PART:01]"
 
       - conditions:
           $_STATE.DISPLAY.is: buttons
@@ -108,6 +111,16 @@ actions:
         - "[slmk3.set_bottom_box_selected:$SCREEN7:00]"
         - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
         - "[slmk3.set_bottom_box_selected:$_ARGS.PART:01]"
+
+      - "[slmk3.set_button_color:$BUTTON1:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON2:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON3:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON4:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON5:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON6:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON7:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$BUTTON8:$COLOR_OFF]"
+      - "[slmk3.set_button_color:$_ARGS.BUTTON:$_ARGS.COLOR]"
 
   display_encoders:
     actions:
@@ -149,7 +162,14 @@ actions:
     - "[slmk3.set_knob_bottom_color:$SCREEN7:$PART7_COLOR]"
     - "[slmk3.set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
 
-    - "[slmk3.set_knob_lower_text_selected:$SCREEN1:01]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN1:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN2:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN3:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN4:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN5:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN6:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN7:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN8:$_STATE.CURRENT_COLOR]"
 
     - "[page.set_state:DISPLAY:encoders]"
     - "[page.update_controller_ui]"
@@ -223,44 +243,24 @@ actions:
     - "[page.set_state:DISPLAY:buttons]"
     - "[page.update_controller_ui]"
 
-  set_knob_top_bar_colors:
-    arguments:
-      - COLOR
-    actions:
-    - "[slmk3.set_knob_top_bar_color:$SCREEN1:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN2:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN3:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN4:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN5:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN6:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN7:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN8:$_STATE.CURRENT_COLOR]"
 
 mappings:
   controls:
     slmk3.button1:
-      label: $_PAGES.page1.name
       on_press:
-        - conditions:
-            $_CURRENT_PAGE.isnot: page1
+        #- conditions:
+            #$_STATE.CURRENT_PAGE.isnot: page1
           actions:
             - "[session.load_page:page1]"
+            - "[page.set_selected_part:$SCREEN1:$BUTTON1:$PART1_COLOR]"
 
     slmk3.button2:
-      label: $_PAGES.page2.name
       on_press:
-        - conditions:
-            $_CURRENT_PAGE.isnot: page2
+        #- conditions:
+            #$_STATE.CURRENT_PAGE.isnot: page2
           actions:
             - "[session.load_page:page2]"
-
-    slmk3.button3:
-      label: $_PAGES.page3.name
-      on_press:
-        - conditions:
-            $_CURRENT_PAGE.isnot: page3
-          actions:
-            - "[session.load_page:page3]"
+            - "[page.set_selected_part:$SCREEN2:$BUTTON2:$PART2_COLOR]"
 
     slmk3.button_screen_up:
       on_press:
