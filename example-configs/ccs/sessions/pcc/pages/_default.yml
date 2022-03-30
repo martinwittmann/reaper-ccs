@@ -28,8 +28,8 @@ variables:
 
   PART1_LABEL: Juno 1
   PART2_LABEL: Juno 2
-  PART3_LABEL: Juno 3
-  PART4_LABEL: Vital
+  PART3_LABEL: Vital
+  PART4_LABEL: 
   PART5_LABEL: 
   PART6_LABEL: 
   PART7_LABEL: 
@@ -77,15 +77,30 @@ variables:
   BUTTON22: 48
   BUTTON23: 49
   BUTTON24: 4A
+  
+  BUTTON9_LABEL:  Pulse
+  BUTTON10_LABEL: Saw
+  BUTTON11_LABEL: Sub
+  BUTTON12_LABEL: F-Env
+  BUTTON13_LABEL: A-Env/G
+  BUTTON14_LABEL: ""
+  BUTTON15_LABEL: Chor I
+  BUTTON16_LABEL: Chor II
+
+  BUTTON17_LABEL: LfoTrMd
+  BUTTON18_LABEL: LfoShape
+  BUTTON19_LABEL: GldeType
+  BUTTON20_LABEL: GldePoly
+  BUTTON21_LABEL: ""
+  BUTTON22_LABEL: ""
+  BUTTON23_LABEL: ""
+  BUTTON24_LABEL: ""
 
 
 actions:
   set_selected_part:
-    arguments:
-      - PART
-      - BUTTON
-      - COLOR
     actions:
+      - "[session.debug:$_STATE.DISPLAY:$SCREEN_COLUMN:$PAGE_BUTTON]"
       - conditions:
           $_STATE.DISPLAY.is: encoders
         actions:
@@ -97,7 +112,7 @@ actions:
         - "[slmk3.set_knob_lower_text_selected:$SCREEN6:00]"
         - "[slmk3.set_knob_lower_text_selected:$SCREEN7:00]"
         - "[slmk3.set_knob_lower_text_selected:$SCREEN8:00]"
-        - "[slmk3.set_knob_lower_text_selected:$_ARGS.PART:01]"
+        - "[slmk3.set_knob_lower_text_selected:$SCREEN_COLUMN:01]"
 
       - conditions:
           $_STATE.DISPLAY.is: buttons
@@ -110,7 +125,7 @@ actions:
         - "[slmk3.set_bottom_box_selected:$SCREEN6:00]"
         - "[slmk3.set_bottom_box_selected:$SCREEN7:00]"
         - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
-        - "[slmk3.set_bottom_box_selected:$_ARGS.PART:01]"
+        - "[slmk3.set_bottom_box_selected:$SCREEN_COLUMN:01]"
 
       - "[slmk3.set_button_color:$BUTTON1:$COLOR_OFF]"
       - "[slmk3.set_button_color:$BUTTON2:$COLOR_OFF]"
@@ -120,7 +135,7 @@ actions:
       - "[slmk3.set_button_color:$BUTTON6:$COLOR_OFF]"
       - "[slmk3.set_button_color:$BUTTON7:$COLOR_OFF]"
       - "[slmk3.set_button_color:$BUTTON8:$COLOR_OFF]"
-      - "[slmk3.set_button_color:$_ARGS.BUTTON:$_ARGS.COLOR]"
+      - "[slmk3.set_button_color:$PAGE_BUTTON:$PAGE_COLOR]"
 
   display_encoders:
     actions:
@@ -154,24 +169,25 @@ actions:
     - "[slmk3.set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
 
     - "[slmk3.set_knob_bottom_color:$SCREEN1:$PART1_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN2:$PART2_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN3:$PART3_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN4:$PART4_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN5:$PART5_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN6:$PART6_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN7:$PART7_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN2:$PART1_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN3:$PART2_COLOR]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
+    - "[slmk3.set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
     - "[slmk3.set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
 
-    - "[slmk3.set_knob_top_bar_color:$SCREEN1:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN2:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN3:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN4:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN5:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN6:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN7:$_STATE.CURRENT_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN8:$_STATE.CURRENT_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN3:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN4:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN5:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN6:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
+    - "[slmk3.set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
 
     - "[page.set_state:DISPLAY:encoders]"
+    - "[page.set_selected_part]"
     - "[page.update_controller_ui]"
 
   display_buttons:
@@ -231,16 +247,8 @@ actions:
     - "[slmk3.set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
     - "[slmk3.set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
 
-    - "[slmk3.set_bottom_box_selected:$SCREEN1:01]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN2:00]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN3:00]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN4:00]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN5:00]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN6:00]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN7:00]"
-    - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
-
     - "[page.set_state:DISPLAY:buttons]"
+    - "[page.set_selected_part]"
     - "[page.update_controller_ui]"
 
 
@@ -248,19 +256,27 @@ mappings:
   controls:
     slmk3.button1:
       on_press:
-        #- conditions:
-            #$_STATE.CURRENT_PAGE.isnot: page1
+        - conditions:
+            $_STATE.CURRENT_PAGE.isnot: page1
           actions:
+            - "[session.debug:$SCREEN_COLUMN]"
             - "[session.load_page:page1]"
-            - "[page.set_selected_part:$SCREEN1:$BUTTON1:$PART1_COLOR]"
 
     slmk3.button2:
       on_press:
-        #- conditions:
-            #$_STATE.CURRENT_PAGE.isnot: page2
+        - conditions:
+            $_STATE.CURRENT_PAGE.isnot: page2
           actions:
+            - "[session.debug:$SCREEN_COLUMN]"
             - "[session.load_page:page2]"
-            - "[page.set_selected_part:$SCREEN2:$BUTTON2:$PART2_COLOR]"
+
+    slmk3.button3:
+      on_press:
+        - conditions:
+            $_STATE.CURRENT_PAGE.isnot: page3
+          actions:
+            - "[session.debug:$SCREEN_COLUMN]"
+            - "[session.load_page:page3]"
 
     slmk3.button_screen_up:
       on_press:

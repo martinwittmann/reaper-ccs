@@ -2,7 +2,6 @@ extends: _default
 name: $PART2_LABEL
 id: page2
 on_activate:
-  - "[page.set_state:CURRENT_COLOR:$PART2_COLOR]"
   - conditions:
       $_STATE.DISPLAY.is: ""
     actions:
@@ -18,10 +17,9 @@ on_activate:
 
 
 variables:
-  DISPLAY_ENCODERS: encoders
-  DISPLAY_FADERS: faders
-  DISPLAY_BUTTONS: buttons
-  DISPLAY_DEFAULT: encoders
+  SCREEN_COLUMN: 01
+  PAGE_BUTTON: 34
+  PAGE_COLOR: 25
 
   ENCODER1_LABEL: PtchBend
   ENCODER2_LABEL: PW Filt
@@ -31,33 +29,6 @@ variables:
   ENCODER6_LABEL: Rev Mix
   ENCODER7_LABEL: Rev Size
   ENCODER8_LABEL: Voices
-
-  BUTTON1_LABEL: $PART1_LABEL
-  BUTTON2_LABEL: $PART2_LABEL
-  BUTTON3_LABEL: LFO Rate
-  BUTTON4_LABEL: Test 1
-  BUTTON5_LABEL: Test 2
-  BUTTON6_LABEL: Test 3
-  BUTTON7_LABEL: Test 4
-  BUTTON8_LABEL: Test 5
-
-  BUTTON9_LABEL:  WITTI
-  BUTTON10_LABEL: Saw
-  BUTTON11_LABEL: Sub
-  BUTTON12_LABEL: F-Env
-  BUTTON13_LABEL: A-Env/G
-  BUTTON14_LABEL: ""
-  BUTTON15_LABEL: Chor I
-  BUTTON16_LABEL: Chor II
-
-  BUTTON17_LABEL: LfoTrMd
-  BUTTON18_LABEL: LfoShape
-  BUTTON19_LABEL: GldeType
-  BUTTON20_LABEL: GldePoly
-  BUTTON21_LABEL: ""
-  BUTTON22_LABEL: ""
-  BUTTON23_LABEL: ""
-  BUTTON24_LABEL: ""
 
 
 # To make writing pages easier, they can define their own actions too.
@@ -92,6 +63,11 @@ mappings:
           actions:
             - "[slmk3.set_knob_value:$SCREEN1:$VALUE]"
             - "[slmk3.set_knob_value_label:$SCREEN1:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder2:
       mapping: track1.fx1.control_pitch_bend_filter
@@ -101,6 +77,11 @@ mappings:
           actions:
             - "[slmk3.set_knob_value:$SCREEN2:$VALUE]"
             - "[slmk3.set_knob_value_label:$SCREEN2:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder3:
       mapping: track1.fx1.control_velocity_envelope
@@ -110,6 +91,11 @@ mappings:
           actions:
           - "[slmk3.set_knob_value:$SCREEN3:$VALUE]"
           - "[slmk3.set_knob_value_label:$SCREEN3:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder4:
       mapping: track1.fx1.control_velocity_volume
@@ -119,6 +105,11 @@ mappings:
           actions:
           - "[slmk3.set_knob_value:$SCREEN4:$VALUE]"
           - "[slmk3.set_knob_value_label:$SCREEN4:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder5:
       mapping: track1.fx1.portamento_time
@@ -128,6 +119,11 @@ mappings:
           actions:
           - "[slmk3.set_knob_value:$SCREEN5:$VALUE]"
           - "[slmk3.set_knob_value_label:$SCREEN5:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder6:
       mapping: track1.fx1.fx_reverb_dry_wet
@@ -137,6 +133,11 @@ mappings:
           actions:
           - "[slmk3.set_knob_value:$SCREEN6:$VALUE]"
           - "[slmk3.set_knob_value_label:$SCREEN6:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder7:
       mapping: track1.fx1.fx_reverb_size
@@ -146,6 +147,11 @@ mappings:
           actions:
           - "[slmk3.set_knob_value:$SCREEN7:$VALUE]"
           - "[slmk3.set_knob_value_label:$SCREEN7:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.encoder8:
       mapping: track1.fx1.max_voices
@@ -155,6 +161,11 @@ mappings:
           actions:
           - "[slmk3.set_knob_value:$SCREEN8:$VALUE]"
           - "[slmk3.set_knob_value_label:$SCREEN8:$FORMATTED_VALUE]"
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+          - "[page.display_encoders]"
 
     slmk3.button9:
       mapping: track1.fx1.dco_pulse_enabled
