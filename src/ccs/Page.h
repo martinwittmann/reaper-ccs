@@ -37,6 +37,7 @@ class Page : public ActionProvider {
     vector<MidiControlElementMapping*> m_controlElementMappings;
     ReaperApi *m_reaperApi;
     CompositeAction *m_activateAction;
+    std::map<int,MidiEventSubscriber*> m_subscribedMidiEventIds;
 
   public:
     Page(
@@ -52,6 +53,7 @@ class Page : public ActionProvider {
     string getPageId();
     void actionCallback(string actionName, vector<string> arguments);
     void createMidiControlElementMappings();
+    void createSubscribedMidiEventIds();
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
     std::map<string,string> *getState();
 

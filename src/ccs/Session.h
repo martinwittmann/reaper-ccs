@@ -35,6 +35,7 @@ namespace CCS {
     ActionsManager *m_actionsManager;
     midi_Output *m_output;
     ReaperApi *m_reaperApi;
+    std::map<int,MidiEventSubscriber*> m_subscribedMidiEventIds;
 
   public:
     Session(
@@ -53,7 +54,7 @@ namespace CCS {
     void loadMidiControllers();
     void loadPage(string pageId);
     Page *getActivePage();
-    std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
+    std::map<int,MidiEventSubscriber*> *getSubscribedMidiEventIds();
     MidiController *getMidiController(std::string id);
     FxPlugins *getPluginManager();
 

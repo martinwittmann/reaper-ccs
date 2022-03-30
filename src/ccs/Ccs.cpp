@@ -13,34 +13,34 @@ namespace CCS {
   using std::vector;
 
   Ccs::Ccs(string baseDir, midi_Output *output) {
-    resourceDir = baseDir;
+    m_resourceDir = baseDir;
     const char separator = fse::path::preferred_separator;
-    ccsDir = resourceDir + separator + "ccs" + separator;
+    m_ccsDir = m_resourceDir + separator + "ccs" + separator;
 
-    sessionsDir = ccsDir + "sessions";
-    controllersDir = ccsDir + "controllers";
-    pluginsDir = ccsDir + "fx_plugins";
+    m_sessionsDir = m_ccsDir + "sessions";
+    m_controllersDir = m_ccsDir + "controllers";
+    m_pluginsDir = m_ccsDir + "fx_plugins";
 
-    this->output = output;
-    config = new GlobalConfig(ccsDir + "config" + YAML_EXT);
-    actionsManager = new ActionsManager();
+    m_output = output;
+    m_config = new GlobalConfig(m_ccsDir + "config" + YAML_EXT);
+    m_actionsManager = new ActionsManager();
     reaperApi = new ReaperApi();
 
-    sessions = Session::getSessions(sessionsDir);
-    lastSession = config->getLastSessionId();
-    currentSession = loadSession(lastSession, actionsManager);
-    subscribedMidiEventIds = currentSession->getSubscribedMidiEventIds();
+    m_sessions = Session::getSessions(m_sessionsDir);
+    m_lastSession = m_config->getLastSessionId();
+    m_currentSession = loadSession(m_lastSession, m_actionsManager);
+    m_subscribedMidiEventIds = m_currentSession->getSubscribedMidiEventIds();
     std::map<int,MidiEventSubscriber*>::iterator it;
   }
 
   Ccs::~Ccs() {
-    delete currentSession;
+    delete m_currentSession;
   }
 
 
   Session *Ccs::loadSession(string sessionId, ActionsManager *actionsManager) {
-    string sessionPath = sessionsDir + SEP + sessionId;
-    return new Session(sessionPath, actionsManager, output, reaperApi);
+    string sessionPath = m_sessionsDir + SEP + sessionId;
+    return new Session(sessionPath, actionsManager, m_output, reaperApi);
   }
 
   void Ccs::onMidiEvent(MIDI_event_t *rawEvent) {
@@ -48,8 +48,8 @@ namespace CCS {
       rawEvent->midi_message[0],
       rawEvent->midi_message[1]
     );
-    if (subscribedMidiEventIds.contains(eventId)) {
-      MidiEventSubscriber *subscriber = subscribedMidiEventIds.at(eventId);
+    if (m_subscribedMidiEventIds->contains(eventId)) {
+      MidiEventSubscriber *subscriber = m_subscribedMidiEventIds->at(eventId);
       if (subscriber) {
         subscriber->onMidiEvent(eventId, rawEvent->midi_message[2]);
       }

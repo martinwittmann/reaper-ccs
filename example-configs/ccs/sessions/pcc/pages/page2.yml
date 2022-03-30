@@ -112,7 +112,7 @@ mappings:
           - "[page.display_encoders]"
 
     slmk3.encoder5:
-      mapping: track1.fx1.portamento_time
+      mapping: track1.fx1.portamento_intensity
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -221,5 +221,11 @@ mappings:
             $VALUE.isnot: $MAX_VALUE
           actions:
           - "[slmk3.set_button_color:$BUTTON9:$COLOR_OFF]"
+
+
+
+    slmk3.button18:
+      on_value_change:
+        - "[session.debug:sdfsdfsdf]"
 
 

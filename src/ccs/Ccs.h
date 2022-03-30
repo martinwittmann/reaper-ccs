@@ -16,19 +16,19 @@ namespace CCS {
   using std::string;
 
   class Ccs {
-    string resourceDir;
-    string ccsDir;
-    string sessionsDir;
-    string controllersDir;
-    string pluginsDir;
-    string lastSession;
-    std::vector<string> sessions;
-    Session *currentSession;
-    GlobalConfig *config;
-    ActionsManager *actionsManager;
-    midi_Output *output;
-    std::map<int,MidiEventSubscriber*> subscribedMidiEventIds;
-    std::vector<string> subscribedReaperEvents;
+    string m_resourceDir;
+    string m_ccsDir;
+    string m_sessionsDir;
+    string m_controllersDir;
+    string m_pluginsDir;
+    string m_lastSession;
+    std::vector<string> m_sessions;
+    Session *m_currentSession;
+    GlobalConfig *m_config;
+    ActionsManager *m_actionsManager;
+    midi_Output *m_output;
+    std::map<int,MidiEventSubscriber*>* m_subscribedMidiEventIds;
+    std::vector<string> m_subscribedReaperEvents;
 
   public:
     ReaperApi *reaperApi;

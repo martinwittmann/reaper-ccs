@@ -88,6 +88,7 @@ namespace CCS {
     try {
       Page *page = getPage(pageId);
       m_activePage = page;
+      m_subscribedMidiEventIds = m_activePage->getSubscribedMidiEventIds();
 
       // We need to call setActive after setting activePage here because the
       // call of setActive invokes the on_activate actions which depend on an
@@ -186,8 +187,8 @@ namespace CCS {
     }
   }
 
-  std::map<int,MidiEventSubscriber*> Session::getSubscribedMidiEventIds() {
-    return m_activePage->getSubscribedMidiEventIds();
+  std::map<int,MidiEventSubscriber*> *Session::getSubscribedMidiEventIds() {
+    return &m_subscribedMidiEventIds;
   }
 
   MidiController *Session::getMidiController(std::string id) {

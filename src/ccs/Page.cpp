@@ -28,8 +28,13 @@ namespace CCS {
     m_actionsManager = actionsManager;
     m_session = session;
     m_reaperApi = reaperApi;
+
     createActions();
     createMidiControlElementMappings();
+
+    // This needs to be called after setting up the mappings because these are
+    // needed to determine the subscribed midi event ids.
+    createSubscribedMidiEventIds();
 
     m_activateAction = new CompositeAction(
       m_pageId + ".on_activate",
@@ -132,14 +137,17 @@ namespace CCS {
     }
   }
 
-  std::map<int,MidiEventSubscriber*> Page::getSubscribedMidiEventIds() {
-    std::map<int,MidiEventSubscriber*> result;
+  void Page::createSubscribedMidiEventIds() {
+    m_subscribedMidiEventIds.clear();
     for (const auto &mapping: m_controlElementMappings) {
       int eventId = mapping->getMidiEventId();
       auto subscriber = dynamic_cast<MidiEventSubscriber*>(mapping);
-      result.insert(std::pair(eventId, subscriber));
+      m_subscribedMidiEventIds.insert(std::pair(eventId, subscriber));
     }
-    return result;
+  }
+
+  std::map<int,MidiEventSubscriber*> Page::getSubscribedMidiEventIds() {
+    return m_subscribedMidiEventIds;
   }
 
   void Page::createMidiControlElementMappings() {
