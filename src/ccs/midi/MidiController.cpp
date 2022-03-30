@@ -97,16 +97,6 @@ namespace CCS {
     return is_regular_file(path);
   }
 
-  vector<MidiEventType> MidiController::getMidiEventTypes() {
-    vector<MidiEventType> result;
-    for (auto it = controls.begin(); it != controls.end(); ++it) {
-      MidiControlElement *element = *it;
-      MidiEventType event = element->getEventType();
-      result.push_back(event);
-    }
-    return result;
-  }
-
   void MidiController::actionCallback(std::string actionName, std::vector<std::string> arguments) {
     if (actionName == "send_midi_message") {
       return sendMidiMessage(actionName, arguments);
@@ -121,7 +111,7 @@ namespace CCS {
   }
 
   void MidiController::flushMidiMessagesBuffer() {
-    return _sendMidiMessage(&midiMessagesBuffer);
+    _sendMidiMessage(&midiMessagesBuffer);
     midiMessagesBuffer.clear();
   }
 
@@ -195,42 +185,31 @@ namespace CCS {
 
     // Get Actions from config.
     YAML::Node actionsNode = config->getMapValue("actions");
-    YAML::Node variablesNode = config->getMapValue("variables");
-    std::map<string,string> variables = Variables::getVariables(variablesNode);
     for (const auto &item: actionsNode) {
       auto actionId = item.first.as<string>();
-      Action *action = createMidiControllerAction(
+      YAML::Node actionNode = item.second;
+      preprocessActionConfigNode(actionNode);
+      Action *action = new Action(
+        controllerId,
         actionId,
-        item.second
+        actionNode,
+        actionsManager
       );
       provideAction(action);
     }
   }
 
-  Action *MidiController::createMidiControllerAction(string actionId, YAML::Node node) {
+  // Since actions in midi controllers have some special features, we transform
+  // a given config node in a way that Action and CompositeAction can handle.
+  void MidiController::preprocessActionConfigNode(YAML::Node node) {
+    // Basically we convert each message into a send midi action and merge all
+    // send midi actions together for performance reasons.
     vector<string> rawSubActions = config->getListValues("message", &node);
     vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
-    vector<string> argumentNames = config->getListValues("arguments", &node);
-    vector<string> argumentTypes;
-
-    for (auto &argument : argumentNames) {
-      if (argument.substr(argument.length() - 1) == "!") {
-        argument = argument.substr(0, argument.length() - 1);
-        argumentTypes.push_back("string");
-      }
-      else {
-        argumentTypes.push_back("byte");
-      }
+    node["actions"];
+    for (auto subAction : processedSubActions) {
+      node["actions"].push_back(subAction);
     }
-
-    return new Action(
-      controllerId,
-      actionId,
-      argumentNames,
-      argumentTypes,
-      processedSubActions,
-      actionsManager
-    );
   }
 
   vector<string> MidiController::getProcessedSubActions(vector<string> rawSubActions) {
@@ -250,7 +229,6 @@ namespace CCS {
       // Also try to merge multiple subsequent send midi messages into a single
       // send midi message to not add performance bottlenecks by sending lots
       // of small messages after each other.
-      isMacroAction("dfs");
       if (isMacroAction(subAction)) {
         if (!midiMessages.empty()) {
           // Since the current action is not a midi action, but the last one(s)

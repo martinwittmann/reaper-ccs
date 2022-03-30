@@ -68,15 +68,21 @@ namespace CCS {
       }
 
       // Set up the actual subactions.
+      int i = 0;
       for (auto rawSubAction : actionRoot["actions"]) {
         YAML::Node item = rawSubAction;
-        string tmpId = m_id + "." + rawSubAction.first.as<string>();
+        string tmpId = m_id + "." + std::to_string(i);
         auto subAction = new CompositeAction(tmpId, item);
         m_subActions.push_back(subAction);
+        i++;
       }
     }
     else {
       throw CcsException("Trying to create CompositeAction from an invalid yaml node.");
+    }
+
+    if (!m_isSimpleAction && m_subActions.size() < 1) {
+      Util::error("CompositeAction " + m_id + " does not have any subactions.");
     }
   }
 

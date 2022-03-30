@@ -56,6 +56,8 @@ namespace CCS {
     static std::vector<std::string> getUsedVariables(std::string input, std::string pattern);
 
     static void error(std::string message, bool lineBreak = true);
+
+    static void debugYaml(YAML::Node node);
   };
 }
 

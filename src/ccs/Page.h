@@ -48,8 +48,6 @@ class Page : public ActionProvider {
     static bool isPageConfigFile(fse::path path);
     void setActive();
     void createActions();
-    Action *createPageAction(string actionId, YAML::Node node);
-    vector<string> getProcessedSubActions(vector<string> rawSubActions);
     string getPageId();
     void actionCallback(string actionName, vector<string> arguments);
     void createMidiControlElementMappings();

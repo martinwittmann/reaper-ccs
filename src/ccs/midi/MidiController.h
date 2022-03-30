@@ -49,10 +49,6 @@ namespace CCS {
     void initializeControls();
 
     static bool isMidiControllerConfigFile(fse::path path);
-    vector<MidiEventType> getMidiEventTypes();
-
-
-    Action *createMidiControllerAction(string actionId, YAML::Node node);
 
     vector<string> getProcessedSubActions(vector<string> rawSubActions);
 
@@ -68,6 +64,8 @@ namespace CCS {
     string getControllerId();
 
     MidiControlElement *getMidiControlElement(string id);
+
+    void preprocessActionConfigNode(YAML::Node node);
   };
 }
 

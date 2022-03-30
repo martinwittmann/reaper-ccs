@@ -87,36 +87,14 @@ namespace CCS {
     YAML::Node variablesNode = m_config->getMapValue("variables");
     for (const auto &item: actionsNode) {
       auto actionId = item.first.as<string>();
-      Action *action = createPageAction(
+      Action *action = new Action(
+        m_pageId,
         actionId,
-        item.second
+        item.second,
+        m_actionsManager
       );
       provideAction(action);
     }
-  }
-
-  Action *Page::createPageAction(string actionId, YAML::Node node) {
-    vector<string> rawSubActions = m_config->getListValues("actions", &node);
-    vector<string> processedSubActions = getProcessedSubActions(rawSubActions);
-
-    return new Action(
-      m_pageId,
-      actionId,
-      argumentNames,
-      argumentTypes,
-      processedSubActions,
-      actionsManager
-    );
-  }
-
-  vector<string> Page::getProcessedSubActions(vector<string> rawSubActions) {
-    vector<string> result;
-
-    vector<string>midiMessages;
-    for (auto rawSubAction: rawSubActions) {
-      result.push_back(Util::regexReplace(rawSubAction, "^\\[page\\.", "[" + m_pageId + "."));
-    }
-    return result;
   }
 
   string Page::getPageId() {

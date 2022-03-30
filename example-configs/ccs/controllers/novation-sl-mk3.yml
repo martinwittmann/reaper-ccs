@@ -299,16 +299,6 @@ variables:
 
 
 actions:
-  # Combining multiple messages within 1 header and end does not
-  # work. At least not the way it's implemented currently.
-  sysex_header:
-    message:
-      - $SYSEX_HEADER
-
-  sysex_end:
-    message:
-      - $SYSEX_END
-
   set_screen_layout:
     arguments:
       - LAYOUT

@@ -1,5 +1,6 @@
 #include "ActionProvider.h"
 #include "ActionsManager.h"
+#include "Action.h"
 #include <string>
 
 namespace CCS {

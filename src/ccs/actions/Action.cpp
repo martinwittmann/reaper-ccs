@@ -8,6 +8,7 @@
 #include "../CcsException.h"
 #include "../Util.h"
 #include "yaml-cpp/yaml.h"
+#include "CompositeAction.h"
 
 namespace CCS {
 
@@ -25,14 +26,8 @@ namespace CCS {
     m_type = "composite";
     m_providerId = providerId;
     m_actionId = actionId;
-    m_argumentNames = argumentNames;
-    m_argumentTypes = argumentTypes;
-    m_subActions = subActions;
     m_actionsManager = actionsManager;
-
-    if (m_subActions.size() < 1) {
-      Util::error("Action " + m_providerId + "." + m_actionId + " does not have any subactions.");
-    }
+    m_compositeAction = new CompositeAction(providerId + "." + actionId, node);
   }
 
   Action::Action(
@@ -59,10 +54,6 @@ namespace CCS {
     // argument names we got in the constructor.
     std::map<string, string> argumentVariables;
 
-    // For callback actions argumentNames is always empty.
-    // TODO Move this into CompositeAction.
-
-
     if (m_type == "callback") {
       Util::log("Executing callback action: " + m_actionId);
 
@@ -76,16 +67,7 @@ namespace CCS {
     }
     else if (m_type == "composite") {
       Util::log("Executing composite action: " + m_actionId);
-      // Apply the arguments to every sub action.
-      for (auto rawSubAction: m_subActions) {
-        string subAction = rawSubAction;
-        subAction = Variables::replaceVariables(subAction, argumentVariables);
-        subAction = Variables::replaceVariables(subAction, *state, "state");
-        checkAction(subAction);
-        Util::log("- " + subAction);
-        m_actionsManager->invokeAction(subAction, session);
-      }
-      //Util::log("");
+      m_compositeAction->invoke(arguments, session);
     }
   }
 

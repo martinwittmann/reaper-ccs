@@ -65,7 +65,11 @@ namespace CCS {
   void MidiControlElementMapping::createActions() {
     for (auto eventType : m_actionTypes) {
       const YAML::Node actionConfig = m_config->getNode(eventType);
-      m_actions.insert(std::pair(eventType, new CompositeAction(actionConfig)));
+      if (!actionConfig) {
+        continue;
+      }
+      string actionId = m_controllerId + "." + m_controlId + "." + eventType;
+      m_actions.insert(std::pair(eventType, new CompositeAction(actionId, actionConfig)));
     }
   }
 
@@ -86,7 +90,7 @@ namespace CCS {
     }
     CompositeAction *action = m_actions.at(actionType);
     auto variables = getActionVariables();
-    action->invoke(variables, session);
+    action->invoke(variables, m_session);
   }
 
   std::map<string,string> MidiControlElementMapping::getActionVariables() {

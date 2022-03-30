@@ -5,6 +5,7 @@
 #include <vector>
 #include "ActionsManager.h"
 #include "ActionProvider.h"
+#include "CompositeAction.h"
 
 namespace CCS {
 
@@ -35,11 +36,9 @@ namespace CCS {
     // (see ActionProviderReaper class) or "ccs" for actions ccs itself provides.
     string m_providerId;
     string m_type;
-    vector<string> m_subActions;
-    vector<string> m_argumentNames;
-    vector<string> m_argumentTypes;
     ActionsManager *m_actionsManager;
     ActionProvider *m_actionProvider;
+    CompositeAction *m_compositeAction;
 
   public:
 

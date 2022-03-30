@@ -12,6 +12,7 @@
 #include "boost/format/group.hpp"
 #include <iomanip>
 #include "../reaper/reaper_plugin_functions.h"
+#include <fstream>
 
 namespace CCS {
 
@@ -229,5 +230,13 @@ namespace CCS {
       message += "\n";
     }
     ShowConsoleMsg(message.c_str());
+  }
+
+  void Util::debugYaml(YAML::Node node) {
+    YAML::Emitter emitter;
+    emitter << node;
+    string filename = "/tmp/witti.yml";
+    std::ofstream file(filename);
+    file << emitter.c_str();
   }
 }
