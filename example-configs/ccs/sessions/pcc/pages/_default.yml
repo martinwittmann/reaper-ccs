@@ -77,13 +77,13 @@ variables:
   BUTTON22: 48
   BUTTON23: 49
   BUTTON24: 4A
-  
+
   BUTTON9_LABEL:  Pulse
   BUTTON10_LABEL: Saw
   BUTTON11_LABEL: Sub
   BUTTON12_LABEL: F-Env
   BUTTON13_LABEL: A-Env/G
-  BUTTON14_LABEL: ""
+  BUTTON14_LABEL: Pwm Mode
   BUTTON15_LABEL: Chor I
   BUTTON16_LABEL: Chor II
 
@@ -291,3 +291,298 @@ mappings:
             $_STATE.DISPLAY.isnot: buttons
           actions:
             - "[page.display_buttons]"
+
+    slmk3.button9:
+      mapping: track1.fx1.dco_pulse_enabled
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN1:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN1:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN1:00]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON9:$COLOR_WHITE]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON9:$COLOR_OFF]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+
+    slmk3.button10:
+      mapping: track1.fx1.dco_saw_enabled
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN2:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN2:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN2:00]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON10:$COLOR_WHITE]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON10:$COLOR_OFF]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button11:
+      mapping: track1.fx1.dco_sub_osc_enabled
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN3:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN3:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN3:00]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON11:$COLOR_WHITE]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON11:$COLOR_OFF]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button12:
+      mapping: track1.fx1.filter_env_mode
+      mapping_type: enum
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN4:$FORMATTED_VALUE]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button13:
+      mapping: track1.fx1.vca_mode
+      mapping_type: enum
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN5:$FORMATTED_VALUE]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button14:
+      mapping: track1.fx1.dco_pwm_mode
+      mapping_type: enum
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN6:$FORMATTED_VALUE]"
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button15:
+      mapping: track1.fx1.chorus_1
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN7:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN7:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN7:00]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON15:$COLOR_WHITE]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON15:$COLOR_OFF]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button16:
+      mapping: track1.fx1.chorus_2
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_top_box_value:$SCREEN8:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN8:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN8:00]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON16:$COLOR_WHITE]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON16:$COLOR_OFF]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+
+
+
+
+    slmk3.button17:
+      mapping: track1.fx1.lfo_trigger_mode
+      mapping_type: enum
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+
+    slmk3.button18:
+      mapping: track1.fx1.lfo_waveform
+      mapping_type: enum
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+
+    slmk3.button19:
+      mapping: track1.fx1.portamento_mode
+      mapping_type: enum
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
+        
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+
+    slmk3.button20:
+      mapping: track1.fx1.portamento_poly
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_center_box_value:$SCREEN4:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_center_box_selected:$SCREEN4:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_center_box_selected:$SCREEN4:00]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON20:$COLOR_WHITE]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON20:$COLOR_OFF]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[page.display_buttons]"
+

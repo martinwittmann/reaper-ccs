@@ -171,8 +171,6 @@ mappings:
     slmk3.button9:
       mapping: track1.fx1.dco_pulse_enabled
       mapping_type: toggle
-      # These actions are called when a plugin parameter is being changed.
-      # They should just reflect the new value on the controller.
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
@@ -202,25 +200,4 @@ mappings:
             $_STATE.DISPLAY.isnot: buttons
           actions:
           - "[page.display_buttons]"
-
-
-    slmk3.button17:
-      mapping: track1.fx1.lfo_trigger_mode
-      mapping_type: enum
-      on_value_change:
-        - conditions:
-            $_STATE.DISPLAY.is: buttons
-          actions:
-            - "[slmk3.set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
-        
-        - conditions:
-            $VALUE.is: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON9:$COLOR_WHITE]"
-
-        - conditions:
-            $VALUE.isnot: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON9:$COLOR_OFF]"
-
 

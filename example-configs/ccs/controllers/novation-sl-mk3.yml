@@ -620,6 +620,19 @@ actions:
       - $_ARGS.COLOR
       - $SYSEX_END
 
+  set_center_box_selected:
+    arguments:
+      - SCREEN_COLUMN
+      - SELECTED
+    message:
+      - $SYSEX_HEADER
+      - $SET_SCREEN_PROPERTY
+      - $_ARGS.SCREEN_COLUMN
+      - $PROPERTY_TYPE_VALUE
+      - $L_BOX_CENTER_BOX_SELECTED
+      - $_ARGS.SELECTED
+      - $SYSEX_END
+
   set_bottom_box_color:
     arguments:
       - SCREEN_COLUMN
