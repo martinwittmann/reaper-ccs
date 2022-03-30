@@ -36,6 +36,7 @@ class Page : public ActionProvider {
     std::map<string,string> m_state;
     vector<MidiControlElementMapping*> m_controlElementMappings;
     ReaperApi *m_reaperApi;
+    CompositeAction *m_activateAction;
 
   public:
     Page(

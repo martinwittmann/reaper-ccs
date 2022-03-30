@@ -34,13 +34,7 @@ namespace CCS {
     if (variables.empty()) {
       return input;
     }
-
-    if (type == "state") {
-      return Util::processString(input, variables, "\\$(_STATE\\.)?[A-Z0-9_]+!?");
-    }
-    else {
-      return Util::processString(input, variables, "\\$(_ARGS\\.)?[A-Z0-9_]+!?");
-    }
+    return Util::processString(input, variables, "\\$(_(ARGS|STATE)\\.)?[A-Z0-9_]+!?");
   }
 
   void Variables::replaceVariables(YAML::Node &yaml, map <string, string> variables) {

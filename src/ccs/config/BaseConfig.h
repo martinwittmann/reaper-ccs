@@ -28,8 +28,8 @@ namespace CCS {
     void mergeYaml(YAML::Node target, YAML::Node const &source);
     bool keyExists(std::string key);
     bool keyExists(std::string key, YAML::Node *rootNode);
-    std::string getValue(std::string key);
-    std::string getValue(std::string key, YAML::Node *rootNode);
+    std::string getValue(std::string key, bool notFoundGraceful = true);
+    std::string getValue(std::string key, YAML::Node *rootNode, bool notFoundGraceful = true);
     std::vector<std::string> getListValues(std::string key);
     std::vector<std::string> getListValues(std::string key, YAML::Node *rootNode);
     YAML::Node getMapValue(std::string key);

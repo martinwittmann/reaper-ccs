@@ -92,16 +92,20 @@ namespace CCS {
     return actualNode[keyParts.back()];
   }
 
-  string BaseConfig::getValue(string key) {
-    return getValue(key, &yaml);
+  string BaseConfig::getValue(string key, bool notFoundGraceful) {
+    return getValue(key, &yaml, notFoundGraceful);
   }
 
-  string BaseConfig::getValue(string key, YAML::Node *rootNode) {
+  string BaseConfig::getValue(string key, YAML::Node *rootNode, bool notFoundGraceful) {
     YAML::Node resultNode = getNode(key, rootNode);
     if (resultNode) {
       return resultNode.as<string>();
     }
-    return "";
+
+    if (notFoundGraceful) {
+      return "";
+    }
+    throw CcsException("Could not find value for key: " + key);
   }
 
   YAML::Node BaseConfig::getNode(string key) {

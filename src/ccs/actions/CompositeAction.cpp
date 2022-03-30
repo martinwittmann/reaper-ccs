@@ -146,10 +146,12 @@ namespace CCS {
       for (auto i = 0; i < arguments.size(); i++) {
         string argumentValue = arguments.at(i);
 
+        /*
         if (i >= m_argumentNames.size()) {
           // We received more arguments than we expect.
           throw CcsException("Received unknown superfluous argument '" + argumentValue + "' for action " + m_id);
         }
+        */
         string argumentType = m_argumentTypes.at(i);
         if (argumentType == "string") {
           argumentValue = Util::strToHexBytes(argumentValue) + " 00";
@@ -173,6 +175,13 @@ namespace CCS {
 
   void CompositeAction::invoke(std::map<string,string> variables, Session *session) {
     try {
+      checkArguments(variables);
+
+      // We need to inject the current state before invoking simple actions and
+      // before testing conditions since they can depend on the current state.
+      std::map<string,string> *state = session->getActivePage()->getState();
+      variables.insert(state->begin(), state->end());
+
       if (m_isSimpleAction) {
         return invokeSimpleAction(variables, session);
       }
@@ -196,9 +205,29 @@ namespace CCS {
     Session *session
   ) {
     string action = Variables::replaceVariables(m_simpleAction, arguments);
-    std::map<string,string> *state = session->getActivePage()->getState();
-    action = Variables::replaceVariables(action, *state, "state");
     session->invokeAction(action, session);
+  }
+
+  void CompositeAction::checkArguments(std::map<string,string> variables) {
+    // TODO Implement a better check for variables.
+    vector<string> arguments;
+    for (auto variable : variables) {
+      if (variable.first.substr(0, 6) == "_ARGS.") {
+        string name = Util::regexReplace(variable.first, "^_ARGS.", "");
+        arguments.push_back(name + ": " + variable.second);
+      }
+    }
+    if (arguments.size() < m_argumentNames.size()) {
+      string message = "Invoked composite action " + m_id + " with invalid arguments:\n";
+      for (auto arg : arguments) {
+        message += " - " + arg + "\n";
+      }
+      message += "\nExpected these arguments:\n";
+      for (auto arg : m_argumentNames) {
+        message += " - " + arg + "\n";
+      }
+      throw CcsException(message);
+    }
   }
 
 }

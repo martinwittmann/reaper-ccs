@@ -19,43 +19,52 @@ namespace CCS {
     ReaperApi *api,
     Session *session
   ) {
-    m_midiEventId = midiEventId;
-    m_config = new MappingConfig(&configRoot);
-    m_controlElement = controlElement;
-    m_controlId = controlId;
-    m_controlType = controlElement->getType();
-    m_onPressValue = controlElement->getOnPressValue();
-    m_onReleaseValue = controlElement->getOnReleaseValue();
-    m_api = api;
-    m_session = session;
+    try {
+      m_midiEventId = midiEventId;
+      m_config = new MappingConfig(&configRoot);
+      m_controlElement = controlElement;
+      m_controlId = controlId;
+      m_controlType = controlElement->getType();
+      m_onPressValue = controlElement->getOnPressValue();
+      m_onReleaseValue = controlElement->getOnReleaseValue();
+      m_api = api;
+      m_session = session;
 
-    m_actionTypes = getAvailableActionTypes(m_controlType);
-    m_paramMapping = m_config->getValue("mapping");
+      m_actionTypes = getAvailableActionTypes(m_controlType);
+      m_paramMapping = m_config->getValue("mapping");
 
-    if (!m_paramMapping.empty()) {
-      m_hasMappedFxParam = true;
-      initializeMappingValues(m_paramMapping);
+      if (!m_paramMapping.empty()) {
+        m_hasMappedFxParam = true;
+        initializeMappingValues(m_paramMapping);
 
-      m_mappingType = m_config->getValue("mapping_type");
-      if (m_mappingType == "enum") {
-        m_enumValues = m_session
-          ->getPluginManager()
-          ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
+        m_mappingType = m_config->getValue("mapping_type");
+        if (m_mappingType == "enum") {
+          m_enumValues = m_session
+            ->getPluginManager()
+            ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
+        }
+
+        auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
+        this->m_api->subscribeToFxParameterChanged(
+          m_track,
+          m_fxId,
+          m_paramId,
+          subscriber
+        );
+
+        // Retrieve the current values on initialization.
+        updateValuesFromReaper();
       }
 
-      auto subscriber = dynamic_cast<ReaperEventSubscriber*>(this);
-      this->m_api->subscribeToFxParameterChanged(
-        m_track,
-        m_fxId,
-        m_paramId,
-        subscriber
-      );
-
-      // Retrieve the current values on initialization.
-      updateValuesFromReaper();
+      createActions();
     }
-
-    createActions();
+    catch (CcsException &e) {
+      Util::error("Error create MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
+      Util::error(e.what());
+    }
+    catch (...) {
+      Util::error("Error create MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
+    }
   }
 
   void MidiControlElementMapping::createActions() {

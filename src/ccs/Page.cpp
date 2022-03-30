@@ -30,6 +30,22 @@ namespace CCS {
     m_reaperApi = reaperApi;
     createActions();
     createMidiControlElementMappings();
+
+    m_activateAction = new CompositeAction(
+      m_pageId + ".on_activate",
+      m_config->getMapValue("on_activate")
+    );
+
+    // We initialize the state of each page with its own page id set and any
+    // values from "initial_state".
+    m_state.insert(std::pair("_STATE.CURRENT_PAGE", m_pageId));
+    YAML::Node initialState = m_config->getMapValue("initial_state");
+    for (auto node : initialState) {
+      m_state.insert(std::pair(
+        "_STATE." + node.first.as<string>(),
+          node.second.as<string>()
+      ));
+    }
   }
 
   Page::~Page() {
@@ -50,11 +66,8 @@ namespace CCS {
   void Page::setActive() {
     // Invoke the actions defined in "on_activate";
     try {
-      vector<string> initActionItems = m_config->getListValues("on_activate");
-      for (auto rawAction : initActionItems) {
-        actionsManager->invokeAction(rawAction, m_session);
-      }
-
+      std::map<string,string> *state = getState();
+      m_activateAction->invoke(*state, m_session);
       updateMidiControllerUI();
     }
     catch (CcsException &e) {

@@ -71,8 +71,13 @@ namespace CCS {
 
   int FxPlugins::getParamId(MediaTrack *track, int fxId, string strParamId) {
     FxPluginConfig *config = getConfig(track, fxId);
-    string rawId = config->getValue("parameters." + strParamId + ".id");
-    return stoi(rawId);
+    try {
+      string rawId = config->getValue("parameters." + strParamId + ".id", false);
+      return stoi(rawId);
+    }
+    catch (CcsException &e) {
+      throw CcsException("Trying to get fx plugin parameter: '" + strParamId + "' that is not in config.");
+    }
   }
 
   std::map<string,double> FxPlugins::getParamEnumValues(

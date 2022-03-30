@@ -43,6 +43,8 @@ namespace CCS {
     void invokeSimpleAction(std::map<string,string> arguments, Session *session);
 
     void invoke(vector <string> arguments, Session *session);
+
+    void checkArguments(std::map<string,string> variables);
   };
 }
 #endif

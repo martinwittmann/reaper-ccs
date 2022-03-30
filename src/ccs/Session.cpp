@@ -54,6 +54,13 @@ namespace CCS {
     );
     provideAction(loadPageAction);
 
+    auto debugAction = new Action(
+      "session",
+      "debug",
+      provider
+    );
+    provideAction(debugAction);
+
     loadMidiControllers();
     loadSessionPages();
 
@@ -83,7 +90,7 @@ namespace CCS {
       m_activePage = page;
 
       // We need to call setActive after setting activePage here because the
-      // call of setActive invokes the activation actions which depend on an
+      // call of setActive invokes the on_activate actions which depend on an
       // active page being set.
       page->setActive();
     }
@@ -203,6 +210,13 @@ namespace CCS {
   void Session::actionCallback(std::string actionName, std::vector<std::string> arguments) {
     if (actionName == "load_page") {
       loadPage(arguments.at(0));
+    }
+    else if (actionName == "debug") {
+      Util::log("[DEBUG]");
+      for (auto argument : arguments) {
+        Util::log("  " + argument);
+      }
+      Util::log("");
     }
   }
 
