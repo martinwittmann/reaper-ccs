@@ -85,6 +85,12 @@ namespace CCS {
       result.push_back("on_press");
       result.push_back("on_release");
     }
+    else if (
+      controlElementType == MidiControlElement::RELATIVE ||
+      controlElementType == MidiControlElement::ABSOLUTE
+    ) {
+      result.push_back("on_change");
+    }
 
     return result;
   }
@@ -164,7 +170,9 @@ namespace CCS {
         break;
 
       case MidiControlElement::ABSOLUTE:
-        m_value = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
+        if (m_hasMappedFxParam) {
+          m_value = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
+        }
         break;
 
       case MidiControlElement::RELATIVE:
@@ -174,6 +182,7 @@ namespace CCS {
 
     if (m_hasMappedFxParam) {
       m_api->setFxParameterValue(m_track, m_fxId, m_paramId, m_value);
+      invokeActions("on_change");
     }
   }
 
