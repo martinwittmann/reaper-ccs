@@ -3,7 +3,7 @@ name: $PART1_LABEL
 id: page2
 on_activate:
   - "[page.set_state:CURRENT_COLOR:$PART1_COLOR]"
-  - "[page.set_display_encoders]"
+  - "[page.display_encoders]"
 
 
 variables:
@@ -147,7 +147,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
           actions:
-          - "[page.set_display_buttons]"
+          - "[page.display_buttons]"
 
 
     slmk3.button17:

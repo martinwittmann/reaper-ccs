@@ -109,9 +109,19 @@ actions:
         - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
         - "[slmk3.set_bottom_box_selected:$_ARGS.PART:01]"
 
-  set_display_encoders:
+  display_encoders:
     actions:
     - "[slmk3.set_knob_layout]"
+
+    - "[slmk3.set_knob_color:$SCREEN1:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN2:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN3:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN4:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN5:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN6:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN7:$COLOR_WHITE]"
+    - "[slmk3.set_knob_color:$SCREEN8:$COLOR_WHITE]"
+
     - "[slmk3.set_knob_label:$SCREEN1:$ENCODER1_LABEL]"
     - "[slmk3.set_knob_label:$SCREEN2:$ENCODER2_LABEL]"
     - "[slmk3.set_knob_label:$SCREEN3:$ENCODER3_LABEL]"
@@ -139,19 +149,12 @@ actions:
     - "[slmk3.set_knob_bottom_color:$SCREEN7:$PART7_COLOR]"
     - "[slmk3.set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
 
-    - "[slmk3.set_knob_color:$SCREEN1:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN2:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN3:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN4:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN5:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN6:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN7:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN8:$COLOR_WHITE]"
-
     - "[slmk3.set_knob_lower_text_selected:$SCREEN1:01]"
-    - "[page.set_state:DISPLAY:encoders]"
 
-  set_display_buttons:
+    - "[page.set_state:DISPLAY:encoders]"
+    - "[page.update_controller_ui]"
+
+  display_buttons:
     actions:
     - "[slmk3.set_box_layout]"
     - "[slmk3.set_top_box_label:$SCREEN1:$BUTTON9_LABEL]"
@@ -218,6 +221,7 @@ actions:
     - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
 
     - "[page.set_state:DISPLAY:buttons]"
+    - "[page.update_controller_ui]"
 
   set_knob_top_bar_colors:
     arguments:
@@ -257,3 +261,17 @@ mappings:
             $_CURRENT_PAGE.isnot: page3
           actions:
             - "[session.load_page:page3]"
+
+    slmk3.button_screen_up:
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: encoders
+          actions:
+            - "[page.display_encoders]"
+
+    slmk3.button_right_up:
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+            - "[page.display_buttons]"

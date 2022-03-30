@@ -3,7 +3,7 @@ name: $PART1_LABEL
 id: page1
 on_activate:
   - "[page.set_state:CURRENT_COLOR:$PART1_COLOR]"
-  - "[page.set_display_buttons]"
+  - "[page.display_buttons]"
 
 
 variables:
@@ -72,54 +72,78 @@ variables:
 
 mappings:
   controls:
+
     slmk3.encoder1:
       mapping: track1.fx1.dco_lfo_value
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN1:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN1:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+            - "[slmk3.set_knob_value:$SCREEN1:$VALUE]"
+            - "[slmk3.set_knob_value_label:$SCREEN1:$FORMATTED_VALUE]"
 
     slmk3.encoder2:
       mapping: track1.fx1.dco_pwm_value
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN2:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN2:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+            - "[slmk3.set_knob_value:$SCREEN2:$VALUE]"
+            - "[slmk3.set_knob_value_label:$SCREEN2:$FORMATTED_VALUE]"
 
     slmk3.encoder3:
       mapping: track1.fx1.lfo_rate
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN3:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN3:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+          - "[slmk3.set_knob_value:$SCREEN3:$VALUE]"
+          - "[slmk3.set_knob_value_label:$SCREEN3:$FORMATTED_VALUE]"
 
     slmk3.encoder4:
       mapping: track1.fx1.lfo_delay
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN4:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN4:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+          - "[slmk3.set_knob_value:$SCREEN4:$VALUE]"
+          - "[slmk3.set_knob_value_label:$SCREEN4:$FORMATTED_VALUE]"
 
     slmk3.encoder5:
       mapping: track1.fx1.filter_env
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN5:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN5:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+          - "[slmk3.set_knob_value:$SCREEN5:$VALUE]"
+          - "[slmk3.set_knob_value_label:$SCREEN5:$FORMATTED_VALUE]"
 
     slmk3.encoder6:
       mapping: track1.fx1.filter_modulation
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN6:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN6:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+          - "[slmk3.set_knob_value:$SCREEN6:$VALUE]"
+          - "[slmk3.set_knob_value_label:$SCREEN6:$FORMATTED_VALUE]"
 
     slmk3.encoder7:
       mapping: track1.fx1.filter_keyboard
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN7:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN7:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+          - "[slmk3.set_knob_value:$SCREEN7:$VALUE]"
+          - "[slmk3.set_knob_value_label:$SCREEN7:$FORMATTED_VALUE]"
 
     slmk3.encoder8:
       mapping: track1.fx1.master_volume
       on_value_change:
-        - "[slmk3.set_knob_value:$SCREEN8:$VALUE]"
-        - "[slmk3.set_knob_value_label:$SCREEN8:$FORMATTED_VALUE]"
-
+        - conditions:
+            $_STATE.DISPLAY.is: encoders
+          actions:
+          - "[slmk3.set_knob_value:$SCREEN8:$VALUE]"
+          - "[slmk3.set_knob_value_label:$SCREEN8:$FORMATTED_VALUE]"
 
     slmk3.button9:
       mapping: track1.fx1.dco_pulse_enabled
@@ -131,31 +155,40 @@ mappings:
             $_STATE.DISPLAY.is: buttons
           actions:
             - "[slmk3.set_top_box_value:$SCREEN1:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN1:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.set_top_box_selected:$SCREEN1:00]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
           - "[slmk3.set_button_color:$BUTTON9:$COLOR_WHITE]"
-          - "[slmk3.set_top_box_selected:$SCREEN1:01]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
           - "[slmk3.set_button_color:$BUTTON9:$COLOR_OFF]"
-          - "[slmk3.set_top_box_selected:$SCREEN1:00]"
 
       on_press:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
           actions:
-          - "[page.set_display_buttons]"
+          - "[page.display_buttons]"
 
 
     slmk3.button17:
       mapping: track1.fx1.lfo_trigger_mode
       mapping_type: enum
       on_value_change:
-        - "[slmk3.set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
         
         - conditions:
             $VALUE.is: $MAX_VALUE

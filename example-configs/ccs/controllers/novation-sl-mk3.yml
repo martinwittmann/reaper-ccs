@@ -210,6 +210,30 @@ controls:
     data2_press: 7F
     data2_release: 00
 
+  button_screen_up:
+    type: button
+    data1: 51
+    data2_press: 7F
+    data2_release: 00
+
+  button_screen_down:
+    type: button
+    data1: 52
+    data2_press: 7F
+    data2_release: 00
+
+  button_right_up:
+    type: button
+    data1: 57
+    data2_press: 7F
+    data2_release: 00
+
+  button_right_down:
+    type: button
+    data1: 58
+    data2_press: 7F
+    data2_release: 00
+
 
 variables:
   SYSEX_HEADER: F0 00 20 29 02 0A 01
