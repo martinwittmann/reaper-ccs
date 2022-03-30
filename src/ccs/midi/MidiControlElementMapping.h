@@ -91,6 +91,8 @@ namespace CCS {
     void setNextEnumValue();
 
     void updateControlElement();
+
+    void updateValuesFromReaper();
   };
 }
 

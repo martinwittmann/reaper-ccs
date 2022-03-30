@@ -84,6 +84,13 @@ namespace CCS {
     );
     provideAction(setStateAction);
 
+    auto updateUiAction = new Action(
+      m_pageId,
+      "update_controller_ui",
+      provider
+    );
+    provideAction(updateUiAction);
+
     // Get Actions from config.
     YAML::Node actionsNode = m_config->getMapValue("actions");
     YAML::Node variablesNode = m_config->getMapValue("variables");
@@ -106,6 +113,9 @@ namespace CCS {
   void Page::actionCallback(string actionName, vector<string> arguments) {
     if (actionName == "set_state") {
       m_state["_STATE." + arguments.at(0)] = arguments.at(1);
+    }
+    else if (actionName == "update_controller_ui") {
+      updateMidiControllerUI();
     }
   }
 

@@ -55,7 +55,7 @@ namespace CCS {
     std::map<string, string> argumentVariables;
 
     if (m_type == "callback") {
-      Util::log("Executing callback action: " + m_actionId);
+      //Util::log("Executing callback action: " + m_actionId);
 
       // Apply the current state to all given arguments.
       std::map<string,string> *state = session->getActivePage()->getState();
@@ -66,7 +66,11 @@ namespace CCS {
       m_actionProvider->actionCallback(m_actionId, arguments);
     }
     else if (m_type == "composite") {
-      Util::log("Executing composite action: " + m_actionId);
+      //string debargs;
+      //for (auto arg : arguments) {
+        //debargs += ":" + arg;
+      //}
+      //Util::log("Executing composite action: " + m_actionId + ": " + debargs);
       m_compositeAction->invoke(arguments, session);
     }
   }

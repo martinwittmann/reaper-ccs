@@ -52,21 +52,7 @@ namespace CCS {
       );
 
       // Retrieve the current values on initialization.
-      const auto [value, minValue, maxValue, midValue] = m_api->getParamValueEx(
-        m_track,
-        m_fxId,
-        m_paramId
-      );
-      m_value = value;
-      m_minValue = minValue;
-      m_maxValue = maxValue;
-      m_midValue = midValue;
-
-      m_formattedValue = m_api->getFormattedParamValue(
-        m_track,
-        m_fxId,
-        m_paramId
-      );
+      updateValuesFromReaper();
     }
 
     createActions();
@@ -257,6 +243,27 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::updateControlElement() {
-    invokeActions("on_value_change");
+    if (m_hasMappedFxParam) {
+      //Util::log(m_paramIdStr + ": " + std::to_string(m_value));
+      invokeActions("on_value_change");
+    }
+  }
+
+  void MidiControlElementMapping::updateValuesFromReaper() {
+    const auto [value, minValue, maxValue, midValue] = m_api->getParamValueEx(
+      m_track,
+      m_fxId,
+      m_paramId
+    );
+    m_value = value;
+    m_minValue = minValue;
+    m_maxValue = maxValue;
+    m_midValue = midValue;
+
+    m_formattedValue = m_api->getFormattedParamValue(
+      m_track,
+      m_fxId,
+      m_paramId
+    );
   }
 }
