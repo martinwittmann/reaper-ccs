@@ -6,7 +6,6 @@
 #include "../Page.h"
 #include "../CcsException.h"
 #include "../actions/CompositeAction.h"
-#include "../../reaper/reaper_plugin_functions.h"
 
 namespace CCS {
 
@@ -68,8 +67,6 @@ namespace CCS {
         m_fxId,
         m_paramId
       );
-
-      updateControlElement();
     }
 
     createActions();
@@ -249,19 +246,13 @@ namespace CCS {
 
   void MidiControlElementMapping::setNextEnumValue() {
     auto it = m_enumValues.find(m_formattedValue);
-    double tmpVal;
-    string tmpLabel;
     it++;
     if (it == m_enumValues.end()) {
       // We were at the end already.
       m_value = m_enumValues.begin()->second;
-      tmpLabel = m_enumValues.begin()->first;
-      tmpVal = m_value;
     }
     else {
       m_value = it->second;
-      tmpLabel = it->first;
-      tmpVal = m_value;
     }
   }
 

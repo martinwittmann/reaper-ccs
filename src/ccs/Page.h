@@ -53,7 +53,9 @@ class Page : public ActionProvider {
     void createMidiControlElementMappings();
     std::map<int,MidiEventSubscriber*> getSubscribedMidiEventIds();
     std::map<string,string> *getState();
-  };
+
+  void updateMidiControllerUI();
+};
 }
 
 #endif

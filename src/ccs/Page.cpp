@@ -54,6 +54,8 @@ namespace CCS {
       for (auto rawAction : initActionItems) {
         actionsManager->invokeAction(rawAction, m_session);
       }
+
+      updateMidiControllerUI();
     }
     catch (CcsException &e) {
       Util::error("Error setting active page:");
@@ -142,5 +144,11 @@ namespace CCS {
 
   std::map<string, string> *Page::getState() {
     return &m_state;
+  }
+
+  void Page::updateMidiControllerUI() {
+    for (const auto mapping : m_controlElementMappings) {
+      mapping->updateControlElement();
+    }
   }
 }
