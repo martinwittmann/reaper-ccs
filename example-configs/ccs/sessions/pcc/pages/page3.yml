@@ -1,19 +1,6 @@
 extends: _default
 name: $PART3_LABEL
 id: page3
-on_activate:
-  - conditions:
-      $_STATE.DISPLAY.is: ""
-    actions:
-      - "[page.display_encoders]"
-  - conditions:
-      $_STATE.DISPLAY.is: "encoders"
-    actions:
-      - "[page.display_encoders]"
-  - conditions:
-      $_STATE.DISPLAY.is: "buttons"
-    actions:
-      - "[page.display_buttons]"
 
 
 variables:

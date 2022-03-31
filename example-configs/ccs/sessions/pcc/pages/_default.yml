@@ -2,6 +2,24 @@ initial_state:
   DISPLAY: encoders
   CURRENT_COLOR: $PART1_COLOR
 
+on_activate:
+  - "[page.set_selected_part]"
+  - conditions:
+      $_STATE.DISPLAY.is: encoders
+    actions:
+      - "[page.display_encoders]"
+
+  - conditions:
+      $_STATE.DISPLAY.is: buttons
+    actions:
+      - "[page.display_buttons]"
+
+  - conditions:
+      $_STATE.DISPLAY.is: faders
+    actions:
+      - "[page.display_faders]"
+      
+
 # To save lots of repetition, allow settings defaults that can be overriden
 # on each page.
 # This is useful if variables and mappings should stay the same on all pages.
@@ -14,6 +32,8 @@ variables:
   SCREEN6: 05
   SCREEN7: 06
   SCREEN8: 07
+
+  CENTER_SCREEN: 08
 
   COLOR_OFF: 00
 
@@ -96,36 +116,67 @@ variables:
   BUTTON23_LABEL: ""
   BUTTON24_LABEL: ""
 
+  BUTTON_SCREEN_UP: 51
+  BUTTON_SCREEN_DOWN: 52
+
+  BUTTON_RIGHT_UP: 57
+  BUTTON_RIGHT_DOWN: 58
+
+  FADER1: 29
+  FADER2: 2A
+  FADER3: 2B
+  FADER4: 2C
+  FADER5: 2D
+  FADER6: 2E
+  FADER7: 2F
+  FADER8: 30
+
+  FADER1_LABEL: Frequ
+  FADER2_LABEL: Res.
+  FADER3_LABEL: Sub
+  FADER4_LABEL: Noise
+  FADER5_LABEL: Attack
+  FADER6_LABEL: Decay
+  FADER7_LABEL: Sustain
+  FADER8_LABEL: Release
+
+  C_LEFT_BAR: 00
+  C_RIGHT_TOP_BAR: 01
+  C_RIGHT_BOTTOM_BAR: 02
+
 
 actions:
   set_selected_part:
     actions:
-      - "[session.debug:$_STATE.DISPLAY:$SCREEN_COLUMN:$PAGE_BUTTON]"
       - conditions:
           $_STATE.DISPLAY.is: encoders
         actions:
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN1:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN2:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN3:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN4:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN5:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN6:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN7:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN8:00]"
-        - "[slmk3.set_knob_lower_text_selected:$SCREEN_COLUMN:01]"
+        - "[slmk3.start_screen_change]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN1:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN2:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN3:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN4:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN5:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN6:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN7:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN8:00]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN_COLUMN:01]"
 
       - conditions:
           $_STATE.DISPLAY.is: buttons
         actions:
-        - "[slmk3.set_bottom_box_selected:$SCREEN1:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN2:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN3:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN4:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN5:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN6:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN7:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN8:00]"
-        - "[slmk3.set_bottom_box_selected:$SCREEN_COLUMN:01]"
+        - "[slmk3.start_screen_change]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN1:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN2:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN3:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN4:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN5:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN6:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN7:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN8:00]"
+        - "[slmk3.sc_set_bottom_box_selected:$SCREEN_COLUMN:01]"
+        - "[slmk3.end_screen_change]"
+
 
       - "[slmk3.set_button_color:$BUTTON1:$COLOR_OFF]"
       - "[slmk3.set_button_color:$BUTTON2:$COLOR_OFF]"
@@ -139,116 +190,246 @@ actions:
 
   display_encoders:
     actions:
+    - "[slmk3.set_button_color:$BUTTON_SCREEN_DOWN:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_SCREEN_UP:$COLOR_WHITE]"
+    - "[slmk3.set_button_color:$BUTTON_RIGHT_UP:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_RIGHT_DOWN:$COLOR_OFF]"
+
     - "[slmk3.set_knob_layout]"
 
-    - "[slmk3.set_knob_color:$SCREEN1:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN2:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN3:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN4:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN5:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN6:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN7:$COLOR_WHITE]"
-    - "[slmk3.set_knob_color:$SCREEN8:$COLOR_WHITE]"
+    - "[slmk3.start_screen_change]"
 
-    - "[slmk3.set_knob_label:$SCREEN1:$ENCODER1_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN2:$ENCODER2_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN3:$ENCODER3_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN4:$ENCODER4_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN5:$ENCODER5_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN6:$ENCODER6_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN7:$ENCODER7_LABEL]"
-    - "[slmk3.set_knob_label:$SCREEN8:$ENCODER8_LABEL]"
+    - "[slmk3.sc_set_knob_color:$SCREEN1:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN2:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN3:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN4:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN5:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN6:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN7:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN8:$COLOR_WHITE]"
 
-    - "[slmk3.set_knob_bottom_label:$SCREEN1:$PART1_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN2:$PART2_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN3:$PART3_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN4:$PART4_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN5:$PART5_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN6:$PART6_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
-    - "[slmk3.set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN1:$ENCODER1_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN2:$ENCODER2_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN3:$ENCODER3_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN4:$ENCODER4_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN5:$ENCODER5_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN6:$ENCODER6_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN7:$ENCODER7_LABEL]"
+    - "[slmk3.sc_set_knob_label:$SCREEN8:$ENCODER8_LABEL]"
 
-    - "[slmk3.set_knob_bottom_color:$SCREEN1:$PART1_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN2:$PART1_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN3:$PART2_COLOR]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
-    - "[slmk3.set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
 
-    - "[slmk3.set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN3:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN4:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN5:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN6:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
-    - "[slmk3.set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN1:$PART1_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN2:$PART1_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN3:$PART2_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
+
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN3:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN4:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN5:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN6:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
+
+    - conditions:
+        $_STATE.DISPLAY.is: buttons
+      actions:
+      - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
+      - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
+
+
+    - "[slmk3.end_screen_change]"
+
+    - conditions:
+        $_STATE.DISPLAY.is: faders
+      actions:
+      - "[slmk3.set_fader_color:$FADER1:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER2:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER3:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER4:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER5:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER6:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER7:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER8:$COLOR_OFF]"
 
     - "[page.set_state:DISPLAY:encoders]"
-    - "[page.set_selected_part]"
     - "[page.update_controller_ui]"
 
   display_buttons:
     actions:
+    - "[slmk3.set_button_color:$BUTTON_SCREEN_DOWN:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_SCREEN_UP:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_RIGHT_UP:$COLOR_WHITE]"
+    - "[slmk3.set_button_color:$BUTTON_RIGHT_DOWN:$COLOR_OFF]"
+
     - "[slmk3.set_box_layout]"
-    - "[slmk3.set_top_box_label:$SCREEN1:$BUTTON9_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN2:$BUTTON10_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN3:$BUTTON11_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN4:$BUTTON12_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN5:$BUTTON13_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN6:$BUTTON14_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN7:$BUTTON15_LABEL]"
-    - "[slmk3.set_top_box_label:$SCREEN8:$BUTTON16_LABEL]"
+    - "[slmk3.set_box_layout]"
+    - "[session.debug:Setting box layout twice]"
 
-    - "[slmk3.set_top_box_color:$SCREEN1:$COLOR1]"
-    - "[slmk3.set_top_box_color:$SCREEN2:$COLOR2]"
-    - "[slmk3.set_top_box_color:$SCREEN3:$COLOR3]"
-    - "[slmk3.set_top_box_color:$SCREEN4:$COLOR4]"
-    - "[slmk3.set_top_box_color:$SCREEN5:$COLOR5]"
-    - "[slmk3.set_top_box_color:$SCREEN6:$COLOR6]"
-    - "[slmk3.set_top_box_color:$SCREEN7:$COLOR7]"
-    - "[slmk3.set_top_box_color:$SCREEN8:$COLOR8]"
+    - "[slmk3.start_screen_change]"
 
-    - "[slmk3.set_center_box_label:$SCREEN1:$BUTTON17_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN2:$BUTTON18_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN3:$BUTTON19_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN4:$BUTTON20_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN5:$BUTTON21_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN6:$BUTTON22_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN7:$BUTTON23_LABEL]"
-    - "[slmk3.set_center_box_label:$SCREEN8:$BUTTON24_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN1:$BUTTON9_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN2:$BUTTON10_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN3:$BUTTON11_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN4:$BUTTON12_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN5:$BUTTON13_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN6:$BUTTON14_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN7:$BUTTON15_LABEL]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN8:$BUTTON16_LABEL]"
 
-    - "[slmk3.set_center_box_color:$SCREEN1:$COLOR1]"
-    - "[slmk3.set_center_box_color:$SCREEN2:$COLOR2]"
-    - "[slmk3.set_center_box_color:$SCREEN3:$COLOR3]"
-    - "[slmk3.set_center_box_color:$SCREEN4:$COLOR4]"
-    - "[slmk3.set_center_box_color:$SCREEN5:$COLOR5]"
-    - "[slmk3.set_center_box_color:$SCREEN6:$COLOR6]"
-    - "[slmk3.set_center_box_color:$SCREEN7:$COLOR7]"
-    - "[slmk3.set_center_box_color:$SCREEN8:$COLOR8]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN2:$COLOR2]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN3:$COLOR3]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.sc_set_top_box_color:$SCREEN8:$COLOR8]"
 
-    - "[slmk3.set_bottom_box_label:$SCREEN1:$PART1_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN2:$PART2_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN3:$PART3_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN4:$PART4_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN5:$PART5_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN6:$PART6_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN7:$PART7_LABEL]"
-    - "[slmk3.set_bottom_box_label:$SCREEN8:$PART8_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN1:$BUTTON17_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN2:$BUTTON18_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN3:$BUTTON19_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN4:$BUTTON20_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN5:$BUTTON21_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN6:$BUTTON22_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN7:$BUTTON23_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN8:$BUTTON24_LABEL]"
 
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN1:$PART1_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN2:$PART1_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN3:$PART1_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN4:$PART4_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN5:$PART5_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN6:$PART6_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
-    - "[slmk3.set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN2:$COLOR2]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN3:$COLOR3]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN8:$COLOR8]"
+
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN8:$PART8_LABEL]"
+
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN1:$PART1_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN2:$PART1_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN3:$PART1_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN4:$PART4_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN5:$PART5_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN6:$PART6_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
+
+    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$PAGE_COLOR]"
+    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$PAGE_COLOR]"
+
+    - "[slmk3.end_screen_change]"
+
+    - conditions:
+        $_STATE.DISPLAY.is: faders
+      actions:
+      - "[slmk3.set_fader_color:$FADER1:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER2:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER3:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER4:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER5:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER6:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER7:$COLOR_OFF]"
+      - "[slmk3.set_fader_color:$FADER8:$COLOR_OFF]"
 
     - "[page.set_state:DISPLAY:buttons]"
-    - "[page.set_selected_part]"
+    - "[page.update_controller_ui]"
+
+  display_faders:
+    actions:
+    - "[slmk3.set_button_color:$BUTTON_SCREEN_DOWN:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_SCREEN_UP:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_RIGHT_UP:$COLOR_OFF]"
+    - "[slmk3.set_button_color:$BUTTON_RIGHT_DOWN:$COLOR_WHITE]"
+
+    - "[slmk3.set_box_layout]"
+
+    - "[slmk3.start_screen_change]"
+
+    - "[slmk3.sc_set_top_box_label:$SCREEN1:Fader 1]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN2:Fader 1]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN3:Fader 3]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN4:Fader 4]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN5:Fader 5]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN6:Fader 6]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN7:Fader 7]"
+    - "[slmk3.sc_set_top_box_label:$SCREEN8:Fader 8]"
+
+    - "[slmk3.sc_set_center_box_label:$SCREEN1:$FADER1_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN2:$FADER2_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN3:$FADER3_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN4:$FADER4_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN5:$FADER5_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN6:$FADER6_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN7:$FADER7_LABEL]"
+    - "[slmk3.sc_set_center_box_label:$SCREEN8:$FADER8_LABEL]"
+
+    - "[slmk3.sc_set_center_box_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN2:$COLOR2]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN3:$COLOR3]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.sc_set_center_box_color:$SCREEN8:$COLOR8]"
+
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.sc_set_bottom_box_label:$SCREEN8:$PART8_LABEL]"
+
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN1:$PART1_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN2:$PART1_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN3:$PART1_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN4:$PART4_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN5:$PART5_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN6:$PART6_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
+
+
+    - conditions:
+        $_STATE.DISPLAY.is: buttons
+      actions:
+      - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
+      - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
+
+    - "[slmk3.end_screen_change]"
+
+    - "[slmk3.set_fader_color:$FADER1:$COLOR1]"
+    - "[slmk3.set_fader_color:$FADER2:$COLOR2]"
+    - "[slmk3.set_fader_color:$FADER3:$COLOR3]"
+    - "[slmk3.set_fader_color:$FADER4:$COLOR4]"
+    - "[slmk3.set_fader_color:$FADER5:$COLOR5]"
+    - "[slmk3.set_fader_color:$FADER6:$COLOR6]"
+    - "[slmk3.set_fader_color:$FADER7:$COLOR7]"
+    - "[slmk3.set_fader_color:$FADER8:$COLOR8]"
+
+    - "[page.set_state:DISPLAY:faders]"
     - "[page.update_controller_ui]"
 
 
@@ -259,7 +440,6 @@ mappings:
         - conditions:
             $_STATE.CURRENT_PAGE.isnot: page1
           actions:
-            - "[session.debug:$SCREEN_COLUMN]"
             - "[session.load_page:page1]"
 
     slmk3.button2:
@@ -267,7 +447,6 @@ mappings:
         - conditions:
             $_STATE.CURRENT_PAGE.isnot: page2
           actions:
-            - "[session.debug:$SCREEN_COLUMN]"
             - "[session.load_page:page2]"
 
     slmk3.button3:
@@ -275,7 +454,6 @@ mappings:
         - conditions:
             $_STATE.CURRENT_PAGE.isnot: page3
           actions:
-            - "[session.debug:$SCREEN_COLUMN]"
             - "[session.load_page:page3]"
 
     slmk3.button_screen_up:
@@ -292,6 +470,14 @@ mappings:
           actions:
             - "[page.display_buttons]"
 
+    slmk3.button_right_down:
+      on_press:
+        - "[page.display_faders]"
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+            - "[page.display_faders]"
+
     slmk3.button9:
       mapping: track1.fx1.dco_pulse_enabled
       mapping_type: toggle
@@ -299,15 +485,17 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN1:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN1:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN1:01]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN1:01]"
             - conditions:
                 $VALUE.isnot: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN1:00]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN1:00]"
+            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -333,15 +521,17 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN2:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN2:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN2:01]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN2:01]"
             - conditions:
                 $VALUE.isnot: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN2:00]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN2:00]"
+            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -366,15 +556,17 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN3:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN3:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN3:01]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN3:01]"
             - conditions:
                 $VALUE.isnot: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN3:00]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN3:00]"
+            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -399,7 +591,9 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN4:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN4:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -414,7 +608,9 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN5:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN5:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -429,7 +625,9 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN6:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN6:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
       on_press:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
@@ -443,15 +641,17 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN7:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN7:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN7:01]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN7:01]"
             - conditions:
                 $VALUE.isnot: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN7:00]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN7:00]"
+            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -476,15 +676,17 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_top_box_value:$SCREEN8:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_top_box_value:$SCREEN8:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN8:01]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN8:01]"
             - conditions:
                 $VALUE.isnot: $MAX_VALUE
               actions:
-              - "[slmk3.set_top_box_selected:$SCREEN8:00]"
+              - "[slmk3.sc_set_top_box_selected:$SCREEN8:00]"
+            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -513,7 +715,9 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -529,7 +733,9 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -545,7 +751,9 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
         
       on_press:
         - conditions:
@@ -560,15 +768,17 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.set_center_box_value:$SCREEN4:$FORMATTED_VALUE]"
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN4:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
               actions:
-              - "[slmk3.set_center_box_selected:$SCREEN4:01]"
+              - "[slmk3.sc_set_center_box_selected:$SCREEN4:01]"
             - conditions:
                 $VALUE.isnot: $MAX_VALUE
               actions:
-              - "[slmk3.set_center_box_selected:$SCREEN4:00]"
+              - "[slmk3.sc_set_center_box_selected:$SCREEN4:00]"
+            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -586,3 +796,131 @@ mappings:
           actions:
           - "[page.display_buttons]"
 
+
+    slmk3.fader1:
+      mapping: track1.fx1.filter_cutoff
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
+          - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader2:
+      mapping: track1.fx1.filter_resonance
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader3:
+      mapping: track1.fx1.dco_sub_osc_volume
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader4:
+      mapping: track1.fx1.dco_noise_volume
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN4:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader5:
+      mapping: track1.fx1.attack
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN5:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader6:
+      mapping: track1.fx1.decay
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN6:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader7:
+      mapping: track1.fx1.sustain
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN7:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"
+
+    slmk3.fader8:
+      mapping: track1.fx1.release
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: faders
+          actions:
+            - "[slmk3.start_screen_change]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN8:$FORMATTED_VALUE]"
+            - "[slmk3.end_screen_change]"
+
+      on_change:
+        - conditions:
+            $_STATE.DISPLAY.isnot: faders
+          actions:
+          - "[page.display_faders]"

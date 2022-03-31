@@ -35,36 +35,36 @@ controls:
     data1: 1C
 
   fader1:
-    type: relative
-    data1: 36
+    type: absolute
+    data1: 29
 
   fader2:
-    type: relative
-    data1: 37
+    type: absolute
+    data1: 2A
 
   fader3:
-    type: relative
-    data1: 38
+    type: absolute
+    data1: 2B
 
   fader4:
-    type: relative
-    data1: 39
+    type: absolute
+    data1: 2C
 
   fader5:
-    type: relative
-    data1: 3A
+    type: absolute
+    data1: 2D
 
   fader6:
-    type: relative
-    data1: 3B
+    type: absolute
+    data1: 2E
 
   fader7:
-    type: relative
-    data1: 3C
+    type: absolute
+    data1: 2F
 
   fader8:
-    type: relative
-    data1: 3D
+    type: absolute
+    data1: 30
 
   button1:
     type: button
@@ -247,6 +247,7 @@ variables:
   SCREEN6: 05
   SCREEN7: 06
   SCREEN8: 07
+  CENTER_SCREEN: 08
 
   SET_SCREEN_LAYOUT: 01
   SET_SCREEN_PROPERTY: 02
@@ -323,13 +324,13 @@ variables:
 
 
 actions:
-  set_screen_layout:
-    arguments:
-      - LAYOUT
+  start_screen_change:
     message:
       - $SYSEX_HEADER
-      - $SET_SCREEN_LAYOUT
-      - $_ARGS.LAYOUT
+      - $SET_SCREEN_PROPERTY
+
+  end_screen_change:
+    message:
       - $SYSEX_END
 
   set_knob_layout:
@@ -354,124 +355,85 @@ actions:
       - 00
       - $SYSEX_END
 
-  set_label:
-    arguments:
-      - SCREEN_COLUMN
-      - LABEL_ID
-      - TEXT!
-    message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
-      - $_ARGS.SCREEN_COLUMN
-      - $PROPERTY_TYPE_TEXT
-      - $_ARGS.LABEL_ID
-      - $_ARGS.TEXT
-      - $SYSEX_END
-
-  set_knob_label:
+  sc_set_knob_label:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_KNOB_TEXT1
       - $_ARGS.TEXT
-      - $SYSEX_END
 
-  set_knob_value_label:
+  sc_set_knob_value_label:
     arguments:
       - SCREEN_COLUMN
       - VALUE!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_KNOB_TEXT2
       - $_ARGS.VALUE
-      - $SYSEX_END
 
-  set_knob_value:
+  sc_set_knob_value:
     arguments:
       - SCREEN_COLUMN
       - VALUE
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_VALUE
       - $L_KNOB_VALUE
       - $_ARGS.VALUE
-      - $SYSEX_END
 
-  set_knob_color:
+  sc_set_knob_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_KNOB_KNOB_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
-  set_knob_bottom_label:
+  sc_set_knob_bottom_label:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_KNOB_TEXT4
       - $_ARGS.TEXT
-      - $SYSEX_END
 
-  set_knob_lower_text_selected:
+  sc_set_knob_lower_text_selected:
     arguments:
       - SCREEN_COLUMN
       - SELECTED
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_VALUE
       - $L_KNOB_LOWER_TEXT_SELECTED
       - $_ARGS.SELECTED
-      - $SYSEX_END
 
-  set_knob_top_bar_color:
+  sc_set_knob_top_bar_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_KNOB_TOP_BAR_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
-
-  set_knob_bottom_color:
+  sc_set_knob_bottom_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_KNOB_BOTTOM_BAR_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
   set_box_layout:
     message:
@@ -480,84 +442,55 @@ actions:
       - $LAYOUT_BOX
       - $SYSEX_END
 
-  set_box_label:
-    arguments:
-      - SCREEN_COLUMN
-      - LABEL
-      - TEXT!
-    message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
-      - $_ARGS.SCREEN_COLUMN
-      - $PROPERTY_TYPE_TEXT
-      - $_ARGS.LABEL
-      - $_ARGS.TEXT
-      - $SYSEX_END
-
-  set_top_box_label:
+  sc_set_top_box_label:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_BOX_TEXT1
       - $_ARGS.TEXT
-      - $SYSEX_END
 
-  set_top_box_value:
+  sc_set_top_box_value:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_BOX_TEXT2
       - $_ARGS.TEXT
-      - $SYSEX_END
 
-  set_center_box_label:
+  sc_set_center_box_label:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_BOX_TEXT3
       - $_ARGS.TEXT
-      - $SYSEX_END
 
-  set_center_box_value:
+  sc_set_center_box_value:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_BOX_TEXT4
       - $_ARGS.TEXT
-      - $SYSEX_END
 
-  set_bottom_box_label:
+  sc_set_bottom_box_label:
     arguments:
       - SCREEN_COLUMN
       - TEXT!
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_BOX_TEXT6
       - $_ARGS.TEXT
-      - $SYSEX_END
 
   set_button_color:
     arguments:
@@ -568,93 +501,91 @@ actions:
       - $_ARGS.BUTTON
       - $_ARGS.COLOR
 
-  set_box_bottom_bar_color:
+  sc_set_box_bottom_bar_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_BOX_BOTTOM_BAR_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
-  set_top_box_color:
+  sc_set_top_box_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_BOX_TOP_BOX_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
-  set_top_box_selected:
+  sc_set_top_box_selected:
     arguments:
       - SCREEN_COLUMN
       - SELECTED
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_VALUE
       - $L_BOX_TOP_BOX_SELECTED
       - $_ARGS.SELECTED
-      - $SYSEX_END
 
-  set_center_box_color:
+  sc_set_center_box_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_BOX_CENTER_BOX_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
-  set_center_box_selected:
+  sc_set_center_box_selected:
     arguments:
       - SCREEN_COLUMN
       - SELECTED
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_VALUE
       - $L_BOX_CENTER_BOX_SELECTED
       - $_ARGS.SELECTED
-      - $SYSEX_END
 
-  set_bottom_box_color:
+  sc_set_bottom_box_color:
     arguments:
       - SCREEN_COLUMN
       - COLOR
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_COLOR
       - $L_BOX_BOTTOM_BOX_COLOR
       - $_ARGS.COLOR
-      - $SYSEX_END
 
-  set_bottom_box_selected:
+  sc_set_bottom_box_selected:
     arguments:
       - SCREEN_COLUMN
       - SELECTED
     message:
-      - $SYSEX_HEADER
-      - $SET_SCREEN_PROPERTY
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_VALUE
       - $L_BOX_BOTTOM_BOX_SELECTED
       - $_ARGS.SELECTED
-      - $SYSEX_END
+
+  set_fader_color:
+    arguments:
+      - FADER
+      - COLOR
+    message:
+      - BF
+      - $_ARGS.FADER
+      - $_ARGS.COLOR
+
+  sc_set_center_screen_right_bar_color:
+    arguments:
+      - BAR
+      - COLOR
+    message:
+      - $CENTER_SCREEN
+      - $PROPERTY_TYPE_COLOR
+      - $_ARGS.BAR
+      - $_ARGS.COLOR
