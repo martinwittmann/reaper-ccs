@@ -36,10 +36,12 @@ namespace CCS {
     // needed to determine the subscribed midi event ids.
     createSubscribedMidiEventIds();
 
-    m_activateAction = new CompositeAction(
-      m_pageId + ".on_activate",
-      m_config->getMapValue("on_activate")
-    );
+    if (m_config->keyExists("on_activate")) {
+      m_activateAction = new CompositeAction(
+        m_pageId + ".on_activate",
+        m_config->getMapValue("on_activate")
+      );
+    }
 
     // We initialize the state of each page with its own page id set and any
     // values from "initial_state".
@@ -72,7 +74,9 @@ namespace CCS {
     // Invoke the actions defined in "on_activate";
     try {
       std::map<string,string> *state = getState();
-      m_activateAction->invoke(*state, m_session);
+      if (m_activateAction) {
+        m_activateAction->invoke(*state, m_session);
+      }
       updateMidiControllerUI();
     }
     catch (CcsException &e) {

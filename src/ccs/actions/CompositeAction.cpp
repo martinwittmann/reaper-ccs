@@ -137,7 +137,6 @@ namespace CCS {
   }
 
   void CompositeAction::invoke(vector<string> arguments, Session *session) {
-
     // We map the given arguments in the same order as the vector of
     // argument names we got in the constructor.
     std::map<string, string> argumentVariables;

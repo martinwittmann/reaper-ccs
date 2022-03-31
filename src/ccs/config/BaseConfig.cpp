@@ -125,8 +125,10 @@ namespace CCS {
   vector<string> BaseConfig::getListValues(string key, YAML::Node *rootNode) {
     vector<string> keyParts = Util::splitString(key, keySeparator);
     YAML::Node actualNode = _getValue(keyParts, *rootNode);
-    if (actualNode[keyParts.back()] && actualNode[keyParts.back()].Type() != YAML::NodeType::Null) {
-      return actualNode[keyParts.back()].as<vector<string>>();
+    if (keyExists(keyParts.back(), &actualNode)) {
+      if (actualNode[keyParts.back()] && actualNode[keyParts.back()].Type() != YAML::NodeType::Null) {
+        return actualNode[keyParts.back()].as<vector<string>>();
+      }
     }
 
     vector<string> result;

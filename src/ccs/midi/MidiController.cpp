@@ -140,14 +140,14 @@ namespace CCS {
       unsigned char data[4096];
     } event;
 
-    //Util::log("Send midi");
+    Util::log("Send midi ", false);
     event.message.frame_offset = 0;
     event.message.size = buffer->size();
     for (int i = 0; i < buffer->size(); ++i) {
-      //Util::log(Util::formatHexByte(buffer->at(i)) + " ", false);
+      Util::log(Util::formatHexByte(buffer->at(i)) + " ", false);
       event.message.midi_message[i] = buffer->at(i);
     }
-    //Util::log("");
+    Util::log("");
 
 #ifndef MOCK_MIDI
     if (midiOutput) {

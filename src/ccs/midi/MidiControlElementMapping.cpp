@@ -38,6 +38,9 @@ namespace CCS {
         initializeMappingValues(m_paramMapping);
 
         m_mappingType = m_config->getValue("mapping_type");
+        if (m_mappingType.empty()) {
+          m_mappingType = "absolute";
+        }
         if (m_mappingType == "enum") {
           m_enumValues = m_session
             ->getPluginManager()
@@ -239,7 +242,7 @@ namespace CCS {
 
     string fxIdPart = parts.at(1);
     fxIdPart = Util::regexReplace(fxIdPart, "[^0-9]+", "");
-    // Also 1-based indices, but there is not special fx index 0 in reaper.
+    // Also 1-based indices, but there is no special fx index 0 in reaper.
     m_fxId = stoi(fxIdPart) - 1;
 
     m_paramIdStr = parts.at(2);

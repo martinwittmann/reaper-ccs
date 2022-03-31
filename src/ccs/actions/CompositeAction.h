@@ -21,7 +21,6 @@ namespace CCS {
     std::vector<CompositeAction* > m_subActions;
     std::vector<composite_action_condition> m_conditions;
 
-    std::vector<std::string> m_argumentNames;
     std::vector<std::string> m_argumentTypes;
 
     bool m_isSimpleAction = false;
@@ -30,6 +29,7 @@ namespace CCS {
     std::string m_simpleAction;
 
   public:
+    std::vector<std::string> m_argumentNames;
     CompositeAction(std::string id, YAML::Node actionRoot);
 
     bool conditionsAreMet(std::map<string,string> variables);
