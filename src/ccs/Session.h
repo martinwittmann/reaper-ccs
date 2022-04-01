@@ -5,11 +5,7 @@
 #include <experimental/filesystem>
 #include "yaml-cpp/yaml.h"
 #include "globals.cpp"
-#include "config/SessionConfig.h"
 #include "../reaper/reaper_plugin.h"
-#include "midi/MidiEventSubscriber.h"
-#include "../reaper-api/ReaperApi.h"
-#include "FxPlugins.h"
 #include "actions/ActionProvider.h"
 
 namespace CCS {
@@ -20,6 +16,10 @@ namespace CCS {
   class ActionsManager;
   class MidiController;
   class Page;
+  class SessionConfig;
+  class MidiEventSubscriber;
+  class FxPlugins;
+  class ReaperApi;
 
   class Session : public ActionProvider {
     string m_path;

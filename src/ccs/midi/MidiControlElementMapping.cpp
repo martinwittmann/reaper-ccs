@@ -9,6 +9,8 @@
 #include "../config/MappingConfig.h"
 #include "MidiControlElement.h"
 #include "../Session.h"
+#include "../Util.h"
+#include "../../reaper-api/ReaperApi.h"
 
 namespace CCS {
 

@@ -9,8 +9,11 @@
 #include "Variables.h"
 #include "CcsException.h"
 #include "actions/CompositeAction.h"
+#include "actions/Action.h"
 #include "midi/MidiController.h"
 #include "Session.h"
+#include "Util.h"
+#include "midi/MidiControlElementMapping.h"
 
 namespace CCS {
 

@@ -7,6 +7,7 @@
 #include "../reaper/reaper_plugin_functions.h"
 #include "Util.h"
 #include "CcsException.h"
+#include "config/FxPluginConfig.h"
 
 namespace CCS {
 

@@ -1,14 +1,16 @@
 #ifndef CCS_FX_PLUGIN_H
 #define CCS_FX_PLUGIN_H
 
-#include "config/FxPluginConfig.h"
 #include <string>
 #include <vector>
+#include <map>
 #include <experimental/filesystem>
 #include "../reaper/csurf.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
+
+  class FxPluginConfig;
 
   class FxPlugins {
     std::string m_pluginsDir;

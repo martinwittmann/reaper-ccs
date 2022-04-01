@@ -3,15 +3,17 @@
 
 #include <string>
 #include <map>
-#include "Session.h"
-#include "config/GlobalConfig.h"
 #include "globals.cpp"
-#include "actions/ActionsManager.h"
 #include "../reaper/reaper_plugin.h"
-#include "midi/MidiEventSubscriber.h"
-#include "../reaper-api/ReaperApi.h"
 
 namespace CCS {
+
+  class Session;
+  class GlobalConfig;
+  class ActionsManager;
+  class MidiEventSubscriber;
+  class ReaperApi;
+
   namespace fse = std::experimental::filesystem;
   using std::string;
 

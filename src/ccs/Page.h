@@ -5,19 +5,20 @@
 #include <map>
 #include <experimental/filesystem>
 #include "yaml-cpp/yaml.h"
-#include "Util.h"
-#include "config/PageConfig.h"
-#include "actions/ActionsManager.h"
 #include "actions/ActionProvider.h"
-#include "actions/Action.h"
-#include "midi/MidiEventSubscriber.h"
-#include "midi/MidiControlElementMapping.h"
-#include "../reaper-api/ReaperApi.h"
-#include "FxPlugins.h"
 
 namespace CCS {
 
   class Session;
+  class Util;
+  class PageConfig;
+  class ActionsManager;
+  class ReaperApi;
+  class FxPlugins;
+  class MidiControlElementMapping;
+  class Action;
+  class MidiEventSubscriber;
+  class CompositeAction;
 
   namespace fse = std::experimental::filesystem;
   namespace fs = std::filesystem;

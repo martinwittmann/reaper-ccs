@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <map>
-#include "MidiEventSubscriber.h"
 
 namespace CCS {
   class MidiEventSubscriber {

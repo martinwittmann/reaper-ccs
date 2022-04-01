@@ -1,6 +1,7 @@
 #include "Ccs_ControlSurface.h"
 #include "../reaper/reaper_plugin_functions.h"
-//#include "../WDL/swell/swell-functions.h"
+#include "Ccs.h"
+#include "../reaper-api/ReaperApi.h"
 
 namespace CCS {
 

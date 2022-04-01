@@ -5,7 +5,9 @@
 #include "globals.cpp"
 #include "Ccs.h"
 #include "Util.h"
+#include "../reaper-api/ReaperApi.h"
 #include "actions/ActionsManager.h"
+#include "midi/MidiEventSubscriber.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

@@ -11,6 +11,9 @@
 #include "actions/ActionsManager.h"
 #include "../reaper-api/ReaperApi.h"
 #include "CcsException.h"
+#include "FxPlugins.h"
+#include "Util.h"
+#include "actions/Action.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;

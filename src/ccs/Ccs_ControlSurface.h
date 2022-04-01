@@ -2,9 +2,10 @@
 #define CCS__CCS_CONTROL_SURFACE_H
 
 #include "../reaper/ControlSurface.h"
-#include "Ccs.h"
 
 namespace CCS {
+
+  class Ccs;
 
   class Ccs_ControlSurface : public Reaper::ControlSurface {
     CCS::Ccs *ccs = nullptr;
