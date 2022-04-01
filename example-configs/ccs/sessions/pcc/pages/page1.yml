@@ -41,6 +41,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder2:
       mapping: track1.fx1.dco_pwm_value
@@ -64,6 +65,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder3:
       mapping: track1.fx1.lfo_rate
@@ -87,6 +89,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder4:
       mapping: track1.fx1.lfo_delay
@@ -110,6 +113,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder5:
       mapping: track1.fx1.filter_env
@@ -133,6 +137,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder6:
       mapping: track1.fx1.filter_modulation
@@ -156,6 +161,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder7:
       mapping: track1.fx1.filter_keyboard
@@ -179,6 +185,7 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.encoder8:
       mapping: track1.fx1.master_volume
@@ -202,4 +209,5 @@ mappings:
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 

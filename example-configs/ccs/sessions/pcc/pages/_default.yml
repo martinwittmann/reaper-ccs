@@ -7,20 +7,38 @@ on_activate:
   - conditions:
       $_STATE.DISPLAY.is: encoders
     actions:
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[page.display_encoders]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[slmk3.flush_buffer:screen_properties]"
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.start_screen_change]"
+        - "[slmk3.stop_buffer:screen_properties]"
+        - "[page.display_encoders]"
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.end_screen_change]"
+        - "[slmk3.stop_buffer:screen_properties]"
+        - "[slmk3.flush_buffer:screen_properties]"
 
   - conditions:
       $_STATE.DISPLAY.is: buttons
     actions:
-      - "[page.display_buttons]"
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.start_screen_change]"
+        - "[slmk3.stop_buffer:screen_properties]"
+        - "[page.display_buttons]"
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.end_screen_change]"
+        - "[slmk3.stop_buffer:screen_properties]"
+        - "[slmk3.flush_buffer:screen_properties]"
 
   - conditions:
       $_STATE.DISPLAY.is: faders
     actions:
-      - "[page.display_faders]"
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.start_screen_change]"
+        - "[slmk3.stop_buffer:screen_properties]"
+        - "[page.display_faders]"
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.end_screen_change]"
+        - "[slmk3.stop_buffer:screen_properties]"
+        - "[slmk3.flush_buffer:screen_properties]"
 
 # To save lots of repetition, allow settings defaults that can be overriden
 # on each page.
@@ -355,15 +373,6 @@ actions:
 
     - "[slmk3.start_buffer:screen_properties]"
 
-    - "[slmk3.sc_set_top_box_label:$SCREEN1:Fader 1]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN2:Fader 1]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN3:Fader 3]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN4:Fader 4]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN5:Fader 5]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN6:Fader 6]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN7:Fader 7]"
-    - "[slmk3.sc_set_top_box_label:$SCREEN8:Fader 8]"
-
     - "[slmk3.sc_set_center_box_label:$SCREEN1:$FADER1_LABEL]"
     - "[slmk3.sc_set_center_box_label:$SCREEN2:$FADER2_LABEL]"
     - "[slmk3.sc_set_center_box_label:$SCREEN3:$FADER3_LABEL]"
@@ -526,9 +535,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
 
     slmk3.button10:
@@ -568,9 +579,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button11:
       mapping: track1.fx1.dco_sub_osc_enabled
@@ -609,9 +622,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button12:
       mapping: track1.fx1.filter_env_mode
@@ -632,9 +647,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button13:
       mapping: track1.fx1.vca_mode
@@ -655,9 +672,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button14:
       mapping: track1.fx1.dco_pwm_mode
@@ -677,9 +696,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button15:
       mapping: track1.fx1.chorus_1
@@ -718,9 +739,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button16:
       mapping: track1.fx1.chorus_2
@@ -759,10 +782,11 @@ mappings:
           - "[slmk3.start_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.end_screen_change]"
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
-
+          - "[page.update_controller_ui]"
 
 
     slmk3.button17:
@@ -780,7 +804,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
 
     slmk3.button18:
@@ -798,7 +830,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
 
     slmk3.button19:
@@ -816,7 +856,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.button20:
       mapping: track1.fx1.portamento_poly
@@ -851,7 +899,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
 
     slmk3.fader1:
@@ -868,7 +924,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader2:
       mapping: track1.fx1.filter_resonance
@@ -884,7 +948,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader3:
       mapping: track1.fx1.dco_sub_osc_volume
@@ -900,7 +972,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader4:
       mapping: track1.fx1.dco_noise_volume
@@ -916,7 +996,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader5:
       mapping: track1.fx1.attack
@@ -932,7 +1020,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader6:
       mapping: track1.fx1.decay
@@ -948,7 +1044,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader7:
       mapping: track1.fx1.sustain
@@ -964,7 +1068,15 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
 
     slmk3.fader8:
       mapping: track1.fx1.release
@@ -980,4 +1092,12 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: faders
           actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
