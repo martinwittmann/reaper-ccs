@@ -223,7 +223,7 @@ namespace CCS {
     for (const auto mapping : m_controlElementMappings) {
       mapping->updateControlElement();
     }
-    m_beforeValueChangesAction->invoke(*state, m_session);
+    m_afterValueChangesAction->invoke(*state, m_session);
   }
 
   void Page::invokeBeforeValueChangesAction() {
