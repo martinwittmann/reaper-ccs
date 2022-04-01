@@ -100,6 +100,12 @@ namespace CCS {
     void updateControlElement();
 
     void updateValuesFromReaper();
+
+    void activate();
+
+    void deactivate();
+
+    bool hasMappedFxParam();
   };
 }
 

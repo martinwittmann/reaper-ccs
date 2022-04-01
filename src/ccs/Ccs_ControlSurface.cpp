@@ -27,7 +27,7 @@ namespace CCS {
     }
 
     //if (pollingIndex % 30 == 0) {
-      ccs->reaperApi->pollReaperData();
+    ccs->reaperApi->pollReaperData();
     //}
 
     pollingIndex++;
@@ -35,7 +35,7 @@ namespace CCS {
     // Since the internet says that Run is supposed to be called ~30 times
     // per second we can use pollingIndex with a modulo to run things
     // 15, 10, 8 and 5 times per second to not use too much resources.
-    if (pollingIndex % 30 == 0) {
+    if (pollingIndex >= 30) {
       pollingIndex = 0;
     }
   }

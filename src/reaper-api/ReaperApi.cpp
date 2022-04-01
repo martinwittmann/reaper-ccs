@@ -3,6 +3,7 @@
 #include "../reaper/reaper_plugin.h"
 #include "../reaper/reaper_plugin_functions.h"
 #include <iostream>
+#include "../ccs/Util.h"
 
 namespace CCS {
 
@@ -45,6 +46,33 @@ namespace CCS {
     fxParamChangedSubscriptions.push_back(subscription);
   }
 
+  void ReaperApi::unsubscribeFromFxParameterChanged(
+    MediaTrack *track,
+    int fxId,
+    int paramId,
+    ReaperEventSubscriber *subscriber
+  ) {
+    if (!isSubscribedToFxParameterChanged(track, fxId, paramId, subscriber)) {
+      return;
+    }
+
+    for (
+      auto it = fxParamChangedSubscriptions.begin();
+      it != fxParamChangedSubscriptions.end();
+      ++it
+    ) {
+      FxParameterChangedSubscription* subscription = *it;
+      if (
+        subscription->getTrack() == track &&
+        subscription->getFxId() == fxId &&
+        subscription->getParamId() == paramId &&
+        subscription->getSubscriber() == subscriber) {
+        fxParamChangedSubscriptions.erase(it);
+        return;
+      }
+    }
+  }
+
   bool ReaperApi::isSubscribedToFxParameterChanged(
     MediaTrack *track,
     int fxId,
@@ -57,16 +85,6 @@ namespace CCS {
         subscription->getFxId() == fxId &&
         subscription->getParamId() == paramId &&
         subscription->getSubscriber() == subscriber) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool ReaperApi::isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId) {
-    vector<ReaperEventSubscriber*> subscribers = subscribersMap.at(eventId);
-    for (auto current : subscribers) {
-      if (current == subscriber) {
         return true;
       }
     }
@@ -196,7 +214,7 @@ namespace CCS {
   void ReaperApi::pollReaperData() {
     // Retrieve the data we're subscribed to and trigger the corresponding events.
     for (auto tracker : fxParamChangedSubscriptions) {
-      tracker->update();
+      tracker->update(true);
     }
   }
 

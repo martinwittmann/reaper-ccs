@@ -5,6 +5,7 @@
 #include "../reaper/reaper_plugin_functions.h"
 #include "ReaperDataTracker.h"
 #include "ReaperApi.h"
+#include "../ccs/Util.h"
 
 namespace CCS {
 
@@ -34,6 +35,7 @@ namespace CCS {
     memset(buffer, 0, sizeof buffer);
     TrackFX_GetParamName(track, fxId, paramId, buffer, sizeof buffer);
     m_paramName = std::string(buffer);
+
 
     // Set the current values when initializing but don't trigger the event.
     update(false);

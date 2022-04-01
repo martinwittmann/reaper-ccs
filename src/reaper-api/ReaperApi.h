@@ -42,6 +42,13 @@ namespace CCS {
       ReaperEventSubscriber *subscriber
     );
 
+    void unsubscribeFromFxParameterChanged(
+      MediaTrack *track,
+      int fxId,
+      int paramId,
+      ReaperEventSubscriber *subscriber
+    );
+
     bool isSubscribedToFxParameterChanged(
       MediaTrack *track,
       int fxId,
@@ -84,8 +91,6 @@ namespace CCS {
       double maxValue,
       string formattedValue
     );
-    void subscribeToEvent(int eventId, ReaperEventSubscriber *subscriber);
-    bool isSubscribedToEvent(ReaperEventSubscriber *subscriber, int eventId);
 
     ReaProject *getProject(int index = -1);
     MediaTrack *getTrack(int index = 0);

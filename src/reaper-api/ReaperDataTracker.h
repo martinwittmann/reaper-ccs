@@ -18,7 +18,7 @@ namespace CCS {
 
   public:
     ReaperDataTracker(ReaperApi *apiManager);
-    virtual void update(bool triggerOnChange = true);
+    virtual void update(bool triggerOnChange);
     virtual void triggerEvent();
   };
 }

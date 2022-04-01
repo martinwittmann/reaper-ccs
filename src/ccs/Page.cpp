@@ -35,13 +35,6 @@ namespace CCS {
     m_session = session;
     m_reaperApi = reaperApi;
 
-    createActions();
-    createMidiControlElementMappings();
-
-    // This needs to be called after setting up the mappings because these are
-    // needed to determine the subscribed midi event ids.
-    createSubscribedMidiEventIds();
-
     if (m_config->keyExists("on_activate")) {
       m_activateAction = new CompositeAction(
         m_pageId + ".on_activate",
@@ -75,6 +68,13 @@ namespace CCS {
           node.second.as<string>()
       ));
     }
+
+    createActions();
+    createMidiControlElementMappings();
+
+    // This needs to be called after setting up the mappings because these are
+    // needed to determine the subscribed midi event ids.
+    createSubscribedMidiEventIds();
   }
 
   Page::~Page() {
@@ -95,6 +95,11 @@ namespace CCS {
   void Page::setActive() {
     // Invoke the actions defined in "on_activate";
     try {
+      for (auto mapping : m_controlElementMappings) {
+        if (mapping->hasMappedFxParam()) {
+          mapping->activate();
+        }
+      }
       std::map<string,string> *state = getState();
       if (m_activateAction) {
         m_activateAction->invoke(*state, m_session);
@@ -104,6 +109,14 @@ namespace CCS {
     catch (CcsException &e) {
       Util::error("Error setting active page:");
       Util::error(e.what());
+    }
+  }
+
+  void Page::setInactive() {
+    if (!m_controlElementMappings.empty()) {
+      for (auto mapping : m_controlElementMappings) {
+        mapping->deactivate();
+      }
     }
   }
 
@@ -206,24 +219,24 @@ namespace CCS {
 
   void Page::updateMidiControllerUI() {
     std::map<string,string> *state = getState();
-    if (m_beforeValueChangesAction) {
-      m_beforeValueChangesAction->invoke(*state, m_session);
-    }
+    m_beforeValueChangesAction->invoke(*state, m_session);
     for (const auto mapping : m_controlElementMappings) {
       mapping->updateControlElement();
     }
-    if (m_afterValueChangesAction) {
+    m_beforeValueChangesAction->invoke(*state, m_session);
+  }
+
+  void Page::invokeBeforeValueChangesAction() {
+    if (m_beforeValueChangesAction != nullptr) {
+      std::map<string, string> *state = getState();
       m_beforeValueChangesAction->invoke(*state, m_session);
     }
   }
 
-  void Page::invokeBeforeValueChangesAction() {
-    std::map<string,string> *state = getState();
-    m_beforeValueChangesAction->invoke(*state, m_session);
-  }
-
   void Page::invokeAfterValueChangesAction() {
-    std::map<string,string> *state = getState();
-    m_afterValueChangesAction->invoke(*state, m_session);
+    if (m_afterValueChangesAction != nullptr) {
+      std::map<string, string> *state = getState();
+      m_afterValueChangesAction->invoke(*state, m_session);
+    }
   }
 }

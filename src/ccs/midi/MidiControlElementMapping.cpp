@@ -55,14 +55,6 @@ namespace CCS {
             ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
         }
 
-        auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
-        this->m_api->subscribeToFxParameterChanged(
-          m_track,
-          m_fxId,
-          m_paramId,
-          subscriber
-        );
-
         // Retrieve the current values on initialization.
         updateValuesFromReaper();
       }
@@ -76,6 +68,33 @@ namespace CCS {
     catch (...) {
       Util::error("Error create MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
     }
+  }
+
+  bool MidiControlElementMapping::hasMappedFxParam() {
+    return m_hasMappedFxParam;
+  }
+
+  void MidiControlElementMapping::activate() {
+    if (!hasMappedFxParam()) {
+      return;
+    }
+    auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
+    this->m_api->subscribeToFxParameterChanged(
+      m_track,
+      m_fxId,
+      m_paramId,
+      subscriber
+    );
+  }
+
+  void MidiControlElementMapping::deactivate() {
+    auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
+    this->m_api->unsubscribeFromFxParameterChanged(
+      m_track,
+      m_fxId,
+      m_paramId,
+      subscriber
+    );
   }
 
   void MidiControlElementMapping::createActions() {
@@ -150,6 +169,7 @@ namespace CCS {
 
   MidiControlElementMapping::~MidiControlElementMapping() {
     delete m_config;
+    deactivate();
   }
 
   void MidiControlElementMapping::toggleValue() {

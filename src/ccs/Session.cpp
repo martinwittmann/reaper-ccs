@@ -89,6 +89,11 @@ namespace CCS {
 
   void Session::loadPage(string pageId) {
     try {
+      // To unsubscribe from old fx param changes.
+      if (m_activePage != nullptr) {
+        m_activePage->setInactive();
+      }
+
       Page *page = getPage(pageId);
       m_activePage = page;
       m_subscribedMidiEventIds = m_activePage->getSubscribedMidiEventIds();

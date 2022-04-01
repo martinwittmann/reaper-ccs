@@ -65,6 +65,8 @@ class Page : public ActionProvider {
   void invokeBeforeValueChangesAction();
 
   void invokeAfterValueChangesAction();
+
+  void setInactive();
 };
 }
 

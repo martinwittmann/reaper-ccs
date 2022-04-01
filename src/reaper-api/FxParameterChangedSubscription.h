@@ -34,7 +34,7 @@ namespace CCS {
     );
 
     void triggerEvent() override;
-    void update(bool triggerOnChange = true) override;
+    void update(bool triggerOnChange) override;
 
     MediaTrack *getTrack();
     int getFxId();
