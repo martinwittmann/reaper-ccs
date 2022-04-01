@@ -14,20 +14,31 @@ set(
   SOURCE_FILES
 
   WDL/swell/swell-modstub-generic.cpp
-  src/reaper/ThreadedMidiOutput.cpp
-  src/reaper/ControlSurface.cpp
-
-  src/ccs/config/BaseConfig.cpp
-  src/ccs/config/PageConfig.cpp
-  src/ccs/config/SessionConfig.cpp
-  src/ccs/config/MappingConfig.cpp
-  src/ccs/config/MidiControllerConfig.cpp
-  src/ccs/config/GlobalConfig.cpp
 
   src/ccs/actions/Action.cpp
+  src/ccs/actions/ActionInvocation.cpp
   src/ccs/actions/ActionsManager.cpp
   src/ccs/actions/ActionProvider.cpp
-  src/ccs/actions/ActionInvocation.cpp
+  src/ccs/actions/CompositeAction.cpp
+
+  src/ccs/config/BaseConfig.cpp
+  src/ccs/config/CompositeActionConfig.cpp
+  src/ccs/config/FxPluginConfig.cpp
+  src/ccs/config/GlobalConfig.cpp
+  src/ccs/config/MappingConfig.cpp
+  src/ccs/config/MidiControllerConfig.cpp
+  src/ccs/config/PageConfig.cpp
+  src/ccs/config/SessionConfig.cpp
+
+  src/ccs/midi/MidiController.cpp
+  src/ccs/midi/MidiControlElement.cpp
+  src/ccs/midi/MidiControlElementMapping.cpp
+  src/ccs/midi/MidiEventType.h
+  src/ccs/midi/MidiEventSubscriber.cpp
+
+  src/reaper/ControlSurface.cpp
+  src/reaper/ThreadedMidiOutput.cpp
+  src/reaper/reaper_extension.cpp
 
   src/reaper-api/FxParameterChangedSubscription.cpp
   src/reaper-api/ReaperDataTracker.cpp
@@ -35,24 +46,13 @@ set(
   src/reaper-api/ReaperEventSubscriber.cpp
 
   src/ccs/Ccs.cpp
-  src/ccs/midi/MidiController.cpp
-  src/ccs/midi/MidiControlElement.cpp
-  src/ccs/midi/MidiControlElementMapping.cpp
-  src/ccs/midi/MidiEventType.h
-  src/ccs/midi/MidiEventSubscriber.cpp
+  src/ccs/CcsException.cpp
+  src/ccs/Ccs_ControlSurface.cpp
+  src/ccs/FxPlugins.cpp src/ccs/FxPlugins.h
   src/ccs/Page.cpp
   src/ccs/Session.cpp
   src/ccs/Util.cpp
   src/ccs/Variables.cpp
-
-  src/ccs/Ccs_ControlSurface.cpp
-
-  src/reaper/reaper_extension.cpp
-  src/ccs/config/FxPluginConfig.cpp
-  src/ccs/FxPlugins.cpp src/ccs/FxPlugins.h
-  src/ccs/CcsException.cpp
-  src/ccs/actions/CompositeAction.cpp
-  src/ccs/config/CompositeActionConfig.cpp
 )
 
 set(

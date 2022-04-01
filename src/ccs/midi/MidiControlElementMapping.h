@@ -4,15 +4,20 @@
 #include <string>
 #include <vector>
 #include "yaml-cpp/yaml.h"
-#include "MidiController.h"
 #include "MidiEventSubscriber.h"
 #include "../../reaper-api/ReaperEventSubscriber.h"
-#include "../../reaper-api/ReaperApi.h"
-#include "../config/MappingConfig.h"
-#include "../Session.h"
-#include "../actions/CompositeAction.h"
 
 namespace CCS {
+
+  using std::string;
+
+  class MidiControlElement;
+  class MappingConfig;
+  class Session;
+  class CompositeAction;
+  class Page;
+  class ReaperApi;
+
   class MidiControlElementMapping :
     public MidiEventSubscriber,
     public ReaperEventSubscriber
@@ -20,14 +25,14 @@ namespace CCS {
     int m_midiEventId;
     MappingConfig *m_config = nullptr;
     MidiControlElement *m_controlElement = nullptr;
-    std::string m_controlId;
-    std::string m_controllerId;
+    string m_controlId;
+    string m_controllerId;
     short m_controlType;
     short m_onPressValue;
     short m_onReleaseValue;
     // We store the current value as double like reaper and convert it when needed.
     double m_value;
-    std::string m_formattedValue;
+    string m_formattedValue;
 
     MediaTrack *m_reaperTrack = nullptr;
     ReaperApi *m_api = nullptr;
@@ -35,17 +40,17 @@ namespace CCS {
     Page* m_page = nullptr;
 
     // The action types that are being used for the given control element.
-    std::vector<std::string> m_actionTypes;
-    std::string m_mappingType;
-    std::string m_paramMapping;
+    std::vector<string> m_actionTypes;
+    string m_mappingType;
+    string m_paramMapping;
     // A map of label:parameterValue for each available enum value.
     std::map<string,double> m_enumValues;
 
     MediaTrack *m_track = nullptr;
     int m_fxId;
     int m_paramId;
-    std::string m_paramIdStr;
-    std::map<std::string,CompositeAction*> m_actions;
+    string m_paramIdStr;
+    std::map<string,CompositeAction*> m_actions;
     bool m_hasMappedFxParam = false;
 
     double m_minValue;
@@ -56,7 +61,7 @@ namespace CCS {
 
     MidiControlElementMapping(
       int midiEventId,
-      std::string controlId,
+      string controlId,
       YAML::Node config,
       MidiControlElement *controlElement,
       ReaperApi *api,
@@ -77,9 +82,9 @@ namespace CCS {
       double value,
       double minValue,
       double maxValue,
-      std::string formattedValue
+      string formattedValue
     ) override;
-    void initializeMappingValues(std::string rawMapping);
+    void initializeMappingValues(string rawMapping);
     void createActions();
     void invokeActions(string actionType);
 
@@ -88,7 +93,7 @@ namespace CCS {
     std::map<string,string> getActionVariables();
     void toggleValue();
 
-    vector <string> getAvailableActionTypes(short controlElementType);
+    std::vector<string> getAvailableActionTypes(short controlElementType);
 
     void setNextEnumValue();
 

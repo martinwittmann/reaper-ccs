@@ -3,13 +3,14 @@
 
 #include <string>
 #include <vector>
-#include "ActionsManager.h"
-#include "ActionProvider.h"
-#include "CompositeAction.h"
+#include "yaml-cpp/yaml.h"
 
 namespace CCS {
 
   class Session;
+  class ActionsManager;
+  class ActionProvider;
+  class CompositeAction;
 
   using std::string;
   using std::vector;

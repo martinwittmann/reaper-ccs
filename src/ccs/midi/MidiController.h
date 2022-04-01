@@ -3,23 +3,23 @@
 
 #include <string>
 #include <vector>
-#include "../../reaper/csurf.h"
-#include "yaml-cpp/yaml.h"
-#include "../Util.h"
-#include "MidiEventType.h"
-#include "../config/MidiControllerConfig.h"
 #include <experimental/filesystem>
-#include "../actions/Action.h"
-#include "../actions/ActionsManager.h"
-#include "../actions/ActionProvider.h"
+#include "yaml-cpp/yaml.h"
+#include "../../reaper/csurf.h"
 #include "../../reaper/reaper_plugin.h"
-#include "MidiControlElement.h"
+#include "MidiEventType.h"
+#include "../actions/ActionProvider.h"
 
 namespace CCS {
 
   namespace fse = std::experimental::filesystem;
   using std::string;
   using std::vector;
+
+  class MidiControllerConfig;
+  class Action;
+  class ActionsManager;
+  class MidiControlElement;
 
   /**
     *This represents a midi controller

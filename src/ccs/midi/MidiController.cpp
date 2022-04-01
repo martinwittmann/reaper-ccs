@@ -8,6 +8,7 @@
 #include "../globals.cpp"
 #include "../actions/ActionProvider.h"
 #include "../actions/ActionsManager.h"
+#include "../actions/Action.h"
 #include "../Variables.h"
 #include "../../reaper/reaper_plugin.h"
 #include <iostream>

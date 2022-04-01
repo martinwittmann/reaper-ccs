@@ -6,6 +6,7 @@
 #include "../Session.h"
 #include "../Page.h"
 #include "yaml-cpp/yaml.h"
+#include "../config/CompositeActionConfig.h"
 
 namespace CCS {
 

@@ -9,6 +9,7 @@
 #include "../Util.h"
 #include "yaml-cpp/yaml.h"
 #include "CompositeAction.h"
+#include "../Session.h"
 
 namespace CCS {
 

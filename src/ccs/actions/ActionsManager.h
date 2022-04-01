@@ -3,12 +3,12 @@
 
 #include <vector>
 #include <string>
-#include "../Session.h"
 
 namespace CCS {
 
   class Action;
   class ActionProvider;
+  class Session;
 
   class ActionsManager {
     std::vector<Action*> actions;

@@ -6,6 +6,9 @@
 #include "../Page.h"
 #include "../CcsException.h"
 #include "../actions/CompositeAction.h"
+#include "../config/MappingConfig.h"
+#include "MidiControlElement.h"
+#include "../Session.h"
 
 namespace CCS {
 

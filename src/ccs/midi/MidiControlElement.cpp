@@ -50,6 +50,10 @@ namespace CCS {
     return m_controlId;
   }
 
+  string MidiControlElement::getControllerId() {
+    return m_controllerId;
+  }
+
   int MidiControlElement::getInputEventId() {
     return Util::getMidiEventId(m_statusByte, m_data1Byte);
   }

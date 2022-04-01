@@ -3,9 +3,11 @@
 
 #include <string>
 #include <vector>
-#include "../Session.h"
 
 namespace CCS {
+
+  class Session;
+
   class ActionInvokation {
     const char separator = ':';
     Session *session;
