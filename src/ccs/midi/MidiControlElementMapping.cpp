@@ -17,18 +17,21 @@ namespace CCS {
     YAML::Node configRoot,
     MidiControlElement *controlElement,
     ReaperApi *api,
-    Session *session
+    Session *session,
+    Page *page
   ) {
     try {
       m_midiEventId = midiEventId;
       m_config = new MappingConfig(&configRoot);
       m_controlElement = controlElement;
       m_controlId = controlId;
+      m_controllerId = controlElement->getControllerId();
       m_controlType = controlElement->getType();
       m_onPressValue = controlElement->getOnPressValue();
       m_onReleaseValue = controlElement->getOnReleaseValue();
       m_api = api;
       m_session = session;
+      m_page = page;
 
       m_actionTypes = getAvailableActionTypes(m_controlType);
       m_paramMapping = m_config->getValue("mapping");
@@ -185,7 +188,7 @@ namespace CCS {
 
     if (m_hasMappedFxParam) {
       m_api->setFxParameterValue(m_track, m_fxId, m_paramId, m_value);
-      invokeActions("on_change");
+      //invokeActions("on_change");
     }
   }
 
@@ -229,7 +232,9 @@ namespace CCS {
     m_value = value;
     m_formattedValue = formattedValue;
     if (m_hasMappedFxParam) {
+      m_page->invokeBeforeValueChangesAction();
       invokeActions("on_value_change");
+      m_page->invokeAfterValueChangesAction();
     }
   }
 
@@ -265,7 +270,6 @@ namespace CCS {
 
   void MidiControlElementMapping::updateControlElement() {
     if (m_hasMappedFxParam) {
-      //Util::log(m_paramIdStr + ": " + std::to_string(m_value));
       invokeActions("on_value_change");
     }
   }

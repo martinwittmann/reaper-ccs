@@ -3,7 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "MidiEventType.cpp"
+#include "MidiEventType.h"
+
 
 namespace CCS {
   using std::string;
@@ -16,8 +17,9 @@ namespace CCS {
     *Note that we do not use leds and other feedback elements here.
    */
   class MidiControlElement {
-    string controlId;
-    short controlType;
+    string m_controlId;
+    string m_controllerId;
+    short m_controlType;
     // The status byte of the midi message received for this control element.
     // We assume that the status stays the same, no matter which action this
     // element triggers.
@@ -26,11 +28,11 @@ namespace CCS {
     // as data1.
     // For relative encoders we also expect status and data1 to stay the same
     // the the received data2 byte to contain the direction and speed information.
-    unsigned char statusByte;
-    unsigned char data1Byte;
-    unsigned char onPressData2;
-    unsigned char onReleaseData2;
-    MidiController *midiController;
+    unsigned char m_statusByte;
+    unsigned char m_data1Byte;
+    unsigned char m_onPressData2;
+    unsigned char m_onReleaseData2;
+    MidiController *m_midiController;
 
   public:
     const static int UNKNOWN_CONTROL_TYPE = -1;
@@ -50,6 +52,7 @@ namespace CCS {
 
     short getType();
     string getControlId();
+    string getControllerId();
     static short getTypeByName(string type);
     MidiEventType getEventType();
     int getInputEventId();

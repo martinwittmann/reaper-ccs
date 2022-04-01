@@ -4,6 +4,9 @@ initial_state:
 
 on_activate:
   - "[page.set_selected_part]"
+  - "[session.debug:$_STATE.DISPLAY]"
+  - "[session.debug:$_STATE.CURRENT_PAGE]"
+  - "[session.debug:$_STATE.CURRENT_COLOR]"
   - conditions:
       $_STATE.DISPLAY.is: encoders
     actions:
@@ -18,7 +21,6 @@ on_activate:
       $_STATE.DISPLAY.is: faders
     actions:
       - "[page.display_faders]"
-      
 
 # To save lots of repetition, allow settings defaults that can be overriden
 # on each page.
@@ -161,6 +163,7 @@ actions:
         - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN7:00]"
         - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN8:00]"
         - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN_COLUMN:01]"
+        - "[slmk3.end_screen_change]"
 
       - conditions:
           $_STATE.DISPLAY.is: buttons
@@ -190,6 +193,7 @@ actions:
 
   display_encoders:
     actions:
+    - "[session.debug:showing display_encoders]"
     - "[slmk3.set_button_color:$BUTTON_SCREEN_DOWN:$COLOR_OFF]"
     - "[slmk3.set_button_color:$BUTTON_SCREEN_UP:$COLOR_WHITE]"
     - "[slmk3.set_button_color:$BUTTON_RIGHT_UP:$COLOR_OFF]"
@@ -244,12 +248,11 @@ actions:
     - "[slmk3.sc_set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
     - "[slmk3.sc_set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
 
-    - conditions:
-        $_STATE.DISPLAY.is: buttons
-      actions:
-      - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
-      - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
-
+    #- conditions:
+        #$_STATE.DISPLAY.is: buttons
+      #actions:
+      #- "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
+      #- "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
 
     - "[slmk3.end_screen_change]"
 
@@ -270,6 +273,7 @@ actions:
 
   display_buttons:
     actions:
+    - "[session.debug:showing display buttons]"
     - "[slmk3.set_button_color:$BUTTON_SCREEN_DOWN:$COLOR_OFF]"
     - "[slmk3.set_button_color:$BUTTON_SCREEN_UP:$COLOR_OFF]"
     - "[slmk3.set_button_color:$BUTTON_RIGHT_UP:$COLOR_WHITE]"
@@ -357,6 +361,7 @@ actions:
 
   display_faders:
     actions:
+    - "[session.debug:showing display faders]"
     - "[slmk3.set_button_color:$BUTTON_SCREEN_DOWN:$COLOR_OFF]"
     - "[slmk3.set_button_color:$BUTTON_SCREEN_UP:$COLOR_OFF]"
     - "[slmk3.set_button_color:$BUTTON_RIGHT_UP:$COLOR_OFF]"
@@ -434,6 +439,11 @@ actions:
 
 
 mappings:
+  before_value_changes:
+    - "[slmk3.start_screen_change]"
+  after_value_changes:
+    - "[slmk3.end_screen_change]"
+
   controls:
     slmk3.button1:
       on_press:
@@ -485,7 +495,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN1:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -495,7 +504,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_top_box_selected:$SCREEN1:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -521,7 +529,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN2:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -531,7 +538,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_top_box_selected:$SCREEN2:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -556,7 +562,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN3:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -566,7 +571,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_top_box_selected:$SCREEN3:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -591,9 +595,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN4:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -608,9 +610,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN5:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -625,9 +625,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN6:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
       on_press:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
@@ -641,7 +639,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN7:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -651,7 +648,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_top_box_selected:$SCREEN7:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -676,7 +672,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN8:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -686,7 +681,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_top_box_selected:$SCREEN8:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -715,9 +709,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -733,9 +725,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_press:
         - conditions:
@@ -751,9 +741,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
         
       on_press:
         - conditions:
@@ -768,7 +756,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN4:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -778,7 +765,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_center_box_selected:$SCREEN4:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE
@@ -803,9 +789,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -819,9 +803,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -835,9 +817,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -851,9 +831,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN4:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -867,9 +845,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN5:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -883,9 +859,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN6:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -899,9 +873,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN7:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:
@@ -915,9 +887,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: faders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_center_box_value:$SCREEN8:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
 
       on_change:
         - conditions:

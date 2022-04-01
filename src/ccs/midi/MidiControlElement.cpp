@@ -1,7 +1,8 @@
 #include <string>
-#include "MidiEventType.cpp"
-#include "MidiControlElement.h"
+#include "MidiEventType.h"
 #include "../Util.h"
+#include "MidiControlElement.h"
+#include "MidiController.h"
 
 namespace CCS {
   using std::string;
@@ -20,13 +21,14 @@ namespace CCS {
     unsigned char onPressData2,
     unsigned char onReleaseData2
   ) {
-    this->controlId = controlId;
-    this->controlType = controlType;
-    statusByte = status;
-    data1Byte = data1;
-    this->midiController = midiController;
-    this->onPressData2 = onPressData2;
-    this->onReleaseData2 = onReleaseData2;
+    m_midiController = midiController;
+    m_controllerId = m_midiController->getControllerId();
+    m_controlId = controlId;
+    m_controlType = controlType;
+    m_statusByte = status;
+    m_data1Byte = data1;
+    m_onPressData2 = onPressData2;
+    m_onReleaseData2 = onReleaseData2;
   }
 
   short MidiControlElement::getTypeByName(string type) {
@@ -37,26 +39,26 @@ namespace CCS {
   }
 
   short MidiControlElement::getType() {
-    return controlType;
+    return m_controlType;
   }
 
   MidiEventType MidiControlElement::getEventType() {
-    return MidiEventType{statusByte, data1Byte};
+    return MidiEventType{m_statusByte, m_data1Byte};
   }
 
   string MidiControlElement::getControlId() {
-    return controlId;
+    return m_controlId;
   }
 
   int MidiControlElement::getInputEventId() {
-    return Util::getMidiEventId(statusByte, data1Byte);
+    return Util::getMidiEventId(m_statusByte, m_data1Byte);
   }
 
   short MidiControlElement::getOnPressValue() {
-    return onPressData2;
+    return m_onPressData2;
   }
 
   short MidiControlElement::getOnReleaseValue() {
-    return onReleaseData2;
+    return m_onReleaseData2;
   }
 }

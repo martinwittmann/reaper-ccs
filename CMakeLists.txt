@@ -38,7 +38,7 @@ set(
   src/ccs/midi/MidiController.cpp
   src/ccs/midi/MidiControlElement.cpp
   src/ccs/midi/MidiControlElementMapping.cpp
-  src/ccs/midi/MidiEventType.cpp
+  src/ccs/midi/MidiEventType.h
   src/ccs/midi/MidiEventSubscriber.cpp
   src/ccs/Page.cpp
   src/ccs/Session.cpp

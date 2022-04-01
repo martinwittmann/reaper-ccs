@@ -27,14 +27,14 @@ namespace CCS {
     string m_midiControllersDir;
     string m_pluginsDir;
     string m_name;
-    SessionConfig *m_sessionConfig;
+    SessionConfig *m_sessionConfig = nullptr;
     std::vector<Page *> m_pages;
     std::vector<MidiController *> m_midiControllers;
-    FxPlugins *m_pluginManager;
-    Page *m_activePage;
-    ActionsManager *m_actionsManager;
-    midi_Output *m_output;
-    ReaperApi *m_reaperApi;
+    FxPlugins *m_pluginManager = nullptr;
+    Page *m_activePage = nullptr;
+    ActionsManager *m_actionsManager = nullptr;
+    midi_Output *m_output = nullptr;
+    ReaperApi *m_reaperApi = nullptr;
     std::map<int,MidiEventSubscriber*> m_subscribedMidiEventIds;
 
   public:

@@ -27,16 +27,18 @@ namespace CCS {
   class Action;
 
 class Page : public ActionProvider {
-    PageConfig *m_config;
-    ActionsManager *m_actionsManager;
-    Session *m_session;
+    PageConfig *m_config = nullptr;
+    ActionsManager *m_actionsManager = nullptr;
+    Session *m_session = nullptr;
     string m_pageId;
     // A map of string variables that can be set via a page action.
     // Example: [page.set_state:name:value]
     std::map<string,string> m_state;
     vector<MidiControlElementMapping*> m_controlElementMappings;
-    ReaperApi *m_reaperApi;
+    ReaperApi *m_reaperApi = nullptr;
     CompositeAction *m_activateAction = nullptr;
+    CompositeAction *m_beforeValueChangesAction = nullptr;
+    CompositeAction *m_afterValueChangesAction = nullptr;
     std::map<int,MidiEventSubscriber*> m_subscribedMidiEventIds;
 
   public:
@@ -58,6 +60,10 @@ class Page : public ActionProvider {
     std::map<string,string> *getState();
 
   void updateMidiControllerUI();
+
+  void invokeBeforeValueChangesAction();
+
+  void invokeAfterValueChangesAction();
 };
 }
 

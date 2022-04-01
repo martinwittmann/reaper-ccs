@@ -12,10 +12,10 @@ namespace CCS {
   class ActionsManager;
 
   class ActionProvider {
-    std::string id;
+    std::string m_actionProviderId;
 
   protected:
-    ActionsManager *actionsManager;
+    ActionsManager *m_actionsManager;
     std::vector<Action*> m_providedActions;
 
   public:

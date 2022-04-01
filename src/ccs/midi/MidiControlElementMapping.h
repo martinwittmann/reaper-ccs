@@ -18,8 +18,8 @@ namespace CCS {
     public ReaperEventSubscriber
   {
     int m_midiEventId;
-    MappingConfig *m_config;
-    MidiControlElement *m_controlElement;
+    MappingConfig *m_config = nullptr;
+    MidiControlElement *m_controlElement = nullptr;
     std::string m_controlId;
     std::string m_controllerId;
     short m_controlType;
@@ -29,9 +29,10 @@ namespace CCS {
     double m_value;
     std::string m_formattedValue;
 
-    MediaTrack *m_reaperTrack;
-    ReaperApi *m_api;
-    Session *m_session;
+    MediaTrack *m_reaperTrack = nullptr;
+    ReaperApi *m_api = nullptr;
+    Session *m_session = nullptr;
+    Page* m_page = nullptr;
 
     // The action types that are being used for the given control element.
     std::vector<std::string> m_actionTypes;
@@ -40,7 +41,7 @@ namespace CCS {
     // A map of label:parameterValue for each available enum value.
     std::map<string,double> m_enumValues;
 
-    MediaTrack *m_track;
+    MediaTrack *m_track = nullptr;
     int m_fxId;
     int m_paramId;
     std::string m_paramIdStr;
@@ -59,7 +60,8 @@ namespace CCS {
       YAML::Node config,
       MidiControlElement *controlElement,
       ReaperApi *api,
-      Session *session
+      Session *session,
+      Page *page
     );
 
     ~MidiControlElementMapping();

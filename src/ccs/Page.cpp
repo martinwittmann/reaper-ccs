@@ -43,6 +43,22 @@ namespace CCS {
       );
     }
 
+    // This action will be invoked, before any mapped control's on_change actions.
+    if (m_config->keyExists("mappings.before_value_changes")) {
+      m_beforeValueChangesAction = new CompositeAction(
+        m_pageId + ".before_value_changes",
+        m_config->getMapValue("mappings.before_value_changes")
+      );
+    }
+
+    // This action will be invoked, after any mapped control's on_change actions.
+    if (m_config->keyExists("mappings.after_value_changes")) {
+      m_afterValueChangesAction = new CompositeAction(
+        m_pageId + ".after_value_changes",
+        m_config->getMapValue("mappings.after_value_changes")
+      );
+    }
+
     // We initialize the state of each page with its own page id set and any
     // values from "initial_state".
     m_state.insert(std::pair("_STATE.CURRENT_PAGE", m_pageId));
@@ -172,7 +188,8 @@ namespace CCS {
         controlConfig.second,
         controlEl,
         m_reaperApi,
-        m_session
+        m_session,
+        this
       ));
     }
   }
@@ -182,8 +199,25 @@ namespace CCS {
   }
 
   void Page::updateMidiControllerUI() {
+    std::map<string,string> *state = getState();
+    if (m_beforeValueChangesAction) {
+      m_beforeValueChangesAction->invoke(*state, m_session);
+    }
     for (const auto mapping : m_controlElementMappings) {
       mapping->updateControlElement();
     }
+    if (m_afterValueChangesAction) {
+      m_beforeValueChangesAction->invoke(*state, m_session);
+    }
+  }
+
+  void Page::invokeBeforeValueChangesAction() {
+    std::map<string,string> *state = getState();
+    m_beforeValueChangesAction->invoke(*state, m_session);
+  }
+
+  void Page::invokeAfterValueChangesAction() {
+    std::map<string,string> *state = getState();
+    m_afterValueChangesAction->invoke(*state, m_session);
   }
 }

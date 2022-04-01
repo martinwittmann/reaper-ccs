@@ -19,7 +19,7 @@ namespace CCS {
   // I know, this is a side-effect situation, but until I find a cleaner way
   // we're sticking with this.
   ActionProvider::ActionProvider(ActionsManager *actionsManager) {
-    this->actionsManager = actionsManager;
+    m_actionsManager = actionsManager;
   }
 
   ActionProvider::~ActionProvider() {
@@ -30,12 +30,12 @@ namespace CCS {
   }
 
   void ActionProvider::registerActionProvider(string providerId) {
-    id = providerId;
-    actionsManager->registerProvider(this);
+    m_actionProviderId = providerId;
+    m_actionsManager->registerProvider(this);
   }
 
   string ActionProvider::getProviderId() {
-    return id;
+    return m_actionProviderId;
   }
 
   void ActionProvider::actionCallback(string actionName, vector<string> arguments) {}
@@ -49,6 +49,6 @@ namespace CCS {
 
   void ActionProvider::provideAction(Action *action) {
     m_providedActions.push_back(action);
-    actionsManager->registerAction(action);
+    m_actionsManager->registerAction(action);
   }
 }

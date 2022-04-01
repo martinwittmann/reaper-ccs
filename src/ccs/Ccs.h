@@ -23,15 +23,15 @@ namespace CCS {
     string m_pluginsDir;
     string m_lastSession;
     std::vector<string> m_sessions;
-    Session *m_currentSession;
-    GlobalConfig *m_config;
-    ActionsManager *m_actionsManager;
-    midi_Output *m_output;
+    Session *m_currentSession = nullptr;
+    GlobalConfig *m_config = nullptr;
+    ActionsManager *m_actionsManager = nullptr;
+    midi_Output *m_output = nullptr;
     std::map<int,MidiEventSubscriber*>* m_subscribedMidiEventIds;
     std::vector<string> m_subscribedReaperEvents;
 
   public:
-    ReaperApi *reaperApi;
+    ReaperApi *reaperApi = nullptr;
     Ccs(string baseDir, midi_Output *output);
     ~Ccs();
     Session *loadSession(string sessionId, ActionsManager *actionsManager);

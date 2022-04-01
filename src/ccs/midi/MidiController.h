@@ -4,16 +4,16 @@
 #include <string>
 #include <vector>
 #include "../../reaper/csurf.h"
-#include "MidiControlElement.h"
 #include "yaml-cpp/yaml.h"
 #include "../Util.h"
-#include "MidiEventType.cpp"
+#include "MidiEventType.h"
 #include "../config/MidiControllerConfig.h"
 #include <experimental/filesystem>
 #include "../actions/Action.h"
 #include "../actions/ActionsManager.h"
 #include "../actions/ActionProvider.h"
 #include "../../reaper/reaper_plugin.h"
+#include "MidiControlElement.h"
 
 namespace CCS {
 
@@ -27,11 +27,11 @@ namespace CCS {
   class MidiController : public ActionProvider {
     string controllerId;
     string name;
-    midi_Output *midiOutput;
+    midi_Output *midiOutput = nullptr;
     vector<MidiControlElement*> controls;
-    MidiControllerConfig *config;
+    MidiControllerConfig *config = nullptr;
     unsigned char defaultStatusByte;
-    ActionProvider *actionProvider;
+    ActionProvider *actionProvider = nullptr;
     vector<Action*> providedActions;
     bool shouldBufferMidiMessages = false;
     vector<unsigned char> midiMessagesBuffer;

@@ -48,10 +48,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_knob_value:$SCREEN1:$VALUE]"
             - "[slmk3.sc_set_knob_value_label:$SCREEN1:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -64,10 +62,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_knob_value:$SCREEN2:$VALUE]"
             - "[slmk3.sc_set_knob_value_label:$SCREEN2:$FORMATTED_VALUE]"
-            - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -80,10 +76,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_knob_value:$SCREEN3:$VALUE]"
           - "[slmk3.sc_set_knob_value_label:$SCREEN3:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -96,10 +90,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_knob_value:$SCREEN4:$VALUE]"
           - "[slmk3.sc_set_knob_value_label:$SCREEN4:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -112,10 +104,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_knob_value:$SCREEN5:$VALUE]"
           - "[slmk3.sc_set_knob_value_label:$SCREEN5:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -128,10 +118,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_knob_value:$SCREEN6:$VALUE]"
           - "[slmk3.sc_set_knob_value_label:$SCREEN6:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -144,10 +132,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_knob_value:$SCREEN7:$VALUE]"
           - "[slmk3.sc_set_knob_value_label:$SCREEN7:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -160,10 +146,8 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: encoders
           actions:
-          - "[slmk3.start_screen_change]"
           - "[slmk3.sc_set_knob_value:$SCREEN8:$VALUE]"
           - "[slmk3.sc_set_knob_value_label:$SCREEN8:$FORMATTED_VALUE]"
-          - "[slmk3.end_screen_change]"
       on_change:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
@@ -178,7 +162,6 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:
-            - "[slmk3.start_screen_change]"
             - "[slmk3.sc_set_top_box_value:$SCREEN1:$FORMATTED_VALUE]"
             - conditions:
                 $VALUE.is: $MAX_VALUE
@@ -188,7 +171,6 @@ mappings:
                 $VALUE.isnot: $MAX_VALUE
               actions:
               - "[slmk3.sc_set_top_box_selected:$SCREEN1:00]"
-            - "[slmk3.end_screen_change]"
 
         - conditions:
             $VALUE.is: $MAX_VALUE

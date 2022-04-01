@@ -1,12 +1,10 @@
 #include <string>
 #include <vector>
 #include "../../reaper/csurf.h"
-#include "MidiControlElement.h"
 #include "yaml-cpp/yaml.h"
 #include "../Util.h"
-#include "MidiEventType.cpp"
+#include "MidiEventType.h"
 #include "../config/MidiControllerConfig.h"
-#include "MidiController.h"
 #include "../globals.cpp"
 #include "../actions/ActionProvider.h"
 #include "../actions/ActionsManager.h"
@@ -14,6 +12,8 @@
 #include "../../reaper/reaper_plugin.h"
 #include <iostream>
 #include "../CcsException.h"
+#include "MidiController.h"
+#include "MidiControlElement.h"
 
 namespace CCS {
 
@@ -140,14 +140,14 @@ namespace CCS {
       unsigned char data[4096];
     } event;
 
-    Util::log("Send midi ", false);
+    //Util::log("Send midi ", false);
     event.message.frame_offset = 0;
     event.message.size = buffer->size();
     for (int i = 0; i < buffer->size(); ++i) {
-      Util::log(Util::formatHexByte(buffer->at(i)) + " ", false);
+      //Util::log(Util::formatHexByte(buffer->at(i)) + " ", false);
       event.message.midi_message[i] = buffer->at(i);
     }
-    Util::log("");
+    //Util::log("");
 
 #ifndef MOCK_MIDI
     if (midiOutput) {
@@ -193,7 +193,7 @@ namespace CCS {
         controllerId,
         actionId,
         actionNode,
-        actionsManager
+        m_actionsManager
       );
       provideAction(action);
     }
