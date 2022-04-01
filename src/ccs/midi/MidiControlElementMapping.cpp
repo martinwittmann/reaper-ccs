@@ -204,11 +204,15 @@ namespace CCS {
       case MidiControlElement::ABSOLUTE:
         if (m_hasMappedFxParam) {
           m_value = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
+          invokeActions("on_change");
         }
         break;
 
       case MidiControlElement::RELATIVE:
-        addValueDiff(data2);
+        if (m_hasMappedFxParam) {
+          addValueDiff(data2);
+          invokeActions("on_change");
+        }
         break;
     }
 
