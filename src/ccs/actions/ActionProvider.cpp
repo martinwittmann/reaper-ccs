@@ -2,6 +2,7 @@
 #include "ActionsManager.h"
 #include "Action.h"
 #include <string>
+#include "../Util.h"
 
 namespace CCS {
 
@@ -44,7 +45,7 @@ namespace CCS {
     // If the string contains brackets we think it's a macro action because we
     // define that macros/subactions are being called by using
     // [action_provider.action_id:argument1:argument2:...]
-    return rawAction.find("[") != -1;
+    return Util::regexMatch(rawAction, "^\\[");
   }
 
   void ActionProvider::provideAction(Action *action) {

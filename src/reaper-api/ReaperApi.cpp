@@ -260,10 +260,14 @@ namespace CCS {
     return std::string(formattedValue);
   }
 
+  double ReaperApi::getParamValue(MediaTrack *track, int fxId, int paramId) {
+    return TrackFX_GetParam(track, fxId, paramId, nullptr, nullptr);
+  }
+
   std::tuple<double,double,double,double> ReaperApi::getParamValueEx(
     MediaTrack * track,
-    int paramId,
-    int fxId
+    int fxId,
+    int paramId
   ) {
 
     double minValue;

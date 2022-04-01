@@ -324,7 +324,7 @@ namespace CCS {
         }
 
         // Now add the current macro action.
-        result.push_back("[" + m_controllerId + "." + Util::removePrefixSuffix(subAction) + "]");
+        result.push_back(subAction);
       }
       else {
         // Here subAction is simply a string of midi messages, possibly containing

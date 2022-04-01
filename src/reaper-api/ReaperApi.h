@@ -104,6 +104,8 @@ namespace CCS {
       int paramId,
       int fxId
     );
+
+    double getParamValue(MediaTrack *track, int paramId, int fxId);
   };
 }
 

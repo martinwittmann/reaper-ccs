@@ -182,6 +182,7 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::onMidiEvent(int eventId, unsigned char data2) {
+
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
@@ -213,7 +214,6 @@ namespace CCS {
 
     if (m_hasMappedFxParam) {
       m_api->setFxParameterValue(m_track, m_fxId, m_paramId, m_value);
-      //invokeActions("on_change");
     }
   }
 
