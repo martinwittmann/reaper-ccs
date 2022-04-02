@@ -1,6 +1,6 @@
 initial_state:
   DISPLAY: encoders
-  CURRENT_COLOR: $PART1_COLOR
+  CURRENT_COLOR: $COLOR1
 
 on_activate:
   - "[page.set_selected_part]"
@@ -56,15 +56,7 @@ variables:
   CENTER_SCREEN: 08
 
   COLOR_OFF: 00
-
-  COLOR_LIGHT_BLUE: 25
-  COLOR_RED: 05
-  COLOR_YELLOW: 0D
-  COLOR_VIOLET: 36
-  COLOR_ORANGE: 54
   COLOR_WHITE: 03
-  COLOR_GREEN: 15
-  COLOR_DARK_BLUE: 28
 
   PART1_LABEL: Juno 1
   PART2_LABEL: Juno 2
@@ -75,23 +67,32 @@ variables:
   PART7_LABEL: 
   PART8_LABEL: Mixer
 
-  PART1_COLOR: 25
-  PART2_COLOR: 05
-  PART3_COLOR: 0D
-  PART4_COLOR: 36
-  PART5_COLOR: 54
-  PART6_COLOR: 03
-  PART7_COLOR: 15
-  PART8_COLOR: 28
-
   COLOR1: 25
-  COLOR2: 05
+  COLOR2: 09
   COLOR3: 0D
-  COLOR4: 36
-  COLOR5: 54
-  COLOR6: 03
+  COLOR4: 35
+  COLOR5: 48
+  COLOR6: 02
   COLOR7: 15
-  COLOR8: 28
+  COLOR8: 29
+
+  COLOR1_BRIGHT: 25
+  COLOR2_BRIGHT: 09
+  COLOR3_BRIGHT: 0D
+  COLOR4_BRIGHT: 35
+  COLOR5_BRIGHT: 48
+  COLOR6_BRIGHT: 02
+  COLOR7_BRIGHT: 15
+  COLOR8_BRIGHT: 29
+
+  COLOR1_DARK: 27
+  COLOR2_DARK: 0B
+  COLOR3_DARK: 0E
+  COLOR4_DARK: 37
+  COLOR5_DARK: 06
+  COLOR6_DARK: 01
+  COLOR7_DARK: 17
+  COLOR8_DARK: 2B
 
   BUTTON1: 33
   BUTTON2: 34
@@ -246,14 +247,14 @@ actions:
     - "[slmk3.sc_set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
     - "[slmk3.sc_set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
 
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN1:$PART1_COLOR]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN2:$PART1_COLOR]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN3:$PART2_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN2:$COLOR1]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN3:$COLOR2]"
     - "[slmk3.sc_set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
     - "[slmk3.sc_set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
     - "[slmk3.sc_set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
     - "[slmk3.sc_set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN8:$PART8_COLOR]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN8:$COLOR8]"
 
     - "[slmk3.sc_set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
     - "[slmk3.sc_set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
@@ -337,14 +338,14 @@ actions:
     - "[slmk3.sc_set_bottom_box_label:$SCREEN7:$PART7_LABEL]"
     - "[slmk3.sc_set_bottom_box_label:$SCREEN8:$PART8_LABEL]"
 
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN1:$PART1_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN2:$PART1_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN3:$PART1_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN4:$PART4_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN5:$PART5_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN6:$PART6_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN2:$COLOR1]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN3:$COLOR1]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN8:$COLOR8]"
 
     - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$PAGE_COLOR]"
     - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$PAGE_COLOR]"
@@ -400,14 +401,14 @@ actions:
     - "[slmk3.sc_set_bottom_box_label:$SCREEN7:$PART7_LABEL]"
     - "[slmk3.sc_set_bottom_box_label:$SCREEN8:$PART8_LABEL]"
 
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN1:$PART1_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN2:$PART1_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN3:$PART1_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN4:$PART4_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN5:$PART5_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN6:$PART6_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN7:$PART7_COLOR]"
-    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN8:$PART8_COLOR]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN2:$COLOR1]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN3:$COLOR1]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN4:$COLOR4]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN5:$COLOR5]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN6:$COLOR6]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN7:$COLOR7]"
+    - "[slmk3.sc_set_box_bottom_bar_color:$SCREEN8:$COLOR8]"
 
 
     - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
@@ -415,14 +416,14 @@ actions:
 
     - "[slmk3.stop_buffer:screen_properties]"
 
-    - "[slmk3.set_fader_color:$FADER1:$COLOR1]"
-    - "[slmk3.set_fader_color:$FADER2:$COLOR2]"
-    - "[slmk3.set_fader_color:$FADER3:$COLOR3]"
-    - "[slmk3.set_fader_color:$FADER4:$COLOR4]"
-    - "[slmk3.set_fader_color:$FADER5:$COLOR5]"
-    - "[slmk3.set_fader_color:$FADER6:$COLOR6]"
-    - "[slmk3.set_fader_color:$FADER7:$COLOR7]"
-    - "[slmk3.set_fader_color:$FADER8:$COLOR8]"
+    - "[slmk3.set_fader_color:$FADER1:$COLOR1_DARK]"
+    - "[slmk3.set_fader_color:$FADER2:$COLOR2_DARK]"
+    - "[slmk3.set_fader_color:$FADER3:$COLOR3_DARK]"
+    - "[slmk3.set_fader_color:$FADER4:$COLOR4_DARK]"
+    - "[slmk3.set_fader_color:$FADER5:$COLOR5_DARK]"
+    - "[slmk3.set_fader_color:$FADER6:$COLOR6_DARK]"
+    - "[slmk3.set_fader_color:$FADER7:$COLOR7_DARK]"
+    - "[slmk3.set_fader_color:$FADER8:$COLOR8_DARK]"
 
     - "[page.set_state:DISPLAY:faders]"
 
@@ -520,12 +521,12 @@ mappings:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON9:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON9:$COLOR1_BRIGHT]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON9:$COLOR_OFF]"
+          - "[slmk3.set_button_color:$BUTTON9:$COLOR1_DARK]"
 
       on_press:
         - conditions:
@@ -564,12 +565,12 @@ mappings:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON10:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON10:$COLOR2_BRIGHT]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON10:$COLOR_OFF]"
+          - "[slmk3.set_button_color:$BUTTON10:$COLOR2_DARK]"
 
       on_press:
         - conditions:
@@ -607,12 +608,12 @@ mappings:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON11:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON11:$COLOR3_BRIGHT]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON11:$COLOR_OFF]"
+          - "[slmk3.set_button_color:$BUTTON11:$COLOR3_DARK]"
 
       on_press:
         - conditions:
@@ -638,6 +639,7 @@ mappings:
             - "[slmk3.start_buffer:screen_properties]"
             - "[slmk3.sc_set_top_box_value:$SCREEN4:$FORMATTED_VALUE]"
             - "[slmk3.stop_buffer:screen_properties]"
+            - "[slmk3.set_button_color:$BUTTON12:$COLOR4_DARK]"
 
       on_press:
         - conditions:
@@ -663,6 +665,7 @@ mappings:
             - "[slmk3.start_buffer:screen_properties]"
             - "[slmk3.sc_set_top_box_value:$SCREEN5:$FORMATTED_VALUE]"
             - "[slmk3.stop_buffer:screen_properties]"
+            - "[slmk3.set_button_color:$BUTTON13:$COLOR5_DARK]"
 
       on_press:
         - conditions:
@@ -688,6 +691,7 @@ mappings:
             - "[slmk3.start_buffer:screen_properties]"
             - "[slmk3.sc_set_top_box_value:$SCREEN6:$FORMATTED_VALUE]"
             - "[slmk3.stop_buffer:screen_properties]"
+            - "[slmk3.set_button_color:$BUTTON14:$COLOR6_DARK]"
       on_press:
         - conditions:
             $_STATE.DISPLAY.isnot: buttons
@@ -724,12 +728,12 @@ mappings:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON15:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON15:$COLOR7_BRIGHT]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON15:$COLOR_OFF]"
+          - "[slmk3.set_button_color:$BUTTON15:$COLOR7_DARK]"
 
       on_press:
         - conditions:
@@ -767,12 +771,12 @@ mappings:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON16:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON16:$COLOR8_BRIGHT]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON16:$COLOR_OFF]"
+          - "[slmk3.set_button_color:$BUTTON16:$COLOR8_DARK]"
 
       on_press:
         - conditions:
@@ -799,6 +803,7 @@ mappings:
             - "[slmk3.start_buffer:screen_properties]"
             - "[slmk3.sc_set_center_box_value:$SCREEN1:$FORMATTED_VALUE]"
             - "[slmk3.stop_buffer:screen_properties]"
+            - "[slmk3.set_button_color:$BUTTON17:$COLOR1_DARK]"
 
       on_press:
         - conditions:
@@ -825,6 +830,7 @@ mappings:
             - "[slmk3.start_buffer:screen_properties]"
             - "[slmk3.sc_set_center_box_value:$SCREEN2:$FORMATTED_VALUE]"
             - "[slmk3.stop_buffer:screen_properties]"
+            - "[slmk3.set_button_color:$BUTTON18:$COLOR2_DARK]"
 
       on_press:
         - conditions:
@@ -851,6 +857,7 @@ mappings:
             - "[slmk3.start_buffer:screen_properties]"
             - "[slmk3.sc_set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
             - "[slmk3.stop_buffer:screen_properties]"
+            - "[slmk3.set_button_color:$BUTTON19:$COLOR3_DARK]"
         
       on_press:
         - conditions:
@@ -888,12 +895,12 @@ mappings:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON20:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON20:$COLOR4_BRIGHT]"
 
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON20:$COLOR_OFF]"
+          - "[slmk3.set_button_color:$BUTTON20:$COLOR4_DARK]"
 
       on_press:
         - conditions:
