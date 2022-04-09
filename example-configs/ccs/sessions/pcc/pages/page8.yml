@@ -1,7 +1,11 @@
 extends: _default
 name: $PART8_LABEL
 id: page8
+initial_state:
+  DISPLAY: mixer
+  CURRENT_COLOR: $COLOR8
 on_activate:
+  - "[page.set_selected_part]"
   - "[slmk3.start_buffer:screen_properties]"
   - "[slmk3.start_screen_change]"
   - "[slmk3.stop_buffer:screen_properties]"
@@ -26,71 +30,6 @@ variables:
   ENCODER8_LABEL: Volume
 
 actions:
-  display_mixer:
-    actions:
-    - "[slmk3.set_knob_layout]"
-
-    - "[slmk3.start_buffer:screen_properties]"
-
-    - "[slmk3.sc_set_knob_color:$SCREEN1:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN2:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN3:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN4:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN5:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN6:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN7:$COLOR_WHITE]"
-    - "[slmk3.sc_set_knob_color:$SCREEN8:$COLOR_WHITE]"
- 
-    - "[slmk3.sc_set_knob_label:$SCREEN1:$_STATE.TRACK1_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN2:$_STATE.TRACK2_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN3:$_STATE.TRACK3_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN4:$_STATE.TRACK4_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN5:$_STATE.TRACK5_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN6:$_STATE.TRACK6_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN7:$_STATE.TRACK7_NAME]"
-    - "[slmk3.sc_set_knob_label:$SCREEN8:$_STATE.TRACK8_NAME]"
-
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN1:$PART1_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN2:$PART2_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN3:$PART3_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN4:$PART4_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN5:$PART5_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN6:$PART6_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
-    - "[slmk3.sc_set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
-
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN1:$COLOR1]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN2:$COLOR1]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN3:$COLOR2]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
-    - "[slmk3.sc_set_knob_bottom_color:$SCREEN8:$COLOR8]"
-
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN3:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN4:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN5:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN6:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
-    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
-
-    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
-    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
-
-
-    - "[slmk3.stop_buffer:screen_properties]"
-
-    - "[slmk3.set_fader_color:$FADER1:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER2:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER3:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER4:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER5:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER6:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER7:$COLOR_OFF]"
-    - "[slmk3.set_fader_color:$FADER8:$COLOR_OFF]"
 
 mappings:
   controls:

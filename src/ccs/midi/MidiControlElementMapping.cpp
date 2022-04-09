@@ -279,11 +279,15 @@ namespace CCS {
           break;
 
         case TRACK_MUTE:
-          m_api->setTrackMute(m_track, m_value);
+          m_api->setTrackMute(m_track, m_value == m_maxValue);
+          break;
+
+        case TRACK_SOLO:
+          m_api->setTrackSolo(m_track, m_value == m_maxValue);
           break;
 
         case TRACK_RECORD_ARM:
-          m_api->setTrackRecordArm(m_track, m_value);
+          m_api->setTrackRecordArm(m_track, m_value == m_maxValue);
           break;
 
         case FX_PARAMETER:
@@ -464,6 +468,7 @@ namespace CCS {
 
       case TRACK_VOLUME:
         m_value = m_api->getTrackVolume(m_track);
+        m_formattedValue = Util::roundDouble(m_value * 10.0);
         Util::log(m_controlId + ": " + std::to_string(m_value));
         break;
     }

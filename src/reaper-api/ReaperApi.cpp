@@ -326,15 +326,15 @@ namespace CCS {
   }
 
   void ReaperApi::setTrackMute(MediaTrack *track, bool mute) {
-
+    SetMediaTrackInfo_Value(track, "B_MUTE", mute);
   }
 
   void ReaperApi::setTrackSolo(MediaTrack *track, bool solo) {
-
+    SetMediaTrackInfo_Value(track, "I_SOLO", solo ? 1 : 0);
   }
 
   void ReaperApi::setTrackRecordArm(MediaTrack *track, bool recordArm) {
-
+    SetMediaTrackInfo_Value(track, "I_RECARM", recordArm ? 1 : 0);
   }
 
   void ReaperApi::subscribeToControlSurfaceEvent(

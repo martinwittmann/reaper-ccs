@@ -7,38 +7,38 @@ on_activate:
   - conditions:
       $_STATE.DISPLAY.is: encoders
     actions:
-        - "[slmk3.start_buffer:screen_properties]"
-        - "[slmk3.start_screen_change]"
-        - "[slmk3.stop_buffer:screen_properties]"
-        - "[page.display_encoders]"
-        - "[slmk3.start_buffer:screen_properties]"
-        - "[slmk3.end_screen_change]"
-        - "[slmk3.stop_buffer:screen_properties]"
-        - "[slmk3.flush_buffer:screen_properties]"
+      - "[slmk3.start_buffer:screen_properties]"
+      - "[slmk3.start_screen_change]"
+      - "[slmk3.stop_buffer:screen_properties]"
+      - "[page.display_encoders]"
+      - "[slmk3.start_buffer:screen_properties]"
+      - "[slmk3.end_screen_change]"
+      - "[slmk3.stop_buffer:screen_properties]"
+      - "[slmk3.flush_buffer:screen_properties]"
 
   - conditions:
       $_STATE.DISPLAY.is: buttons
     actions:
-        - "[slmk3.start_buffer:screen_properties]"
-        - "[slmk3.start_screen_change]"
-        - "[slmk3.stop_buffer:screen_properties]"
-        - "[page.display_buttons]"
-        - "[slmk3.start_buffer:screen_properties]"
-        - "[slmk3.end_screen_change]"
-        - "[slmk3.stop_buffer:screen_properties]"
-        - "[slmk3.flush_buffer:screen_properties]"
+      - "[slmk3.start_buffer:screen_properties]"
+      - "[slmk3.start_screen_change]"
+      - "[slmk3.stop_buffer:screen_properties]"
+      - "[page.display_buttons]"
+      - "[slmk3.start_buffer:screen_properties]"
+      - "[slmk3.end_screen_change]"
+      - "[slmk3.stop_buffer:screen_properties]"
+      - "[slmk3.flush_buffer:screen_properties]"
 
   - conditions:
       $_STATE.DISPLAY.is: faders
     actions:
-        - "[slmk3.start_buffer:screen_properties]"
-        - "[slmk3.start_screen_change]"
-        - "[slmk3.stop_buffer:screen_properties]"
-        - "[page.display_faders]"
-        - "[slmk3.start_buffer:screen_properties]"
-        - "[slmk3.end_screen_change]"
-        - "[slmk3.stop_buffer:screen_properties]"
-        - "[slmk3.flush_buffer:screen_properties]"
+      - "[slmk3.start_buffer:screen_properties]"
+      - "[slmk3.start_screen_change]"
+      - "[slmk3.stop_buffer:screen_properties]"
+      - "[page.display_faders]"
+      - "[slmk3.start_buffer:screen_properties]"
+      - "[slmk3.end_screen_change]"
+      - "[slmk3.stop_buffer:screen_properties]"
+      - "[slmk3.flush_buffer:screen_properties]"
 
 # To save lots of repetition, allow settings defaults that can be overriden
 # on each page.
@@ -194,7 +194,7 @@ actions:
         - "[slmk3.sc_set_bottom_box_selected:$SCREEN6:00]"
         - "[slmk3.sc_set_bottom_box_selected:$SCREEN7:00]"
         - "[slmk3.sc_set_bottom_box_selected:$SCREEN8:00]"
-        - "[slmk3.sc_set_bottom_box_selected:$SCREEN_COLUMN:01]"
+        - "[slmk3.sc_set_bottom_box_selected:$PAGE_SCREEN_COLUMN:01]"
 
       - "[slmk3.stop_buffer:screen_properties]"
 
@@ -426,6 +426,73 @@ actions:
     - "[slmk3.set_fader_color:$FADER8:$COLOR8_DARK]"
 
     - "[page.set_state:DISPLAY:faders]"
+
+  display_mixer:
+    actions:
+    - "[slmk3.set_knob_layout]"
+
+    - "[slmk3.start_buffer:screen_properties]"
+
+    - "[slmk3.sc_set_knob_color:$SCREEN1:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN2:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN3:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN4:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN5:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN6:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN7:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN8:$COLOR_WHITE]"
+ 
+    - "[slmk3.sc_set_knob_label:$SCREEN1:$_STATE.TRACK1_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN2:$_STATE.TRACK2_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN3:$_STATE.TRACK3_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN4:$_STATE.TRACK4_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN5:$_STATE.TRACK5_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN6:$_STATE.TRACK6_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN7:$_STATE.TRACK7_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN8:$_STATE.TRACK8_NAME]"
+
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
+
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN2:$COLOR1]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN3:$COLOR2]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN8:$COLOR8]"
+
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN3:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN4:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN5:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN6:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
+
+    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
+    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
+
+    - "[slmk3.stop_buffer:screen_properties]"
+
+    - "[slmk3.set_fader_color:$FADER1:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER2:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER3:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER4:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER5:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER6:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER7:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER8:$COLOR_OFF]"
+
+    - "[page.set_state:DISPLAY:mixer]"
 
 
 mappings:
@@ -921,6 +988,107 @@ mappings:
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
           - "[page.update_controller_ui]"
+
+    slmk3.button21:
+      mapping: track1.record_arm
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.start_buffer:screen_properties]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN5:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.sc_set_center_box_selected:$SCREEN5:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.sc_set_center_box_selected:$SCREEN5:00]"
+            - "[slmk3.stop_buffer:screen_properties]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON21:$COLOR5_BRIGHT]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON21:$COLOR5_DARK]"
+
+      on_press:
+        - conditions:
+            $_STATE.DISPLAY.isnot: buttons
+          actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+          - "[page.update_controller_ui]"
+
+    slmk3.button22:
+      mapping: track1.mute
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.start_buffer:screen_properties]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN6:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.sc_set_center_box_selected:$SCREEN6:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.sc_set_center_box_selected:$SCREEN6:00]"
+            - "[slmk3.stop_buffer:screen_properties]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON22:$COLOR6_BRIGHT]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON22:$COLOR6_DARK]"
+
+    slmk3.button23:
+      mapping: track1.solo
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $_STATE.DISPLAY.is: buttons
+          actions:
+            - "[slmk3.start_buffer:screen_properties]"
+            - "[slmk3.sc_set_center_box_value:$SCREEN7:$FORMATTED_VALUE]"
+            - conditions:
+                $VALUE.is: $MAX_VALUE
+              actions:
+              - "[slmk3.sc_set_center_box_selected:$SCREEN7:01]"
+            - conditions:
+                $VALUE.isnot: $MAX_VALUE
+              actions:
+              - "[slmk3.sc_set_center_box_selected:$SCREEN7:00]"
+            - "[slmk3.stop_buffer:screen_properties]"
+
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON23:$COLOR7_BRIGHT]"
+
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON23:$COLOR7_DARK]"
 
 
     slmk3.fader1:

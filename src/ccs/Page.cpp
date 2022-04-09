@@ -63,13 +63,16 @@ namespace CCS {
     // values from "initial_state".
     m_state.insert(std::pair("_STATE.CURRENT_PAGE", m_pageId));
 
-    // Add track names to state.
-    vector<string> trackNames = m_reaperApi->getTrackNames();
-    for (auto it = trackNames.begin(); it != trackNames.end(); ++it) {
-      int index = it - trackNames.begin();
+    // Add track names to state. Note that we're not respecting the actual
+    // number of available tracks here because by depending on the reaper api
+    // giving empty names for non existing tracks, we can allow unknown tracks
+    // in config files. Otherwise those unknown variables would not be replaced
+    // and would show as $_STATE.TRACK15_NAME on the display.
+    // We default to allow 16 tracks for now.
+    for (int i = 1; i < 17; ++i) {
       // We're using 1-based indexes in variables.
-      string keyName = "_STATE.TRACK" + std::to_string(index + 1) + "_NAME";
-      m_state.insert(std::pair(keyName, *it));
+      string keyName = "_STATE.TRACK" + std::to_string(i) + "_NAME";
+      m_state.insert(std::pair(keyName, m_reaperApi->getTrackName(i)));
     }
 
     YAML::Node initialState = m_config->getMapValue("initial_state");
