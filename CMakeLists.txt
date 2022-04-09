@@ -53,7 +53,7 @@ set(
   src/ccs/Session.cpp
   src/ccs/Util.cpp
   src/ccs/Variables.cpp
-)
+  src/reaper-api/ControlSurfaceEventSubscription.cpp src/reaper-api/ControlSurfaceEventSubscription.h)
 
 set(
   REAPER_SOURCE_FILES

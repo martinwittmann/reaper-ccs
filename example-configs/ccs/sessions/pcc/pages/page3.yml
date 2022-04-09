@@ -4,7 +4,7 @@ id: page3
 
 
 variables:
-  SCREEN_COLUMN: 02
+  PAGE_SCREEN_COLUMN: 02
   PAGE_BUTTON: 35
   PAGE_COLOR: 05
 

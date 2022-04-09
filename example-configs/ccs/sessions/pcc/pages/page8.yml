@@ -1,0 +1,160 @@
+extends: _default
+name: $PART8_LABEL
+id: page8
+on_activate:
+  - "[slmk3.start_buffer:screen_properties]"
+  - "[slmk3.start_screen_change]"
+  - "[slmk3.stop_buffer:screen_properties]"
+  - "[page.display_mixer]"
+  - "[slmk3.start_buffer:screen_properties]"
+  - "[slmk3.end_screen_change]"
+  - "[slmk3.stop_buffer:screen_properties]"
+  - "[slmk3.flush_buffer:screen_properties]"
+
+variables:
+  PAGE_SCREEN_COLUMN: 07
+  PAGE_BUTTON: 3A
+  PAGE_COLOR: 25
+
+  ENCODER1_LABEL: LFO Amt
+  ENCODER2_LABEL: PW
+  ENCODER3_LABEL: LfoRate
+  ENCODER4_LABEL: LfoDel
+  ENCODER5_LABEL: FiltEnv
+  ENCODER6_LABEL: FiltMod
+  ENCODER7_LABEL: FiltKey
+  ENCODER8_LABEL: Volume
+
+actions:
+  display_mixer:
+    actions:
+    - "[slmk3.set_knob_layout]"
+
+    - "[slmk3.start_buffer:screen_properties]"
+
+    - "[slmk3.sc_set_knob_color:$SCREEN1:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN2:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN3:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN4:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN5:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN6:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN7:$COLOR_WHITE]"
+    - "[slmk3.sc_set_knob_color:$SCREEN8:$COLOR_WHITE]"
+ 
+    - "[slmk3.sc_set_knob_label:$SCREEN1:$_STATE.TRACK1_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN2:$_STATE.TRACK2_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN3:$_STATE.TRACK3_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN4:$_STATE.TRACK4_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN5:$_STATE.TRACK5_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN6:$_STATE.TRACK6_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN7:$_STATE.TRACK7_NAME]"
+    - "[slmk3.sc_set_knob_label:$SCREEN8:$_STATE.TRACK8_NAME]"
+
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN1:$PART1_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN2:$PART2_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN3:$PART3_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN4:$PART4_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN5:$PART5_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN6:$PART6_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN7:$PART7_LABEL]"
+    - "[slmk3.sc_set_knob_bottom_label:$SCREEN8:$PART8_LABEL]"
+
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN1:$COLOR1]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN2:$COLOR1]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN3:$COLOR2]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN4:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN5:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN6:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN7:$COLOR_OFF]"
+    - "[slmk3.sc_set_knob_bottom_color:$SCREEN8:$COLOR8]"
+
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN1:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN2:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN3:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN4:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN5:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN6:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN7:$PAGE_COLOR]"
+    - "[slmk3.sc_set_knob_top_bar_color:$SCREEN8:$PAGE_COLOR]"
+
+    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_TOP_BAR:$COLOR_OFF]"
+    - "[slmk3.sc_set_center_screen_right_bar_color:$C_RIGHT_BOTTOM_BAR:$COLOR_OFF]"
+
+
+    - "[slmk3.stop_buffer:screen_properties]"
+
+    - "[slmk3.set_fader_color:$FADER1:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER2:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER3:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER4:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER5:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER6:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER7:$COLOR_OFF]"
+    - "[slmk3.set_fader_color:$FADER8:$COLOR_OFF]"
+
+mappings:
+  controls:
+
+    slmk3.encoder1:
+      mapping: track1.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN1:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN1:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder2:
+      mapping: track2.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN2:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN2:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder3:
+      mapping: track3.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN3:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN3:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder4:
+      mapping: track4.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN4:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN4:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder5:
+      mapping: track5.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN5:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN5:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder6:
+      mapping: track6.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN6:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN6:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder7:
+      mapping: track7.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN7:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN7:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"
+
+    slmk3.encoder8:
+      mapping: track8.volume
+      on_value_change:
+        - "[slmk3.start_buffer:screen_properties]"
+        - "[slmk3.sc_set_knob_value:$SCREEN8:$VALUE]"
+        - "[slmk3.sc_set_knob_value_label:$SCREEN8:$FORMATTED_VALUE]"
+        - "[slmk3.stop_buffer:screen_properties]"

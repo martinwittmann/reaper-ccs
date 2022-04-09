@@ -14,6 +14,7 @@
 #include "Session.h"
 #include "Util.h"
 #include "midi/MidiControlElementMapping.h"
+#include "../reaper-api/ReaperApi.h"
 
 namespace CCS {
 
@@ -61,6 +62,16 @@ namespace CCS {
     // We initialize the state of each page with its own page id set and any
     // values from "initial_state".
     m_state.insert(std::pair("_STATE.CURRENT_PAGE", m_pageId));
+
+    // Add track names to state.
+    vector<string> trackNames = m_reaperApi->getTrackNames();
+    for (auto it = trackNames.begin(); it != trackNames.end(); ++it) {
+      int index = it - trackNames.begin();
+      // We're using 1-based indexes in variables.
+      string keyName = "_STATE.TRACK" + std::to_string(index + 1) + "_NAME";
+      m_state.insert(std::pair(keyName, *it));
+    }
+
     YAML::Node initialState = m_config->getMapValue("initial_state");
     for (auto node : initialState) {
       m_state.insert(std::pair(
@@ -96,9 +107,7 @@ namespace CCS {
     // Invoke the actions defined in "on_activate";
     try {
       for (auto mapping : m_controlElementMappings) {
-        if (mapping->hasMappedFxParam()) {
-          mapping->activate();
-        }
+        mapping->activate();
       }
       std::map<string,string> *state = getState();
       if (m_activateAction) {

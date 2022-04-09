@@ -32,6 +32,8 @@ namespace CCS {
       double maxValue,
       std::string formattedValue
     );
+
+    void onPause();
   };
 }
 

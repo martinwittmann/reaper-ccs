@@ -6,16 +6,19 @@
 #include <map>
 #include "ReaperEventSubscriber.h"
 #include "ReaperDataTracker.h"
-#include "FxParameterChangedSubscription.h"
 
 namespace CCS {
 
   using std::string;
   using std::vector;
 
+  class FxParameterChangedSubscription;
+  class ControlSurfaceEventSubscription;
+
   class ReaperApi {
-    std::map<int, vector<ReaperEventSubscriber*>> subscribersMap;
-    vector<FxParameterChangedSubscription*> fxParamChangedSubscriptions;
+    std::map<int, vector<ReaperEventSubscriber*>> m_subscribersMap;
+    vector<FxParameterChangedSubscription*> m_fxParamChangedSubscriptions;
+    vector<ControlSurfaceEventSubscription*> m_controlSurfaceEventSubscriptions;
 
   public:
 
@@ -63,6 +66,11 @@ namespace CCS {
       int parameterId
     );
 
+    std::vector<string> getTrackNames();
+
+    string getTrackName(int trackIndex);
+    string getTrackName(MediaTrack *track);
+
     std::tuple<double,double> getFxParameterMinMax(
       MediaTrack *track,
       int fxId,
@@ -106,6 +114,38 @@ namespace CCS {
     );
 
     double getParamValue(MediaTrack *track, int paramId, int fxId);
+
+    void setTrackVolume(MediaTrack *track, double volume);
+
+    void setTrackMute(MediaTrack *track, bool mute);
+
+    void setTrackSolo(MediaTrack *track, bool solo);
+
+    void setTrackRecordArm(MediaTrack *track, bool recordArm);
+
+    bool isSubscribedToControlSurfaceEvent(
+      int eventId,
+      MediaTrack *track,
+      ReaperEventSubscriber *subscriber
+    );
+
+    void subscribeToControlSurfaceEvent(
+      int eventId,
+      MediaTrack *track,
+      ReaperEventSubscriber *subscriber
+    );
+
+    void unsubscribeFromControlSurfaceEvent(
+      int eventId,
+      MediaTrack *track,
+      ReaperEventSubscriber *subscriber
+    );
+
+    vector<ReaperEventSubscriber *> getControlSurfaceEventSubscribers(MediaTrack *track, int eventId);
+
+    string getFxName(MediaTrack *track, int fxId);
+
+    double getTrackVolume(MediaTrack *track);
   };
 }
 

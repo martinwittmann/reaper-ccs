@@ -35,10 +35,10 @@ namespace CCS {
     MidiController *m_midiController;
 
   public:
-    const static int UNKNOWN_CONTROL_TYPE = -1;
-    const static int BUTTON = 0;
-    const static int ABSOLUTE = 1;
-    const static int RELATIVE = 2;
+    const static short UNKNOWN_CONTROL_TYPE = -1;
+    const static short BUTTON = 0;
+    const static short ABSOLUTE = 1;
+    const static short RELATIVE = 2;
 
     MidiControlElement(
       string controlId,
@@ -58,6 +58,8 @@ namespace CCS {
     int getInputEventId();
     short getOnPressValue();
     short getOnReleaseValue();
+
+    string getTypeName(short type);
   };
 }
 

@@ -181,7 +181,7 @@ actions:
         - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN6:00]"
         - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN7:00]"
         - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN8:00]"
-        - "[slmk3.sc_set_knob_lower_text_selected:$SCREEN_COLUMN:01]"
+        - "[slmk3.sc_set_knob_lower_text_selected:$PAGE_SCREEN_COLUMN:01]"
 
       - conditions:
           $_STATE.DISPLAY.is: buttons
@@ -462,6 +462,13 @@ mappings:
           actions:
             - "[session.load_page:page3]"
 
+    slmk3.button8:
+      on_press:
+        - conditions:
+            $_STATE.CURRENT_PAGE.isnot: page8
+          actions:
+            - "[session.load_page:page8]"
+
     slmk3.button_screen_up:
       on_press:
         - "[slmk3.start_buffer:screen_properties]"
@@ -502,7 +509,6 @@ mappings:
       mapping: track1.fx1.dco_pulse_enabled
       mapping_type: toggle
       on_value_change:
-        - "[session.debug: button9 - $VALUE - $MIN_VALUE - $MAX_VALUE]"
         - conditions:
             $_STATE.DISPLAY.is: buttons
           actions:

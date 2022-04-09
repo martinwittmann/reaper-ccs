@@ -4,6 +4,7 @@
 namespace CCS {
 
   void ReaperEventSubscriber::onPlay() {}
+  void ReaperEventSubscriber::onPause() {}
   void ReaperEventSubscriber::onStop() {}
   void ReaperEventSubscriber::onRecord() {}
   void ReaperEventSubscriber::onRepeatChanged(bool repeat) {}

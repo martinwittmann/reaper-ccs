@@ -60,6 +60,14 @@ namespace CCS {
     static void debugYaml(YAML::Node node);
 
     static std::string compactString(std::string input);
+
+    static std::string toLower(std::string input);
+
+    static double volumeToSlider(double raw);
+
+    static double sliderToVolume(double raw);
+
+    static std::string roundDouble(double value, int precision = 2);
   };
 }
 

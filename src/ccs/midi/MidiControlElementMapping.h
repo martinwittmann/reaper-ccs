@@ -6,6 +6,7 @@
 #include "yaml-cpp/yaml.h"
 #include "MidiEventSubscriber.h"
 #include "../../reaper-api/ReaperEventSubscriber.h"
+#include <chrono>
 
 namespace CCS {
 
@@ -41,8 +42,10 @@ namespace CCS {
 
     // The action types that are being used for the given control element.
     std::vector<string> m_actionTypes;
-    string m_mappingType;
+    string m_inputType;
     string m_paramMapping;
+
+    short m_mappingType = MAPPING_TYPE_UNKNOWN;
     // A map of label:parameterValue for each available enum value.
     std::map<string,double> m_enumValues;
 
@@ -51,13 +54,21 @@ namespace CCS {
     int m_paramId;
     string m_paramIdStr;
     std::map<string,CompositeAction*> m_actions;
-    bool m_hasMappedFxParam = false;
+    bool m_hasMapping = false;
 
     double m_minValue;
     double m_maxValue;
     double m_midValue;
 
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_lastOnValueChangeAction = std::chrono::high_resolution_clock::now();
+
   public:
+    const static short MAPPING_TYPE_UNKNOWN = -1;
+    const static short TRACK_VOLUME = 0;
+    const static short TRACK_MUTE = 1;
+    const static short TRACK_SOLO = 2;
+    const static short TRACK_RECORD_ARM = 3;
+    const static short FX_PARAMETER = 10;
 
     MidiControlElementMapping(
       int midiEventId,
@@ -105,7 +116,21 @@ namespace CCS {
 
     void deactivate();
 
-    bool hasMappedFxParam();
+    double getRelativeValueDiff(unsigned char rawDiff);
+
+    void onTrackVolumeChanged(double volume) override;
+
+    int getControlSurfaceEventId(int mappingType);
+
+    void onTrackMuteChanged(bool mute);
+
+    void onTrackSoloChanged(bool solo);
+
+    void onTrackRecordArmChanged(bool recordArm);
+
+    void invokeOnValueChangeAction(bool forceUpdate = false);
+
+    void updateFxParamValuesFromReaper();
   };
 }
 

@@ -38,6 +38,13 @@ namespace CCS {
     return UNKNOWN_CONTROL_TYPE;
   }
 
+  string MidiControlElement::getTypeName(short type) {
+    if (type == BUTTON) return "toggle";
+    if (type == ABSOLUTE) return "absolute";
+    if (type == RELATIVE) return "relative";
+    return "";
+  }
+
   short MidiControlElement::getType() {
     return m_controlType;
   }

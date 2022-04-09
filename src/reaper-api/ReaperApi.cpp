@@ -4,6 +4,9 @@
 #include "../reaper/reaper_plugin_functions.h"
 #include <iostream>
 #include "../ccs/Util.h"
+#include "../WDL/db2val.h"
+#include "ControlSurfaceEventSubscription.h"
+#include "FxParameterChangedSubscription.h"
 
 namespace CCS {
 
@@ -16,6 +19,31 @@ namespace CCS {
     return CSurf_NumTracks(false);
   }
 
+  std::vector<string> ReaperApi::getTrackNames() {
+    std::vector<string> result;
+    int numTracks = getNumTracks() + 1;
+    // getNumTracks does not contain the master track which is index 0.
+    // This is why we start at index 1 to exclude the master track, but add 1
+    // to the number of tracks to not lose the last track.
+    for (int i = 1; i < numTracks; ++i) {
+      result.push_back(getTrackName(i));
+    }
+    return result;
+  }
+
+  string ReaperApi::getTrackName(int trackIndex) {
+    MediaTrack *track = getTrack(trackIndex);
+    return getTrackName(track);
+  }
+
+  string ReaperApi::getTrackName(MediaTrack *track) {
+    char buffer[512];
+    buffer[0] = 0;
+    GetTrackName(track, buffer, sizeof buffer);
+    return string(buffer);
+  }
+
+
   string ReaperApi::getFxParameterName(
     MediaTrack *track,
     int fxId,
@@ -26,6 +54,14 @@ namespace CCS {
     TrackFX_GetParamName(track, fxId, parameterId, buffer, sizeof(buffer));
     return string(buffer);
   };
+
+  string ReaperApi::getFxName(MediaTrack *track, int fxId) {
+    char buffer[512];
+    buffer[0] = 0;
+    memset(buffer, 0, sizeof buffer);
+    TrackFX_GetFXName(track, fxId, buffer, sizeof buffer);
+    return std::string(buffer);
+  }
 
   void ReaperApi::subscribeToFxParameterChanged(
     MediaTrack *track,
@@ -43,7 +79,7 @@ namespace CCS {
       subscriber,
       this
     );
-    fxParamChangedSubscriptions.push_back(subscription);
+    m_fxParamChangedSubscriptions.push_back(subscription);
   }
 
   void ReaperApi::unsubscribeFromFxParameterChanged(
@@ -57,8 +93,8 @@ namespace CCS {
     }
 
     for (
-      auto it = fxParamChangedSubscriptions.begin();
-      it != fxParamChangedSubscriptions.end();
+      auto it = m_fxParamChangedSubscriptions.begin();
+      it != m_fxParamChangedSubscriptions.end();
       ++it
     ) {
       FxParameterChangedSubscription* subscription = *it;
@@ -67,7 +103,7 @@ namespace CCS {
         subscription->getFxId() == fxId &&
         subscription->getParamId() == paramId &&
         subscription->getSubscriber() == subscriber) {
-        fxParamChangedSubscriptions.erase(it);
+        m_fxParamChangedSubscriptions.erase(it);
         return;
       }
     }
@@ -79,7 +115,7 @@ namespace CCS {
     int paramId,
     ReaperEventSubscriber *subscriber
   ) {
-    for (auto subscription : fxParamChangedSubscriptions) {
+    for (auto subscription : m_fxParamChangedSubscriptions) {
       if (
         subscription->getTrack() == track &&
         subscription->getFxId() == fxId &&
@@ -92,90 +128,90 @@ namespace CCS {
   }
 
   void ReaperApi::triggerOnPlay() {
-    if (!subscribersMap.contains(ON_PLAY)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_PLAY);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      nullptr,
+      ON_PLAY
+    );
     for (auto subscriber: subscribers) {
       subscriber->onPlay();
     }
   };
 
   void ReaperApi::triggerOnPause() {
-    if (!subscribersMap.contains(ON_PAUSE)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_PAUSE);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      nullptr,
+      ON_PAUSE
+    );
     for (auto subscriber: subscribers) {
-      subscriber->onPlay();
+      subscriber->onPause();
     }
   };
 
   void ReaperApi::triggerOnRecord() {
-    if (!subscribersMap.contains(ON_RECORD)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_RECORD);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      nullptr,
+      ON_RECORD
+    );
     for (auto subscriber: subscribers) {
       subscriber->onRecord();
     }
   };
 
   void ReaperApi::triggerOnStop() {
-    if (!subscribersMap.contains(ON_STOP)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_STOP);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      nullptr,
+      ON_STOP
+    );
     for (auto subscriber: subscribers) {
       subscriber->onStop();
     }
   };
 
   void ReaperApi::triggerOnRepeatChanged(bool repeat) {
-    if (!subscribersMap.contains(ON_REPEAT_CHANGED)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_REPEAT_CHANGED);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      nullptr,
+      ON_REPEAT_CHANGED
+    );
     for (auto subscriber: subscribers) {
       subscriber->onRepeatChanged(repeat);
     }
   };
 
   void ReaperApi::triggerOnTrackVolumeChanged(MediaTrack *track, double volume) {
-    if (!subscribersMap.contains(ON_TRACK_VOLUME_CHANGED)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_TRACK_VOLUME_CHANGED);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      track,
+      ON_TRACK_VOLUME_CHANGED
+    );
     for (auto subscriber: subscribers) {
       subscriber->onTrackVolumeChanged(volume);
     }
   }
 
   void ReaperApi::triggerOnTrackMuteChanged(MediaTrack *track, bool mute) {
-    if (!subscribersMap.contains(ON_TRACK_MUTE_CHANGED)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_TRACK_MUTE_CHANGED);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      track,
+      ON_TRACK_MUTE_CHANGED
+    );
     for (auto subscriber: subscribers) {
       subscriber->onTrackMuteChanged(mute);
     }
   }
 
   void ReaperApi::triggerOnTrackSoloChanged(MediaTrack *track, bool solo) {
-    if (!subscribersMap.contains(ON_TRACK_SOLO_CHANGED)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_TRACK_SOLO_CHANGED);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      track,
+      ON_TRACK_SOLO_CHANGED
+    );
     for (auto subscriber: subscribers) {
       subscriber->onTrackSoloChanged(solo);
     }
   }
 
   void ReaperApi::triggerOnTrackRecordArmChanged(MediaTrack *track, bool recordArm) {
-    if (!subscribersMap.contains(ON_TRACK_RECORD_ARM_CHANGED)) {
-      return;
-    }
-    std::vector subscribers = subscribersMap.at(ON_TRACK_RECORD_ARM_CHANGED);
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      track,
+      ON_TRACK_RECORD_ARM_CHANGED
+    );
     for (auto subscriber: subscribers) {
       subscriber->onTrackRecordArmChanged(recordArm);
     }
@@ -190,7 +226,7 @@ namespace CCS {
     double maxValue,
     string formattedValue
   ) {
-    std::vector subscriptions = fxParamChangedSubscriptions;
+    std::vector subscriptions = m_fxParamChangedSubscriptions;
     for (auto subscription: subscriptions) {
       if (
         subscription->getTrack() != track ||
@@ -213,7 +249,7 @@ namespace CCS {
 
   void ReaperApi::pollReaperData() {
     // Retrieve the data we're subscribed to and trigger the corresponding events.
-    for (auto tracker : fxParamChangedSubscriptions) {
+    for (auto tracker : m_fxParamChangedSubscriptions) {
       tracker->update(true);
     }
   }
@@ -283,5 +319,99 @@ namespace CCS {
     );
 
     return { rawValue, minValue, maxValue, midValue };
+  }
+
+  void ReaperApi::setTrackVolume(MediaTrack *track, double value) {
+    SetMediaTrackInfo_Value(track, "D_VOL", Util::volumeToSlider(value));
+  }
+
+  void ReaperApi::setTrackMute(MediaTrack *track, bool mute) {
+
+  }
+
+  void ReaperApi::setTrackSolo(MediaTrack *track, bool solo) {
+
+  }
+
+  void ReaperApi::setTrackRecordArm(MediaTrack *track, bool recordArm) {
+
+  }
+
+  void ReaperApi::subscribeToControlSurfaceEvent(
+    int eventId,
+    MediaTrack *track,
+    ReaperEventSubscriber *subscriber
+  ) {
+    if (isSubscribedToControlSurfaceEvent(eventId, track, subscriber)) {
+      return;
+    }
+    auto subscription = new ControlSurfaceEventSubscription(
+      eventId,
+      track,
+      subscriber,
+      this
+    );
+    m_controlSurfaceEventSubscriptions.push_back(subscription);
+  }
+
+  void ReaperApi::unsubscribeFromControlSurfaceEvent(
+    int eventId,
+    MediaTrack *track,
+    ReaperEventSubscriber *subscriber
+  ) {
+    if (!isSubscribedToControlSurfaceEvent(eventId, track, subscriber)) {
+      return;
+    }
+
+    for (
+      auto it = m_controlSurfaceEventSubscriptions.begin();
+      it != m_controlSurfaceEventSubscriptions.end();
+      ++it
+      ) {
+      ControlSurfaceEventSubscription* subscription = *it;
+      if (
+        subscription->getEventId() == eventId &&
+        subscription->getTrack() == track &&
+        subscription->getSubscriber() == subscriber) {
+        m_controlSurfaceEventSubscriptions.erase(it);
+        return;
+      }
+    }
+  }
+
+  bool ReaperApi::isSubscribedToControlSurfaceEvent(
+    int eventId,
+    MediaTrack *track,
+    ReaperEventSubscriber *subscriber
+  ) {
+    for (auto subscription : m_controlSurfaceEventSubscriptions) {
+      if (
+        subscription->getTrack() == track &&
+        subscription->getEventId() == eventId &&
+        subscription->getSubscriber() == subscriber) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  vector<ReaperEventSubscriber*> ReaperApi::getControlSurfaceEventSubscribers(
+    MediaTrack *track,
+    int eventId
+  ) {
+    vector<ReaperEventSubscriber*> result;
+    for (auto subscription : m_controlSurfaceEventSubscriptions) {
+      if (
+        subscription->getTrack() == track &&
+        subscription->getEventId() == eventId) {
+        result.push_back(subscription->getSubscriber());
+      }
+    }
+    return result;
+  }
+
+  double ReaperApi::getTrackVolume(MediaTrack *track) {
+    double volume = GetMediaTrackInfo_Value(track, "D_VOL");
+    return Util::sliderToVolume(volume);
   }
 }

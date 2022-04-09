@@ -3,7 +3,7 @@ name: $PART2_LABEL
 id: page2
 
 variables:
-  SCREEN_COLUMN: 01
+  PAGE_SCREEN_COLUMN: 01
   PAGE_BUTTON: 34
   PAGE_COLOR: 25
 

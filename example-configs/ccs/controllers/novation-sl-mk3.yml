@@ -370,7 +370,6 @@ actions:
       - SCREEN_COLUMN
       - VALUE!
     message:
-      - "[session.debug:$_ARGS.VALUE]"
       - $_ARGS.SCREEN_COLUMN
       - $PROPERTY_TYPE_TEXT
       - $L_KNOB_TEXT2

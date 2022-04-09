@@ -1,22 +1,20 @@
-#include "ccs/Ccs.h"
-#include "ccs/Util.h"
+#define REAPERAPI_WANT_DB2SLIDER
+
+#include "../WDL/db2val.h"
+#include "reaper/reaper_plugin_functions.h"
+#include "reaper/reaper_plugin.h"
 #include <string>
+#include <iostream>
 
-#define MOCK_MIDI
-
-namespace fse = std::experimental::filesystem;
 using std::ofstream;
 using std::string;
 
 // A simple executable for debugging purposes.
 int main() {
-  char a = 0x00;
-  char b = 0x7F;
-  char c = a + b;
-  c -= 1;
-  if (c == 0x7F) {
-    int g = 1;
-  }
-  int aa = 1;
+  double ss = 10 ^ (0 / 20);
+  std::cout << std::to_string(ss) << "\n";
+  ss = 10 ^ (1 / 20);
+  std::cout << std::to_string(ss) << "\n";
+
   return 0;
 }

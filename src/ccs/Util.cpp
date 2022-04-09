@@ -13,6 +13,7 @@
 #include <iomanip>
 #include "../reaper/reaper_plugin_functions.h"
 #include <fstream>
+#include "../WDL/db2val.h"
 
 namespace CCS {
 
@@ -247,12 +248,32 @@ namespace CCS {
     result = "";
     for (auto part : parts) {
       std::string tmp = part;
-      boost::to_lower(tmp);
+      Util::toLower(tmp);
       tmp[0] = std::toupper(tmp[0]);
       result += tmp;
     }
 
     result = Util::regexReplace(result, "I(i+)", "I$1");
     return result;
+  }
+
+  std::string Util::toLower(std::string input) {
+    std::string result = input;
+    boost::to_lower(result);
+    return result;
+  }
+
+  double Util::volumeToSlider(double raw) {
+    return std::pow(10, SLIDER2DB(raw * 1000) / 20);
+  }
+
+  double Util::sliderToVolume(double raw) {
+    return DB2SLIDER(VAL2DB(raw)) / 1000;
+  }
+
+  std::string Util::roundDouble(double value, int precision) {
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(precision) << value;
+    return stream.str();
   }
 }
