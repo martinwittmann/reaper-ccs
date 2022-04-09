@@ -48,21 +48,7 @@ namespace CCS {
     m_reaperApi = reaperApi;
 
     registerActionProvider("session");
-
-    auto provider = dynamic_cast<ActionProvider*>(this);
-    auto loadPageAction = new Action(
-      "session",
-      "load_page",
-      provider
-    );
-    provideAction(loadPageAction);
-
-    auto debugAction = new Action(
-      "session",
-      "debug",
-      provider
-    );
-    provideAction(debugAction);
+    createActions();
 
     loadMidiControllers();
     loadSessionPages();
@@ -75,6 +61,26 @@ namespace CCS {
     delete m_sessionConfig;
     for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
       delete *it;
+    }
+  }
+
+  void Session::createActions() {
+    vector<string> actionNames = {
+      "load_page",
+      "debug",
+      "record_arm",
+      "mute",
+      "solo"
+    };
+
+    auto provider = dynamic_cast<ActionProvider*>(this);
+    for (auto actionName : actionNames) {
+      auto action = new Action(
+        "session",
+        actionName,
+        provider
+      );
+      provideAction(action);
     }
   }
 
@@ -226,6 +232,30 @@ namespace CCS {
         Util::log("  " + argument);
       }
       Util::log("");
+    }
+    else if (actionName == "record_arm") {
+      string rawIndex = Util::regexReplace(arguments.at(0), "[^0-9]+", "");
+      // Track indexes in configs are 1-based, but since reaper uses track 0
+      // for the master track, we can use the index as is.
+      int trackIndex = std::stoi(rawIndex);
+      MediaTrack *track = m_reaperApi->getTrack(trackIndex);
+      m_reaperApi->setTrackRecordArm(track, arguments.at(1) == "1");
+    }
+    else if (actionName == "mute") {
+      string rawIndex = Util::regexReplace(arguments.at(0), "[^0-9]+", "");
+      // Track indexes in configs are 1-based, but since reaper uses track 0
+      // for the master track, we can use the index as is.
+      int trackIndex = std::stoi(rawIndex);
+      MediaTrack *track = m_reaperApi->getTrack(trackIndex);
+      m_reaperApi->setTrackMute(track, arguments.at(1) == "1");
+    }
+    else if (actionName == "solo") {
+      string rawIndex = Util::regexReplace(arguments.at(0), "[^0-9]+", "");
+      // Track indexes in configs are 1-based, but since reaper uses track 0
+      // for the master track, we can use the index as is.
+      int trackIndex = std::stoi(rawIndex);
+      MediaTrack *track = m_reaperApi->getTrack(trackIndex);
+      m_reaperApi->setTrackSolo(track, arguments.at(1) == "1");
     }
   }
 

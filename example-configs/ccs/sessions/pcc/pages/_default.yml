@@ -2,44 +2,6 @@ initial_state:
   DISPLAY: encoders
   CURRENT_COLOR: $COLOR1
 
-on_activate:
-  - "[page.set_selected_part]"
-  - conditions:
-      $_STATE.DISPLAY.is: encoders
-    actions:
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[slmk3.start_screen_change]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[page.display_encoders]"
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[slmk3.end_screen_change]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[slmk3.flush_buffer:screen_properties]"
-
-  - conditions:
-      $_STATE.DISPLAY.is: buttons
-    actions:
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[slmk3.start_screen_change]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[page.display_buttons]"
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[slmk3.end_screen_change]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[slmk3.flush_buffer:screen_properties]"
-
-  - conditions:
-      $_STATE.DISPLAY.is: faders
-    actions:
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[slmk3.start_screen_change]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[page.display_faders]"
-      - "[slmk3.start_buffer:screen_properties]"
-      - "[slmk3.end_screen_change]"
-      - "[slmk3.stop_buffer:screen_properties]"
-      - "[slmk3.flush_buffer:screen_properties]"
-
 # To save lots of repetition, allow settings defaults that can be overriden
 # on each page.
 # This is useful if variables and mappings should stay the same on all pages.
@@ -167,6 +129,44 @@ variables:
 
 
 actions:
+  activate_page:
+    actions:
+      - "[page.set_selected_part]"
+      - conditions:
+          $_STATE.DISPLAY.is: encoders
+        actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[page.display_encoders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+
+      - conditions:
+          $_STATE.DISPLAY.is: buttons
+        actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[page.display_buttons]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
+
+      - conditions:
+          $_STATE.DISPLAY.is: faders
+        actions:
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[page.display_faders]"
+          - "[slmk3.start_buffer:screen_properties]"
+          - "[slmk3.end_screen_change]"
+          - "[slmk3.stop_buffer:screen_properties]"
+          - "[slmk3.flush_buffer:screen_properties]"
   set_selected_part:
     actions:
       - "[slmk3.start_buffer:screen_properties]"
@@ -988,107 +988,6 @@ mappings:
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
           - "[page.update_controller_ui]"
-
-    slmk3.button21:
-      mapping: track1.record_arm
-      mapping_type: toggle
-      on_value_change:
-        - conditions:
-            $_STATE.DISPLAY.is: buttons
-          actions:
-            - "[slmk3.start_buffer:screen_properties]"
-            - "[slmk3.sc_set_center_box_value:$SCREEN5:$FORMATTED_VALUE]"
-            - conditions:
-                $VALUE.is: $MAX_VALUE
-              actions:
-              - "[slmk3.sc_set_center_box_selected:$SCREEN5:01]"
-            - conditions:
-                $VALUE.isnot: $MAX_VALUE
-              actions:
-              - "[slmk3.sc_set_center_box_selected:$SCREEN5:00]"
-            - "[slmk3.stop_buffer:screen_properties]"
-
-        - conditions:
-            $VALUE.is: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON21:$COLOR5_BRIGHT]"
-
-        - conditions:
-            $VALUE.isnot: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON21:$COLOR5_DARK]"
-
-      on_press:
-        - conditions:
-            $_STATE.DISPLAY.isnot: buttons
-          actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[page.display_buttons]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
-
-    slmk3.button22:
-      mapping: track1.mute
-      mapping_type: toggle
-      on_value_change:
-        - conditions:
-            $_STATE.DISPLAY.is: buttons
-          actions:
-            - "[slmk3.start_buffer:screen_properties]"
-            - "[slmk3.sc_set_center_box_value:$SCREEN6:$FORMATTED_VALUE]"
-            - conditions:
-                $VALUE.is: $MAX_VALUE
-              actions:
-              - "[slmk3.sc_set_center_box_selected:$SCREEN6:01]"
-            - conditions:
-                $VALUE.isnot: $MAX_VALUE
-              actions:
-              - "[slmk3.sc_set_center_box_selected:$SCREEN6:00]"
-            - "[slmk3.stop_buffer:screen_properties]"
-
-        - conditions:
-            $VALUE.is: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON22:$COLOR6_BRIGHT]"
-
-        - conditions:
-            $VALUE.isnot: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON22:$COLOR6_DARK]"
-
-    slmk3.button23:
-      mapping: track1.solo
-      mapping_type: toggle
-      on_value_change:
-        - conditions:
-            $_STATE.DISPLAY.is: buttons
-          actions:
-            - "[slmk3.start_buffer:screen_properties]"
-            - "[slmk3.sc_set_center_box_value:$SCREEN7:$FORMATTED_VALUE]"
-            - conditions:
-                $VALUE.is: $MAX_VALUE
-              actions:
-              - "[slmk3.sc_set_center_box_selected:$SCREEN7:01]"
-            - conditions:
-                $VALUE.isnot: $MAX_VALUE
-              actions:
-              - "[slmk3.sc_set_center_box_selected:$SCREEN7:00]"
-            - "[slmk3.stop_buffer:screen_properties]"
-
-        - conditions:
-            $VALUE.is: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON23:$COLOR7_BRIGHT]"
-
-        - conditions:
-            $VALUE.isnot: $MAX_VALUE
-          actions:
-          - "[slmk3.set_button_color:$BUTTON23:$COLOR7_DARK]"
 
 
     slmk3.fader1:

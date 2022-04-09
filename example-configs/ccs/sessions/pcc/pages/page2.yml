@@ -1,6 +1,11 @@
 extends: _default
 name: $PART2_LABEL
 id: page2
+on_activate:
+  - "[page.activate_page]"
+  - "[session.record_arm:track1:1]"
+  - "[session.record_arm:track2:0]"
+  - "[session.record_arm:track3:0]"
 
 variables:
   PAGE_SCREEN_COLUMN: 01

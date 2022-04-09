@@ -64,6 +64,8 @@ namespace CCS {
 
     void actionCallback(std::string actionName, std::vector<std::string> arguments) override;
     void invokeAction(std::string, Session* session);
+
+    void createActions();
   };
 }
 
