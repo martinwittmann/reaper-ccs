@@ -15,6 +15,7 @@
 #include "Util.h"
 #include "midi/MidiControlElementMapping.h"
 #include "../reaper-api/ReaperApi.h"
+#include "midi/RadioGroup.h"
 
 namespace CCS {
 
@@ -250,5 +251,18 @@ namespace CCS {
       std::map<string, string> *state = getState();
       m_afterValueChangesAction->invoke(*state, m_session);
     }
+  }
+
+  void Page::registerRadioButtonMapping(MidiControlElementMapping *mapping, string groupId) {
+
+  }
+
+  bool Page::radioGroupExists(string groupId) {
+    for (auto group : m_radioGroups) {
+      if (group->getGroupId() == groupId) {
+        return true;
+      }
+    }
+    return false;
   }
 }

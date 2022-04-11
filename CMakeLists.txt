@@ -53,7 +53,7 @@ set(
   src/ccs/Session.cpp
   src/ccs/Util.cpp
   src/ccs/Variables.cpp
-  src/reaper-api/ControlSurfaceEventSubscription.cpp src/reaper-api/ControlSurfaceEventSubscription.h)
+  src/reaper-api/ControlSurfaceEventSubscription.cpp src/reaper-api/ControlSurfaceEventSubscription.h src/ccs/midi/RadioGroup.cpp src/ccs/midi/RadioGroup.h)
 
 set(
   REAPER_SOURCE_FILES

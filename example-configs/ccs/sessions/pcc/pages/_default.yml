@@ -1181,3 +1181,23 @@ mappings:
           - "[slmk3.stop_buffer:screen_properties]"
           - "[slmk3.flush_buffer:screen_properties]"
           - "[page.update_controller_ui]"
+
+    slmk3.pad1:
+      mapping_type: radio_button
+      radio:
+        group: current_preset
+        value: preset1 # How to address specific presets?
+        on_selected:
+          - "[slmk3.set_pad_color:$PAD1:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_pad_color:$PAD1:$COLOR1_DARK]"
+
+    slmk3.pad2:
+      mapping_type: radio_button
+      radio:
+        group: current_preset
+        value: preset2
+        on_selected:
+          - "[slmk3.set_pad_color:$PAD1:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_pad_color:$PAD1:$COLOR1_DARK]"

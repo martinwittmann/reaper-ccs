@@ -51,6 +51,11 @@ namespace CCS {
           // Try to get it from the control element.
           m_controlElement->getTypeName(m_controlType);
         }
+        else if (m_inputType == "radio_button") {
+          m_radioGroupId = m_config->getValue("radio.group");
+          m_page->registerRadioButtonMapping(this, m_radioGroupId);
+        }
+
         // Fall back to absolute if nothing was specified.
         if (m_inputType.empty()) {
           m_inputType = "absolute";

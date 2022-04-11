@@ -61,6 +61,7 @@ namespace CCS {
     double m_midValue;
 
     std::chrono::time_point<std::chrono::high_resolution_clock> m_lastOnValueChangeAction = std::chrono::high_resolution_clock::now();
+    string m_radioGroupId;
 
   public:
     const static short MAPPING_TYPE_UNKNOWN = -1;
