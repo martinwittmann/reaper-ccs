@@ -53,7 +53,7 @@ namespace CCS {
         }
         else if (m_mappingType == "radio_button") {
           m_radioGroupId = m_config->getValue("radio.group");
-          m_radioValue = m_config->getValue("radio.value");
+          m_radioValue = std::stod(m_config->getValue("radio.value"));
           m_page->registerRadioButtonMapping(m_radioValue, this, m_radioGroupId);
           m_radioGroup = m_page->getRadioGroup(m_radioGroupId);
         }
@@ -297,6 +297,7 @@ namespace CCS {
         // Don't invoke actions for really soft presses.
         if (data2 > 8) {
           m_radioGroup->selectValue(m_radioValue);
+          m_value = m_radioValue;
         }
         break;
     }

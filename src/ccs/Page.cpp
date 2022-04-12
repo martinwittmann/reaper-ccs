@@ -253,7 +253,11 @@ namespace CCS {
     }
   }
 
-  void Page::registerRadioButtonMapping(string value, MidiControlElementMapping *mapping, string groupId) {
+  void Page::registerRadioButtonMapping(
+    double value,
+    MidiControlElementMapping *mapping,
+    string groupId
+  ) {
     if (!radioGroupExists(groupId)) {
       registerRadioGroup(groupId);
     }

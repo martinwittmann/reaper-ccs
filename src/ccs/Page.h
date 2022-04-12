@@ -70,7 +70,11 @@ class Page : public ActionProvider {
 
   void setInactive();
 
-  void registerRadioButtonMapping(std::string value, MidiControlElementMapping *mapping, string groupId);
+  void registerRadioButtonMapping(
+    double value,
+    MidiControlElementMapping *mapping,
+    string groupId
+  );
 
   bool radioGroupExists(string groupId);
 

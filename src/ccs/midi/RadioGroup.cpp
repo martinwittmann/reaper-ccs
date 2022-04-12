@@ -11,16 +11,22 @@ namespace CCS {
     m_groupId = id;
   }
 
-  void RadioGroup::registerMapping(string value, MidiControlElementMapping *mapping) {
+  void RadioGroup::registerMapping(
+    double value,
+    MidiControlElementMapping *mapping
+  ) {
     if (mappingIsRegistered(value, mapping)) {
       return;
     }
     m_mappings.insert(std::pair(value, mapping));
   }
 
-  bool RadioGroup::mappingIsRegistered(string value, MidiControlElementMapping *newMapping) {
+  bool RadioGroup::mappingIsRegistered(
+    double value,
+    MidiControlElementMapping *newMapping
+  ) {
     for (auto it = m_mappings.begin(); it != m_mappings.end(); ++it) {
-      string tmpValue = it->first;
+      double tmpValue = it->first;
       MidiControlElementMapping *mapping = it->second;
       if (tmpValue == value) {
         if (mapping == newMapping) {
@@ -38,9 +44,9 @@ namespace CCS {
     return m_groupId;
   }
 
-  void RadioGroup::selectValue(string value) {
+  void RadioGroup::selectValue(double value) {
     for (auto it = m_mappings.begin(); it != m_mappings.end(); ++it) {
-      std::string tmpValue = it->first;
+      double tmpValue = it->first;
       MidiControlElementMapping *mapping = it->second;
       if (tmpValue == value) {
         mapping->selectThisRadioItem();

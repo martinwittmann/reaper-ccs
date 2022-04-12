@@ -127,6 +127,23 @@ variables:
   C_RIGHT_TOP_BAR: 01
   C_RIGHT_BOTTOM_BAR: 02
 
+  PAD1: 60
+  PAD2: 61
+  PAD3: 62
+  PAD4: 63
+  PAD5: 64
+  PAD6: 65
+  PAD7: 66
+  PAD8: 67
+
+  PAD9: 70
+  PAD10: 71
+  PAD11: 72
+  PAD12: 73
+  PAD13: 74
+  PAD14: 75
+  PAD15: 76
+  PAD16: 77
 
 actions:
   activate_page:
@@ -1184,20 +1201,33 @@ mappings:
 
     slmk3.pad1:
       mapping_type: radio_button
+      mapping: track1.fx1.dco_pwm_mode
       radio:
         group: current_preset
-        value: preset1 # How to address specific presets?
+        value: 0
         on_selected:
           - "[slmk3.set_pad_color:$PAD1:$COLOR1_BRIGHT]"
         on_unselected:
           - "[slmk3.set_pad_color:$PAD1:$COLOR1_DARK]"
 
     slmk3.pad2:
+      mapping: track1.fx1.dco_pwm_mode
       mapping_type: radio_button
       radio:
         group: current_preset
-        value: preset2
+        value: 0.25
         on_selected:
-          - "[slmk3.set_pad_color:$PAD1:$COLOR1_BRIGHT]"
+          - "[slmk3.set_pad_color:$PAD2:$COLOR1_BRIGHT]"
         on_unselected:
-          - "[slmk3.set_pad_color:$PAD1:$COLOR1_DARK]"
+          - "[slmk3.set_pad_color:$PAD2:$COLOR1_DARK]"
+
+    slmk3.pad3:
+      mapping: track1.fx1.dco_pwm_mode
+      mapping_type: radio_button
+      radio:
+        group: current_preset
+        value: 0.75
+        on_selected:
+          - "[slmk3.set_pad_color:$PAD3:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_pad_color:$PAD3:$COLOR1_DARK]"

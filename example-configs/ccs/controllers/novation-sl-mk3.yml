@@ -236,66 +236,82 @@ controls:
 
   pad1:
     type: pad
+    status: 9F
     data1: 60
 
   pad2:
     type: pad
+    status: 9F
     data1: 61
 
   pad3:
     type: pad
+    status: 9F
     data1: 62
 
   pad4:
     type: pad
+    status: 9F
     data1: 63
 
   pad5:
     type: pad
+    status: 9F
     data1: 64
 
   pad6:
     type: pad
+    status: 9F
     data1: 65
     
   pad7:
     type: pad
+    status: 9F
     data1: 66
 
   pad8:
     type: pad
+    status: 9F
     data1: 67
 
   pad9:
     type: pad
+    status: 9F
     data1: 70
 
   pad10:
     type: pad
+    status: 9F
     data1: 71
 
   pad11:
     type: pad
+    status: 9F
     data1: 72
 
   pad12:
     type: pad
+    status: 9F
     data1: 73
 
   pad13:
     type: pad
+    status: 9F
     data1: 74
 
   pad14:
     type: pad
+    status: 9F
     data1: 75
     
   pad15:
     type: pad
+    status: 9F
     data1: 76
 
   pad16:
     type: pad
+    status: 9F
     data1: 77
 
 
@@ -652,4 +668,13 @@ actions:
       - $CENTER_SCREEN
       - $PROPERTY_TYPE_COLOR
       - $_ARGS.BAR
+      - $_ARGS.COLOR
+
+  set_pad_color:
+    arguments:
+      - PAD
+      - COLOR
+    message:
+      - 9F
+      - $_ARGS.PAD
       - $_ARGS.COLOR
