@@ -68,6 +68,8 @@ namespace CCS {
     static double sliderToVolume(double raw);
 
     static std::string roundDouble(double value, int precision = 2);
+
+    static std::pair<unsigned char, unsigned char> getStatusAndData1(int eventId);
   };
 }
 

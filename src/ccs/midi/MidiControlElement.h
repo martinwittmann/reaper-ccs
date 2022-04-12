@@ -39,6 +39,7 @@ namespace CCS {
     const static short BUTTON = 0;
     const static short ABSOLUTE = 1;
     const static short RELATIVE = 2;
+    const static short PAD = 3;
 
     MidiControlElement(
       string controlId,

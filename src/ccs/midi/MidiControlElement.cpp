@@ -35,6 +35,7 @@ namespace CCS {
     if (type == "button") return BUTTON;
     if (type == "absolute") return ABSOLUTE;
     if (type == "relative") return RELATIVE;
+    if (type == "pad") return PAD;
     return UNKNOWN_CONTROL_TYPE;
   }
 
@@ -42,6 +43,7 @@ namespace CCS {
     if (type == BUTTON) return "toggle";
     if (type == ABSOLUTE) return "absolute";
     if (type == RELATIVE) return "relative";
+    if (type == PAD) return "pad";
     return "";
   }
 

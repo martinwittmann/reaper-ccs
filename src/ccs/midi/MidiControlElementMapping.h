@@ -18,6 +18,7 @@ namespace CCS {
   class CompositeAction;
   class Page;
   class ReaperApi;
+  class RadioGroup;
 
   class MidiControlElementMapping :
     public MidiEventSubscriber,
@@ -42,10 +43,10 @@ namespace CCS {
 
     // The action types that are being used for the given control element.
     std::vector<string> m_actionTypes;
-    string m_inputType;
+    string m_mappingType;
     string m_paramMapping;
 
-    short m_mappingType = MAPPING_TYPE_UNKNOWN;
+    short m_mappingTarget = MAPPING_TARGET_UNKNOWN;
     // A map of label:parameterValue for each available enum value.
     std::map<string,double> m_enumValues;
 
@@ -62,9 +63,11 @@ namespace CCS {
 
     std::chrono::time_point<std::chrono::high_resolution_clock> m_lastOnValueChangeAction = std::chrono::high_resolution_clock::now();
     string m_radioGroupId;
+    string m_radioValue;
+    RadioGroup *m_radioGroup;
 
   public:
-    const static short MAPPING_TYPE_UNKNOWN = -1;
+    const static short MAPPING_TARGET_UNKNOWN = -1;
     const static short TRACK_VOLUME = 0;
     const static short TRACK_MUTE = 1;
     const static short TRACK_SOLO = 2;
@@ -105,7 +108,10 @@ namespace CCS {
     std::map<string,string> getActionVariables();
     void toggleValue();
 
-    std::vector<string> getAvailableActionTypes(short controlElementType);
+    std::vector<string> getAvailableActionTypes(
+      string mappingType,
+      short controlElementType
+    );
 
     void setNextEnumValue();
 
@@ -132,6 +138,10 @@ namespace CCS {
     void invokeOnValueChangeAction(bool forceUpdate = false);
 
     void updateFxParamValuesFromReaper();
+
+    void selectThisRadioItem();
+
+    void unselectThisRadioItem();
   };
 }
 

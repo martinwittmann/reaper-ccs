@@ -12,6 +12,7 @@
 #include "../Util.h"
 #include "../../reaper-api/ReaperApi.h"
 #include <chrono>
+#include "RadioGroup.h"
 
 namespace CCS {
 
@@ -39,33 +40,36 @@ namespace CCS {
       m_session = session;
       m_page = page;
 
-      m_actionTypes = getAvailableActionTypes(m_controlType);
       m_paramMapping = m_config->getValue("mapping");
 
       if (!m_paramMapping.empty()) {
         m_hasMapping = true;
         initializeMappingValues(m_paramMapping);
 
-        m_inputType = m_config->getValue("mapping_type");
-        if (m_inputType.empty()) {
+        m_mappingType = m_config->getValue("mapping_type");
+        if (m_mappingType.empty()) {
           // Try to get it from the control element.
           m_controlElement->getTypeName(m_controlType);
         }
-        else if (m_inputType == "radio_button") {
+        else if (m_mappingType == "radio_button") {
           m_radioGroupId = m_config->getValue("radio.group");
-          m_page->registerRadioButtonMapping(this, m_radioGroupId);
+          m_radioValue = m_config->getValue("radio.value");
+          m_page->registerRadioButtonMapping(m_radioValue, this, m_radioGroupId);
+          m_radioGroup = m_page->getRadioGroup(m_radioGroupId);
         }
 
         // Fall back to absolute if nothing was specified.
-        if (m_inputType.empty()) {
-          m_inputType = "absolute";
+        if (m_mappingType.empty()) {
+          m_mappingType = "absolute";
         }
 
-        if (m_inputType == "enum") {
+        if (m_mappingType == "enum") {
           m_enumValues = m_session
             ->getPluginManager()
             ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
         }
+
+        m_actionTypes = getAvailableActionTypes(m_mappingType, m_controlType);
 
         // Retrieve the current values on initialization.
         updateValuesFromReaper();
@@ -88,13 +92,13 @@ namespace CCS {
     }
     auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
 
-    switch (m_mappingType) {
+    switch (m_mappingTarget) {
       case TRACK_MUTE:
       case TRACK_RECORD_ARM:
       case TRACK_SOLO:
       case TRACK_VOLUME:
         this->m_api->subscribeToControlSurfaceEvent(
-          getControlSurfaceEventId(m_mappingType),
+          getControlSurfaceEventId(m_mappingTarget),
           m_track,
           subscriber
         );
@@ -132,13 +136,25 @@ namespace CCS {
     }
   }
 
-  vector<string> MidiControlElementMapping::getAvailableActionTypes(short controlElementType) {
+  vector<string> MidiControlElementMapping::getAvailableActionTypes(
+    string mappingType,
+    short controlElementType
+  ) {
     vector<string> result = {"on_value_change"};
 
-    if (controlElementType == MidiControlElement::BUTTON) {
+    if (
+      controlElementType == MidiControlElement::BUTTON ||
+      controlElementType == MidiControlElement::PAD
+    ) {
       result.push_back("on_press");
       result.push_back("on_release");
-    } else if (
+
+      if (mappingType == "radio_button") {
+        result.push_back("radio.on_selected");
+        result.push_back("radio.on_unselected");
+      }
+    }
+    else if (
       controlElementType == MidiControlElement::RELATIVE ||
       controlElementType == MidiControlElement::ABSOLUTE
       ) {
@@ -209,9 +225,9 @@ namespace CCS {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
           if (m_hasMapping) {
-            if (m_inputType == "toggle") {
+            if (m_mappingType == "toggle") {
               toggleValue();
-            } else if (m_inputType == "enum") {
+            } else if (m_mappingType == "enum") {
               setNextEnumValue();
             }
           }
@@ -223,7 +239,7 @@ namespace CCS {
 
       case MidiControlElement::ABSOLUTE:
         if (m_hasMapping) {
-          switch (m_mappingType) {
+          switch (m_mappingTarget) {
             case TRACK_VOLUME:
             case FX_PARAMETER:
               m_value = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
@@ -246,7 +262,7 @@ namespace CCS {
         if (m_hasMapping) {
           double diff;
 
-          switch (m_mappingType) {
+          switch (m_mappingTarget) {
             case TRACK_VOLUME:
             case FX_PARAMETER:
               diff = getRelativeValueDiff(data2);
@@ -275,10 +291,18 @@ namespace CCS {
           invokeActions("on_change");
         }
         break;
+
+      case MidiControlElement::PAD:
+        std::pair<unsigned char, unsigned char> message = Util::getStatusAndData1(eventId);
+        // Don't invoke actions for really soft presses.
+        if (data2 > 8) {
+          m_radioGroup->selectValue(m_radioValue);
+        }
+        break;
     }
 
     if (m_hasMapping) {
-      switch (m_mappingType) {
+      switch (m_mappingTarget) {
         case TRACK_VOLUME:
           m_api->setTrackVolume(m_track, m_value);
           break;
@@ -335,6 +359,9 @@ namespace CCS {
   }
 
   int MidiControlElementMapping::getMidiEventId() {
+    if (m_mappingType == "radio_button") {
+      int a = 1;
+    }
     return m_midiEventId;
   }
 
@@ -349,7 +376,7 @@ namespace CCS {
   ) {
     m_value = value;
     m_formattedValue = formattedValue;
-    if (m_hasMapping && m_mappingType == FX_PARAMETER) {
+    if (m_hasMapping && m_mappingTarget == FX_PARAMETER) {
       invokeOnValueChangeAction(true);
     }
   }
@@ -365,7 +392,7 @@ namespace CCS {
       forceUpdate = true;
     }
     m_formattedValue = Util::roundDouble(m_value * 10.0);
-    if (m_hasMapping && m_mappingType == TRACK_VOLUME) {
+    if (m_hasMapping && m_mappingTarget == TRACK_VOLUME) {
       invokeOnValueChangeAction(forceUpdate);
     }
   }
@@ -373,7 +400,7 @@ namespace CCS {
   void MidiControlElementMapping::onTrackMuteChanged(bool mute) {
     m_value = mute ? 1.0 : 0.0;
     m_formattedValue = mute ? "MUTE" : "";
-    if (m_hasMapping && m_mappingType == TRACK_MUTE) {
+    if (m_hasMapping && m_mappingTarget == TRACK_MUTE) {
       invokeOnValueChangeAction();
     }
   }
@@ -381,7 +408,7 @@ namespace CCS {
   void MidiControlElementMapping::onTrackSoloChanged(bool solo) {
     m_value = solo ? 1.0 : 0.0;
     m_formattedValue = solo ? "SOLO" : "";
-    if (m_hasMapping && m_mappingType == TRACK_SOLO) {
+    if (m_hasMapping && m_mappingTarget == TRACK_SOLO) {
       invokeOnValueChangeAction();
     }
   }
@@ -389,7 +416,7 @@ namespace CCS {
   void MidiControlElementMapping::onTrackRecordArmChanged(bool recordArm) {
     m_value = recordArm ? 1.0 : 0.0;
     m_formattedValue = recordArm ? "REC" : "";
-    if (m_hasMapping && m_mappingType == TRACK_RECORD_ARM) {
+    if (m_hasMapping && m_mappingTarget == TRACK_RECORD_ARM) {
       invokeOnValueChangeAction();
     }
   }
@@ -403,7 +430,7 @@ namespace CCS {
       m_track = m_api->getTrack(trackId);
 
       if (Util::regexMatch(parts.at(1), "^fx")) {
-        m_mappingType = FX_PARAMETER;
+        m_mappingTarget = FX_PARAMETER;
 
         string fxIdPart = parts.at(1);
         fxIdPart = Util::regexReplace(fxIdPart, "[^0-9]+", "");
@@ -417,22 +444,22 @@ namespace CCS {
           ->getParamId(m_track, m_fxId, m_paramIdStr);
       }
       else if (Util::regexMatch(parts.at(1), "volume")) {
-        m_mappingType = TRACK_VOLUME;
+        m_mappingTarget = TRACK_VOLUME;
         m_minValue = 0;
         m_maxValue = 1;
       }
       else if (Util::regexMatch(parts.at(1), "mute")) {
-        m_mappingType = TRACK_MUTE;
+        m_mappingTarget = TRACK_MUTE;
         m_minValue = 0;
         m_maxValue = 1;
       }
       else if (Util::regexMatch(parts.at(1), "solo")) {
-        m_mappingType = TRACK_SOLO;
+        m_mappingTarget = TRACK_SOLO;
         m_minValue = 0;
         m_maxValue = 1;
       }
       else if (Util::regexMatch(parts.at(1), "record_arm")) {
-        m_mappingType = TRACK_RECORD_ARM;
+        m_mappingTarget = TRACK_RECORD_ARM;
         m_minValue = 0;
         m_maxValue = 1;
       }
@@ -452,7 +479,7 @@ namespace CCS {
 
   void MidiControlElementMapping::updateControlElement() {
     if (m_hasMapping) {
-      switch (m_mappingType) {
+      switch (m_mappingTarget) {
         case TRACK_VOLUME:
         case TRACK_MUTE:
         case TRACK_SOLO:
@@ -465,7 +492,7 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::updateValuesFromReaper() {
-    switch (m_mappingType) {
+    switch (m_mappingTarget) {
 
       case FX_PARAMETER:
         updateFxParamValuesFromReaper();
@@ -474,7 +501,6 @@ namespace CCS {
       case TRACK_VOLUME:
         m_value = m_api->getTrackVolume(m_track);
         m_formattedValue = Util::roundDouble(m_value * 10.0);
-        Util::log(m_controlId + ": " + std::to_string(m_value));
         break;
     }
   }
@@ -528,4 +554,11 @@ namespace CCS {
     }
   }
 
+  void MidiControlElementMapping::selectThisRadioItem() {
+    invokeActions("radio.on_selected");
+  }
+
+  void MidiControlElementMapping::unselectThisRadioItem() {
+    invokeActions("radio.on_unselected");
+  }
 }

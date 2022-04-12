@@ -2,7 +2,7 @@
 #define CCS_RADIO_GROUP_H
 
 #include <string>
-#include <vector>
+#include <map>
 
 namespace CCS {
 
@@ -10,17 +10,19 @@ namespace CCS {
 
   class RadioGroup {
     std::string m_groupId;
-    std::vector<MidiControlElementMapping*> m_mappings;
+    std::map<std::string, MidiControlElementMapping*> m_mappings;
 
   public:
 
     RadioGroup(std::string id);
 
-    void registerMapping(MidiControlElementMapping *mapping);
+    void registerMapping(std::string value, MidiControlElementMapping *mapping);
 
-    bool mappingIsRegistered(MidiControlElementMapping *mapping);
+    bool mappingIsRegistered(std::string value, MidiControlElementMapping *mapping);
 
     std::string getGroupId();
+
+    void selectValue(std::string value);
   };
 }
 

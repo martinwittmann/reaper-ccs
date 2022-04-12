@@ -183,6 +183,13 @@ namespace CCS {
     return result;
   }
 
+  std::pair<unsigned char,unsigned char> Util::getStatusAndData1(int eventId) {
+    unsigned char status = eventId >> 8;
+    // Status starts at bit 8 which represents multiples of 256.
+    unsigned char data1 = eventId - (256 * status);
+    return std::pair(status, data1);
+  }
+
   short Util::get7BitValue(double value, double minValue, double maxValue) {
     double range = maxValue - minValue;
     int steps = 127;
