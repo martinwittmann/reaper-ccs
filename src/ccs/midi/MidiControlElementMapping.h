@@ -63,6 +63,7 @@ namespace CCS {
 
     std::chrono::time_point<std::chrono::high_resolution_clock> m_lastOnValueChangeAction = std::chrono::high_resolution_clock::now();
     string m_radioGroupId;
+    string m_radioFormattedValue;
     double m_radioValue;
     RadioGroup *m_radioGroup;
 

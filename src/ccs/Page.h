@@ -71,7 +71,7 @@ class Page : public ActionProvider {
   void setInactive();
 
   void registerRadioButtonMapping(
-    double value,
+    string formattedValue,
     MidiControlElementMapping *mapping,
     string groupId
   );

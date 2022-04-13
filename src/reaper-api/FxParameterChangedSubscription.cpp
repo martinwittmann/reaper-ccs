@@ -1,8 +1,9 @@
 #include "FxParameterChangedSubscription.h"
-#include <iostream>
 #include <string>
 #include "ReaperDataTracker.h"
 #include "ReaperApi.h"
+#include "boost/math/special_functions/round.hpp"
+#include "../ccs/Util.h"
 
 namespace CCS {
 
@@ -13,7 +14,6 @@ namespace CCS {
     ReaperEventSubscriber *subscriber,
     ReaperApi *apiManager
   ) : ReaperDataTracker(apiManager) {
-
     m_track = track;
     m_fxId = fxId;
     m_paramId = paramId;
@@ -28,21 +28,30 @@ namespace CCS {
   }
 
   void FxParameterChangedSubscription::update(bool triggerOnChange) {
-    const auto [newValue, minValue, maxValue, midValue] = m_api->getParamValueEx(
-      m_track,
-      m_fxId,
-      m_paramId
-    );
+    string newFormattedValue = m_api->getFormattedParamValue(m_track, m_fxId, m_paramId);
+    // Clion reports std::round as not defined even though we're using c++20.
+    // See: https://youtrack.jetbrains.com/issue/CPP-25870
+    //int normalizedNewValue = boost::math::round(newValue * 100.0);
+    //int normalizedCurrentValue = boost::math::round(m_currentValue * 100.0);
 
-    m_minValue = minValue;
-    m_maxValue = maxValue;
-    m_midValue = midValue;
+    // We're checking formatted value, because some plugins seem to set different
+    // values when changing parameters to the same value.
+    // Since this would trigger multiple change events, we work around this by
+    // checking the formatted value.
+    if (newFormattedValue != m_formattedValue) {
+      const auto [newValue, minValue, maxValue, midValue] = m_api->getParamValueEx(
+        m_track,
+        m_fxId,
+        m_paramId
+      );
 
-    if (newValue != m_currentValue) {
+      m_minValue = minValue;
+      m_maxValue = maxValue;
+      m_midValue = midValue;
       m_currentValue = newValue;
-
-      // Only update the formatted value if we know the actual value has changed.
-      m_formattedValue = m_api->getFormattedParamValue(m_track, m_fxId, m_paramId);
+      m_formattedValue = newFormattedValue;
+      Util::log(m_paramName + " " + m_formattedValue + " ", false);
+      Util::log(m_currentValue);
 
       if (triggerOnChange) {
         triggerEvent();

@@ -87,7 +87,9 @@ bool is_enum_value(string input) {
   string result = Util::regexReplace(input, "Hz$", "");
   result = Util::regexReplace(result, "m?s$", "");
   result = Util::regexReplace(result, "\\s+", "");
-  return !CCS::Util::regexMatch(result, "[\\d.]+");
+  // Note that we're not using \d here, because we want detect values like "+1"
+  // as enum values.
+  return !CCS::Util::regexMatch(result, "^[0-9\\.]+$");
 }
 
 bool ccs_write_fx_plugin_config_callback() {

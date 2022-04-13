@@ -10,19 +10,19 @@ namespace CCS {
 
   class RadioGroup {
     std::string m_groupId;
-    std::map<double, MidiControlElementMapping*> m_mappings;
+    std::map<std::string, MidiControlElementMapping*> m_mappings;
 
   public:
 
     RadioGroup(std::string id);
 
-    void registerMapping(double value, MidiControlElementMapping *mapping);
+    void registerMapping(std::string formattedValue, MidiControlElementMapping *mapping);
 
-    bool mappingIsRegistered(double value, MidiControlElementMapping *mapping);
+    bool mappingIsRegistered(std::string formattedValue, MidiControlElementMapping *mapping);
 
     std::string getGroupId();
 
-    void selectValue(double value);
+    void selectValue(std::string value);
   };
 }
 

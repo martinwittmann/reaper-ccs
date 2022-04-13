@@ -254,7 +254,7 @@ namespace CCS {
   }
 
   void Page::registerRadioButtonMapping(
-    double value,
+    string formattedValue,
     MidiControlElementMapping *mapping,
     string groupId
   ) {
@@ -262,7 +262,7 @@ namespace CCS {
       registerRadioGroup(groupId);
     }
     RadioGroup *group = getRadioGroup(groupId);
-    group->registerMapping(value, mapping);
+    group->registerMapping(formattedValue, mapping);
   }
 
   bool Page::radioGroupExists(string groupId) {

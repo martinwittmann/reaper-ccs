@@ -47,26 +47,24 @@ namespace CCS {
         initializeMappingValues(m_paramMapping);
 
         m_mappingType = m_config->getValue("mapping_type");
-        if (m_mappingType.empty()) {
-          // Try to get it from the control element.
-          m_controlElement->getTypeName(m_controlType);
-        }
-        else if (m_mappingType == "radio_button") {
-          m_radioGroupId = m_config->getValue("radio.group");
-          m_radioValue = std::stod(m_config->getValue("radio.value"));
-          m_page->registerRadioButtonMapping(m_radioValue, this, m_radioGroupId);
-          m_radioGroup = m_page->getRadioGroup(m_radioGroupId);
-        }
 
         // Fall back to absolute if nothing was specified.
         if (m_mappingType.empty()) {
           m_mappingType = "absolute";
         }
 
-        if (m_mappingType == "enum") {
+        if (m_mappingType == "enum_button" || m_mappingType == "radio_button") {
           m_enumValues = m_session
             ->getPluginManager()
             ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
+
+          if (m_mappingType == "radio_button") {
+            m_radioGroupId = m_config->getValue("radio.group");
+            m_radioFormattedValue = m_config->getValue("radio.value");
+            m_radioValue = m_enumValues.at(m_radioFormattedValue);
+            m_page->registerRadioButtonMapping(m_radioFormattedValue, this, m_radioGroupId);
+            m_radioGroup = m_page->getRadioGroup(m_radioGroupId);
+          }
         }
 
         m_actionTypes = getAvailableActionTypes(m_mappingType, m_controlType);
@@ -296,7 +294,6 @@ namespace CCS {
         std::pair<unsigned char, unsigned char> message = Util::getStatusAndData1(eventId);
         // Don't invoke actions for really soft presses.
         if (data2 > 8) {
-          m_radioGroup->selectValue(m_radioValue);
           m_value = m_radioValue;
         }
         break;
@@ -377,7 +374,13 @@ namespace CCS {
   ) {
     m_value = value;
     m_formattedValue = formattedValue;
-    if (m_hasMapping && m_mappingTarget == FX_PARAMETER) {
+    if (m_hasMapping) {
+      // For radio_buttons we update all buttons in this group via the known
+      // on_selected/on_unselected actions, before invoking the regular
+      // on_value_changed actions.
+      if (m_mappingType == "radio_button") {
+        m_radioGroup->selectValue(m_formattedValue);
+      }
       invokeOnValueChangeAction(true);
     }
   }
