@@ -1,0 +1,857 @@
+name: "VSTi: TAL-NoiseMaker (TAL-Togu Audio Line)"
+id: vsti_tal_noisemaker_tal_togu_audio_line
+parameters:
+  "":
+    id: 0
+    label: ""
+    min: 0
+    max: 1
+  master_volume:
+    id: 1
+    label: Master_Volume
+    min: 0
+    max: 1
+  filter_type:
+    id: 2
+    label: Filter_Type
+    min: 0
+    max: 1
+  filter_cutoff:
+    id: 3
+    label: Filter_Cutoff
+    min: 0
+    max: 1
+  filter_resonance:
+    id: 4
+    label: Filter_Resonance
+    min: 0
+    max: 1
+  fitler_keyfollow:
+    id: 5
+    label: Fitler_Keyfollow
+    min: 0
+    max: 1
+  filter_contour:
+    id: 6
+    label: Filter_Contour
+    min: 0
+    max: 1
+  filter_attack:
+    id: 7
+    label: Filter_Attack
+    min: 0
+    max: 1
+  filter_decay:
+    id: 8
+    label: Filter_Decay
+    min: 0
+    max: 1
+  filter_sustain:
+    id: 9
+    label: Filter_Sustain
+    min: 0
+    max: 1
+  filter_release:
+    id: 10
+    label: Filter_Release
+    min: 0
+    max: 1
+  amp_attack:
+    id: 11
+    label: Amp_Attack
+    min: 0
+    max: 1
+  amp_decay:
+    id: 12
+    label: Amp_Decay
+    min: 0
+    max: 1
+  amp_sustain:
+    id: 13
+    label: Amp_Sustain
+    min: 0
+    max: 1
+  amp_release:
+    id: 14
+    label: Amp_Release
+    min: 0
+    max: 1
+  osc_1_volume:
+    id: 15
+    label: Osc_1_Volume
+    min: 0
+    max: 1
+  osc_2_volume:
+    id: 16
+    label: Osc_2_Volume
+    min: 0
+    max: 1
+  osc_3_volume:
+    id: 17
+    label: Osc_3_Volume
+    min: 0
+    max: 1
+  osc_mastertune:
+    type: enum
+    id: 18
+    label: Osc_Mastertune
+    values:
+      -0.50 Semitones: 0
+      -0.49 Semitones: 0.01
+      -0.48 Semitones: 0.02
+      -0.47 Semitones: 0.029999999999999999
+      -0.46 Semitones: 0.040000000000000001
+      -0.45 Semitones: 0.050000000000000003
+      -0.44 Semitones: 0.059999999999999998
+      -0.43 Semitones: 0.070000000000000007
+      -0.42 Semitones: 0.080000000000000002
+      -0.41 Semitones: 0.089999999999999997
+      -0.40 Semitones: 0.10000000000000001
+      -0.39 Semitones: 0.11
+      -0.38 Semitones: 0.12
+      -0.37 Semitones: 0.13
+      -0.36 Semitones: 0.14000000000000001
+      -0.35 Semitones: 0.14999999999999999
+      -0.34 Semitones: 0.16
+      -0.33 Semitones: 0.17000000000000001
+      -0.32 Semitones: 0.17999999999999999
+      -0.31 Semitones: 0.19
+      -0.30 Semitones: 0.20000000000000001
+      -0.29 Semitones: 0.20999999999999999
+      -0.28 Semitones: 0.22
+      -0.27 Semitones: 0.23000000000000001
+      -0.26 Semitones: 0.23999999999999999
+      -0.25 Semitones: 0.25
+      -0.24 Semitones: 0.26000000000000001
+      -0.23 Semitones: 0.27000000000000002
+      -0.22 Semitones: 0.28000000000000003
+      -0.21 Semitones: 0.28999999999999998
+      -0.20 Semitones: 0.29999999999999999
+      -0.19 Semitones: 0.31
+      -0.18 Semitones: 0.32000000000000001
+      -0.17 Semitones: 0.33000000000000002
+      -0.16 Semitones: 0.34000000000000002
+      -0.15 Semitones: 0.34999999999999998
+      -0.14 Semitones: 0.35999999999999999
+      -0.13 Semitones: 0.37
+      -0.12 Semitones: 0.38
+      -0.11 Semitones: 0.39000000000000001
+      -0.10 Semitones: 0.40000000000000002
+      -0.09 Semitones: 0.40999999999999998
+      -0.08 Semitones: 0.41999999999999998
+      -0.07 Semitones: 0.42999999999999999
+      -0.06 Semitones: 0.44
+      -0.05 Semitones: 0.45000000000000001
+      -0.04 Semitones: 0.46000000000000002
+      -0.03 Semitones: 0.46999999999999997
+      -0.02 Semitones: 0.47999999999999998
+      -0.01 Semitones: 0.48999999999999999
+      0.00 Semitones: 0.5
+      0.01 Semitones: 0.51000000000000001
+      0.02 Semitones: 0.52000000000000002
+      0.03 Semitones: 0.53000000000000003
+      0.04 Semitones: 0.54000000000000004
+      0.05 Semitones: 0.55000000000000004
+      0.06 Semitones: 0.56000000000000005
+      0.07 Semitones: 0.56999999999999995
+      0.08 Semitones: 0.57999999999999996
+      0.09 Semitones: 0.58999999999999997
+      0.10 Semitones: 0.59999999999999998
+      0.11 Semitones: 0.60999999999999999
+      0.12 Semitones: 0.62
+      0.13 Semitones: 0.63
+      0.14 Semitones: 0.64000000000000001
+      0.15 Semitones: 0.65000000000000002
+      0.16 Semitones: 0.66000000000000003
+      0.17 Semitones: 0.67000000000000004
+      0.18 Semitones: 0.68000000000000005
+      0.19 Semitones: 0.68999999999999995
+      0.20 Semitones: 0.69999999999999996
+      0.21 Semitones: 0.70999999999999996
+      0.22 Semitones: 0.71999999999999997
+      0.23 Semitones: 0.72999999999999998
+      0.24 Semitones: 0.73999999999999999
+      0.25 Semitones: 0.75
+      0.26 Semitones: 0.76000000000000001
+      0.27 Semitones: 0.77000000000000002
+      0.28 Semitones: 0.78000000000000003
+      0.29 Semitones: 0.79000000000000004
+      0.30 Semitones: 0.80000000000000004
+      0.31 Semitones: 0.81000000000000005
+      0.32 Semitones: 0.81999999999999995
+      0.33 Semitones: 0.82999999999999996
+      0.34 Semitones: 0.83999999999999997
+      0.35 Semitones: 0.84999999999999998
+      0.36 Semitones: 0.85999999999999999
+      0.37 Semitones: 0.87
+      0.38 Semitones: 0.88
+      0.39 Semitones: 0.89000000000000001
+      0.40 Semitones: 0.90000000000000002
+      0.41 Semitones: 0.91000000000000003
+      0.42 Semitones: 0.92000000000000004
+      0.43 Semitones: 0.93000000000000005
+      0.44 Semitones: 0.93999999999999995
+      0.45 Semitones: 0.94999999999999996
+      0.46 Semitones: 0.95999999999999996
+      0.47 Semitones: 0.96999999999999997
+      0.48 Semitones: 0.97999999999999998
+      0.49 Semitones: 0.98999999999999999
+      0.50 Semitones: 1
+  osc_1_tune:
+    type: enum
+    id: 19
+    label: Osc_1_Tune
+    values:
+      -24 Semitones: 0
+      -23 Semitones: 0.01
+      -22 Semitones: 0.029999999999999999
+      -21 Semitones: 0.050000000000000003
+      -20 Semitones: 0.070000000000000007
+      -19 Semitones: 0.089999999999999997
+      -18 Semitones: 0.11
+      -17 Semitones: 0.13
+      -16 Semitones: 0.14999999999999999
+      -15 Semitones: 0.17000000000000001
+      -14 Semitones: 0.19
+      -13 Semitones: 0.20999999999999999
+      -12 Semitones: 0.23000000000000001
+      -11 Semitones: 0.26000000000000001
+      -10 Semitones: 0.28000000000000003
+      -9 Semitones: 0.29999999999999999
+      -8 Semitones: 0.32000000000000001
+      -7 Semitones: 0.34000000000000002
+      -6 Semitones: 0.35999999999999999
+      -5 Semitones: 0.38
+      -4 Semitones: 0.40000000000000002
+      -3 Semitones: 0.41999999999999998
+      -2 Semitones: 0.44
+      -1 Semitones: 0.46000000000000002
+      0 Semitones: 0.47999999999999998
+      1 Semitones: 0.53000000000000003
+      2 Semitones: 0.55000000000000004
+      3 Semitones: 0.56999999999999995
+      4 Semitones: 0.58999999999999997
+      5 Semitones: 0.60999999999999999
+      6 Semitones: 0.63
+      7 Semitones: 0.65000000000000002
+      8 Semitones: 0.67000000000000004
+      9 Semitones: 0.68999999999999995
+      10 Semitones: 0.70999999999999996
+      11 Semitones: 0.72999999999999998
+      12 Semitones: 0.75
+      13 Semitones: 0.78000000000000003
+      14 Semitones: 0.80000000000000004
+      15 Semitones: 0.81999999999999995
+      16 Semitones: 0.83999999999999997
+      17 Semitones: 0.85999999999999999
+      18 Semitones: 0.88
+      19 Semitones: 0.90000000000000002
+      20 Semitones: 0.92000000000000004
+      21 Semitones: 0.93999999999999995
+      22 Semitones: 0.95999999999999996
+      23 Semitones: 0.97999999999999998
+      24 Semitones: 1
+  osc_2_tune:
+    type: enum
+    id: 20
+    label: Osc_2_Tune
+    values:
+      -24 Semitones: 0
+      -23 Semitones: 0.01
+      -22 Semitones: 0.029999999999999999
+      -21 Semitones: 0.050000000000000003
+      -20 Semitones: 0.070000000000000007
+      -19 Semitones: 0.089999999999999997
+      -18 Semitones: 0.11
+      -17 Semitones: 0.13
+      -16 Semitones: 0.14999999999999999
+      -15 Semitones: 0.17000000000000001
+      -14 Semitones: 0.19
+      -13 Semitones: 0.20999999999999999
+      -12 Semitones: 0.23000000000000001
+      -11 Semitones: 0.26000000000000001
+      -10 Semitones: 0.28000000000000003
+      -9 Semitones: 0.29999999999999999
+      -8 Semitones: 0.32000000000000001
+      -7 Semitones: 0.34000000000000002
+      -6 Semitones: 0.35999999999999999
+      -5 Semitones: 0.38
+      -4 Semitones: 0.40000000000000002
+      -3 Semitones: 0.41999999999999998
+      -2 Semitones: 0.44
+      -1 Semitones: 0.46000000000000002
+      0 Semitones: 0.47999999999999998
+      1 Semitones: 0.53000000000000003
+      2 Semitones: 0.55000000000000004
+      3 Semitones: 0.56999999999999995
+      4 Semitones: 0.58999999999999997
+      5 Semitones: 0.60999999999999999
+      6 Semitones: 0.63
+      7 Semitones: 0.65000000000000002
+      8 Semitones: 0.67000000000000004
+      9 Semitones: 0.68999999999999995
+      10 Semitones: 0.70999999999999996
+      11 Semitones: 0.72999999999999998
+      12 Semitones: 0.75
+      13 Semitones: 0.78000000000000003
+      14 Semitones: 0.80000000000000004
+      15 Semitones: 0.81999999999999995
+      16 Semitones: 0.83999999999999997
+      17 Semitones: 0.85999999999999999
+      18 Semitones: 0.88
+      19 Semitones: 0.90000000000000002
+      20 Semitones: 0.92000000000000004
+      21 Semitones: 0.93999999999999995
+      22 Semitones: 0.95999999999999996
+      23 Semitones: 0.97999999999999998
+      24 Semitones: 1
+  osc_1_fine_tune:
+    type: enum
+    id: 21
+    label: Osc_1_Fine_Tune
+    values:
+      -0.50 Semitones: 0
+      -0.49 Semitones: 0.01
+      -0.48 Semitones: 0.02
+      -0.47 Semitones: 0.029999999999999999
+      -0.46 Semitones: 0.040000000000000001
+      -0.45 Semitones: 0.050000000000000003
+      -0.44 Semitones: 0.059999999999999998
+      -0.43 Semitones: 0.070000000000000007
+      -0.42 Semitones: 0.080000000000000002
+      -0.41 Semitones: 0.089999999999999997
+      -0.40 Semitones: 0.10000000000000001
+      -0.39 Semitones: 0.11
+      -0.38 Semitones: 0.12
+      -0.37 Semitones: 0.13
+      -0.36 Semitones: 0.14000000000000001
+      -0.35 Semitones: 0.14999999999999999
+      -0.34 Semitones: 0.16
+      -0.33 Semitones: 0.17000000000000001
+      -0.32 Semitones: 0.17999999999999999
+      -0.31 Semitones: 0.19
+      -0.30 Semitones: 0.20000000000000001
+      -0.29 Semitones: 0.20999999999999999
+      -0.28 Semitones: 0.22
+      -0.27 Semitones: 0.23000000000000001
+      -0.26 Semitones: 0.23999999999999999
+      -0.25 Semitones: 0.25
+      -0.24 Semitones: 0.26000000000000001
+      -0.23 Semitones: 0.27000000000000002
+      -0.22 Semitones: 0.28000000000000003
+      -0.21 Semitones: 0.28999999999999998
+      -0.20 Semitones: 0.29999999999999999
+      -0.19 Semitones: 0.31
+      -0.18 Semitones: 0.32000000000000001
+      -0.17 Semitones: 0.33000000000000002
+      -0.16 Semitones: 0.34000000000000002
+      -0.15 Semitones: 0.34999999999999998
+      -0.14 Semitones: 0.35999999999999999
+      -0.13 Semitones: 0.37
+      -0.12 Semitones: 0.38
+      -0.11 Semitones: 0.39000000000000001
+      -0.10 Semitones: 0.40000000000000002
+      -0.09 Semitones: 0.40999999999999998
+      -0.08 Semitones: 0.41999999999999998
+      -0.07 Semitones: 0.42999999999999999
+      -0.06 Semitones: 0.44
+      -0.05 Semitones: 0.45000000000000001
+      -0.04 Semitones: 0.46000000000000002
+      -0.03 Semitones: 0.46999999999999997
+      -0.02 Semitones: 0.47999999999999998
+      -0.01 Semitones: 0.48999999999999999
+      0.00 Semitones: 0.5
+      0.01 Semitones: 0.51000000000000001
+      0.02 Semitones: 0.52000000000000002
+      0.03 Semitones: 0.53000000000000003
+      0.04 Semitones: 0.54000000000000004
+      0.05 Semitones: 0.55000000000000004
+      0.06 Semitones: 0.56000000000000005
+      0.07 Semitones: 0.56999999999999995
+      0.08 Semitones: 0.57999999999999996
+      0.09 Semitones: 0.58999999999999997
+      0.10 Semitones: 0.59999999999999998
+      0.11 Semitones: 0.60999999999999999
+      0.12 Semitones: 0.62
+      0.13 Semitones: 0.63
+      0.14 Semitones: 0.64000000000000001
+      0.15 Semitones: 0.65000000000000002
+      0.16 Semitones: 0.66000000000000003
+      0.17 Semitones: 0.67000000000000004
+      0.18 Semitones: 0.68000000000000005
+      0.19 Semitones: 0.68999999999999995
+      0.20 Semitones: 0.69999999999999996
+      0.21 Semitones: 0.70999999999999996
+      0.22 Semitones: 0.71999999999999997
+      0.23 Semitones: 0.72999999999999998
+      0.24 Semitones: 0.73999999999999999
+      0.25 Semitones: 0.75
+      0.26 Semitones: 0.76000000000000001
+      0.27 Semitones: 0.77000000000000002
+      0.28 Semitones: 0.78000000000000003
+      0.29 Semitones: 0.79000000000000004
+      0.30 Semitones: 0.80000000000000004
+      0.31 Semitones: 0.81000000000000005
+      0.32 Semitones: 0.81999999999999995
+      0.33 Semitones: 0.82999999999999996
+      0.34 Semitones: 0.83999999999999997
+      0.35 Semitones: 0.84999999999999998
+      0.36 Semitones: 0.85999999999999999
+      0.37 Semitones: 0.87
+      0.38 Semitones: 0.88
+      0.39 Semitones: 0.89000000000000001
+      0.40 Semitones: 0.90000000000000002
+      0.41 Semitones: 0.91000000000000003
+      0.42 Semitones: 0.92000000000000004
+      0.43 Semitones: 0.93000000000000005
+      0.44 Semitones: 0.93999999999999995
+      0.45 Semitones: 0.94999999999999996
+      0.46 Semitones: 0.95999999999999996
+      0.47 Semitones: 0.96999999999999997
+      0.48 Semitones: 0.97999999999999998
+      0.49 Semitones: 0.98999999999999999
+      0.50 Semitones: 1
+  osc_2_fine_tune:
+    type: enum
+    id: 22
+    label: Osc_2_Fine_Tune
+    values:
+      -0.50 Semitones: 0
+      -0.49 Semitones: 0.01
+      -0.48 Semitones: 0.02
+      -0.47 Semitones: 0.029999999999999999
+      -0.46 Semitones: 0.040000000000000001
+      -0.45 Semitones: 0.050000000000000003
+      -0.44 Semitones: 0.059999999999999998
+      -0.43 Semitones: 0.070000000000000007
+      -0.42 Semitones: 0.080000000000000002
+      -0.41 Semitones: 0.089999999999999997
+      -0.40 Semitones: 0.10000000000000001
+      -0.39 Semitones: 0.11
+      -0.38 Semitones: 0.12
+      -0.37 Semitones: 0.13
+      -0.36 Semitones: 0.14000000000000001
+      -0.35 Semitones: 0.14999999999999999
+      -0.34 Semitones: 0.16
+      -0.33 Semitones: 0.17000000000000001
+      -0.32 Semitones: 0.17999999999999999
+      -0.31 Semitones: 0.19
+      -0.30 Semitones: 0.20000000000000001
+      -0.29 Semitones: 0.20999999999999999
+      -0.28 Semitones: 0.22
+      -0.27 Semitones: 0.23000000000000001
+      -0.26 Semitones: 0.23999999999999999
+      -0.25 Semitones: 0.25
+      -0.24 Semitones: 0.26000000000000001
+      -0.23 Semitones: 0.27000000000000002
+      -0.22 Semitones: 0.28000000000000003
+      -0.21 Semitones: 0.28999999999999998
+      -0.20 Semitones: 0.29999999999999999
+      -0.19 Semitones: 0.31
+      -0.18 Semitones: 0.32000000000000001
+      -0.17 Semitones: 0.33000000000000002
+      -0.16 Semitones: 0.34000000000000002
+      -0.15 Semitones: 0.34999999999999998
+      -0.14 Semitones: 0.35999999999999999
+      -0.13 Semitones: 0.37
+      -0.12 Semitones: 0.38
+      -0.11 Semitones: 0.39000000000000001
+      -0.10 Semitones: 0.40000000000000002
+      -0.09 Semitones: 0.40999999999999998
+      -0.08 Semitones: 0.41999999999999998
+      -0.07 Semitones: 0.42999999999999999
+      -0.06 Semitones: 0.44
+      -0.05 Semitones: 0.45000000000000001
+      -0.04 Semitones: 0.46000000000000002
+      -0.03 Semitones: 0.46999999999999997
+      -0.02 Semitones: 0.47999999999999998
+      -0.01 Semitones: 0.48999999999999999
+      0.00 Semitones: 0.5
+      0.01 Semitones: 0.51000000000000001
+      0.02 Semitones: 0.52000000000000002
+      0.03 Semitones: 0.53000000000000003
+      0.04 Semitones: 0.54000000000000004
+      0.05 Semitones: 0.55000000000000004
+      0.06 Semitones: 0.56000000000000005
+      0.07 Semitones: 0.56999999999999995
+      0.08 Semitones: 0.57999999999999996
+      0.09 Semitones: 0.58999999999999997
+      0.10 Semitones: 0.59999999999999998
+      0.11 Semitones: 0.60999999999999999
+      0.12 Semitones: 0.62
+      0.13 Semitones: 0.63
+      0.14 Semitones: 0.64000000000000001
+      0.15 Semitones: 0.65000000000000002
+      0.16 Semitones: 0.66000000000000003
+      0.17 Semitones: 0.67000000000000004
+      0.18 Semitones: 0.68000000000000005
+      0.19 Semitones: 0.68999999999999995
+      0.20 Semitones: 0.69999999999999996
+      0.21 Semitones: 0.70999999999999996
+      0.22 Semitones: 0.71999999999999997
+      0.23 Semitones: 0.72999999999999998
+      0.24 Semitones: 0.73999999999999999
+      0.25 Semitones: 0.75
+      0.26 Semitones: 0.76000000000000001
+      0.27 Semitones: 0.77000000000000002
+      0.28 Semitones: 0.78000000000000003
+      0.29 Semitones: 0.79000000000000004
+      0.30 Semitones: 0.80000000000000004
+      0.31 Semitones: 0.81000000000000005
+      0.32 Semitones: 0.81999999999999995
+      0.33 Semitones: 0.82999999999999996
+      0.34 Semitones: 0.83999999999999997
+      0.35 Semitones: 0.84999999999999998
+      0.36 Semitones: 0.85999999999999999
+      0.37 Semitones: 0.87
+      0.38 Semitones: 0.88
+      0.39 Semitones: 0.89000000000000001
+      0.40 Semitones: 0.90000000000000002
+      0.41 Semitones: 0.91000000000000003
+      0.42 Semitones: 0.92000000000000004
+      0.43 Semitones: 0.93000000000000005
+      0.44 Semitones: 0.93999999999999995
+      0.45 Semitones: 0.94999999999999996
+      0.46 Semitones: 0.95999999999999996
+      0.47 Semitones: 0.96999999999999997
+      0.48 Semitones: 0.97999999999999998
+      0.49 Semitones: 0.98999999999999999
+      0.50 Semitones: 1
+  osc_1_waveform:
+    id: 24
+    label: Osc_1_Waveform
+    min: 0
+    max: 1
+  osc_sync:
+    id: 25
+    label: Osc_Sync
+    min: 0
+    max: 1
+  lfo_1_waveform:
+    id: 26
+    label: Lfo_1_Waveform
+    min: 0
+    max: 1
+  lfo_2_waveform:
+    id: 27
+    label: Lfo_2_Waveform
+    min: 0
+    max: 1
+  lfo_1_rate:
+    id: 28
+    label: Lfo_1_Rate
+    min: 0
+    max: 1
+  lfo_2_rate:
+    id: 29
+    label: Lfo_2_Rate
+    min: 0
+    max: 1
+  lfo_1_amount:
+    id: 30
+    label: Lfo_1_Amount
+    min: 0
+    max: 1
+  lfo_2_amount:
+    id: 31
+    label: Lfo_2_Amount
+    min: 0
+    max: 1
+  lfo_1_destination:
+    id: 32
+    label: Lfo_1_Destination
+    min: 0
+    max: 1
+  lfo_2_destination:
+    id: 33
+    label: Lfo_2_Destination
+    min: 0
+    max: 1
+  lfo_1_phase:
+    id: 34
+    label: Lfo_1_Phase
+    min: 0
+    max: 1
+  lfo_2_phase:
+    id: 35
+    label: Lfo_2_Phase
+    min: 0
+    max: 1
+  osc_2_fm:
+    id: 36
+    label: Osc_2_FM
+    min: 0
+    max: 1
+  osc_2_phase:
+    id: 39
+    label: Osc_2_Phase
+    min: 0
+    max: 1
+  osc_2_pw:
+    id: 38
+    label: Osc_2_PW
+    min: 0
+    max: 1
+  transpose:
+    type: enum
+    id: 40
+    label: Transpose
+    values:
+      -12 Semitones: 0
+      0 Semitones: 0.34000000000000002
+      12 Semitones: 0.67000000000000004
+      24 Semitones: 1
+  free_ad_attack:
+    id: 41
+    label: Free_Ad_Attack
+    min: 0
+    max: 1
+  free_ad_decay:
+    id: 42
+    label: Free_Ad_Decay
+    min: 0
+    max: 1
+  free_ad_amount:
+    id: 43
+    label: Free_Ad_Amount
+    min: 0
+    max: 1
+  free_ad_destination:
+    id: 44
+    label: Free_Ad_Destination
+    min: 0
+    max: 1
+  lfo_1_sync:
+    id: 45
+    label: Lfo_1_Sync
+    min: 0
+    max: 1
+  lfo_1_keytrigger:
+    id: 46
+    label: Lfo_1_Keytrigger
+    min: 0
+    max: 1
+  lfo_2_sync:
+    id: 47
+    label: Lfo_2_Sync
+    min: 0
+    max: 1
+  lfo_2_keytrigger:
+    id: 48
+    label: Lfo_2_Keytrigger
+    min: 0
+    max: 1
+  portamento_amount:
+    id: 49
+    label: Portamento_Amount
+    min: 0
+    max: 1
+  portamento_mode:
+    id: 50
+    label: Portamento_Mode
+    min: 0
+    max: 1
+  voices:
+    id: 51
+    label: Voices
+    min: 0
+    max: 1
+  velocity_volume:
+    id: 52
+    label: Velocity_Volume
+    min: 0
+    max: 1
+  velocity_contour:
+    id: 53
+    label: Velocity_Contour
+    min: 0
+    max: 1
+  velocity_filter:
+    id: 54
+    label: Velocity_Filter
+    min: 0
+    max: 1
+  pitchwheel_cutoff:
+    id: 55
+    label: Pitchwheel_Cutoff
+    min: 0
+    max: 1
+  pitchwheel_pitch:
+    id: 56
+    label: Pitchwheel_Pitch
+    min: 0
+    max: 1
+  ringmodulation:
+    id: 57
+    label: Ringmodulation
+    min: 0
+    max: 1
+  chorus_1_enable:
+    id: 58
+    label: Chorus_1_Enable
+    min: 0
+    max: 1
+  chorus_2_enable:
+    id: 59
+    label: Chorus_2_Enable
+    min: 0
+    max: 1
+  reverb_wet:
+    id: 60
+    label: Reverb_Wet
+    min: 0
+    max: 1
+  reverb_decay:
+    id: 61
+    label: Reverb_Decay
+    min: 0
+    max: 1
+  reverb_pre_delay:
+    id: 62
+    label: Reverb_Pre_Delay
+    min: 0
+    max: 1
+  reverb_high_cut:
+    id: 63
+    label: Reverb_High_Cut
+    min: 0
+    max: 1
+  reverb_low_cut:
+    id: 64
+    label: Reverb_Low_Cut
+    min: 0
+    max: 1
+  osc_bitcrusher:
+    id: 65
+    label: Osc_Bitcrusher
+    min: 0
+    max: 1
+  master_high_pass:
+    id: 66
+    label: Master_High_Pass
+    min: 0
+    max: 1
+  master_detune:
+    id: 67
+    label: Master_Detune
+    min: 0
+    max: 1
+  vintage_noise:
+    id: 68
+    label: Vintage_Noise
+    min: 0
+    max: 1
+  panic:
+    id: 69
+    label: Panic
+    min: 0
+    max: 1
+  midi_learn:
+    id: 70
+    label: MIDI_LEARN
+    min: 0
+    max: 1
+  envelope_destination:
+    id: 71
+    label: Envelope_Destination
+    min: 0
+    max: 1
+  envelope_speed:
+    id: 72
+    label: Envelope_Speed
+    min: 0
+    max: 1
+  envelope_amount:
+    id: 73
+    label: Envelope_Amount
+    min: 0
+    max: 1
+  envelope_one_shot_mode:
+    id: 74
+    label: Envelope_One_Shot_Mode
+    min: 0
+    max: 1
+  envelope_fix_tempo:
+    id: 75
+    label: Envelope_Fix_Tempo
+    min: 0
+    max: 1
+  envelope_reset:
+    id: 76
+    label: Envelope_Reset
+    min: 0
+    max: 1
+  filter_drive:
+    id: 77
+    label: Filter_Drive
+    min: 0
+    max: 1
+  delay_wet:
+    id: 78
+    label: Delay_Wet
+    min: 0
+    max: 1
+  delay_time:
+    id: 79
+    label: Delay_Time
+    min: 0
+    max: 1
+  delay_sync:
+    id: 80
+    label: Delay_Sync
+    min: 0
+    max: 1
+  delay_x2_l:
+    id: 81
+    label: Delay_x2_L
+    min: 0
+    max: 1
+  delay_x2_r:
+    id: 82
+    label: Delay_x2_R
+    min: 0
+    max: 1
+  delay_high_shelf:
+    id: 83
+    label: Delay_High_Shelf
+    min: 0
+    max: 1
+  delay_low_shelf:
+    id: 84
+    label: Delay_Low_Shelf
+    min: 0
+    max: 1
+  delay_feedback:
+    id: 85
+    label: Delay_Feedback
+    min: 0
+    max: 1
+  midi_clear:
+    id: 86
+    label: MIDI_Clear
+    min: 0
+    max: 1
+  midi_lock:
+    id: 87
+    label: MIDI_Lock
+    min: 0
+    max: 1
+  bypass:
+    type: enum
+    id: 88
+    label: bypass
+    values:
+      normal: 0
+      bypassed: 0.5
+  wet:
+    id: 89
+    label: wet
+    min: 0
+    max: 1
+  delta:
+    type: enum
+    id: 90
+    label: delta
+    values:
+      normal: 0
+      enabled: 0.51000000000000001

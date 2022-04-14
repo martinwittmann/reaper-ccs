@@ -721,7 +721,7 @@ mappings:
 
     slmk3.button12:
       mapping: track1.fx1.filter_env_mode
-      mapping_type: enum
+      mapping_type: enum_button
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
@@ -747,7 +747,7 @@ mappings:
 
     slmk3.button13:
       mapping: track1.fx1.vca_mode
-      mapping_type: enum
+      mapping_type: enum_button
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
@@ -773,7 +773,7 @@ mappings:
 
     slmk3.button14:
       mapping: track1.fx1.dco_pwm_mode
-      mapping_type: enum
+      mapping_type: enum_button
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
@@ -885,7 +885,7 @@ mappings:
 
     slmk3.button17:
       mapping: track1.fx1.lfo_trigger_mode
-      mapping_type: enum
+      mapping_type: enum_button
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
@@ -912,7 +912,7 @@ mappings:
 
     slmk3.button18:
       mapping: track1.fx1.lfo_waveform
-      mapping_type: enum
+      mapping_type: enum_button
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
@@ -1201,33 +1201,91 @@ mappings:
 
     slmk3.pad1:
       mapping_type: radio_button
-      mapping: track1.fx1.dco_pwm_mode
+      mapping: track1.fx1.lfo_trigger_mode
       radio:
-        group: current_preset
-        value: 0
+        value: SYNC
         on_selected:
           - "[slmk3.set_pad_color:$PAD1:$COLOR1_BRIGHT]"
         on_unselected:
           - "[slmk3.set_pad_color:$PAD1:$COLOR1_DARK]"
 
     slmk3.pad2:
-      mapping: track1.fx1.dco_pwm_mode
+      mapping: track1.fx1.lfo_trigger_mode
       mapping_type: radio_button
       radio:
-        group: current_preset
-        value: 0.25
+        value: FREE
         on_selected:
           - "[slmk3.set_pad_color:$PAD2:$COLOR1_BRIGHT]"
         on_unselected:
           - "[slmk3.set_pad_color:$PAD2:$COLOR1_DARK]"
 
     slmk3.pad3:
-      mapping: track1.fx1.dco_pwm_mode
+      mapping: track1.fx1.lfo_trigger_mode
       mapping_type: radio_button
       radio:
-        group: current_preset
-        value: 0.75
+        value: NOTE TRIG
         on_selected:
           - "[slmk3.set_pad_color:$PAD3:$COLOR1_BRIGHT]"
         on_unselected:
           - "[slmk3.set_pad_color:$PAD3:$COLOR1_DARK]"
+
+    slmk3.pad9:
+      mapping_type: radio_button
+      mapping: track1.fx1_preset
+      radio:
+        value: witti1
+        on_selected:
+          - "[slmk3.set_pad_color:$PAD9:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_pad_color:$PAD9:$COLOR1_DARK]"
+
+    slmk3.pad10:
+      mapping: track1.fx1_preset
+      mapping_type: radio_button
+      radio:
+        value: witti2
+        on_selected:
+          - "[slmk3.set_pad_color:$PAD10:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_pad_color:$PAD10:$COLOR1_DARK]"
+
+    slmk3.pad11:
+      mapping: track1.fx1_preset
+      mapping_type: radio_button
+      radio:
+        value: witti22
+        on_selected:
+          - "[slmk3.set_pad_color:$PAD11:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_pad_color:$PAD11:$COLOR1_DARK]"
+
+    slmk3.button21:
+      mapping: track1.fx1.lfo_trigger_mode
+      mapping_type: radio_button
+      radio:
+        value: SYNC
+        on_selected:
+          - "[slmk3.set_button_color:$BUTTON21:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_button_color:$BUTTON21:$COLOR1_DARK]"
+
+    slmk3.button22:
+      mapping: track1.fx1.lfo_trigger_mode
+      mapping_type: radio_button
+      radio:
+        value: FREE
+        on_selected:
+          - "[slmk3.set_button_color:$BUTTON22:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_button_color:$BUTTON22:$COLOR1_DARK]"
+
+    slmk3.button23:
+      mapping: track1.fx1.lfo_trigger_mode
+      mapping_type: radio_button
+      radio:
+        value: NOTE TRIG
+        on_selected:
+          - "[slmk3.set_button_color:$BUTTON23:$COLOR1_BRIGHT]"
+        on_unselected:
+          - "[slmk3.set_button_color:$BUTTON23:$COLOR1_DARK]"
+
