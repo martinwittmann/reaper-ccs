@@ -62,7 +62,6 @@ namespace CCS {
     double m_midValue;
 
     std::chrono::time_point<std::chrono::high_resolution_clock> m_lastOnValueChangeAction = std::chrono::high_resolution_clock::now();
-    string m_radioGroupId;
     string m_radioFormattedValue;
     double m_radioValue;
     RadioGroup *m_radioGroup;
@@ -74,6 +73,7 @@ namespace CCS {
     const static short TRACK_SOLO = 2;
     const static short TRACK_RECORD_ARM = 3;
     const static short FX_PARAMETER = 10;
+    const static short FX_PRESET = 11;
 
     MidiControlElementMapping(
       int midiEventId,
@@ -100,21 +100,27 @@ namespace CCS {
       double maxValue,
       string formattedValue
     ) override;
+
+    void onFxPresetChanged(
+      MediaTrack *track,
+      int fxId,
+      int value,
+      string formattedValue
+    ) override;
+
     void initializeMappingValues(string rawMapping);
     void createActions();
     void invokeActions(string actionType);
 
-    void addValueDiff(char diff);
-
     std::map<string,string> getActionVariables();
-    void toggleValue();
+    double getToggledValue();
 
     std::vector<string> getAvailableActionTypes(
       string mappingType,
       short controlElementType
     );
 
-    void setNextEnumValue();
+    double getNextEnumValue();
 
     void updateControlElement();
 
@@ -123,8 +129,6 @@ namespace CCS {
     void activate();
 
     void deactivate();
-
-    double getRelativeValueDiff(unsigned char rawDiff);
 
     void onTrackVolumeChanged(double volume) override;
 
@@ -143,6 +147,16 @@ namespace CCS {
     void selectThisRadioItem();
 
     void unselectThisRadioItem();
+
+    void onButtonPress();
+
+    void onButtonRelease();
+
+    void applyChangesFromUserInput(double newValue);
+
+    void onAbsoluteMidiValue(unsigned char data2);
+
+    void onRelativeMidiValue(char diff);
   };
 }
 

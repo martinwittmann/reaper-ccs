@@ -13,11 +13,13 @@ namespace CCS {
   using std::vector;
 
   class FxParameterChangedSubscription;
+  class FxPresetChangedSubscription;
   class ControlSurfaceEventSubscription;
 
   class ReaperApi {
     std::map<int, vector<ReaperEventSubscriber*>> m_subscribersMap;
     vector<FxParameterChangedSubscription*> m_fxParamChangedSubscriptions;
+    vector<FxPresetChangedSubscription*> m_fxPresetChangedSubscriptions;
     vector<ControlSurfaceEventSubscription*> m_controlSurfaceEventSubscriptions;
 
   public:
@@ -100,6 +102,13 @@ namespace CCS {
       string formattedValue
     );
 
+    void triggerOnFxPresetChanged(
+      MediaTrack *track,
+      int fxId,
+      double value,
+      string formattedValue
+    );
+
     ReaProject *getProject(int index = -1);
     MediaTrack *getTrack(int index = 0);
 
@@ -146,6 +155,28 @@ namespace CCS {
     string getFxName(MediaTrack *track, int fxId);
 
     double getTrackVolume(MediaTrack *track);
+
+    void loadFxPreset(MediaTrack *track, int fxId, string presetName);
+
+    MediaTrack *getTrackByGenericName(string genericName);
+
+    int getFxIdByGenericName(string genericName);
+
+    int getFxPresetIndex(MediaTrack *track, int fxId);
+
+    std::string getCurrentFxPresetName(MediaTrack *track, int fxId);
+
+    bool isSubscribedToFxPresetChanged(MediaTrack *track, int fxId, ReaperEventSubscriber *subscriber);
+
+    void subscribeToFxPresetChanged(MediaTrack *track, int fxId, ReaperEventSubscriber *subscriber);
+
+    void unsubscribeFromFxPresetChanged(MediaTrack *track, int fxId, ReaperEventSubscriber *subscriber);
+
+    void loadFxPreset(MediaTrack *track, int fxId, int index);
+
+    void loadNextFxPreset(MediaTrack *track, int fxId);
+
+    void loadPreviousFxPreset(MediaTrack *track, int fxId);
   };
 }
 

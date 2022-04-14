@@ -3,17 +3,19 @@
 #include "../reaper/reaper_plugin.h"
 #include "../reaper/reaper_plugin_functions.h"
 #include <iostream>
+#include <string>
 #include "../ccs/Util.h"
 #include "../WDL/db2val.h"
 #include "ControlSurfaceEventSubscription.h"
 #include "FxParameterChangedSubscription.h"
+#include "FxPresetChangedSubscription.h"
+#include "../ccs/CcsException.h"
 
 namespace CCS {
 
+  using std::string;
 
-  ReaperApi::ReaperApi() {
-
-  }
+  ReaperApi::ReaperApi() {}
 
   int ReaperApi::getNumTracks() {
     return CSurf_NumTracks(false);
@@ -107,6 +109,64 @@ namespace CCS {
         return;
       }
     }
+  }
+
+  void ReaperApi::subscribeToFxPresetChanged(
+    MediaTrack *track,
+    int fxId,
+    ReaperEventSubscriber *subscriber
+  ) {
+    if (isSubscribedToFxPresetChanged(track, fxId, subscriber)) {
+      return;
+    }
+    auto subscription = new FxPresetChangedSubscription(
+      track,
+      fxId,
+      subscriber,
+      this
+    );
+    m_fxPresetChangedSubscriptions.push_back(subscription);
+  }
+
+  void ReaperApi::unsubscribeFromFxPresetChanged(
+    MediaTrack *track,
+    int fxId,
+    ReaperEventSubscriber *subscriber
+  ) {
+    if (!isSubscribedToFxPresetChanged(track, fxId, subscriber)) {
+      return;
+    }
+
+    for (
+      auto it = m_fxPresetChangedSubscriptions.begin();
+      it != m_fxPresetChangedSubscriptions.end();
+      ++it
+      ) {
+      FxPresetChangedSubscription* subscription = *it;
+      if (
+        subscription->getTrack() == track &&
+        subscription->getFxId() == fxId &&
+        subscription->getSubscriber() == subscriber) {
+        m_fxPresetChangedSubscriptions.erase(it);
+        return;
+      }
+    }
+  }
+
+  bool ReaperApi::isSubscribedToFxPresetChanged(
+    MediaTrack *track,
+    int fxId,
+    ReaperEventSubscriber *subscriber
+  ) {
+    for (auto subscription : m_fxPresetChangedSubscriptions) {
+      if (
+        subscription->getTrack() == track &&
+        subscription->getFxId() == fxId &&
+        subscription->getSubscriber() == subscriber) {
+        return true;
+      }
+    }
+    return false;
   }
 
   bool ReaperApi::isSubscribedToFxParameterChanged(
@@ -247,9 +307,33 @@ namespace CCS {
     }
   };
 
+  void ReaperApi::triggerOnFxPresetChanged(
+    MediaTrack *track,
+    int fxId,
+    double value,
+    string formattedValue
+  ) {
+    std::vector subscriptions = m_fxPresetChangedSubscriptions;
+    for (auto subscription: subscriptions) {
+      if (subscription->getTrack() != track || subscription->getFxId() != fxId) {
+        continue;
+      }
+      subscription->getSubscriber()->onFxPresetChanged(
+        track,
+        fxId,
+        value,
+        formattedValue
+      );
+    }
+  };
+
   void ReaperApi::pollReaperData() {
     // Retrieve the data we're subscribed to and trigger the corresponding events.
     for (auto tracker : m_fxParamChangedSubscriptions) {
+      tracker->update(true);
+    }
+
+    for (auto tracker : m_fxPresetChangedSubscriptions) {
       tracker->update(true);
     }
   }
@@ -413,5 +497,56 @@ namespace CCS {
   double ReaperApi::getTrackVolume(MediaTrack *track) {
     double volume = GetMediaTrackInfo_Value(track, "D_VOL");
     return Util::sliderToVolume(volume);
+  }
+
+  void ReaperApi::loadFxPreset(MediaTrack *track, int fxId, std::string presetName) {
+    TrackFX_SetPreset(track, fxId, presetName.c_str());
+  }
+
+  void ReaperApi::loadFxPreset(MediaTrack *track, int fxId, int index) {
+    TrackFX_SetPresetByIndex(track, fxId, index);
+  }
+
+  MediaTrack *ReaperApi::getTrackByGenericName(std::string genericName) {
+    if (!Util::regexMatch(genericName, "^track")) {
+      throw CcsException("Trying to get track by invalid generic name: " + genericName);
+    }
+    string rawIndex = Util::regexReplace(genericName, "[^0-9]+", "");
+    // Track indexes in configs are 1-based, but since reaper uses track 0
+    // for the master track, we can use the index as is.
+    int trackIndex = std::stoi(rawIndex);
+    return getTrack(trackIndex);
+  }
+
+  int ReaperApi::getFxIdByGenericName(std::string genericName) {
+    std::string rawIndex = Util::regexReplace(genericName, "[^0-9]+", "");
+    // We're using 1-based indices. There is no special fx index 0 in reaper.
+    // Index 0 is just the first fx plugin.
+    return stoi(rawIndex) - 1;
+  }
+
+  int ReaperApi::getFxPresetIndex(MediaTrack *track, int fxId) {
+    int presetIndex;
+    int result = TrackFX_GetPresetIndex(track, fxId, &presetIndex);
+    if (result < 0) {
+      throw CcsException("Error getting fx preset index for fxId: " + fxId);
+    }
+    string name = getCurrentFxPresetName(track, fxId);
+    return presetIndex;
+  }
+
+  string ReaperApi::getCurrentFxPresetName(MediaTrack *track, int fxId) {
+    char buffer[512];
+    buffer[0] = 0;
+    TrackFX_GetPreset(track, fxId, buffer, sizeof buffer);
+    return string(buffer);
+  }
+
+  void ReaperApi::loadNextFxPreset(MediaTrack *track, int fxId) {
+    TrackFX_NavigatePresets(track, fxId, -1);
+  }
+
+  void ReaperApi::loadPreviousFxPreset(MediaTrack *track, int fxId) {
+    TrackFX_NavigatePresets(track, fxId, 1);
   }
 }

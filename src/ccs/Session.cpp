@@ -234,27 +234,15 @@ namespace CCS {
       Util::log("");
     }
     else if (actionName == "record_arm") {
-      string rawIndex = Util::regexReplace(arguments.at(0), "[^0-9]+", "");
-      // Track indexes in configs are 1-based, but since reaper uses track 0
-      // for the master track, we can use the index as is.
-      int trackIndex = std::stoi(rawIndex);
-      MediaTrack *track = m_reaperApi->getTrack(trackIndex);
+      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
       m_reaperApi->setTrackRecordArm(track, arguments.at(1) == "1");
     }
     else if (actionName == "mute") {
-      string rawIndex = Util::regexReplace(arguments.at(0), "[^0-9]+", "");
-      // Track indexes in configs are 1-based, but since reaper uses track 0
-      // for the master track, we can use the index as is.
-      int trackIndex = std::stoi(rawIndex);
-      MediaTrack *track = m_reaperApi->getTrack(trackIndex);
+      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
       m_reaperApi->setTrackMute(track, arguments.at(1) == "1");
     }
     else if (actionName == "solo") {
-      string rawIndex = Util::regexReplace(arguments.at(0), "[^0-9]+", "");
-      // Track indexes in configs are 1-based, but since reaper uses track 0
-      // for the master track, we can use the index as is.
-      int trackIndex = std::stoi(rawIndex);
-      MediaTrack *track = m_reaperApi->getTrack(trackIndex);
+      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
       m_reaperApi->setTrackSolo(track, arguments.at(1) == "1");
     }
   }

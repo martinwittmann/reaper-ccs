@@ -50,8 +50,8 @@ namespace CCS {
       m_midValue = midValue;
       m_currentValue = newValue;
       m_formattedValue = newFormattedValue;
-      Util::log(m_paramName + " " + m_formattedValue + " ", false);
-      Util::log(m_currentValue);
+      //Util::log(m_paramName + " " + m_formattedValue + " ", false);
+      //Util::log(m_currentValue);
 
       if (triggerOnChange) {
         triggerEvent();

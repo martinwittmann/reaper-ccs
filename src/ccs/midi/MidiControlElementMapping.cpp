@@ -12,7 +12,6 @@
 #include "../Util.h"
 #include "../../reaper-api/ReaperApi.h"
 #include <chrono>
-#include "RadioGroup.h"
 
 namespace CCS {
 
@@ -54,16 +53,19 @@ namespace CCS {
         }
 
         if (m_mappingType == "enum_button" || m_mappingType == "radio_button") {
-          m_enumValues = m_session
-            ->getPluginManager()
-            ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
+          if (m_mappingTarget == FX_PARAMETER) {
+            m_enumValues = m_session
+              ->getPluginManager()
+              ->getParamEnumValues(m_track, m_fxId, m_paramIdStr);
+          }
 
           if (m_mappingType == "radio_button") {
-            m_radioGroupId = m_config->getValue("radio.group");
             m_radioFormattedValue = m_config->getValue("radio.value");
-            m_radioValue = m_enumValues.at(m_radioFormattedValue);
-            m_page->registerRadioButtonMapping(m_radioFormattedValue, this, m_radioGroupId);
-            m_radioGroup = m_page->getRadioGroup(m_radioGroupId);
+
+            if (m_mappingTarget == FX_PARAMETER) {
+              // We only use m_radioValue for enum fx params.
+              m_radioValue = m_enumValues.at(m_radioFormattedValue);
+            }
           }
         }
 
@@ -107,6 +109,14 @@ namespace CCS {
           m_track,
           m_fxId,
           m_paramId,
+          subscriber
+        );
+        break;
+
+      case FX_PRESET:
+        this->m_api->subscribeToFxPresetChanged(
+          m_track,
+          m_fxId,
           subscriber
         );
         break;
@@ -209,12 +219,15 @@ namespace CCS {
     deactivate();
   }
 
-  void MidiControlElementMapping::toggleValue() {
+  double MidiControlElementMapping::getToggledValue() {
+    double result;
     if (m_value == m_maxValue) {
-      m_value = m_minValue;
-    } else {
-      m_value = m_maxValue;
+      result = m_minValue;
     }
+    else {
+      result = m_maxValue;
+    }
+    return result;
   }
 
   void MidiControlElementMapping::onMidiEvent(int eventId, unsigned char data2) {
@@ -222,137 +235,35 @@ namespace CCS {
     switch (m_controlType) {
       case MidiControlElement::BUTTON:
         if (data2 == m_onPressValue) {
-          if (m_hasMapping) {
-            if (m_mappingType == "toggle") {
-              toggleValue();
-            } else if (m_mappingType == "enum") {
-              setNextEnumValue();
-            }
-          }
-          invokeActions("on_press");
-        } else if (data2 == m_onReleaseValue) {
-          invokeActions("on_release");
+          onButtonPress();
+        }
+        else if (data2 == m_onReleaseValue) {
+          onButtonRelease();
         }
         break;
 
       case MidiControlElement::ABSOLUTE:
-        if (m_hasMapping) {
-          switch (m_mappingTarget) {
-            case TRACK_VOLUME:
-            case FX_PARAMETER:
-              m_value = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
-              break;
-
-            case TRACK_MUTE:
-            case TRACK_RECORD_ARM:
-            case TRACK_SOLO:
-              if (data2 >= 63) {
-                m_value = 1.0;
-              } else {
-                m_value = 0.0;
-              }
-          }
-          invokeActions("on_change");
-        }
+        onAbsoluteMidiValue(data2);
         break;
 
       case MidiControlElement::RELATIVE:
-        if (m_hasMapping) {
-          double diff;
-
-          switch (m_mappingTarget) {
-            case TRACK_VOLUME:
-            case FX_PARAMETER:
-              diff = getRelativeValueDiff(data2);
-              // To give users better / finer control over parameters we only apply half
-              // of the diff we're getting from the controller. Otherwise the distance
-              // between min and max is not that big.
-              m_value += diff / 2;
-
-              if (m_value < m_minValue) {
-                m_value = m_minValue;
-              } else if (m_value > m_maxValue) {
-                m_value = m_maxValue;
-              }
-              break;
-
-            case TRACK_MUTE:
-            case TRACK_RECORD_ARM:
-            case TRACK_SOLO:
-              if (data2 >= 63) {
-                m_value = 1.0;
-              } else {
-                m_value = 0.0;
-              }
-          }
-
-          invokeActions("on_change");
+        char diff;
+        if (data2 > 63) {
+          diff = data2 - 128;
         }
+        else if (data2 < 63) {
+          diff = data2;
+        };
+        onRelativeMidiValue(diff);
         break;
 
       case MidiControlElement::PAD:
-        std::pair<unsigned char, unsigned char> message = Util::getStatusAndData1(eventId);
         // Don't invoke actions for really soft presses.
         if (data2 > 8) {
-          m_value = m_radioValue;
+          // For now we treat pads like regular buttons.
+          onButtonPress();
         }
         break;
-    }
-
-    if (m_hasMapping) {
-      switch (m_mappingTarget) {
-        case TRACK_VOLUME:
-          m_api->setTrackVolume(m_track, m_value);
-          break;
-
-        case TRACK_MUTE:
-          m_api->setTrackMute(m_track, m_value == m_maxValue);
-          break;
-
-        case TRACK_SOLO:
-          m_api->setTrackSolo(m_track, m_value == m_maxValue);
-          break;
-
-        case TRACK_RECORD_ARM:
-          m_api->setTrackRecordArm(m_track, m_value == m_maxValue);
-          break;
-
-        case FX_PARAMETER:
-          m_api->setFxParameterValue(m_track, m_fxId, m_paramId, m_value);
-          break;
-      }
-    }
-  }
-
-  double MidiControlElementMapping::getRelativeValueDiff(unsigned char rawDiff) {
-    char diff;
-    if (rawDiff > 63) {
-      diff = rawDiff - 128;
-    } else if (rawDiff < 63) {
-      diff = rawDiff;
-    };
-    return Util::getParamValueFrom7Bit(diff, m_minValue, m_maxValue);
-  }
-
-  void MidiControlElementMapping::addValueDiff(char rawDiff) {
-    double diff;
-    if (rawDiff > 63) {
-      rawDiff = rawDiff - 128;
-    } else if (rawDiff < 63) {
-      rawDiff = rawDiff;
-    }
-
-    diff = Util::getParamValueFrom7Bit(rawDiff, m_minValue, m_maxValue);
-
-    // To give users better / finer control over parameters we only apply half
-    // of the diff we're getting from the controller. Otherwise the distance
-    // between min and max is not that big.
-    m_value += diff / 2;
-
-    if (m_value < m_minValue) {
-      m_value = m_minValue;
-    } else if (m_value > m_maxValue) {
-      m_value = m_maxValue;
     }
   }
 
@@ -379,7 +290,36 @@ namespace CCS {
       // on_selected/on_unselected actions, before invoking the regular
       // on_value_changed actions.
       if (m_mappingType == "radio_button") {
-        m_radioGroup->selectValue(m_formattedValue);
+        if(m_formattedValue == m_radioFormattedValue) {
+          selectThisRadioItem();
+        }
+        else {
+          unselectThisRadioItem();
+        }
+      }
+      invokeOnValueChangeAction(true);
+    }
+  }
+
+  void MidiControlElementMapping::onFxPresetChanged(
+    MediaTrack *track,
+    int fxId,
+    int value,
+    string formattedValue
+  ) {
+    m_value = double(value);
+    m_formattedValue = formattedValue;
+    if (m_hasMapping) {
+      // For radio_buttons we update all buttons in this group via the known
+      // on_selected/on_unselected actions, before invoking the regular
+      // on_value_changed actions.
+      if (m_mappingType == "radio_button") {
+        if(m_formattedValue == m_radioFormattedValue) {
+          selectThisRadioItem();
+        }
+        else {
+          unselectThisRadioItem();
+        }
       }
       invokeOnValueChangeAction(true);
     }
@@ -434,18 +374,22 @@ namespace CCS {
       m_track = m_api->getTrack(trackId);
 
       if (Util::regexMatch(parts.at(1), "^fx")) {
-        m_mappingTarget = FX_PARAMETER;
 
-        string fxIdPart = parts.at(1);
-        fxIdPart = Util::regexReplace(fxIdPart, "[^0-9]+", "");
-        // We're using 1-based indices. There is no special fx index 0 in reaper.
-        // Index 0 is just the first fx plugin.
-        m_fxId = stoi(fxIdPart) - 1;
+        if (Util::regexMatch(parts.at(1), "^fx[0-9]+_preset$")) {
+          string rawName = Util::regexReplace(parts.at(1), "_preset$", "");
+          m_fxId = m_api->getFxIdByGenericName(rawName);
+          m_mappingTarget = FX_PRESET;
+        }
+        else {
+          m_mappingTarget = FX_PARAMETER;
 
-        m_paramIdStr = parts.at(2);
-        m_paramId = m_session
-          ->getPluginManager()
-          ->getParamId(m_track, m_fxId, m_paramIdStr);
+          string paramIdStr = parts.at(2);
+          m_paramIdStr = paramIdStr;
+          m_fxId = m_api->getFxIdByGenericName(parts.at(1));
+          m_paramId = m_session
+            ->getPluginManager()
+            ->getParamId(m_track, m_fxId, m_paramIdStr);
+        }
       }
       else if (Util::regexMatch(parts.at(1), "volume")) {
         m_mappingTarget = TRACK_VOLUME;
@@ -470,14 +414,14 @@ namespace CCS {
     }
   }
 
-  void MidiControlElementMapping::setNextEnumValue() {
+  double MidiControlElementMapping::getNextEnumValue() {
     auto it = m_enumValues.find(m_formattedValue);
     it++;
     if (it == m_enumValues.end()) {
-      // We were at the end already.
-      m_value = m_enumValues.begin()->second;
+      // We were at the end already, get the first value.
+      return m_enumValues.begin()->second;
     } else {
-      m_value = it->second;
+      return it->second;
     }
   }
 
@@ -564,5 +508,129 @@ namespace CCS {
 
   void MidiControlElementMapping::unselectThisRadioItem() {
     invokeActions("radio.on_unselected");
+  }
+
+  void MidiControlElementMapping::onButtonPress() {
+    invokeActions("on_press");
+
+    if (m_hasMapping) {
+      if (m_mappingType == "toggle") {
+        applyChangesFromUserInput(getToggledValue());
+      }
+      else if (m_mappingType == "enum_button") {
+        applyChangesFromUserInput(getNextEnumValue());
+      }
+      else if (m_mappingType == "radio_button") {
+
+        if (m_mappingTarget == FX_PARAMETER) {
+          applyChangesFromUserInput(m_radioValue);
+        }
+        else if (m_mappingTarget == FX_PRESET) {
+          m_formattedValue = m_radioFormattedValue;
+          m_api->loadFxPreset(m_track, m_fxId, m_radioFormattedValue);
+        }
+      }
+    }
+  }
+
+  void MidiControlElementMapping::onButtonRelease() {
+    invokeActions("on_release");
+    // We do not apply changes for toggle buttons on release, since this would
+    // undo changes made on press.
+  }
+
+  void MidiControlElementMapping::applyChangesFromUserInput(double newValue) {
+    if (m_hasMapping) {
+      switch (m_mappingTarget) {
+        case TRACK_VOLUME:
+          m_api->setTrackVolume(m_track, newValue);
+          break;
+
+        case TRACK_MUTE:
+          m_api->setTrackMute(m_track, newValue == m_maxValue);
+          break;
+
+        case TRACK_SOLO:
+          m_api->setTrackSolo(m_track, newValue == m_maxValue);
+          break;
+
+        case TRACK_RECORD_ARM:
+          m_api->setTrackRecordArm(m_track, newValue == m_maxValue);
+          break;
+
+        case FX_PARAMETER:
+          m_api->setFxParameterValue(m_track, m_fxId, m_paramId, newValue);
+          break;
+      }
+    }
+  }
+
+  void MidiControlElementMapping::onAbsoluteMidiValue(unsigned char data2) {
+    invokeActions("on_change");
+
+    if (m_hasMapping) {
+      double newValue;
+
+      switch (m_mappingTarget) {
+        case TRACK_VOLUME:
+        case FX_PARAMETER:
+          newValue = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
+          applyChangesFromUserInput(newValue);
+          break;
+
+
+        case TRACK_MUTE:
+        case TRACK_RECORD_ARM:
+        case TRACK_SOLO:
+          if (data2 >= 63) {
+            newValue = 1.0;
+          } else {
+            newValue = 0.0;
+          }
+          applyChangesFromUserInput(newValue);
+      }
+    }
+  }
+
+  void MidiControlElementMapping::onRelativeMidiValue(char diff) {
+    invokeActions("on_change");
+
+    if (m_hasMapping) {
+      double newValue;
+      double valueDiff;
+
+      switch (m_mappingTarget) {
+        case TRACK_VOLUME:
+        case FX_PARAMETER:
+          // This is specific to the slmk3.
+          // TODO Create multiple generic relative speeds.
+          if (diff > 1) {
+            diff += 2;
+          }
+          else if (diff < -1) {
+            diff -= 2;
+          }
+          valueDiff = Util::getParamValueFrom7Bit(diff, m_minValue, m_maxValue);
+          newValue = m_value + valueDiff;
+
+          if (newValue < m_minValue) {
+            newValue = m_minValue;
+          }
+          else if (newValue > m_maxValue) {
+            newValue = m_maxValue;
+          }
+          applyChangesFromUserInput(newValue);
+          break;
+
+        case FX_PRESET:
+          if (diff > 0) {
+            m_api->loadNextFxPreset(m_track, m_fxId);
+          }
+          else {
+            m_api->loadPreviousFxPreset(m_track, m_fxId);
+          }
+          break;
+      }
+    }
   }
 }

@@ -26,7 +26,6 @@ namespace CCS {
   using std::vector;
 
   class Action;
-  class RadioGroup;
 
 class Page : public ActionProvider {
     PageConfig *m_config = nullptr;
@@ -42,7 +41,6 @@ class Page : public ActionProvider {
     CompositeAction *m_beforeValueChangesAction = nullptr;
     CompositeAction *m_afterValueChangesAction = nullptr;
     std::map<int,MidiEventSubscriber*> m_subscribedMidiEventIds;
-    std::vector<RadioGroup *> m_radioGroups;
 
   public:
     Page(
@@ -69,18 +67,6 @@ class Page : public ActionProvider {
   void invokeAfterValueChangesAction();
 
   void setInactive();
-
-  void registerRadioButtonMapping(
-    string formattedValue,
-    MidiControlElementMapping *mapping,
-    string groupId
-  );
-
-  bool radioGroupExists(string groupId);
-
-  void registerRadioGroup(string groupId);
-
-  RadioGroup *getRadioGroup(string groupId);
 };
 }
 

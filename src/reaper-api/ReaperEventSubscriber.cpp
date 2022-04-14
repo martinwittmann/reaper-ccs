@@ -21,4 +21,11 @@ namespace CCS {
     double maxValue,
     std::string formattedValue
   ) {}
+
+  void ReaperEventSubscriber::onFxPresetChanged(
+    MediaTrack *track,
+    int fxId,
+    int value,
+    std::string formattedValue
+  ) {}
 }

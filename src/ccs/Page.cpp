@@ -15,7 +15,6 @@
 #include "Util.h"
 #include "midi/MidiControlElementMapping.h"
 #include "../reaper-api/ReaperApi.h"
-#include "midi/RadioGroup.h"
 
 namespace CCS {
 
@@ -154,6 +153,13 @@ namespace CCS {
     );
     provideAction(setStateAction);
 
+    auto loadPresetAction = new Action(
+      m_pageId,
+      "load_preset",
+      provider
+    );
+    provideAction(loadPresetAction);
+
     auto updateUiAction = new Action(
       m_pageId,
       "update_controller_ui",
@@ -186,6 +192,11 @@ namespace CCS {
     }
     else if (actionName == "update_controller_ui") {
       updateMidiControllerUI();
+    }
+    else if (actionName == "load_preset") {
+      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
+      int fxId = m_reaperApi->getFxIdByGenericName(arguments.at(1));
+      m_reaperApi->loadFxPreset(track, fxId, arguments.at(1));
     }
   }
 
@@ -251,40 +262,5 @@ namespace CCS {
       std::map<string, string> *state = getState();
       m_afterValueChangesAction->invoke(*state, m_session);
     }
-  }
-
-  void Page::registerRadioButtonMapping(
-    string formattedValue,
-    MidiControlElementMapping *mapping,
-    string groupId
-  ) {
-    if (!radioGroupExists(groupId)) {
-      registerRadioGroup(groupId);
-    }
-    RadioGroup *group = getRadioGroup(groupId);
-    group->registerMapping(formattedValue, mapping);
-  }
-
-  bool Page::radioGroupExists(string groupId) {
-    for (auto group : m_radioGroups) {
-      if (group->getGroupId() == groupId) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  void Page::registerRadioGroup(string groupId) {
-    RadioGroup *group = new RadioGroup(groupId);
-    m_radioGroups.push_back(group);
-  }
-
-  RadioGroup *Page::getRadioGroup(string groupId) {
-    for (auto group : m_radioGroups) {
-      if (group->getGroupId() == groupId) {
-        return group;
-      }
-    }
-    throw CcsException("Trying to get RadioGroup with id: " + groupId + " that does not exist.");
   }
 }

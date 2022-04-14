@@ -40,7 +40,9 @@ set(
   src/reaper/ThreadedMidiOutput.cpp
   src/reaper/reaper_extension.cpp
 
+  src/reaper-api/ControlSurfaceEventSubscription.cpp
   src/reaper-api/FxParameterChangedSubscription.cpp
+  src/reaper-api/FxPresetChangedSubscription.cpp
   src/reaper-api/ReaperDataTracker.cpp
   src/reaper-api/ReaperApi.cpp
   src/reaper-api/ReaperEventSubscriber.cpp
@@ -53,7 +55,7 @@ set(
   src/ccs/Session.cpp
   src/ccs/Util.cpp
   src/ccs/Variables.cpp
-  src/reaper-api/ControlSurfaceEventSubscription.cpp src/reaper-api/ControlSurfaceEventSubscription.h src/ccs/midi/RadioGroup.cpp src/ccs/midi/RadioGroup.h)
+)
 
 set(
   REAPER_SOURCE_FILES

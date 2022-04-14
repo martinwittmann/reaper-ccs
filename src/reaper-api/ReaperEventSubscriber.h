@@ -32,6 +32,12 @@ namespace CCS {
       double maxValue,
       std::string formattedValue
     );
+    virtual void onFxPresetChanged(
+      MediaTrack *track,
+      int fxId,
+      int value,
+      std::string formattedValue
+    );
 
     void onPause();
   };
