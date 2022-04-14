@@ -22,9 +22,9 @@ static HWND control_surface_configure(const char *type_string, HWND parent, cons
 }
 
 reaper_csurf_reg_t ccs_control_surface = {
-  "NOVATIONSLMK3",
+  "CCS",
   // !WANT_LOCALIZE_STRINGS_BEGIN:csurf_type
-  __LOCALIZE_VERFMT("Novation SL MK III", "csurf"),
+  __LOCALIZE_VERFMT("Custom Control Surface", "csurf"),
   // !WANT_LOCALIZE_STRINGS_END
   control_surface_create,
   control_surface_configure,

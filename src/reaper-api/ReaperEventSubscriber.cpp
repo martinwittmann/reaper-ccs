@@ -25,7 +25,9 @@ namespace CCS {
   void ReaperEventSubscriber::onFxPresetChanged(
     MediaTrack *track,
     int fxId,
-    int value,
-    std::string formattedValue
+    int presetIndex,
+    std::string presetName
   ) {}
+
+  void ReaperEventSubscriber::onTrackListChanged(int numTracks) {}
 }

@@ -24,21 +24,22 @@ namespace CCS {
     m_pluginsDir = m_ccsDir + "fx_plugins";
 
     m_output = output;
-    m_config = new GlobalConfig(m_ccsDir + "config" + YAML_EXT);
     m_actionsManager = new ActionsManager();
     reaperApi = new ReaperApi();
-
-    m_sessions = Session::getSessions(m_sessionsDir);
-    m_lastSession = m_config->getLastSessionId();
-    m_currentSession = loadSession(m_lastSession, m_actionsManager);
-    m_subscribedMidiEventIds = m_currentSession->getSubscribedMidiEventIds();
-    std::map<int,MidiEventSubscriber*>::iterator it;
   }
 
   Ccs::~Ccs() {
     delete m_currentSession;
   }
 
+  void Ccs::initialize() {
+    m_config = new GlobalConfig(m_ccsDir + "config" + YAML_EXT);
+    m_sessions = Session::getSessions(m_sessionsDir);
+    m_lastSession = m_config->getLastSessionId();
+    m_currentSession = loadSession(m_lastSession, m_actionsManager);
+    m_subscribedMidiEventIds = m_currentSession->getSubscribedMidiEventIds();
+    std::map<int,MidiEventSubscriber*>::iterator it;
+  }
 
   Session *Ccs::loadSession(string sessionId, ActionsManager *actionsManager) {
     string sessionPath = m_sessionsDir + SEP + sessionId;

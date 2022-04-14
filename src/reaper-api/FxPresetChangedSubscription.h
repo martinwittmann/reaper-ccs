@@ -2,21 +2,18 @@
 #define CCS_FX_PRESET_CHANGED_SUBSCRIPTION_H
 
 #include "ReaperEventSubscriber.h"
-#include "ReaperDataTracker.h"
 #include <string>
 
 namespace CCS {
 
   class ReaperApi;
 
-  class FxPresetChangedSubscription : public ReaperDataTracker {
-    MediaTrack *m_track;
+  class FxPresetChangedSubscription {
+    ReaperApi *m_api = nullptr;
+    MediaTrack *m_track = nullptr;
     int m_fxId;
-    ReaperEventSubscriber *m_subscriber;
+    ReaperEventSubscriber *m_subscriber = nullptr;
     double m_currentValue;
-    double m_minValue;
-    double m_maxValue;
-    double m_midValue;
     std::string m_formattedValue;
     std::string m_trackName;
     std::string m_fxName;
@@ -30,8 +27,7 @@ namespace CCS {
       ReaperApi *apiManager
     );
 
-    void triggerEvent() override;
-    void update(bool triggerOnChange) override;
+    void triggerEvent();
 
     MediaTrack *getTrack();
     int getFxId();

@@ -50,6 +50,8 @@ namespace CCS {
     // A map of label:parameterValue for each available enum value.
     std::map<string,double> m_enumValues;
 
+    bool m_trackExists = false;
+    int m_trackId = -1;
     MediaTrack *m_track = nullptr;
     int m_fxId;
     int m_paramId;
@@ -104,8 +106,8 @@ namespace CCS {
     void onFxPresetChanged(
       MediaTrack *track,
       int fxId,
-      int value,
-      string formattedValue
+      int presetIndex,
+      string presetName
     ) override;
 
     void initializeMappingValues(string rawMapping);
@@ -157,6 +159,12 @@ namespace CCS {
     void onAbsoluteMidiValue(unsigned char data2);
 
     void onRelativeMidiValue(char diff);
+
+    bool trackIsAvailable();
+
+    void updateTrack();
+
+    void onTrackListChanged(int numTracks) override;
   };
 }
 

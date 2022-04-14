@@ -2,6 +2,7 @@
 #include "../reaper/reaper_plugin_functions.h"
 #include "Ccs.h"
 #include "../reaper-api/ReaperApi.h"
+#include "../ccs/Util.h"
 
 namespace CCS {
 
@@ -64,5 +65,30 @@ namespace CCS {
 
   void Ccs_ControlSurface::SetSurfaceRecArm(MediaTrack *track, bool recarm) {
     ccs->reaperApi->triggerOnTrackRecordArmChanged(track, recarm);
+  }
+
+  void Ccs_ControlSurface::SetTrackListChange() {
+    ccs->reaperApi->triggerOnTrackListChanged();
+  }
+
+  int Ccs_ControlSurface::Extended(int event, void *param1, void *param2, void *param3) {
+    switch (event) {
+      case CSURF_EXT_RESET:
+        // Reading code from the CSI project I think this is called when reaper
+        // is ready for extensions to run.
+        // When the extension is initialized reaper might still be loading.
+        ccs->initialize();
+        break;
+
+      case CSURF_EXT_TRACKFX_PRESET_CHANGED:
+        MediaTrack *track = (MediaTrack*)param1;
+        int fxId = *((int*)param2);
+        int presetIndex = ccs->reaperApi->getFxPresetIndex(track, fxId);
+        string presetName = ccs->reaperApi->getCurrentFxPresetName(track, fxId);
+        ccs->reaperApi->triggerOnFxPresetChanged(track, fxId, presetIndex, presetName);
+        break;
+    }
+
+    return 1;
   }
 }

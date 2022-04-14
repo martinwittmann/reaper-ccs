@@ -36,6 +36,7 @@ namespace CCS {
     ReaperApi *reaperApi = nullptr;
     Ccs(string baseDir, midi_Output *output);
     ~Ccs();
+    void initialize();
     Session *loadSession(string sessionId, ActionsManager *actionsManager);
     void onMidiEvent(MIDI_event_t *rawEvent);
   };

@@ -35,11 +35,12 @@ namespace CCS {
     virtual void onFxPresetChanged(
       MediaTrack *track,
       int fxId,
-      int value,
-      std::string formattedValue
+      int presetIndex,
+      std::string presetName
     );
 
-    void onPause();
+    virtual void onPause();
+    virtual void onTrackListChanged(int numTracks);
   };
 }
 

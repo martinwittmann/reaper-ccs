@@ -17,7 +17,6 @@ namespace CCS {
   class ControlSurfaceEventSubscription;
 
   class ReaperApi {
-    std::map<int, vector<ReaperEventSubscriber*>> m_subscribersMap;
     vector<FxParameterChangedSubscription*> m_fxParamChangedSubscriptions;
     vector<FxPresetChangedSubscription*> m_fxPresetChangedSubscriptions;
     vector<ControlSurfaceEventSubscription*> m_controlSurfaceEventSubscriptions;
@@ -30,6 +29,8 @@ namespace CCS {
     static const unsigned short ON_RECORD = 2;
     static const unsigned short ON_STOP = 3;
     static const unsigned short ON_REPEAT_CHANGED = 4;
+
+    static const unsigned short ON_TRACK_LIST_CHANGED = 100;
 
     static const unsigned short ON_TRACK_VOLUME_CHANGED = 1000;
     static const unsigned short ON_TRACK_MUTE_CHANGED = 1001;
@@ -105,8 +106,8 @@ namespace CCS {
     void triggerOnFxPresetChanged(
       MediaTrack *track,
       int fxId,
-      double value,
-      string formattedValue
+      int presetIndex,
+      string presetName
     );
 
     ReaProject *getProject(int index = -1);
@@ -177,6 +178,8 @@ namespace CCS {
     void loadNextFxPreset(MediaTrack *track, int fxId);
 
     void loadPreviousFxPreset(MediaTrack *track, int fxId);
+
+    void triggerOnTrackListChanged();
   };
 }
 

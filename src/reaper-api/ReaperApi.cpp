@@ -17,6 +17,10 @@ namespace CCS {
 
   ReaperApi::ReaperApi() {}
 
+  /**
+   * This does not include the master track which has track index 0.
+   * @return
+   */
   int ReaperApi::getNumTracks() {
     return CSurf_NumTracks(false);
   }
@@ -310,8 +314,8 @@ namespace CCS {
   void ReaperApi::triggerOnFxPresetChanged(
     MediaTrack *track,
     int fxId,
-    double value,
-    string formattedValue
+    int presetIndex,
+    string presetName
   ) {
     std::vector subscriptions = m_fxPresetChangedSubscriptions;
     for (auto subscription: subscriptions) {
@@ -321,8 +325,8 @@ namespace CCS {
       subscription->getSubscriber()->onFxPresetChanged(
         track,
         fxId,
-        value,
-        formattedValue
+        presetIndex,
+        presetName
       );
     }
   };
@@ -330,10 +334,6 @@ namespace CCS {
   void ReaperApi::pollReaperData() {
     // Retrieve the data we're subscribed to and trigger the corresponding events.
     for (auto tracker : m_fxParamChangedSubscriptions) {
-      tracker->update(true);
-    }
-
-    for (auto tracker : m_fxPresetChangedSubscriptions) {
       tracker->update(true);
     }
   }
@@ -548,5 +548,16 @@ namespace CCS {
 
   void ReaperApi::loadPreviousFxPreset(MediaTrack *track, int fxId) {
     TrackFX_NavigatePresets(track, fxId, 1);
+  }
+
+  void ReaperApi::triggerOnTrackListChanged() {
+    vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
+      nullptr,
+      ON_TRACK_LIST_CHANGED
+    );
+    int numTracks = getNumTracks();
+    for (auto subscriber: subscribers) {
+      subscriber->onTrackListChanged(numTracks);
+    }
   }
 }

@@ -41,6 +41,7 @@ namespace CCS {
 
       m_paramMapping = m_config->getValue("mapping");
 
+
       if (!m_paramMapping.empty()) {
         m_hasMapping = true;
         initializeMappingValues(m_paramMapping);
@@ -68,29 +69,35 @@ namespace CCS {
             }
           }
         }
-
-        m_actionTypes = getAvailableActionTypes(m_mappingType, m_controlType);
-
-        // Retrieve the current values on initialization.
-        updateValuesFromReaper();
       }
 
+      // Mapping type might be empty if no mapping is used, but that's ok.
+      m_actionTypes = getAvailableActionTypes(m_mappingType, m_controlType);
       createActions();
+
+      // Retrieve the current values on initialization.
+      updateValuesFromReaper();
     }
     catch (CcsException &e) {
-      Util::error("Error create MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
+      Util::error("Error creating MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
       Util::error(e.what());
     }
     catch (...) {
-      Util::error("Error create MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
+      Util::error("Error creating MidiControlElementMapping for " + m_controllerId + "." + m_controlId);
     }
   }
 
   void MidiControlElementMapping::activate() {
-    if (!m_hasMapping) {
+    if (!m_hasMapping || !m_trackExists) {
       return;
     }
     auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
+
+    this->m_api->subscribeToControlSurfaceEvent(
+      ReaperApi::ON_TRACK_LIST_CHANGED,
+      m_track,
+      subscriber
+    );
 
     switch (m_mappingTarget) {
       case TRACK_MUTE:
@@ -125,10 +132,26 @@ namespace CCS {
 
   void MidiControlElementMapping::deactivate() {
     auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
+
+    // We're not unsubscribing from onTracklistChanged here because we want to
+    // be updated if our track becomes available again and reactivate.
+
+    this->m_api->unsubscribeFromControlSurfaceEvent(
+      getControlSurfaceEventId(m_mappingTarget),
+      m_track,
+      subscriber
+    );
+
     this->m_api->unsubscribeFromFxParameterChanged(
       m_track,
       m_fxId,
       m_paramId,
+      subscriber
+    );
+
+    this->m_api->unsubscribeFromFxPresetChanged(
+      m_track,
+      m_fxId,
       subscriber
     );
   }
@@ -285,7 +308,7 @@ namespace CCS {
   ) {
     m_value = value;
     m_formattedValue = formattedValue;
-    if (m_hasMapping) {
+    if (m_trackExists && m_hasMapping) {
       // For radio_buttons we update all buttons in this group via the known
       // on_selected/on_unselected actions, before invoking the regular
       // on_value_changed actions.
@@ -304,12 +327,12 @@ namespace CCS {
   void MidiControlElementMapping::onFxPresetChanged(
     MediaTrack *track,
     int fxId,
-    int value,
-    string formattedValue
+    int presetIndex,
+    string presetName
   ) {
-    m_value = double(value);
-    m_formattedValue = formattedValue;
-    if (m_hasMapping) {
+    m_value = double(presetIndex);
+    m_formattedValue = presetName;
+    if (m_trackExists && m_hasMapping) {
       // For radio_buttons we update all buttons in this group via the known
       // on_selected/on_unselected actions, before invoking the regular
       // on_value_changed actions.
@@ -336,7 +359,7 @@ namespace CCS {
       forceUpdate = true;
     }
     m_formattedValue = Util::roundDouble(m_value * 10.0);
-    if (m_hasMapping && m_mappingTarget == TRACK_VOLUME) {
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRACK_VOLUME) {
       invokeOnValueChangeAction(forceUpdate);
     }
   }
@@ -344,7 +367,7 @@ namespace CCS {
   void MidiControlElementMapping::onTrackMuteChanged(bool mute) {
     m_value = mute ? 1.0 : 0.0;
     m_formattedValue = mute ? "MUTE" : "";
-    if (m_hasMapping && m_mappingTarget == TRACK_MUTE) {
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRACK_MUTE) {
       invokeOnValueChangeAction();
     }
   }
@@ -352,7 +375,7 @@ namespace CCS {
   void MidiControlElementMapping::onTrackSoloChanged(bool solo) {
     m_value = solo ? 1.0 : 0.0;
     m_formattedValue = solo ? "SOLO" : "";
-    if (m_hasMapping && m_mappingTarget == TRACK_SOLO) {
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRACK_SOLO) {
       invokeOnValueChangeAction();
     }
   }
@@ -360,9 +383,13 @@ namespace CCS {
   void MidiControlElementMapping::onTrackRecordArmChanged(bool recordArm) {
     m_value = recordArm ? 1.0 : 0.0;
     m_formattedValue = recordArm ? "REC" : "";
-    if (m_hasMapping && m_mappingTarget == TRACK_RECORD_ARM) {
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRACK_RECORD_ARM) {
       invokeOnValueChangeAction();
     }
+  }
+
+  void MidiControlElementMapping::onTrackListChanged(int numTracks) {
+    updateTrack();
   }
 
   void MidiControlElementMapping::initializeMappingValues(string rawMapping) {
@@ -370,8 +397,12 @@ namespace CCS {
     string first = Util::toLower(parts.at(0));
     if (Util::regexMatch(first, "^track")) {
       string trackPart = Util::regexReplace(first, "[^0-9]+", "");
-      int trackId = stoi(trackPart);
-      m_track = m_api->getTrack(trackId);
+      m_trackId = stoi(trackPart);
+      updateTrack();
+
+      if (!trackIsAvailable()) {
+        return;
+      }
 
       if (Util::regexMatch(parts.at(1), "^fx")) {
 
@@ -440,6 +471,10 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::updateValuesFromReaper() {
+    if (!m_hasMapping) {
+      return;
+    }
+
     switch (m_mappingTarget) {
 
       case FX_PARAMETER:
@@ -631,6 +666,22 @@ namespace CCS {
           }
           break;
       }
+    }
+  }
+
+  bool MidiControlElementMapping::trackIsAvailable() {
+    return m_trackId >= 0 && m_track != nullptr && m_trackExists;
+  }
+
+  void MidiControlElementMapping::updateTrack() {
+    m_track = m_api->getTrack(m_trackId);
+    bool trackExisted = m_trackExists;
+    m_trackExists = m_track != nullptr;
+    if (trackExisted && !m_trackExists) {
+      deactivate();
+    }
+    else if (!trackExisted && m_trackExists) {
+      activate();
     }
   }
 }

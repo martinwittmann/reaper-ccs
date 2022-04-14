@@ -61,7 +61,7 @@ namespace Reaper {
   const char* ControlSurface::GetDescString() {
     m_controlSurfaceDescription.SetFormatted(
       512,
-      __LOCALIZE_VERFMT("Novation SL MK III (Device %d,%d)", "csurf"),
+      __LOCALIZE_VERFMT("Custom Control Surface", "csurf"),
       m_midiInput,
       m_midiOutput
     );
@@ -69,7 +69,7 @@ namespace Reaper {
   }
   const char* ControlSurface::GetConfigString() {
     // String of configuration data. We just store the midi device ids as integers.
-    sprintf(m_configuration, "0 0 %d %d", m_midiInputDeviceId, m_midiOutputDeviceId);
+    sprintf(m_configuration, "%d %d", m_midiInputDeviceId, m_midiOutputDeviceId);
     return m_configuration;
   }
 

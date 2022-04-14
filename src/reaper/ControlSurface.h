@@ -14,7 +14,7 @@ namespace Reaper {
     int m_midiOutputDeviceId;
     midi_Input* m_midiInput;
     midi_Output* m_midiOutput;
-    std::string m_controlSurfaceType;
+    std::string m_controlSurfaceType = "CCS";
     WDL_String m_controlSurfaceDescription;
     char m_configuration[1024];
 

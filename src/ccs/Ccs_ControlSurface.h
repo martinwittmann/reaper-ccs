@@ -21,6 +21,8 @@ namespace CCS {
     void SetSurfaceMute(MediaTrack *track, bool mute) override;
     void SetSurfaceSolo(MediaTrack *track, bool solo) override;
     void SetSurfaceRecArm(MediaTrack *track, bool recarm) override;
+    void SetTrackListChange() override;
+    int Extended(int call, void *parm1, void *parm2, void *parm3) override;
   };
 }
 
