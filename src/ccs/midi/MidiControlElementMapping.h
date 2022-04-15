@@ -183,10 +183,13 @@ namespace CCS {
     double getPreviousEnumValue();
 
     void onPlay(bool play);
+    void onPause(bool play);
 
     void onStop(bool stop);
 
     void onRecord(bool record);
+
+    void onRepeatChanged(bool repeat);
   };
 }
 

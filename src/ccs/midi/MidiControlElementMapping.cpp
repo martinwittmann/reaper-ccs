@@ -92,10 +92,31 @@ namespace CCS {
   }
 
   void MidiControlElementMapping::activate() {
-    if (!m_hasMapping || !m_trackExists) {
+    if (!m_hasMapping) {
       return;
     }
     auto subscriber = dynamic_cast<ReaperEventSubscriber *>(this);
+
+    switch (m_mappingTarget) {
+      case TRANSPORT_PLAY:
+      case TRANSPORT_PAUSE:
+      case TRANSPORT_STOP:
+      case TRANSPORT_RECORD:
+      case TRANSPORT_REPEAT:
+      case TRANSPORT_REWIND:
+      case TRANSPORT_FAST_FORWARD:
+        this->m_api->subscribeToControlSurfaceEvent(
+          getControlSurfaceEventId(m_mappingTarget),
+          m_track,
+          subscriber
+        );
+        break;
+    }
+
+    // Everything below depends on a track.
+    if (!m_trackExists) {
+      return;
+    }
 
     this->m_api->subscribeToControlSurfaceEvent(
       ReaperApi::ON_TRACK_LIST_CHANGED,
@@ -104,19 +125,6 @@ namespace CCS {
     );
 
     switch (m_mappingTarget) {
-      case TRANSPORT_PLAY:
-        this->m_api->subscribeToControlSurfaceEvent(
-          getControlSurfaceEventId(m_mappingTarget),
-          m_track,
-          subscriber
-        );
-        break;
-      case TRANSPORT_PAUSE:
-      case TRANSPORT_STOP:
-      case TRANSPORT_RECORD:
-      case TRANSPORT_REPEAT:
-      case TRANSPORT_REWIND:
-      case TRANSPORT_FAST_FORWARD:
       case TRACK_MUTE:
       case TRACK_RECORD_ARM:
       case TRACK_SOLO:
@@ -412,7 +420,15 @@ namespace CCS {
   void MidiControlElementMapping::onPlay(bool play) {
     m_value = play ? m_maxValue : m_minValue;
     m_formattedValue = play ? "PLAY" : "";
-    if (m_trackExists && m_hasMapping && m_mappingTarget == TRANSPORT_PLAY) {
+    if (m_hasMapping && m_mappingTarget == TRANSPORT_PLAY) {
+      invokeOnValueChangeAction();
+    }
+  }
+
+  void MidiControlElementMapping::onPause(bool pause) {
+    m_value = pause ? m_maxValue : m_minValue;
+    m_formattedValue = pause ? "PAUSED" : "";
+    if (m_hasMapping && m_mappingTarget == TRANSPORT_PLAY) {
       invokeOnValueChangeAction();
     }
   }
@@ -420,7 +436,7 @@ namespace CCS {
   void MidiControlElementMapping::onStop(bool stop) {
     m_value = stop ? m_maxValue : m_minValue;
     m_formattedValue = stop ? "STOPPED" : "";
-    if (m_trackExists && m_hasMapping && m_mappingTarget == TRANSPORT_STOP) {
+    if (m_hasMapping && m_mappingTarget == TRANSPORT_STOP) {
       invokeOnValueChangeAction();
     }
   }
@@ -428,7 +444,15 @@ namespace CCS {
   void MidiControlElementMapping::onRecord(bool record) {
     m_value = record ? m_maxValue : m_minValue;
     m_formattedValue = record ? "REC" : "";
-    if (m_trackExists && m_hasMapping && m_mappingTarget == TRANSPORT_RECORD) {
+    if (m_hasMapping && m_mappingTarget == TRANSPORT_RECORD) {
+      invokeOnValueChangeAction();
+    }
+  }
+
+  void MidiControlElementMapping::onRepeatChanged(bool repeat) {
+    m_value = repeat ? m_maxValue : m_minValue;
+    m_formattedValue = repeat ? "REPEAT" : "";
+    if (m_hasMapping && m_mappingTarget == TRANSPORT_REPEAT) {
       invokeOnValueChangeAction();
     }
   }
@@ -643,6 +667,9 @@ namespace CCS {
 
       case TRANSPORT_STOP:
         return ReaperApi::ON_STOP;
+
+      case TRANSPORT_RECORD:
+        return ReaperApi::ON_RECORD;
 
       case TRANSPORT_REPEAT:
         return ReaperApi::ON_REPEAT_CHANGED;

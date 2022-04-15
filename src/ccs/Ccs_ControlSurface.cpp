@@ -33,14 +33,21 @@ namespace CCS {
   void Ccs_ControlSurface::SetPlayState(bool play, bool pause, bool record) {
     if (!play && !record) {
       m_ccs->reaperApi->triggerOnStop(true);
+      m_ccs->reaperApi->triggerOnPlay(false);
+      m_ccs->reaperApi->triggerOnRecord(false);
     }
     else if (!play && pause && !record) {
       m_ccs->reaperApi->triggerOnPause(true);
+      m_ccs->reaperApi->triggerOnPlay(false);
+      m_ccs->reaperApi->triggerOnRecord(false);
     }
     else if (play && !pause && !record) {
+      m_ccs->reaperApi->triggerOnStop(false);
       m_ccs->reaperApi->triggerOnPlay(true);
     }
-    else if (play && !pause && record) {
+    else if (play && record) {
+      m_ccs->reaperApi->triggerOnStop(false);
+      m_ccs->reaperApi->triggerOnPlay(true);
       m_ccs->reaperApi->triggerOnRecord(true);
     }
   }
