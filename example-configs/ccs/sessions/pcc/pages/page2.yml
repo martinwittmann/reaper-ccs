@@ -25,7 +25,7 @@ mappings:
   controls:
 
     slmk3.encoder1:
-      mapping: track1.fx1.control_pitch_bend_dco
+      mapping: track1.fx2.control_pitch_bend_dco
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -49,7 +49,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder2:
-      mapping: track1.fx1.control_pitch_bend_filter
+      mapping: track1.fx2.control_pitch_bend_filter
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -73,7 +73,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder3:
-      mapping: track1.fx1.control_velocity_envelope
+      mapping: track1.fx2.control_velocity_envelope
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -97,7 +97,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder4:
-      mapping: track1.fx1.control_velocity_volume
+      mapping: track1.fx2.control_velocity_volume
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -121,7 +121,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder5:
-      mapping: track1.fx1.portamento_intensity
+      mapping: track1.fx2.portamento_intensity
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -145,7 +145,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder6:
-      mapping: track1.fx1.fx_reverb_dry_wet
+      mapping: track1.fx2.fx_reverb_dry_wet
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -169,7 +169,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder7:
-      mapping: track1.fx1.fx_reverb_size
+      mapping: track1.fx2.fx_reverb_size
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -193,7 +193,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder8:
-      mapping: track1.fx1.max_voices
+      mapping: track1.fx2.max_voices
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders

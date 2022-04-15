@@ -57,6 +57,7 @@ variables:
   COLOR8_DARK: 2B
 
   COLOR_GREEN: 15
+  COLOR_RED: 05
 
   BUTTON1: 33
   BUTTON2: 34
@@ -600,7 +601,7 @@ mappings:
         - "[page.update_controller_ui]"
 
     slmk3.button9:
-      mapping: track1.fx1.dco_pulse_enabled
+      mapping: track1.fx2.dco_pulse_enabled
       mapping_type: toggle
       on_value_change:
         - conditions:
@@ -644,7 +645,7 @@ mappings:
 
 
     slmk3.button10:
-      mapping: track1.fx1.dco_saw_enabled
+      mapping: track1.fx2.dco_saw_enabled
       mapping_type: toggle
       on_value_change:
         - conditions:
@@ -687,7 +688,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button11:
-      mapping: track1.fx1.dco_sub_osc_enabled
+      mapping: track1.fx2.dco_sub_osc_enabled
       mapping_type: toggle
       on_value_change:
         - conditions:
@@ -730,7 +731,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button12:
-      mapping: track1.fx1.filter_env_mode
+      mapping: track1.fx2.filter_env_mode
       mapping_type: enum_button
       on_value_change:
         - conditions:
@@ -756,7 +757,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button13:
-      mapping: track1.fx1.vca_mode
+      mapping: track1.fx2.vca_mode
       mapping_type: enum_button
       on_value_change:
         - conditions:
@@ -782,7 +783,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button14:
-      mapping: track1.fx1.dco_pwm_mode
+      mapping: track1.fx2.dco_pwm_mode
       mapping_type: enum_button
       on_value_change:
         - conditions:
@@ -807,7 +808,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button15:
-      mapping: track1.fx1.chorus_1
+      mapping: track1.fx2.chorus_1
       mapping_type: toggle
       on_value_change:
         - conditions:
@@ -850,7 +851,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button16:
-      mapping: track1.fx1.chorus_2
+      mapping: track1.fx2.chorus_2
       mapping_type: toggle
       on_value_change:
         - conditions:
@@ -894,7 +895,7 @@ mappings:
 
 
     slmk3.button17:
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       mapping_type: enum_button
       on_value_change:
         - conditions:
@@ -921,7 +922,7 @@ mappings:
 
 
     slmk3.button18:
-      mapping: track1.fx1.lfo_waveform
+      mapping: track1.fx2.lfo_waveform
       mapping_type: enum_button
       on_value_change:
         - conditions:
@@ -948,7 +949,7 @@ mappings:
 
 
     slmk3.button19:
-      mapping: track1.fx1.portamento_mode
+      mapping: track1.fx2.portamento_mode
       mapping_type: enum_button
       on_value_change:
         - conditions:
@@ -974,7 +975,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.button20:
-      mapping: track1.fx1.portamento_poly
+      mapping: track1.fx2.portamento_poly
       mapping_type: toggle
       on_value_change:
         - conditions:
@@ -1018,7 +1019,7 @@ mappings:
 
 
     slmk3.fader1:
-      mapping: track1.fx1.filter_cutoff
+      mapping: track1.fx2.filter_cutoff
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1042,7 +1043,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader2:
-      mapping: track1.fx1.filter_resonance
+      mapping: track1.fx2.filter_resonance
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1066,7 +1067,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader3:
-      mapping: track1.fx1.dco_sub_osc_volume
+      mapping: track1.fx2.dco_sub_osc_volume
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1090,7 +1091,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader4:
-      mapping: track1.fx1.dco_noise_volume
+      mapping: track1.fx2.dco_noise_volume
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1114,7 +1115,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader5:
-      mapping: track1.fx1.attack
+      mapping: track1.fx2.attack
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1138,7 +1139,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader6:
-      mapping: track1.fx1.decay
+      mapping: track1.fx2.decay
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1162,7 +1163,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader7:
-      mapping: track1.fx1.sustain
+      mapping: track1.fx2.sustain
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1186,7 +1187,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.fader8:
-      mapping: track1.fx1.release
+      mapping: track1.fx2.release
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: faders
@@ -1211,7 +1212,7 @@ mappings:
 
     slmk3.pad1:
       mapping_type: radio_button
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       radio:
         value: SYNC
         on_selected:
@@ -1220,7 +1221,7 @@ mappings:
           - "[slmk3.set_pad_color:$PAD1:$COLOR1_DARK]"
 
     slmk3.pad2:
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       mapping_type: radio_button
       radio:
         value: FREE
@@ -1230,7 +1231,7 @@ mappings:
           - "[slmk3.set_pad_color:$PAD2:$COLOR1_DARK]"
 
     slmk3.pad3:
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       mapping_type: radio_button
       radio:
         value: NOTE TRIG
@@ -1241,7 +1242,7 @@ mappings:
 
     slmk3.pad9:
       mapping_type: radio_button
-      mapping: track1.fx1_preset
+      mapping: track1.fx2_preset
       radio:
         value: witti1
         on_selected:
@@ -1250,7 +1251,7 @@ mappings:
           - "[slmk3.set_pad_color:$PAD9:$COLOR1_DARK]"
 
     slmk3.pad10:
-      mapping: track1.fx1_preset
+      mapping: track1.fx2_preset
       mapping_type: radio_button
       radio:
         value: witti2
@@ -1260,7 +1261,7 @@ mappings:
           - "[slmk3.set_pad_color:$PAD10:$COLOR1_DARK]"
 
     slmk3.pad11:
-      mapping: track1.fx1_preset
+      mapping: track1.fx2_preset
       mapping_type: radio_button
       radio:
         value: witti22
@@ -1270,7 +1271,7 @@ mappings:
           - "[slmk3.set_pad_color:$PAD11:$COLOR1_DARK]"
 
     slmk3.button21:
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       mapping_type: radio_button
       radio:
         value: SYNC
@@ -1280,7 +1281,7 @@ mappings:
           - "[slmk3.set_button_color:$BUTTON21:$COLOR1_DARK]"
 
     slmk3.button22:
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       mapping_type: radio_button
       radio:
         value: FREE
@@ -1290,7 +1291,7 @@ mappings:
           - "[slmk3.set_button_color:$BUTTON22:$COLOR1_DARK]"
 
     slmk3.button23:
-      mapping: track1.fx1.lfo_trigger_mode
+      mapping: track1.fx2.lfo_trigger_mode
       mapping_type: radio_button
       radio:
         value: NOTE TRIG
@@ -1376,16 +1377,14 @@ mappings:
         - "[reaper.toggle_repeat]"
 
     slmk3.button_record:
-      mapping: reaper.record
+      mapping: track4.mute
       mapping_type: toggle
       on_value_change:
         - conditions:
             $VALUE.is: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON_RECORD:$COLOR_WHITE]"
+          - "[slmk3.set_button_color:$BUTTON_RECORD:$COLOR_OFF]"
         - conditions:
             $VALUE.isnot: $MAX_VALUE
           actions:
-          - "[slmk3.set_button_color:$BUTTON_RECORD:$COLOR_OFF]"
-      on_press:
-        - "[reaper.record]"
+          - "[slmk3.set_button_color:$BUTTON_RECORD:$COLOR_RED]"

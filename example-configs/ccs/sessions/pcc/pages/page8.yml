@@ -34,6 +34,12 @@ actions:
 mappings:
   controls:
 
+    slmk3.button_right_up:
+    slmk3.button_right_down:
+    slmk3.button_screen_up:
+    slmk3.button_screen_down:
+
+
     slmk3.encoder1:
       mapping: track1.volume
       on_value_change:

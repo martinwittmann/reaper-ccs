@@ -25,7 +25,7 @@ mappings:
   controls:
 
     slmk3.encoder1:
-      mapping: track1.fx1.dco_lfo_value
+      mapping: track1.fx2.dco_lfo_value
       # This allows users to define how fine/coarse the changing of values will be.
       # A factor of 1 means that the relative value the midicontroller sends will
       # translate to 1 of 128 steps as in midi.
@@ -55,7 +55,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder2:
-      mapping: track1.fx1.dco_pwm_value
+      mapping: track1.fx2.dco_pwm_value
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -79,7 +79,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder3:
-      mapping: track1.fx1.lfo_rate
+      mapping: track1.fx2.lfo_rate
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -103,7 +103,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder4:
-      mapping: track1.fx1.lfo_delay
+      mapping: track1.fx2.lfo_delay
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -127,7 +127,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder5:
-      mapping: track1.fx1.filter_env
+      mapping: track1.fx2.filter_env
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -151,7 +151,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder6:
-      mapping: track1.fx1.filter_modulation
+      mapping: track1.fx2.filter_modulation
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -175,7 +175,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder7:
-      mapping: track1.fx1.filter_keyboard
+      mapping: track1.fx2.filter_keyboard
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
@@ -199,7 +199,7 @@ mappings:
           - "[page.update_controller_ui]"
 
     slmk3.encoder8:
-      mapping: track1.fx1.master_volume
+      mapping: track1.fx2.master_volume
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders
