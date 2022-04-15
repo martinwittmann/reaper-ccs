@@ -8,8 +8,7 @@ namespace CCS {
   class Ccs;
 
   class Ccs_ControlSurface : public Reaper::ControlSurface {
-    CCS::Ccs *ccs = nullptr;
-    char pollingIndex = 0;
+    CCS::Ccs *m_ccs = nullptr;
 
   public:
     explicit Ccs_ControlSurface(int *errorStats);

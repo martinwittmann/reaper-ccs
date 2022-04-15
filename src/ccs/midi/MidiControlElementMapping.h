@@ -74,12 +74,22 @@ namespace CCS {
 
   public:
     const static short MAPPING_TARGET_UNKNOWN = -1;
-    const static short TRACK_VOLUME = 0;
-    const static short TRACK_MUTE = 1;
-    const static short TRACK_SOLO = 2;
-    const static short TRACK_RECORD_ARM = 3;
-    const static short FX_PARAMETER = 10;
-    const static short FX_PRESET = 11;
+
+    const static short TRANSPORT_PLAY = 1;
+    const static short TRANSPORT_PAUSE = 2;
+    const static short TRANSPORT_STOP = 3;
+    const static short TRANSPORT_RECORD = 4;
+    const static short TRANSPORT_REPEAT = 5;
+    const static short TRANSPORT_REWIND = 6;
+    const static short TRANSPORT_FAST_FORWARD = 7;
+
+    const static short TRACK_VOLUME = 50;
+    const static short TRACK_MUTE = 51;
+    const static short TRACK_SOLO = 52;
+    const static short TRACK_RECORD_ARM = 53;
+
+    const static short FX_PARAMETER = 100;
+    const static short FX_PRESET = 101;
 
     MidiControlElementMapping(
       int midiEventId,
@@ -171,6 +181,12 @@ namespace CCS {
     void onTrackListChanged(int numTracks) override;
 
     double getPreviousEnumValue();
+
+    void onPlay(bool play);
+
+    void onStop(bool stop);
+
+    void onRecord(bool record);
   };
 }
 

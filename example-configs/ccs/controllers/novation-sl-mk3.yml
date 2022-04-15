@@ -234,6 +234,42 @@ controls:
     data2_press: 7F
     data2_release: 00
 
+  button_rewind:
+    type: button
+    data1: 70
+    data2_press: 7F
+    data2_release: 00
+
+  button_fast_forward:
+    type: button
+    data1: 71
+    data2_press: 7F
+    data2_release: 00
+
+  button_stop:
+    type: button
+    data1: 72
+    data2_press: 7F
+    data2_release: 00
+
+  button_play:
+    type: button
+    data1: 73
+    data2_press: 7F
+    data2_release: 00
+
+  button_repeat:
+    type: button
+    data1: 74
+    data2_press: 7F
+    data2_release: 00
+
+  button_record:
+    type: button
+    data1: 75
+    data2_press: 7F
+    data2_release: 00
+
   pad1:
     type: pad
     status: 9F

@@ -29,6 +29,8 @@ namespace CCS {
     static const unsigned short ON_RECORD = 2;
     static const unsigned short ON_STOP = 3;
     static const unsigned short ON_REPEAT_CHANGED = 4;
+    static const unsigned short ON_REWIND = 5;
+    static const unsigned short ON_FAST_FORWARD = 6;
 
     static const unsigned short ON_TRACK_LIST_CHANGED = 100;
 
@@ -82,10 +84,10 @@ namespace CCS {
 
     void pollReaperData();
 
-    void triggerOnPlay();
-    void triggerOnPause();
-    void triggerOnRecord();
-    void triggerOnStop();
+    void triggerOnPlay(bool play);
+    void triggerOnPause(bool pause);
+    void triggerOnRecord(bool record);
+    void triggerOnStop(bool stop);
     void triggerOnRepeatChanged(bool repeat);
 
     void triggerOnTrackVolumeChanged(MediaTrack *track, double volume);
@@ -180,6 +182,28 @@ namespace CCS {
     void loadPreviousFxPreset(MediaTrack *track, int fxId);
 
     void triggerOnTrackListChanged();
+
+    void play();
+    void pause();
+    void stop();
+
+    void record();
+
+    void rewind();
+
+    void fastForward();
+
+    void toggleRepeat();
+
+    bool isPlaying();
+
+    bool isPaused();
+
+    bool isRecording();
+
+    bool isStopped();
+
+    bool isRepeating();
   };
 }
 

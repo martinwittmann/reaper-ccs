@@ -15,9 +15,10 @@ namespace CCS {
   class ReaperEventSubscriber {
 
   public:
-    virtual void onPlay();
-    virtual void onStop();
-    virtual void onRecord();
+    virtual void onPlay(bool play);
+    virtual void onPause(bool pause);
+    virtual void onStop(bool stop);
+    virtual void onRecord(bool record);
     virtual void onTrackVolumeChanged(double volume);
     virtual void onRepeatChanged(bool repeat);
     virtual void onTrackMuteChanged(bool mute);
@@ -39,7 +40,6 @@ namespace CCS {
       std::string presetName
     );
 
-    virtual void onPause();
     virtual void onTrackListChanged(int numTracks);
   };
 }

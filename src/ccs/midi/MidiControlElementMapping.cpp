@@ -104,6 +104,19 @@ namespace CCS {
     );
 
     switch (m_mappingTarget) {
+      case TRANSPORT_PLAY:
+        this->m_api->subscribeToControlSurfaceEvent(
+          getControlSurfaceEventId(m_mappingTarget),
+          m_track,
+          subscriber
+        );
+        break;
+      case TRANSPORT_PAUSE:
+      case TRANSPORT_STOP:
+      case TRANSPORT_RECORD:
+      case TRANSPORT_REPEAT:
+      case TRANSPORT_REWIND:
+      case TRANSPORT_FAST_FORWARD:
       case TRACK_MUTE:
       case TRACK_RECORD_ARM:
       case TRACK_SOLO:
@@ -396,6 +409,30 @@ namespace CCS {
     updateTrack();
   }
 
+  void MidiControlElementMapping::onPlay(bool play) {
+    m_value = play ? m_maxValue : m_minValue;
+    m_formattedValue = play ? "PLAY" : "";
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRANSPORT_PLAY) {
+      invokeOnValueChangeAction();
+    }
+  }
+
+  void MidiControlElementMapping::onStop(bool stop) {
+    m_value = stop ? m_maxValue : m_minValue;
+    m_formattedValue = stop ? "STOPPED" : "";
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRANSPORT_STOP) {
+      invokeOnValueChangeAction();
+    }
+  }
+
+  void MidiControlElementMapping::onRecord(bool record) {
+    m_value = record ? m_maxValue : m_minValue;
+    m_formattedValue = record ? "REC" : "";
+    if (m_trackExists && m_hasMapping && m_mappingTarget == TRANSPORT_RECORD) {
+      invokeOnValueChangeAction();
+    }
+  }
+
   void MidiControlElementMapping::initializeMappingValues(string rawMapping) {
     std::vector<string> parts = Util::splitString(rawMapping, '.');
     string first = Util::toLower(parts.at(0));
@@ -447,6 +484,43 @@ namespace CCS {
         m_maxValue = 1;
       }
     }
+    else if (Util::regexMatch(first, "^reaper$")) {
+      if (Util::regexMatch(parts.at(1), "play")) {
+        m_mappingTarget = TRANSPORT_PLAY;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+      else if (Util::regexMatch(parts.at(1), "pause")) {
+        m_mappingTarget = TRANSPORT_PAUSE;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+      else if (Util::regexMatch(parts.at(1), "stop")) {
+        m_mappingTarget = TRANSPORT_STOP;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+      else if (Util::regexMatch(parts.at(1), "record")) {
+        m_mappingTarget = TRANSPORT_RECORD;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+      else if (Util::regexMatch(parts.at(1), "rewind")) {
+        m_mappingTarget = TRANSPORT_REWIND;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+      else if (Util::regexMatch(parts.at(1), "fast_forward")) {
+        m_mappingTarget = TRANSPORT_FAST_FORWARD;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+      else if (Util::regexMatch(parts.at(1), "repeat")) {
+        m_mappingTarget = TRANSPORT_REPEAT;
+        m_minValue = 0;
+        m_maxValue = 1;
+      }
+    }
   }
 
   double MidiControlElementMapping::getNextEnumValue() {
@@ -475,6 +549,13 @@ namespace CCS {
   void MidiControlElementMapping::updateControlElement() {
     if (m_hasMapping) {
       switch (m_mappingTarget) {
+        case TRANSPORT_PLAY:
+        case TRANSPORT_PAUSE:
+        case TRANSPORT_STOP:
+        case TRANSPORT_RECORD:
+        case TRANSPORT_REPEAT:
+        case TRANSPORT_REWIND:
+        case TRANSPORT_FAST_FORWARD:
         case TRACK_VOLUME:
         case TRACK_MUTE:
         case TRACK_SOLO:
@@ -501,6 +582,36 @@ namespace CCS {
         m_value = m_api->getTrackVolume(m_track);
         m_formattedValue = Util::roundDouble(m_value * 10.0);
         break;
+
+      case TRANSPORT_PLAY:
+        m_value = m_api->isPlaying() ? m_maxValue : m_minValue;
+        m_formattedValue = m_value ? "PLAY" : "";
+        break;
+
+      case TRANSPORT_PAUSE:
+        m_value = m_api->isPaused() ? m_maxValue : m_minValue;
+        m_formattedValue = m_value ? "PAUSED" : "";
+        break;
+
+      case TRANSPORT_STOP:
+        m_value = m_api->isStopped() ? m_maxValue : m_minValue;
+        m_formattedValue = m_value ? "STOPPED" : "";
+        break;
+
+      case TRANSPORT_RECORD:
+        m_value = m_api->isRecording() ? m_maxValue : m_minValue;
+        m_formattedValue = m_value ? "REC" : "";
+        break;
+
+      case TRANSPORT_REPEAT:
+        m_value = m_api->isRepeating() ? m_maxValue : m_minValue;
+        m_formattedValue = m_value ? "REPEAT" : "";
+        break;
+
+      // Reaper does not start rewinding or fast forwarding. No need to do anything here.
+      case TRANSPORT_REWIND:
+      case TRANSPORT_FAST_FORWARD:
+        break;
     }
   }
 
@@ -524,6 +635,24 @@ namespace CCS {
 
   int MidiControlElementMapping::getControlSurfaceEventId(int mappingType) {
     switch (mappingType) {
+      case TRANSPORT_PLAY:
+        return ReaperApi::ON_PLAY;
+
+      case TRANSPORT_PAUSE:
+        return ReaperApi::ON_PAUSE;
+
+      case TRANSPORT_STOP:
+        return ReaperApi::ON_STOP;
+
+      case TRANSPORT_REPEAT:
+        return ReaperApi::ON_REPEAT_CHANGED;
+
+      case TRANSPORT_REWIND:
+        return ReaperApi::ON_REWIND;
+
+      case TRANSPORT_FAST_FORWARD:
+        return ReaperApi::ON_FAST_FORWARD;
+
       case TRACK_MUTE:
         return ReaperApi::ON_TRACK_MUTE_CHANGED;
 

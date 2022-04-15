@@ -52,6 +52,7 @@ set(
   src/ccs/Ccs_ControlSurface.cpp
   src/ccs/FxPlugins.cpp src/ccs/FxPlugins.h
   src/ccs/Page.cpp
+  src/ccs/ReaperActions.cpp
   src/ccs/Session.cpp
   src/ccs/Util.cpp
   src/ccs/Variables.cpp

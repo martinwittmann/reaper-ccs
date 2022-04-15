@@ -56,6 +56,8 @@ variables:
   COLOR7_DARK: 17
   COLOR8_DARK: 2B
 
+  COLOR_GREEN: 15
+
   BUTTON1: 33
   BUTTON2: 34
   BUTTON3: 35
@@ -80,6 +82,14 @@ variables:
   BUTTON22: 48
   BUTTON23: 49
   BUTTON24: 4A
+
+  BUTTON_REWIND: 70
+  BUTTON_FAST_FORWARD: 71
+  BUTTON_STOP: 72
+  BUTTON_PLAY: 73
+  BUTTON_REPEAT: 74
+  BUTTON_RECORD: 75
+  
 
   BUTTON9_LABEL:  Pulse
   BUTTON10_LABEL: Saw
@@ -1289,3 +1299,93 @@ mappings:
         on_unselected:
           - "[slmk3.set_button_color:$BUTTON23:$COLOR1_DARK]"
 
+    slmk3.button_rewind:
+      mapping: reaper.rewind
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_REWIND:$COLOR_WHITE]"
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_REWIND:$COLOR_OFF]"
+      on_press:
+        - "[reaper.rewind]"
+
+    slmk3.button_fast_forward:
+      mapping: reaper.rewind
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_FAST_FORWARD:$COLOR_WHITE]"
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_FAST_FORWARD:$COLOR_OFF]"
+      on_press:
+        - "[reaper.fast_forward]"
+
+    slmk3.button_stop:
+      mapping: reaper.stop
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_STOP:$COLOR_WHITE]"
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_STOP:$COLOR_OFF]"
+      on_press:
+        - "[reaper.stop]"
+
+
+    slmk3.button_play:
+      mapping: reaper.play
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_PLAY:$COLOR_GREEN]"
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_PLAY:$COLOR_OFF]"
+      on_press:
+        - "[reaper.play]"
+
+    slmk3.button_repeat:
+      mapping: reaper.repeat
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_REPEAT:$COLOR_WHITE]"
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_REPEAT:$COLOR_OFF]"
+      on_press:
+        - "[reaper.toggle_repeat]"
+
+    slmk3.button_record:
+      mapping: reaper.record
+      mapping_type: toggle
+      on_value_change:
+        - conditions:
+            $VALUE.is: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_RECORD:$COLOR_WHITE]"
+        - conditions:
+            $VALUE.isnot: $MAX_VALUE
+          actions:
+          - "[slmk3.set_button_color:$BUTTON_RECORD:$COLOR_OFF]"
+      on_press:
+        - "[reaper.record]"

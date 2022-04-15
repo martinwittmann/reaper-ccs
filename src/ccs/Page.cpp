@@ -34,7 +34,7 @@ namespace CCS {
     registerActionProvider(m_pageId);
     m_actionsManager = actionsManager;
     m_session = session;
-    m_reaperApi = reaperApi;
+    m_api = reaperApi;
 
     if (m_config->keyExists("on_activate")) {
       m_activateAction = new CompositeAction(
@@ -72,7 +72,7 @@ namespace CCS {
     for (int i = 1; i < 17; ++i) {
       // We're using 1-based indexes in variables.
       string keyName = "_STATE.TRACK" + std::to_string(i) + "_NAME";
-      m_state.insert(std::pair(keyName, m_reaperApi->getTrackName(i)));
+      m_state.insert(std::pair(keyName, m_api->getTrackName(i)));
     }
 
     YAML::Node initialState = m_config->getMapValue("initial_state");
@@ -194,9 +194,9 @@ namespace CCS {
       updateMidiControllerUI();
     }
     else if (actionName == "load_preset") {
-      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
-      int fxId = m_reaperApi->getFxIdByGenericName(arguments.at(1));
-      m_reaperApi->loadFxPreset(track, fxId, arguments.at(1));
+      MediaTrack *track = m_api->getTrackByGenericName(arguments.at(0));
+      int fxId = m_api->getFxIdByGenericName(arguments.at(1));
+      m_api->loadFxPreset(track, fxId, arguments.at(1));
     }
   }
 
@@ -230,7 +230,7 @@ namespace CCS {
         controlId,
         controlConfig.second,
         controlEl,
-        m_reaperApi,
+        m_api,
         m_session,
         this
       ));

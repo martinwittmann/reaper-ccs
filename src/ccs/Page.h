@@ -36,7 +36,7 @@ class Page : public ActionProvider {
     // Example: [page.set_state:name:value]
     std::map<string,string> m_state;
     vector<MidiControlElementMapping*> m_controlElementMappings;
-    ReaperApi *m_reaperApi = nullptr;
+    ReaperApi *m_api = nullptr;
     CompositeAction *m_activateAction = nullptr;
     CompositeAction *m_beforeValueChangesAction = nullptr;
     CompositeAction *m_afterValueChangesAction = nullptr;

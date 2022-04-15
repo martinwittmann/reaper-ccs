@@ -14,6 +14,7 @@
 #include "FxPlugins.h"
 #include "Util.h"
 #include "actions/Action.h"
+#include "ReaperActions.h"
 
 namespace CCS {
   namespace fse = std::experimental::filesystem;
@@ -45,10 +46,12 @@ namespace CCS {
     m_actionsManager = actionsManager;
     m_sessionConfig = new SessionConfig(m_path + SEP + "session" + YAML_EXT);
     m_output = output;
-    m_reaperApi = reaperApi;
+    m_api = reaperApi;
 
     registerActionProvider("session");
     createActions();
+
+    m_reaperActions = new ReaperActions(m_actionsManager, m_api);
 
     loadMidiControllers();
     loadSessionPages();
@@ -186,7 +189,7 @@ namespace CCS {
         pagePath,
         m_actionsManager,
         this,
-        m_reaperApi
+        m_api
       ));
     }
   }
@@ -234,16 +237,16 @@ namespace CCS {
       Util::log("");
     }
     else if (actionName == "record_arm") {
-      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
-      m_reaperApi->setTrackRecordArm(track, arguments.at(1) == "1");
+      MediaTrack *track = m_api->getTrackByGenericName(arguments.at(0));
+      m_api->setTrackRecordArm(track, arguments.at(1) == "1");
     }
     else if (actionName == "mute") {
-      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
-      m_reaperApi->setTrackMute(track, arguments.at(1) == "1");
+      MediaTrack *track = m_api->getTrackByGenericName(arguments.at(0));
+      m_api->setTrackMute(track, arguments.at(1) == "1");
     }
     else if (actionName == "solo") {
-      MediaTrack *track = m_reaperApi->getTrackByGenericName(arguments.at(0));
-      m_reaperApi->setTrackSolo(track, arguments.at(1) == "1");
+      MediaTrack *track = m_api->getTrackByGenericName(arguments.at(0));
+      m_api->setTrackSolo(track, arguments.at(1) == "1");
     }
   }
 

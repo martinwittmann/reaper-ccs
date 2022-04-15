@@ -3,10 +3,10 @@
 
 namespace CCS {
 
-  void ReaperEventSubscriber::onPlay() {}
-  void ReaperEventSubscriber::onPause() {}
-  void ReaperEventSubscriber::onStop() {}
-  void ReaperEventSubscriber::onRecord() {}
+  void ReaperEventSubscriber::onPlay(bool play) {}
+  void ReaperEventSubscriber::onPause(bool pause) {}
+  void ReaperEventSubscriber::onStop(bool stop) {}
+  void ReaperEventSubscriber::onRecord(bool record) {}
   void ReaperEventSubscriber::onRepeatChanged(bool repeat) {}
   void ReaperEventSubscriber::onTrackVolumeChanged(double volume) {}
   void ReaperEventSubscriber::onTrackMuteChanged(bool mute) {}

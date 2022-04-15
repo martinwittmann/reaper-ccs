@@ -20,6 +20,7 @@ namespace CCS {
   class MidiEventSubscriber;
   class FxPlugins;
   class ReaperApi;
+  class ReaperActions;
 
   class Session : public ActionProvider {
     string m_path;
@@ -34,8 +35,9 @@ namespace CCS {
     Page *m_activePage = nullptr;
     ActionsManager *m_actionsManager = nullptr;
     midi_Output *m_output = nullptr;
-    ReaperApi *m_reaperApi = nullptr;
+    ReaperApi *m_api = nullptr;
     std::map<int,MidiEventSubscriber*> m_subscribedMidiEventIds;
+    ReaperActions *m_reaperActions = nullptr;
 
   public:
     Session(

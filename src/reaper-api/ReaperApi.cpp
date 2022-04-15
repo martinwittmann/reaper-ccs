@@ -191,43 +191,43 @@ namespace CCS {
     return false;
   }
 
-  void ReaperApi::triggerOnPlay() {
+  void ReaperApi::triggerOnPlay(bool play) {
     vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
       nullptr,
       ON_PLAY
     );
     for (auto subscriber: subscribers) {
-      subscriber->onPlay();
+      subscriber->onPlay(play);
     }
   };
 
-  void ReaperApi::triggerOnPause() {
+  void ReaperApi::triggerOnPause(bool pause) {
     vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
       nullptr,
       ON_PAUSE
     );
     for (auto subscriber: subscribers) {
-      subscriber->onPause();
+      subscriber->onPause(pause);
     }
   };
 
-  void ReaperApi::triggerOnRecord() {
+  void ReaperApi::triggerOnRecord(bool record) {
     vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
       nullptr,
       ON_RECORD
     );
     for (auto subscriber: subscribers) {
-      subscriber->onRecord();
+      subscriber->onRecord(record);
     }
   };
 
-  void ReaperApi::triggerOnStop() {
+  void ReaperApi::triggerOnStop(bool stop) {
     vector<ReaperEventSubscriber*> subscribers = getControlSurfaceEventSubscribers(
       nullptr,
       ON_STOP
     );
     for (auto subscriber: subscribers) {
-      subscriber->onStop();
+      subscriber->onStop(stop);
     }
   };
 
@@ -559,5 +559,57 @@ namespace CCS {
     for (auto subscriber: subscribers) {
       subscriber->onTrackListChanged(numTracks);
     }
+  }
+
+  void ReaperApi::play() {
+    CSurf_OnPlay();
+  }
+
+  void ReaperApi::pause() {
+    CSurf_OnPause();
+  }
+
+  void ReaperApi::stop() {
+    CSurf_OnStop();
+  }
+
+  void ReaperApi::record() {
+    CSurf_OnRecord();
+  }
+
+  void ReaperApi::rewind() {
+    CSurf_OnRewFwd(1, -1);
+  }
+
+  void ReaperApi::fastForward() {
+    CSurf_OnRewFwd(1, 1);
+  }
+
+  void ReaperApi::toggleRepeat() {
+    GetSetRepeat(2);
+  }
+
+  bool ReaperApi::isPlaying() {
+    int result = GetPlayState();
+    return result &1;
+  }
+
+  bool ReaperApi::isPaused() {
+    int result = GetPlayState();
+    return result &2;
+  }
+
+  bool ReaperApi::isStopped() {
+    int result = GetPlayState();
+    return (result &1) && (result &2);
+  }
+
+  bool ReaperApi::isRecording() {
+    int result = GetPlayState();
+    return result &4;
+  }
+
+  bool ReaperApi::isRepeating() {
+    return GetSetRepeat(-1) > 0;
   }
 }
