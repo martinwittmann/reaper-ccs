@@ -26,6 +26,12 @@ mappings:
 
     slmk3.encoder1:
       mapping: track1.fx1.dco_lfo_value
+      # This allows users to define how fine/coarse the changing of values will be.
+      # A factor of 1 means that the relative value the midicontroller sends will
+      # translate to 1 of 128 steps as in midi.
+      # 2 means very coarse - only 64 steps.
+      # 0.5 means finer control and seems like a good default. It is the default value.
+      relative_speed_factor: 0.5
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: encoders

@@ -46,6 +46,10 @@ namespace CCS {
     string m_mappingType;
     string m_paramMapping;
 
+    // We're defaulting to 0.5 since this appears to be a good compromise of
+    // speed and control. This can be overridden per mapping in the config files.
+    double m_relativeSpeedFactor = 0.5;
+
     short m_mappingTarget = MAPPING_TARGET_UNKNOWN;
     // A map of label:parameterValue for each available enum value.
     std::map<string,double> m_enumValues;
@@ -165,6 +169,8 @@ namespace CCS {
     void updateTrack();
 
     void onTrackListChanged(int numTracks) override;
+
+    double getPreviousEnumValue();
   };
 }
 

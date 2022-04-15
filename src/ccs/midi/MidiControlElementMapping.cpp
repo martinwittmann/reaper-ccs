@@ -53,6 +53,10 @@ namespace CCS {
           m_mappingType = "absolute";
         }
 
+        if (m_config->keyExists("relative_speed_factor")) {
+          m_relativeSpeedFactor = std::stod(m_config->getValue("relative_speed_factor"));
+        }
+
         if (m_mappingType == "enum_button" || m_mappingType == "radio_button") {
           if (m_mappingTarget == FX_PARAMETER) {
             m_enumValues = m_session
@@ -456,6 +460,18 @@ namespace CCS {
     }
   }
 
+  double MidiControlElementMapping::getPreviousEnumValue() {
+    auto it = m_enumValues.find(m_formattedValue);
+    if (it == m_enumValues.begin()) {
+      // We were at the end already, get the first value.
+      return m_enumValues.begin()->second;
+    }
+    else {
+      it--;
+      return it->second;
+    }
+  }
+
   void MidiControlElementMapping::updateControlElement() {
     if (m_hasMapping) {
       switch (m_mappingTarget) {
@@ -597,6 +613,7 @@ namespace CCS {
           m_api->setFxParameterValue(m_track, m_fxId, m_paramId, newValue);
           break;
       }
+      m_value = newValue;
     }
   }
 
@@ -637,28 +654,40 @@ namespace CCS {
       switch (m_mappingTarget) {
         case TRACK_VOLUME:
         case FX_PARAMETER:
-          // This is specific to the slmk3.
-          // TODO Create multiple generic relative speeds.
-          if (diff > 1) {
-            diff += 2;
-          }
-          else if (diff < -1) {
-            diff -= 2;
-          }
           valueDiff = Util::getParamValueFrom7Bit(diff, m_minValue, m_maxValue);
-          newValue = m_value + valueDiff;
 
-          if (newValue < m_minValue) {
-            newValue = m_minValue;
+          if (m_mappingType == "toggle") {
+            if (valueDiff > 0) {
+              applyChangesFromUserInput(m_maxValue);
+            }
+            else {
+              applyChangesFromUserInput(m_minValue);
+            }
           }
-          else if (newValue > m_maxValue) {
-            newValue = m_maxValue;
+          else if (m_mappingType == "enum_button") {
+            if (valueDiff > 0) {
+              applyChangesFromUserInput(getNextEnumValue());
+            }
+            else {
+              applyChangesFromUserInput(getPreviousEnumValue());
+            }
           }
-          applyChangesFromUserInput(newValue);
+          else {
+            // We're allowing configs to set a factor for each control.
+            newValue = m_value + (valueDiff * m_relativeSpeedFactor);
+
+            if (newValue < m_minValue) {
+              newValue = m_minValue;
+            }
+            else if (newValue > m_maxValue) {
+              newValue = m_maxValue;
+            }
+            applyChangesFromUserInput(newValue);
+          }
           break;
 
         case FX_PRESET:
-          if (diff > 0) {
+          if (valueDiff > 0) {
             m_api->loadNextFxPreset(m_track, m_fxId);
           }
           else {

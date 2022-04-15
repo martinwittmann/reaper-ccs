@@ -939,7 +939,7 @@ mappings:
 
     slmk3.button19:
       mapping: track1.fx1.portamento_mode
-      mapping_type: enum
+      mapping_type: enum_button
       on_value_change:
         - conditions:
             $_STATE.DISPLAY.is: buttons
