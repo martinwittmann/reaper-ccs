@@ -36,6 +36,12 @@ namespace CCS {
     double m_value;
     string m_formattedValue;
 
+    // The last physical position of the control, if an absolute control. This
+    // is used to check if the physical value differs from the actual value.
+    double m_physicalValue;
+    double m_lastPhysicalValueDiff;
+    bool m_allowChangingAbsoluteValue = false;
+
     MediaTrack *m_reaperTrack = nullptr;
     ReaperApi *m_api = nullptr;
     Session *m_session = nullptr;
@@ -168,7 +174,7 @@ namespace CCS {
 
     void onButtonRelease();
 
-    void applyChangesFromUserInput(double newValue);
+    void applyValueChangeFromMidiEvent(double newValue);
 
     void onAbsoluteMidiValue(unsigned char data2);
 

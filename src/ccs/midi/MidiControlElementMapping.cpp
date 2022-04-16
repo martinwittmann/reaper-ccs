@@ -334,6 +334,19 @@ namespace CCS {
     m_value = value;
     m_formattedValue = formattedValue;
     if (m_trackExists && m_hasMapping) {
+
+      double newDiff = m_physicalValue - m_value;
+      m_lastPhysicalValueDiff = newDiff;
+
+      // If the change was initiated by reaper (via the ui, a script,...) we
+      // know that the physical position of the mapped midi control does not
+      // match the current value. In this case we prevent changing the value
+      // when the physical control is moved until the physical and the stored
+      // values match. See onAbsoluteMidiValue() for more details.
+      if (abs(newDiff) >= 0.1) {
+        m_allowChangingAbsoluteValue = false;
+      }
+
       // For radio_buttons we update all buttons in this group via the known
       // on_selected/on_unselected actions, before invoking the regular
       // on_value_changed actions.
@@ -376,6 +389,16 @@ namespace CCS {
   void MidiControlElementMapping::onTrackVolumeChanged(double volume) {
     bool forceUpdate = false;
     m_value = Util::sliderToVolume(volume);
+
+
+    double newDiff = m_physicalValue - m_value;
+    m_lastPhysicalValueDiff = newDiff;
+
+    // See comment in onFxParameterChanged() for more details.
+    if (abs(newDiff) >= 0.1) {
+      m_allowChangingAbsoluteValue = false;
+    }
+
     if (m_value < 0.01) {
       m_value = 0.00;
       forceUpdate = true;
@@ -722,15 +745,15 @@ namespace CCS {
 
     if (m_hasMapping) {
       if (m_mappingType == "toggle") {
-        applyChangesFromUserInput(getToggledValue());
+        applyValueChangeFromMidiEvent(getToggledValue());
       }
       else if (m_mappingType == "enum_button") {
-        applyChangesFromUserInput(getNextEnumValue());
+        applyValueChangeFromMidiEvent(getNextEnumValue());
       }
       else if (m_mappingType == "radio_button") {
 
         if (m_mappingTarget == FX_PARAMETER) {
-          applyChangesFromUserInput(m_radioValue);
+          applyValueChangeFromMidiEvent(m_radioValue);
         }
         else if (m_mappingTarget == FX_PRESET) {
           m_formattedValue = m_radioFormattedValue;
@@ -746,7 +769,7 @@ namespace CCS {
     // undo changes made on press.
   }
 
-  void MidiControlElementMapping::applyChangesFromUserInput(double newValue) {
+  void MidiControlElementMapping::applyValueChangeFromMidiEvent(double newValue) {
     if (m_hasMapping) {
       switch (m_mappingTarget) {
         case TRACK_VOLUME:
@@ -775,15 +798,50 @@ namespace CCS {
 
   void MidiControlElementMapping::onAbsoluteMidiValue(unsigned char data2) {
     invokeActions("on_change");
+    m_physicalValue = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
 
     if (m_hasMapping) {
-      double newValue;
+      double newValue, newDiff;
 
       switch (m_mappingTarget) {
         case TRACK_VOLUME:
         case FX_PARAMETER:
-          newValue = Util::getParamValueFrom7Bit(data2, m_minValue, m_maxValue);
-          applyChangesFromUserInput(newValue);
+          newValue = m_physicalValue;
+          newDiff = m_physicalValue - m_value;
+
+          // Parameter pick up:
+          // By default we prevent changing mapped values when the absolute
+          // input changes. We allow changing it, when the difference between
+          // them crosses the zero line, or if we set m_allowChangingAbsoluteValue.
+
+          // The reason why changing if e.g. diff < 0.2 does not work is, that
+          // fast movements of the control can move past the threshold, since
+          // we receive midi events (emitted from the extension's Run method)
+          // only ~30 times per second.
+
+          // To work around this we check for crossing the zero line, since
+          // this also works if we're called too late. In this case we simply
+          // store m_allowChangingValues to keep allowing the change.
+          // m_allowChangingValue is reset when we detect a changed value in
+          // one of ReaperEventSubscriber's callbacks and the new value differs
+          // from the old one.
+
+          // If we just set a new value by calling applyValueChangeFromMidiEvent()
+          // these callbacks are called, but the new value should be (almost)
+          // identical to the current one in which case m_allowChangingValue is
+          // not reset.
+          if (
+            m_allowChangingAbsoluteValue ||
+            // we need to exclude 0 for m_lastPhysicalValueDiff since this is 0
+            // before the physical control is being moved at least once.
+            // This would prevent value pick up from working initially.
+            (newDiff <= 0 && m_lastPhysicalValueDiff > 0) ||
+            (newDiff >= 0 && m_lastPhysicalValueDiff < 0)
+          ) {
+            m_allowChangingAbsoluteValue = true;
+            applyValueChangeFromMidiEvent(newValue);
+          }
+          m_lastPhysicalValueDiff = newDiff;
           break;
 
 
@@ -795,7 +853,7 @@ namespace CCS {
           } else {
             newValue = 0.0;
           }
-          applyChangesFromUserInput(newValue);
+          applyValueChangeFromMidiEvent(newValue);
       }
     }
   }
@@ -814,18 +872,18 @@ namespace CCS {
 
           if (m_mappingType == "toggle") {
             if (valueDiff > 0) {
-              applyChangesFromUserInput(m_maxValue);
+              applyValueChangeFromMidiEvent(m_maxValue);
             }
             else {
-              applyChangesFromUserInput(m_minValue);
+              applyValueChangeFromMidiEvent(m_minValue);
             }
           }
           else if (m_mappingType == "enum_button") {
             if (valueDiff > 0) {
-              applyChangesFromUserInput(getNextEnumValue());
+              applyValueChangeFromMidiEvent(getNextEnumValue());
             }
             else {
-              applyChangesFromUserInput(getPreviousEnumValue());
+              applyValueChangeFromMidiEvent(getPreviousEnumValue());
             }
           }
           else {
@@ -838,7 +896,7 @@ namespace CCS {
             else if (newValue > m_maxValue) {
               newValue = m_maxValue;
             }
-            applyChangesFromUserInput(newValue);
+            applyValueChangeFromMidiEvent(newValue);
           }
           break;
 
