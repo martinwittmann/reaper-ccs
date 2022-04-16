@@ -926,6 +926,19 @@ mappings:
           actions:
           - "[page.display_faders]"
 
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN1:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN1:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN1:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN1:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
+
     slmk3.fader2:
       mapping: track1.fx2.filter_resonance
       on_value_change:
@@ -942,6 +955,19 @@ mappings:
           actions:
           - "[page.display_faders]"
 
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN2:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN2:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN2:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN2:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
+
     slmk3.fader3:
       mapping: track1.fx2.dco_sub_osc_volume
       on_value_change:
@@ -951,6 +977,19 @@ mappings:
           - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.sc_set_center_box_value:$SCREEN3:$FORMATTED_VALUE]"
           - "[slmk3.stop_buffer:screen_properties]"
+
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN3:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN3:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN3:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN3:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
 
       on_change:
         - conditions:
@@ -974,6 +1013,19 @@ mappings:
           actions:
           - "[page.display_faders]"
 
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN4:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN4:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN4:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN4:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
+
     slmk3.fader5:
       mapping: track1.fx2.attack
       on_value_change:
@@ -983,6 +1035,19 @@ mappings:
           - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.sc_set_center_box_value:$SCREEN5:$FORMATTED_VALUE]"
           - "[slmk3.stop_buffer:screen_properties]"
+
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN5:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN5:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN5:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN5:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
 
       on_change:
         - conditions:
@@ -999,6 +1064,19 @@ mappings:
           - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.sc_set_center_box_value:$SCREEN6:$FORMATTED_VALUE]"
           - "[slmk3.stop_buffer:screen_properties]"
+
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN6:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN6:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN6:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN6:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
 
       on_change:
         - conditions:
@@ -1022,6 +1100,19 @@ mappings:
           actions:
           - "[page.display_faders]"
 
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN7:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN7:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN7:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN7:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
+
     slmk3.fader8:
       mapping: track1.fx2.release
       on_value_change:
@@ -1031,6 +1122,19 @@ mappings:
           - "[slmk3.start_buffer:screen_properties]"
           - "[slmk3.sc_set_center_box_value:$SCREEN8:$FORMATTED_VALUE]"
           - "[slmk3.stop_buffer:screen_properties]"
+          
+      pick_up:
+        on_pick_up:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN8:1]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN8:]"
+          - "[slmk3.end_screen_change:pickup]"
+
+        on_values_differ:
+          - "[slmk3.start_screen_change]"
+          - "[slmk3.sc_set_center_box_selected:$SCREEN8:0]"
+          - "[slmk3.sc_set_top_box_value:$SCREEN8:$VALUE_DIFF]"
+          - "[slmk3.end_screen_change:pickup]"
 
       on_change:
         - conditions:
