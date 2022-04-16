@@ -38,15 +38,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder2:
       mapping: track1.fx2.control_pitch_bend_filter
@@ -62,15 +54,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder3:
       mapping: track1.fx2.control_velocity_envelope
@@ -86,15 +70,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder4:
       mapping: track1.fx2.control_velocity_volume
@@ -110,15 +86,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder5:
       mapping: track1.fx2.portamento_intensity
@@ -134,15 +102,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder6:
       mapping: track1.fx2.fx_reverb_dry_wet
@@ -158,15 +118,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder7:
       mapping: track1.fx2.fx_reverb_size
@@ -182,15 +134,7 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
 
     slmk3.encoder8:
       mapping: track1.fx2.max_voices
@@ -206,12 +150,4 @@ mappings:
         - conditions:
             $_STATE.DISPLAY.isnot: encoders
           actions:
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.start_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
           - "[page.display_encoders]"
-          - "[slmk3.start_buffer:screen_properties]"
-          - "[slmk3.end_screen_change]"
-          - "[slmk3.stop_buffer:screen_properties]"
-          - "[slmk3.flush_buffer:screen_properties]"
-          - "[page.update_controller_ui]"
