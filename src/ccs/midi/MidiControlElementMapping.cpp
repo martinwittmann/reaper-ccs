@@ -73,6 +73,13 @@ namespace CCS {
             }
           }
         }
+
+        if (m_mappingType == "absolute") {
+          // Set up parameter pick up if needed.
+          if (m_config->keyExists("pick_up")) {
+            m_pickupValue = true;
+          }
+        }
       }
 
       // Mapping type might be empty if no mapping is used, but that's ok.
@@ -217,6 +224,11 @@ namespace CCS {
       result.push_back("on_change");
     }
 
+    if (mappingType == "absolute") {
+      result.push_back("pick_up.on_pick_up");
+      result.push_back("pick_up.on_values_differ");
+    }
+
     return result;
   }
 
@@ -240,6 +252,10 @@ namespace CCS {
 
     string formattedStr = Util::compactString(m_formattedValue);
     result.insert(std::pair("FORMATTED_VALUE", formattedStr));
+
+
+    string diffStr = Util::roundDouble(m_lastPhysicalValueDiff);
+    result.insert(std::pair("VALUE_DIFF", diffStr));
 
     string minValueStr = Util::byteToHex(Util::get7BitValue(
       m_maxValue,
@@ -335,16 +351,19 @@ namespace CCS {
     m_formattedValue = formattedValue;
     if (m_trackExists && m_hasMapping) {
 
-      double newDiff = m_physicalValue - m_value;
-      m_lastPhysicalValueDiff = newDiff;
+      if (m_pickupValue) {
+        double newDiff = m_physicalValue - m_value;
+        m_lastPhysicalValueDiff = newDiff;
 
-      // If the change was initiated by reaper (via the ui, a script,...) we
-      // know that the physical position of the mapped midi control does not
-      // match the current value. In this case we prevent changing the value
-      // when the physical control is moved until the physical and the stored
-      // values match. See onAbsoluteMidiValue() for more details.
-      if (abs(newDiff) >= 0.1) {
-        m_allowChangingAbsoluteValue = false;
+        // If the change was initiated by reaper (via the ui, a script,...) we
+        // know that the physical position of the mapped midi control does not
+        // match the current value. In this case we prevent changing the value
+        // when the physical control is moved until the physical and the stored
+        // values match. See onAbsoluteMidiValue() for more details.
+        if (abs(newDiff) >= 0.1) {
+          m_allowChangingAbsoluteValue = false;
+          invokeActions("pick_up.on_values_differ");
+        }
       }
 
       // For radio_buttons we update all buttons in this group via the known
@@ -831,6 +850,7 @@ namespace CCS {
           // identical to the current one in which case m_allowChangingValue is
           // not reset.
           if (
+            !m_pickupValue ||
             m_allowChangingAbsoluteValue ||
             // we need to exclude 0 for m_lastPhysicalValueDiff since this is 0
             // before the physical control is being moved at least once.
@@ -838,8 +858,16 @@ namespace CCS {
             (newDiff <= 0 && m_lastPhysicalValueDiff > 0) ||
             (newDiff >= 0 && m_lastPhysicalValueDiff < 0)
           ) {
+            // Mark the control as picked up on the midi controller.
+            if (!m_allowChangingAbsoluteValue) {
+              invokeActions("pick_up.on_pick_up");
+            }
+
             m_allowChangingAbsoluteValue = true;
             applyValueChangeFromMidiEvent(newValue);
+          }
+          else {
+            invokeActions("pick_up.on_values_differ");
           }
           m_lastPhysicalValueDiff = newDiff;
           break;

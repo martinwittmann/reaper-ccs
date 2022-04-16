@@ -36,6 +36,7 @@ namespace CCS {
     double m_value;
     string m_formattedValue;
 
+    bool m_pickupValue = false;
     // The last physical position of the control, if an absolute control. This
     // is used to check if the physical value differs from the actual value.
     double m_physicalValue;
